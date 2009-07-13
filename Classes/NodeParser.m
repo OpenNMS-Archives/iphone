@@ -21,14 +21,12 @@
 	for (id xmlNode in xmlNodes) {
 		OnmsNode* node = [[OnmsNode alloc] init];
 
-		DDXMLElement* idElement = [xmlNode elementForName:@"nodeId"];
-		if (idElement) {
-			node.nodeId = [[[idElement childAtIndex:0] stringValue] intValue];
-		}
-		
-		DDXMLElement* labelElement = [xmlNode elementForName:@"label"];
-		if (labelElement) {
-			node.label = [[labelElement childAtIndex:0] stringValue];
+		for (id attr in [xmlNode attributes]) {
+			if ([[attr name] isEqual:@"id"]) {
+				node.nodeId = [[attr stringValue] intValue];
+			} else if ([[attr name] isEqual:@"label"]) {
+				node.label = [attr stringValue];
+			}
 		}
 		
 		[nodes addObject: node];

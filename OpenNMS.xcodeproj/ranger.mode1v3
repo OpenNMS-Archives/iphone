@@ -197,54 +197,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>4469B787100BD20200430EBE</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>EventParser.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>4469B788100BD20200430EBE</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>EventParser.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>44D33CBB100BD9A80065F631</string>
-						<key>history</key>
-						<array>
-							<string>4469B789100BD20200430EBE</string>
-							<string>4469B78F100BD20200430EBE</string>
-						</array>
-						<key>prevStack</key>
-						<array>
-							<string>4469B78B100BD20200430EBE</string>
-							<string>4469B78C100BD20200430EBE</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1018, 878}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>38 233 1018 919 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -328,7 +281,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>8</integer>
+									<integer>24</integer>
 									<integer>4</integer>
 									<integer>0</integer>
 								</array>
@@ -355,7 +308,7 @@
 							<real>224</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>658 289 1155 795 0 0 1920 1178 </string>
+						<string>739 304 1155 795 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -373,7 +326,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>EventParser.m</string>
+								<string>NodeParser.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -381,11 +334,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>EventParser.m</string>
+										<string>NodeParser.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>44D33CBA100BD9A80065F631</string>
+										<string>44D33CD0100BE66F0065F631</string>
 										<key>history</key>
 										<array>
 											<string>4470103D10083D4B006CE665</string>
@@ -400,19 +353,19 @@
 											<string>448AC2CF1009819100C2621C</string>
 											<string>4474194E100990DF007E4BCA</string>
 											<string>44741A2D100994EB007E4BCA</string>
-											<string>44741A95100998D3007E4BCA</string>
 											<string>44741ABA10099AC0007E4BCA</string>
 											<string>44741ABB10099AC0007E4BCA</string>
 											<string>44741ABD10099AC0007E4BCA</string>
-											<string>44741ABE10099AC0007E4BCA</string>
 											<string>444F9E87100AE79E00DC0A25</string>
 											<string>444F9E95100B574000DC0A25</string>
 											<string>444F9ED1100B59D600DC0A25</string>
 											<string>4469B777100BCF0800430EBE</string>
-											<string>4469B77E100BD20200430EBE</string>
 											<string>4469B77F100BD20200430EBE</string>
 											<string>44D33CB7100BD9A80065F631</string>
-											<string>44D33CB8100BD9A80065F631</string>
+											<string>44D33CC8100BE66F0065F631</string>
+											<string>44D33CC9100BE66F0065F631</string>
+											<string>44D33CCA100BE66F0065F631</string>
+											<string>44D33CCB100BE66F0065F631</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -442,6 +395,10 @@
 											<string>44741972100990DF007E4BCA</string>
 											<string>44741973100990DF007E4BCA</string>
 											<string>44D33CB9100BD9A80065F631</string>
+											<string>44D33CCC100BE66F0065F631</string>
+											<string>44D33CCD100BE66F0065F631</string>
+											<string>44D33CCE100BE66F0065F631</string>
+											<string>44D33CCF100BE66F0065F631</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -455,7 +412,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {887, 576}}</string>
 								<key>RubberWindowFrame</key>
-								<string>658 289 1155 795 0 0 1920 1178 </string>
+								<string>739 304 1155 795 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -475,7 +432,7 @@
 								<key>Frame</key>
 								<string>{{0, 581}, {887, 173}}</string>
 								<key>RubberWindowFrame</key>
-								<string>658 289 1155 795 0 0 1920 1178 </string>
+								<string>739 304 1155 795 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -638,11 +595,10 @@
 		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>44700FDA1007D6A8006CE665</string>
-		<string>4469B787100BD20200430EBE</string>
 		<string>/Users/ranger/rcs/opennms-iphone/OpenNMS.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>658 289 1155 795 0 0 1920 1178 </string>
+	<string>739 304 1155 795 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
