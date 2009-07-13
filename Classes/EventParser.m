@@ -41,55 +41,51 @@
 				[event setEventDisplay: [[attr stringValue] boolValue]];
 			} else if ([[attr name] isEqual:@"log"]) {
 				[event setEventLog: [[attr stringValue] boolValue]];
+			} else if ([[attr name] isEqual:@"severity"]) {
+				[event setSeverity: [[attr stringValue] intValue]];
 			} else {
 				NSLog(@"unknown event attribute: %@", [attr name]);
 			}
 		}
 		
 		// Time
-		DDXMLElement *timeElement = [xmlEvent elementForName:@"eventTime"];
+		DDXMLElement *timeElement = [xmlEvent elementForName:@"time"];
 		if (timeElement) {
 			[event setTime: [dateFormatter dateFromString:[[timeElement childAtIndex:0] stringValue]]];
 		}
 
 		// CreateTime
-		DDXMLElement *ctElement = [xmlEvent elementForName:@"eventCreateTime"];
+		DDXMLElement *ctElement = [xmlEvent elementForName:@"createTime"];
 		if (ctElement) {
 			[event setCreateTime: [dateFormatter dateFromString:[[ctElement childAtIndex:0] stringValue]]];
 		}
 		
 		// Description
-		DDXMLElement *descrElement = [xmlEvent elementForName:@"eventDescr"];
+		DDXMLElement *descrElement = [xmlEvent elementForName:@"description"];
 		if (descrElement) {
 			[event setEventDescr:[[descrElement childAtIndex:0] stringValue]];
 		}
 
 		// Host
-		DDXMLElement *hostElement = [xmlEvent elementForName:@"eventHost"];
+		DDXMLElement *hostElement = [xmlEvent elementForName:@"host"];
 		if (hostElement) {
 			[event setEventHost:[[hostElement childAtIndex:0] stringValue]];
 		}
 
 		// Log Message
-		DDXMLElement *lmElement = [xmlEvent elementForName:@"eventLogMsg"];
+		DDXMLElement *lmElement = [xmlEvent elementForName:@"logMessage"];
 		if (lmElement) {
 			[event setEventLogMessage:[[lmElement childAtIndex:0] stringValue]];
 		}
 		
-		// Severity
-		DDXMLElement *sevElement = [xmlEvent elementForName:@"eventSeverity"];
-		if (sevElement) {
-			[event setSeverity:[[[sevElement childAtIndex:0] stringValue] intValue]];
-		}
-		
 		// Source
-		DDXMLElement *sourceElement = [xmlEvent elementForName:@"eventSource"];
+		DDXMLElement *sourceElement = [xmlEvent elementForName:@"source"];
 		if (sourceElement) {
 			[event setSource:[[sourceElement childAtIndex:0] stringValue]];
 		}
 
 		// UEI
-		DDXMLElement *ueiElement = [xmlEvent elementForName:@"eventUei"];
+		DDXMLElement *ueiElement = [xmlEvent elementForName:@"uei"];
 		if (ueiElement) {
 			[event setUei:[[ueiElement childAtIndex:0] stringValue]];
 		}
