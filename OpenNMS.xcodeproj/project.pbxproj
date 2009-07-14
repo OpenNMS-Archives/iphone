@@ -43,6 +43,8 @@
 		44741933100988CB007E4BCA /* NodeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44741932100988CB007E4BCA /* NodeParser.m */; };
 		448AC2C510097B6700C2621C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 448AC2C410097B6700C2621C /* Settings.bundle */; };
 		44C8E120100CB71300A29DA0 /* ViewOutage.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C8E11F100CB71300A29DA0 /* ViewOutage.m */; };
+		44C8E295100CD66400A29DA0 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E294100CD66400A29DA0 /* display.png */; };
+		44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +109,8 @@
 		448AC2C410097B6700C2621C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		44C8E11E100CB71300A29DA0 /* ViewOutage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewOutage.h; sourceTree = "<group>"; };
 		44C8E11F100CB71300A29DA0 /* ViewOutage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewOutage.m; sourceTree = "<group>"; };
+		44C8E294100CD66400A29DA0 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = display.png; path = Images/display.png; sourceTree = "<group>"; };
+		44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutWindow.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* OpenNMS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenNMS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -192,6 +196,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */,
+				44C8E294100CD66400A29DA0 /* display.png */,
 				4470101E1007F0D7006CE665 /* AlarmView.xib */,
 				4470101F1007F0D7006CE665 /* OutageView.xib */,
 				44700FFE1007DA78006CE665 /* clock.png */,
@@ -312,6 +318,8 @@
 				447010201007F0D7006CE665 /* AlarmView.xib in Resources */,
 				447010211007F0D7006CE665 /* OutageView.xib in Resources */,
 				448AC2C510097B6700C2621C /* Settings.bundle in Resources */,
+				44C8E295100CD66400A29DA0 /* display.png in Resources */,
+				44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

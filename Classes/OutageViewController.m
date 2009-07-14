@@ -41,6 +41,13 @@
 
 @implementation OutageViewController
 
+-(void) initialize
+{
+	NSLog(@"initialize called");
+	agent = [[OpenNMSRestAgent alloc] init];
+	outages = [agent getViewOutages];
+}
+
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -59,9 +66,7 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-	agent = [[OpenNMSRestAgent alloc] init];
-	outages = [agent getViewOutages];
-	self.title = @"Outages";
+	[self initialize];
     [super viewDidLoad];
 }
 
@@ -87,6 +92,10 @@
 
 
 - (void)dealloc {
+	[outageTable release];
+	[outages release];
+	[agent release];
+	[fuzzyDate release];
     [super dealloc];
 }
 
@@ -122,7 +131,8 @@
 
 -(IBAction) reload:(id) sender
 {
-	NSLog(@"reload: sender = %@", sender);
+	[self initialize];
+	[outageTable reloadData];
 }
 
 @end

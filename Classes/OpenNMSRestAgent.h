@@ -38,11 +38,13 @@
 #import "OnmsNode.h"
 
 @interface OpenNMSRestAgent : NSObject {
+	NSMutableDictionary* nodes;
 }
 
 -(OnmsNode*) getNode:(int) nodeId;
 -(NSArray*) getOutages;
 -(NSArray*) getViewOutages;
 -(DDXMLDocument*) doRequest: (NSString*) path;
+-(void) doError:(NSError*)error message:(NSString*)extra;
 
 @end
