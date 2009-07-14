@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="12"/>
+			<integer value="1"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -63,7 +63,6 @@
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
-						<int key="IBUIBarStyle">1</int>
 						<object class="NSMutableArray" key="IBUIItems">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBUIBarButtonItem" id="1036091197">
@@ -74,11 +73,6 @@
 							<object class="IBUIBarButtonItem" id="128928569">
 								<reference key="IBUIToolbar" ref="772497444"/>
 								<int key="IBUISystemItemIdentifier">5</int>
-							</object>
-							<object class="IBUIBarButtonItem" id="253159407">
-								<string key="IBUITitle">About</string>
-								<int key="IBUIStyle">1</int>
-								<reference key="IBUIToolbar" ref="772497444"/>
 							</object>
 						</object>
 					</object>
@@ -150,8 +144,8 @@
 						<reference key="object" ref="191373211"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="1040287380"/>
 							<reference ref="772497444"/>
+							<reference ref="1040287380"/>
 						</object>
 						<reference key="parent" ref="37759322"/>
 					</object>
@@ -167,18 +161,11 @@
 						<reference key="parent" ref="37759322"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">8</int>
-						<reference key="object" ref="1040287380"/>
-						<reference key="parent" ref="191373211"/>
-						<string key="objectName">outagesList</string>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">12</int>
 						<reference key="object" ref="772497444"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="1036091197"/>
-							<reference ref="253159407"/>
 							<reference ref="128928569"/>
 						</object>
 						<reference key="parent" ref="191373211"/>
@@ -190,14 +177,15 @@
 						<string key="objectName">refreshButton</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">16</int>
-						<reference key="object" ref="253159407"/>
-						<reference key="parent" ref="772497444"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">18</int>
 						<reference key="object" ref="128928569"/>
 						<reference key="parent" ref="772497444"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">8</int>
+						<reference key="object" ref="1040287380"/>
+						<reference key="parent" ref="191373211"/>
+						<string key="objectName">outagesList</string>
 					</object>
 				</object>
 			</object>
@@ -211,7 +199,6 @@
 					<string>1.IBPluginDependency</string>
 					<string>12.IBPluginDependency</string>
 					<string>13.IBPluginDependency</string>
-					<string>16.IBPluginDependency</string>
 					<string>18.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
 				</object>
@@ -219,8 +206,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>OutageViewController</string>
 					<string>UIResponder</string>
-					<string>{{657, 223}, {320, 480}}</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>{{528, 427}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -248,7 +234,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">18</int>
+			<int key="maxID">25</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
