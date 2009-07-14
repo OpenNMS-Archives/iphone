@@ -76,7 +76,7 @@
 {
 	OutageParser* outageParser = [[OutageParser alloc] init];
 	NSArray* viewOutages = nil;
-	DDXMLDocument* document = [self doRequest: @"/outages?limit=20&orderBy=ifLostService&order=desc&ifRegainedService=null"];
+	DDXMLDocument* document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null"];
 	if (document) {
 		DDXMLElement* rootNode = [document rootElement];
 
@@ -101,7 +101,7 @@
 {
 	OutageParser* outageParser = [[OutageParser alloc] init];
 	NSArray* outages = nil;
-	DDXMLDocument* document = [self doRequest: @"/outages?limit=20&orderBy=ifLostService&order=desc&ifRegainedService=null"];
+	DDXMLDocument* document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null"];
 	if (document) {
 		DDXMLElement* rootNode = [document rootElement];
 		[outageParser parse:rootNode skipRegained:true];
