@@ -37,7 +37,7 @@
 
 @interface OnmsOutage : NSObject {
 
-	int outageId;
+	NSNumber* outageId;
 	NSDate* ifLostService;
 	NSDate* ifRegainedService;
 	OnmsEvent* serviceLostEvent;
@@ -46,7 +46,7 @@
 
 }
 
-@property (readwrite,assign) int outageId;
+@property (retain) NSNumber* outageId;
 @property (retain) NSDate* ifLostService;
 @property (retain) NSDate* ifRegainedService;
 @property (retain) OnmsEvent* serviceLostEvent;

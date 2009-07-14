@@ -51,7 +51,7 @@
 
 -(NSString*) description
 {
-	return [NSString stringWithFormat: @"[id: %d, node: %d, uei: %@]", eventId, nodeId, uei];
+	return [NSString stringWithFormat: @"[id: %@, node: %@, uei: %@]", eventId, nodeId, uei];
 }
 
 @end

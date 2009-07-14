@@ -41,7 +41,7 @@
 	NSMutableDictionary* nodes;
 }
 
--(OnmsNode*) getNode:(int) nodeId;
+-(OnmsNode*) getNode:(NSNumber*)nodeId;
 -(NSArray*) getOutages;
 -(NSArray*) getViewOutages;
 -(DDXMLDocument*) doRequest: (NSString*) path;

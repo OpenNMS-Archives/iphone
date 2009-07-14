@@ -45,7 +45,7 @@
 
 -(NSString *)description
 {
-	return [NSString stringWithFormat: @"[id: %d, service %@ (lost: %@ at %@, regained: %@ at %@)]", outageId, serviceName, serviceLostEvent, ifLostService, serviceRegainedEvent, ifRegainedService];
+	return [NSString stringWithFormat: @"[id: %@, service %@ (lost: %@ at %@, regained: %@ at %@)]", outageId, serviceName, serviceLostEvent, ifLostService, serviceRegainedEvent, ifRegainedService];
 }
 
 @end

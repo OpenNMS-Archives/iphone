@@ -34,14 +34,14 @@
 #import <Foundation/Foundation.h>
 
 @interface OnmsEvent : NSObject {
-	@private int eventId;
+	@private NSNumber* eventId;
 	@private NSString* uei;
 	@private NSDate* time;
 	@private NSDate* createTime;
 	@private NSString* host;
-	@private int nodeId;
+	@private NSNumber* nodeId;
 	@private NSString* source;
-	@private int severity;
+	@private NSNumber* severity;
 	@private NSString* eventDescr;
 	@private NSString* eventHost;
 	@private NSString* eventLogMessage;
@@ -49,14 +49,14 @@
 	@private BOOL eventLog;
 }
 
-@property (readwrite,assign) int eventId;
+@property (retain) NSNumber* eventId;
 @property (retain) NSString* uei;
 @property (retain) NSDate* time;
 @property (retain) NSDate* createTime;
 @property (retain) NSString* host;
-@property (readwrite,assign) int nodeId;
+@property (retain) NSNumber* nodeId;
 @property (retain) NSString* source;
-@property (readwrite,assign) int severity;
+@property (retain) NSNumber* severity;
 @property (retain) NSString* eventDescr;
 @property (retain) NSString* eventHost;
 @property (retain) NSString* eventLogMessage;

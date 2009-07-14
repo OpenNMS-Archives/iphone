@@ -14,6 +14,7 @@
 		288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765070DF74369002DB57D /* CoreGraphics.framework */; };
 		28AD73880D9D96C1002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD73870D9D96C1002E5188 /* MainWindow.xib */; };
 		440B00861008C941005DB69C /* FuzzyDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 440B00851008C941005DB69C /* FuzzyDate.m */; };
+		44566BF2100D399900C2E850 /* NodeDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44566BF1100D399900C2E850 /* NodeDetailController.m */; };
 		44700FC31007D5D8006CE665 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */; };
 		44700FC41007D5D8006CE665 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAF1007D5D8006CE665 /* ASIHTTPRequest.m */; };
 		44700FC51007D5D8006CE665 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB11007D5D8006CE665 /* ASINetworkQueue.m */; };
@@ -62,6 +63,8 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		440B00841008C941005DB69C /* FuzzyDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuzzyDate.h; sourceTree = "<group>"; };
 		440B00851008C941005DB69C /* FuzzyDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FuzzyDate.m; sourceTree = "<group>"; };
+		44566BF0100D399900C2E850 /* NodeDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeDetailController.h; sourceTree = "<group>"; };
+		44566BF1100D399900C2E850 /* NodeDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeDetailController.m; sourceTree = "<group>"; };
 		44700FAC1007D5D8006CE665 /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIFormDataRequest.h; sourceTree = "<group>"; };
 		44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIFormDataRequest.m; sourceTree = "<group>"; };
 		44700FAE1007D5D8006CE665 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequest.h; sourceTree = "<group>"; };
@@ -141,28 +144,15 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4474192D1009889B007E4BCA /* OnmsNode.h */,
-				4474192E1009889B007E4BCA /* OnmsNode.m */,
-				44700FE61007D746006CE665 /* EventParser.h */,
-				44700FE71007D746006CE665 /* EventParser.m */,
-				44700FE81007D746006CE665 /* OnmsEvent.h */,
-				44700FE91007D746006CE665 /* OnmsEvent.m */,
-				44700FEA1007D746006CE665 /* OnmsOutage.h */,
-				44700FEB1007D746006CE665 /* OnmsOutage.m */,
+				444CF5BE100D2180009B00BE /* Events */,
+				444CF5BD100D2173009B00BE /* Nodes */,
+				444CF5B3100D2158009B00BE /* Outages */,
 				44700FEC1007D746006CE665 /* OpenNMSRestAgent.h */,
 				44700FED1007D746006CE665 /* OpenNMSRestAgent.m */,
-				44700FEE1007D746006CE665 /* OutageParser.h */,
-				44700FEF1007D746006CE665 /* OutageParser.m */,
 				1D3623240D0F684500981E51 /* OpenNMSAppDelegate.h */,
 				1D3623250D0F684500981E51 /* OpenNMSAppDelegate.m */,
-				447010231007F23D006CE665 /* OutageViewController.h */,
-				447010241007F23D006CE665 /* OutageViewController.m */,
 				440B00841008C941005DB69C /* FuzzyDate.h */,
 				440B00851008C941005DB69C /* FuzzyDate.m */,
-				44741931100988CB007E4BCA /* NodeParser.h */,
-				44741932100988CB007E4BCA /* NodeParser.m */,
-				44C8E11E100CB71300A29DA0 /* ViewOutage.h */,
-				44C8E11F100CB71300A29DA0 /* ViewOutage.m */,
 				44BBA44B100CF1B2001257CB /* AboutViewController.h */,
 				44BBA44C100CF1B2001257CB /* AboutViewController.m */,
 			);
@@ -230,6 +220,45 @@
 				288765070DF74369002DB57D /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		444CF5B3100D2158009B00BE /* Outages */ = {
+			isa = PBXGroup;
+			children = (
+				44700FEA1007D746006CE665 /* OnmsOutage.h */,
+				44700FEB1007D746006CE665 /* OnmsOutage.m */,
+				44700FEE1007D746006CE665 /* OutageParser.h */,
+				44700FEF1007D746006CE665 /* OutageParser.m */,
+				447010231007F23D006CE665 /* OutageViewController.h */,
+				447010241007F23D006CE665 /* OutageViewController.m */,
+				44C8E11E100CB71300A29DA0 /* ViewOutage.h */,
+				44C8E11F100CB71300A29DA0 /* ViewOutage.m */,
+			);
+			name = Outages;
+			sourceTree = "<group>";
+		};
+		444CF5BD100D2173009B00BE /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				44566BF0100D399900C2E850 /* NodeDetailController.h */,
+				44566BF1100D399900C2E850 /* NodeDetailController.m */,
+				4474192D1009889B007E4BCA /* OnmsNode.h */,
+				4474192E1009889B007E4BCA /* OnmsNode.m */,
+				44741931100988CB007E4BCA /* NodeParser.h */,
+				44741932100988CB007E4BCA /* NodeParser.m */,
+			);
+			name = Nodes;
+			sourceTree = "<group>";
+		};
+		444CF5BE100D2180009B00BE /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				44700FE61007D746006CE665 /* EventParser.h */,
+				44700FE71007D746006CE665 /* EventParser.m */,
+				44700FE81007D746006CE665 /* OnmsEvent.h */,
+				44700FE91007D746006CE665 /* OnmsEvent.m */,
+			);
+			name = Events;
 			sourceTree = "<group>";
 		};
 		44700FAA1007D5C8006CE665 /* External Classes */ = {
@@ -366,6 +395,7 @@
 				44741933100988CB007E4BCA /* NodeParser.m in Sources */,
 				44C8E120100CB71300A29DA0 /* ViewOutage.m in Sources */,
 				44BBA44D100CF1B2001257CB /* AboutViewController.m in Sources */,
+				44566BF2100D399900C2E850 /* NodeDetailController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

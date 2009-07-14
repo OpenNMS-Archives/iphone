@@ -35,6 +35,8 @@
 
 @implementation ViewOutage
 
+@class FuzzyDate;
+
 @synthesize outageId;
 @synthesize serviceLostDate;
 @synthesize serviceLost;
@@ -48,7 +50,7 @@
 
 -(NSString*) description
 {
-	return [NSString stringWithFormat: @"[outage id: %d, node id: %d, node: %@, service: %@, lost: %@]", outageId, nodeId, nodeLabel, serviceLost, serviceLostDate];
+	return [NSString stringWithFormat: @"[outage id: %@, node id: %@, node: %@, service: %@, lost: %@]", outageId, nodeId, nodeLabel, serviceLost, serviceLostDate];
 }
 
 @end

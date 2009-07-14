@@ -52,19 +52,18 @@
 	[super dealloc];
 }
 
-- (OnmsNode*) getNode:(int) nodeId
+- (OnmsNode*) getNode:(NSNumber*)nodeId
 {
 	NodeParser* nodeParser = [[NodeParser alloc] init];
-	NSNumber* key = [NSNumber numberWithInt:nodeId];
-	OnmsNode* node = [nodes objectForKey:key];
+	OnmsNode* node = [nodes objectForKey:nodeId];
 	if (!node) {
-		DDXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes/%i", nodeId]];
+		DDXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@", [nodeId stringValue]]];
 		if (document) {
 			DDXMLElement* rootNode = [document rootElement];
 			[nodeParser parse:rootNode];
 			node = [nodeParser node];
 			if (node != nil) {
-				[nodes setObject:node forKey:[NSNumber numberWithInt:nodeId]];
+				[nodes setObject:node forKey:nodeId];
 			}
 		}
 	}

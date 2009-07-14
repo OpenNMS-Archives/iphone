@@ -69,13 +69,13 @@
 		// ID
 		for (id attr in [xmlEvent attributes]) {
 			if ([[attr name] isEqual:@"id"]) {
-				[event setEventId: [[attr stringValue] intValue]];
+				[event setEventId: [NSNumber numberWithInt:[[attr stringValue] intValue]]];
 			} else if ([[attr name] isEqual:@"display"]) {
 				[event setEventDisplay: [[attr stringValue] boolValue]];
 			} else if ([[attr name] isEqual:@"log"]) {
 				[event setEventLog: [[attr stringValue] boolValue]];
 			} else if ([[attr name] isEqual:@"severity"]) {
-				[event setSeverity: [[attr stringValue] intValue]];
+				[event setSeverity: [NSNumber numberWithInt:[[attr stringValue] intValue]]];
 			} else {
 				NSLog(@"unknown event attribute: %@", [attr name]);
 			}
@@ -126,7 +126,7 @@
 		// Node ID
 		DDXMLElement *nodeElement = [xmlEvent elementForName:@"nodeId"];
 		if (nodeElement) {
-			[event setNodeId:[[[nodeElement childAtIndex:0] stringValue] intValue]];
+			[event setNodeId:[NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]]];
 		}
 		
 		// TODO: parms

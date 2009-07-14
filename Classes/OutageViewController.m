@@ -32,88 +32,72 @@
  *******************************************************************************/
 
 #import "OutageViewController.h"
+#import "NodeDetailController.h"
 #import "OpenNMSRestAgent.h"
 #import "OnmsOutage.h"
 #import "OnmsEvent.h"
 #import "OnmsNode.h"
-
-@class OnmsOutage, OnmsEvent, OnmsNode;
+#import "ViewOutage.h"
 
 @implementation OutageViewController
 
--(void) initialize
-{
-	NSLog(@"initialize called");
+@synthesize outageTable;
+@synthesize nodeDetailController;
+
+static NSString *CellIdentifier = @"Cell";
+
+-(void) dealloc {
+	[outageTable release];
+	[nodeDetailController release];
+	
+	[agent release];
+	[fuzzyDate release];
+	
+	[outages release];
+	
+    [super dealloc];
+}
+
+-(void) awakeFromNib {
+	self.title = @"Outages";
 	agent = [[OpenNMSRestAgent alloc] init];
 	outages = [agent getViewOutages];
 }
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-	[self initialize];
-    [super viewDidLoad];
+-(IBAction) reload:(id) sender
+{
+	outages = [agent getViewOutages];
+	[outageTable reloadData];
 }
 
-/*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-*/
+#pragma mark UIViewController delegates
 
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
+-(void) viewWillAppear:(BOOL)animated
+{
+	[outageTable reloadData];
+	NSIndexPath* tableSelection = [outageTable indexPathForSelectedRow];
+	[outageTable deselectRowAtIndexPath:tableSelection animated:NO];
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
-
-- (void)dealloc {
-	[outageTable release];
-	[outages release];
-	[agent release];
-	[fuzzyDate release];
-    [super dealloc];
-}
-
-#pragma mark Table view methods
+#pragma mark UITableView delegates
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;
 }
 
-// Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return [outages count];
 }
 
-// Customize the appearance of table view cells.
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+{
+	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
+	[nodeDetailController setNodeId:outage.nodeId];
+	UINavigationController* cont = [self navigationController];
+	[cont pushViewController:nodeDetailController animated:YES];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	static NSString *CellIdentifier = @"Cell";
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
@@ -124,15 +108,6 @@
 	cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 	cell.textLabel.text = [[outages objectAtIndex:indexPath.row] getCellText];
 	return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-}
-
--(IBAction) reload:(id) sender
-{
-	[self initialize];
-	[outageTable reloadData];
 }
 
 @end

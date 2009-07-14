@@ -69,7 +69,7 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 	// ID
 	for (id attr in [xmlOutage attributes]) {
 		if ([[attr name] isEqual:@"id"]) {
-			outage.outageId = [[attr stringValue] intValue];
+			outage.outageId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
 		}
 	}
 	
@@ -139,11 +139,10 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 		viewOutage.nodeId = outage.serviceLostEvent.nodeId;
 		
 		if (distinct) {
-			NSNumber* nodeId = [NSNumber numberWithInt:outage.serviceLostEvent.nodeId];
-			if ([labelCount countForObject:nodeId] == 0) {
+			if ([labelCount countForObject:outage.serviceLostEvent.nodeId] == 0) {
 				[viewOutages addObject:viewOutage];
 			}
-			[labelCount addObject:nodeId];
+			[labelCount addObject:outage.serviceLostEvent.nodeId];
 		} else {
 			[viewOutages addObject:viewOutage];
 		}
@@ -163,10 +162,7 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 	for (id xmlOutage in xmlOutages) {
 		OnmsOutage* outage = getOutage(xmlOutage);
 		if (!skip || outage.serviceRegainedEvent == nil) {
-			NSLog(@"adding outage %@", outage);
 			[outages addObject: outage];
-		} else {
-			NSLog(@"skipping outage %@", outage);
 		}
 	}
 	return true;

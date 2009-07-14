@@ -32,21 +32,20 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "FuzzyDate.h"
 
 @interface ViewOutage : NSObject {
-	@private int outageId;
+	@private NSNumber* outageId;
 	@private NSString* serviceLostDate;
 	@private NSString* serviceLost;
-	@private int nodeId;
+	@private NSNumber* nodeId;
 	@private NSString* nodeLabel;
 }
 
-@property (readwrite,assign) int outageId;
-@property (retain) NSString* serviceLostDate;
-@property (retain) NSString* serviceLost;
-@property (readwrite,assign) int nodeId;
-@property (retain) NSString* nodeLabel;
+@property (nonatomic,retain) NSNumber* outageId;
+@property (nonatomic,retain) NSString* serviceLostDate;
+@property (nonatomic,retain) NSString* serviceLost;
+@property (nonatomic,retain) NSNumber* nodeId;
+@property (nonatomic,retain) NSString* nodeLabel;
 
 -(NSString*) getCellText;
 -(NSString*) description;
