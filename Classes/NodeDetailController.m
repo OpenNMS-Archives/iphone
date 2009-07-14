@@ -13,4 +13,11 @@
 
 @synthesize nodeId;
 
+#pragma mark UIViewController delegates
+
+-(void) viewWillAppear:(BOOL)animated
+{
+	NSLog(@"view will appear, node id = %@", nodeId);
+}
+
 @end
