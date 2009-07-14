@@ -184,13 +184,14 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 269286344;
-			PBXWorkspaceStateSaveDate = 269286344;
+			PBXPerProjectTemplateStateSaveDate = 269291325;
+			PBXWorkspaceStateSaveDate = 269291325;
 		};
 		perUserProjectItems = {
 			440B008F1008E4C2005DB69C = 440B008F1008E4C2005DB69C /* PBXTextBookmark */;
 			440B00901008E4C2005DB69C = 440B00901008E4C2005DB69C /* PBXTextBookmark */;
 			440B013210090B56005DB69C = 440B013210090B56005DB69C /* PBXTextBookmark */;
+			4441205D100D0F4200AB5BF6 /* PBXTextBookmark */ = 4441205D100D0F4200AB5BF6 /* PBXTextBookmark */;
 			4470103D10083D4B006CE665 = 4470103D10083D4B006CE665 /* PBXTextBookmark */;
 			4470103E10083D4B006CE665 = 4470103E10083D4B006CE665 /* PlistBookmark */;
 			4470104110083D4B006CE665 = 4470104110083D4B006CE665 /* PBXBookmark */;
@@ -244,10 +245,10 @@
 			44BBA491100CFB75001257CB = 44BBA491100CFB75001257CB /* PBXTextBookmark */;
 			44BBA492100CFB75001257CB = 44BBA492100CFB75001257CB /* PBXTextBookmark */;
 			44BBA494100CFB75001257CB = 44BBA494100CFB75001257CB /* PBXTextBookmark */;
-			44BBA49E100CFBE1001257CB /* PBXTextBookmark */ = 44BBA49E100CFBE1001257CB /* PBXTextBookmark */;
-			44BBA49F100CFBE1001257CB /* PBXTextBookmark */ = 44BBA49F100CFBE1001257CB /* PBXTextBookmark */;
-			44BBA4A0100CFBE1001257CB /* PBXTextBookmark */ = 44BBA4A0100CFBE1001257CB /* PBXTextBookmark */;
-			44BBA4A1100CFBE1001257CB /* PBXTextBookmark */ = 44BBA4A1100CFBE1001257CB /* PBXTextBookmark */;
+			44BBA49E100CFBE1001257CB = 44BBA49E100CFBE1001257CB /* PBXTextBookmark */;
+			44BBA49F100CFBE1001257CB = 44BBA49F100CFBE1001257CB /* PBXTextBookmark */;
+			44BBA4A0100CFBE1001257CB = 44BBA4A0100CFBE1001257CB /* PBXTextBookmark */;
+			44BBA4A1100CFBE1001257CB = 44BBA4A1100CFBE1001257CB /* PBXTextBookmark */;
 			44C8E161100CC0D400A29DA0 = 44C8E161100CC0D400A29DA0 /* PBXTextBookmark */;
 			44C8E162100CC0D400A29DA0 = 44C8E162100CC0D400A29DA0 /* PBXTextBookmark */;
 			44C8E226100CCD4300A29DA0 = 44C8E226100CCD4300A29DA0 /* PBXTextBookmark */;
@@ -346,6 +347,16 @@
 		rType = 0;
 		vrLen = 358;
 		vrLoc = 0;
+	};
+	4441205D100D0F4200AB5BF6 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 447010241007F23D006CE665 /* OutageViewController.m */;
+		name = "OutageViewController.m: 40";
+		rLen = 0;
+		rLoc = 1428;
+		rType = 0;
+		vrLen = 1024;
+		vrLoc = 968;
 	};
 	44700F9B1007D5A3006CE665 /* OpenNMS */ = {
 		isa = PBXExecutable;
@@ -484,9 +495,9 @@
 	};
 	447010241007F23D006CE665 /* OutageViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {984, 1876}}";
+			sepNavIntBoundsRect = "{{0, 0}, {984, 1848}}";
 			sepNavSelRange = "{1428, 0}";
-			sepNavVisRange = "{986, 1006}";
+			sepNavVisRange = "{968, 1024}";
 			sepNavWindowFrame = "{{647, 132}, {1128, 1001}}";
 		};
 	};
@@ -1055,11 +1066,6 @@
 		name = LocateMeAppDelegate.m;
 		path = /Users/ranger/Downloads/LocateMe/Classes/LocateMeAppDelegate.m;
 		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {826, 952}}";
-			sepNavSelRange = "{2433, 0}";
-			sepNavVisRange = "{1527, 1305}";
-		};
 	};
 	44BBA49E100CFBE1001257CB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
