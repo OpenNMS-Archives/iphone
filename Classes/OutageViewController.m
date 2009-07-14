@@ -27,8 +27,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
 	agent = [[OpenNMSRestAgent alloc] init];
-	fuzzyDate = [[FuzzyDate alloc] init];
-	outages = [agent getOutages];
+	outages = [agent getViewOutages];
 	self.title = @"Outages";
     [super viewDidLoad];
 }
@@ -81,14 +80,7 @@
 	
 	// Set up the cell...
 	cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
-	OnmsOutage *outage = [outages objectAtIndex:indexPath.row];
-	if (outage.ifRegainedService != nil) {
-		OnmsNode* node = [agent getNode:outage.serviceRegainedEvent.nodeId];
-		cell.textLabel.text = [NSString stringWithFormat:@"%@/%@ Up %@", node.label, outage.serviceName, [fuzzyDate format: outage.ifRegainedService]];
-	} else {
-		OnmsNode* node = [agent getNode:outage.serviceLostEvent.nodeId];
-		cell.textLabel.text = [NSString stringWithFormat:@"%@/%@ Down %@", node.label, outage.serviceName, [fuzzyDate format: outage.ifLostService]];
-	}
+	cell.textLabel.text = [[outages objectAtIndex:indexPath.row] getCellText];
 	return cell;
 }
 

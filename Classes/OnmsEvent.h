@@ -30,6 +30,6 @@
 @property (readwrite,assign) BOOL eventDisplay;
 @property (readwrite,assign) BOOL eventLog;
 
--(NSString *)description;
+-(NSString*) description;
 
 @end

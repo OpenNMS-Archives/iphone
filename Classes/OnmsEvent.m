@@ -16,7 +16,7 @@
 @synthesize eventDisplay;
 @synthesize eventLog;
 
--(NSString *)description
+-(NSString*) description
 {
 	return [NSString stringWithFormat: @"[id: %d, node: %d, uei: %@]", eventId, nodeId, uei];
 }

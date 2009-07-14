@@ -9,5 +9,7 @@
 
 -(OnmsNode*) getNode:(int) nodeId;
 -(NSArray*) getOutages;
+-(NSArray*) getViewOutages;
+-(DDXMLDocument*) doRequest: (NSString*) path;
 
 @end

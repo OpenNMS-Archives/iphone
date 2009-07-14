@@ -42,6 +42,7 @@
 		4474192F1009889B007E4BCA /* OnmsNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4474192E1009889B007E4BCA /* OnmsNode.m */; };
 		44741933100988CB007E4BCA /* NodeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44741932100988CB007E4BCA /* NodeParser.m */; };
 		448AC2C510097B6700C2621C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 448AC2C410097B6700C2621C /* Settings.bundle */; };
+		44C8E120100CB71300A29DA0 /* ViewOutage.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C8E11F100CB71300A29DA0 /* ViewOutage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,8 @@
 		44741931100988CB007E4BCA /* NodeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeParser.h; sourceTree = "<group>"; };
 		44741932100988CB007E4BCA /* NodeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeParser.m; sourceTree = "<group>"; };
 		448AC2C410097B6700C2621C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		44C8E11E100CB71300A29DA0 /* ViewOutage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewOutage.h; sourceTree = "<group>"; };
+		44C8E11F100CB71300A29DA0 /* ViewOutage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewOutage.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* OpenNMS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenNMS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,6 +150,8 @@
 				440B00851008C941005DB69C /* FuzzyDate.m */,
 				44741931100988CB007E4BCA /* NodeParser.h */,
 				44741932100988CB007E4BCA /* NodeParser.m */,
+				44C8E11E100CB71300A29DA0 /* ViewOutage.h */,
+				44C8E11F100CB71300A29DA0 /* ViewOutage.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -338,6 +343,7 @@
 				440B00861008C941005DB69C /* FuzzyDate.m in Sources */,
 				4474192F1009889B007E4BCA /* OnmsNode.m in Sources */,
 				44741933100988CB007E4BCA /* NodeParser.m in Sources */,
+				44C8E120100CB71300A29DA0 /* ViewOutage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
