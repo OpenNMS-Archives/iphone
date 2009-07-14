@@ -3,16 +3,16 @@
 	1D3623240D0F684500981E51 /* OpenNMSAppDelegate.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {826, 630}}";
-			sepNavSelRange = "{140, 0}";
-			sepNavVisRange = "{0, 1451}";
+			sepNavSelRange = "{940, 0}";
+			sepNavVisRange = "{278, 1314}";
 			sepNavWindowFrame = "{{107, 114}, {1018, 975}}";
 		};
 	};
 	1D3623250D0F684500981E51 /* OpenNMSAppDelegate.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {894, 994}}";
+			sepNavIntBoundsRect = "{{0, 0}, {894, 980}}";
 			sepNavSelRange = "{985, 0}";
-			sepNavVisRange = "{1115, 949}";
+			sepNavVisRange = "{1067, 997}";
 		};
 	};
 	1D6058900D05DD3D006BFB54 /* OpenNMS */ = {
@@ -334,7 +334,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 2;
-		modificationTime = 269286056.487058;
+		modificationTime = 269288573.756448;
 		state = 2;
 	};
 	440B013210090B56005DB69C /* PBXTextBookmark */ = {
@@ -476,17 +476,29 @@
 		};
 	};
 	447010231007F23D006CE665 /* OutageViewController.h */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.h;
+		name = OutageViewController.h;
+		path = "/Users/ranger/rcs/opennms-iphone/Classes/OutageViewController.h";
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {826, 672}}";
 			sepNavSelRange = "{1475, 0}";
-			sepNavVisRange = "{425, 1110}";
+			sepNavVisRange = "{425, 1115}";
 		};
 	};
 	447010241007F23D006CE665 /* OutageViewController.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.objc;
+		name = OutageViewController.m;
+		path = "/Users/ranger/rcs/opennms-iphone/Classes/OutageViewController.m";
+		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {984, 1876}}";
-			sepNavSelRange = "{1428, 0}";
-			sepNavVisRange = "{986, 1006}";
+			sepNavIntBoundsRect = "{{0, 0}, {984, 1946}}";
+			sepNavSelRange = "{1902, 0}";
+			sepNavVisRange = "{2931, 1119}";
 			sepNavWindowFrame = "{{647, 132}, {1128, 1001}}";
 		};
 	};
@@ -760,15 +772,15 @@
 	44BBA44B100CF1B2001257CB /* AboutViewController.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {826, 544}}";
-			sepNavSelRange = "{242, 0}";
+			sepNavSelRange = "{172, 0}";
 			sepNavVisRange = "{0, 266}";
 		};
 	};
 	44BBA44C100CF1B2001257CB /* AboutViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {984, 798}}";
-			sepNavSelRange = "{841, 0}";
-			sepNavVisRange = "{578, 724}";
+			sepNavIntBoundsRect = "{{0, 0}, {826, 544}}";
+			sepNavSelRange = "{219, 0}";
+			sepNavVisRange = "{0, 388}";
 		};
 	};
 	44BBA466100CF7D9001257CB /* PBXTextBookmark */ = {
@@ -818,7 +830,7 @@
 		rLen = 0;
 		rLoc = 260;
 		rType = 0;
-		vrLen = 308;
+		vrLen = 266;
 		vrLoc = 0;
 	};
 	44BBA46D100CF7D9001257CB /* PBXTextBookmark */ = {
@@ -826,7 +838,7 @@
 		fRef = 44BBA44C100CF1B2001257CB /* AboutViewController.m */;
 		name = "AboutViewController.m: 34";
 		rLen = 0;
-		rLoc = 889;
+		rLoc = 290;
 		rType = 0;
 		vrLen = 1022;
 		vrLoc = 0;
@@ -848,7 +860,7 @@
 		rLen = 0;
 		rLoc = 260;
 		rType = 0;
-		vrLen = 290;
+		vrLen = 266;
 		vrLoc = 0;
 	};
 	44BBA470100CF7D9001257CB /* PBXTextBookmark */ = {
@@ -868,7 +880,7 @@
 		rLen = 0;
 		rLoc = 260;
 		rType = 0;
-		vrLen = 290;
+		vrLen = 266;
 		vrLoc = 0;
 	};
 	44BBA472100CF7D9001257CB /* PBXTextBookmark */ = {
@@ -976,7 +988,7 @@
 		fRef = 44BBA44B100CF1B2001257CB /* AboutViewController.h */;
 		name = "AboutViewController.h: 13";
 		rLen = 0;
-		rLoc = 242;
+		rLoc = 258;
 		rType = 0;
 		vrLen = 266;
 		vrLoc = 0;
@@ -1017,7 +1029,7 @@
 		fRef = 44BBA44B100CF1B2001257CB /* AboutViewController.h */;
 		name = "AboutViewController.h: 13";
 		rLen = 0;
-		rLoc = 242;
+		rLoc = 258;
 		rType = 0;
 		vrLen = 266;
 		vrLoc = 0;
@@ -1179,7 +1191,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 1;
-		modificationTime = 269286056.4870909;
+		modificationTime = 269288573.756472;
 		state = 2;
 	};
 	44C8E249100CD20E00A29DA0 /* PBXTextBookmark */ = {

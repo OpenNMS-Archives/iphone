@@ -35,7 +35,7 @@
 #import "FuzzyDate.h"
 #import "OpenNMSRestAgent.h"
 
-@interface OutageViewController : UIViewController {
+@interface OutageListViewController : UIViewController {
 	IBOutlet UITableView* outageTable;
 	NSArray* outages;
 	OpenNMSRestAgent* agent;

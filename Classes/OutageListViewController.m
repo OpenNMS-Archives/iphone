@@ -31,7 +31,7 @@
  *
  *******************************************************************************/
 
-#import "OutageViewController.h"
+#import "OutageListViewController.h"
 #import "OpenNMSRestAgent.h"
 #import "OnmsOutage.h"
 #import "OnmsEvent.h"
@@ -39,7 +39,7 @@
 
 @class OnmsOutage, OnmsEvent, OnmsNode;
 
-@implementation OutageViewController
+@implementation OutageListViewController
 
 -(void) initialize
 {
