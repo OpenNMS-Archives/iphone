@@ -49,6 +49,7 @@
 		44C8E120100CB71300A29DA0 /* ViewOutage.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C8E11F100CB71300A29DA0 /* ViewOutage.m */; };
 		44C8E295100CD66400A29DA0 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E294100CD66400A29DA0 /* display.png */; };
 		44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */; };
+		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,6 +122,7 @@
 		44C8E11F100CB71300A29DA0 /* ViewOutage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewOutage.m; sourceTree = "<group>"; };
 		44C8E294100CD66400A29DA0 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = display.png; path = Images/display.png; sourceTree = "<group>"; };
 		44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutWindow.xib; sourceTree = "<group>"; };
+		44E2A161100E195100DD5A1D /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Images/opennms-headingbg.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* OpenNMS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenNMS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,6 +197,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				44E2A161100E195100DD5A1D /* opennms-headingbg.png */,
 				44BBA449100CE90B001257CB /* o.png */,
 				44BBA447100CE84F001257CB /* question-mark-helvetica.png */,
 				44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */,
@@ -362,6 +365,7 @@
 				44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */,
 				44BBA448100CE84F001257CB /* question-mark-helvetica.png in Resources */,
 				44BBA44A100CE90B001257CB /* o.png in Resources */,
+				44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
