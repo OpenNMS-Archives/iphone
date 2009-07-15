@@ -32,17 +32,24 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
+#import "FuzzyDate.h"
 
-@class OpenNMSRestAgent;
+@class OpenNMSRestAgent, OnmsNode, FuzzyDate;
 
-@interface NodeDetailController : UIViewController {
-	@private NSNumber* nodeId;
-	@private UILabel* label;
-
+@interface NodeDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+	@private UITableView* nodeTable;
 	@private OpenNMSRestAgent* agent;
+	@private FuzzyDate* fuzzyDate;
+
+	@private NSMutableArray* sections;
+	@private NSNumber* nodeId;
+	@private OnmsNode* node;
+	@private NSArray* outages;
+	@private NSArray* interfaces;
+
 }
 
+@property (nonatomic, retain) IBOutlet UITableView* nodeTable;
 @property (nonatomic, retain) NSNumber* nodeId;
-@property (nonatomic, retain) IBOutlet UILabel* label;
 
 @end

@@ -42,10 +42,11 @@
 @synthesize serviceLostEvent;
 @synthesize serviceRegainedEvent;
 @synthesize serviceName;
+@synthesize ipAddress;
 
 -(NSString *)description
 {
-	return [NSString stringWithFormat: @"[id: %@, service %@ (lost: %@ at %@, regained: %@ at %@)]", outageId, serviceName, serviceLostEvent, ifLostService, serviceRegainedEvent, ifRegainedService];
+	return [NSString stringWithFormat: @"[id: %@, service %@/%@ (lost: %@ at %@, regained: %@ at %@)]", outageId, ipAddress, serviceName, serviceLostEvent, ifLostService, serviceRegainedEvent, ifRegainedService];
 }
 
 @end

@@ -31,24 +31,26 @@
  *
  *******************************************************************************/
 
-#import "ViewOutage.h"
+#import "ColumnarTableViewCell.h"
 
-@implementation ViewOutage
 
-@synthesize outageId;
-@synthesize serviceLostDate;
-@synthesize serviceLost;
-@synthesize nodeId;
-@synthesize nodeLabel;
+@implementation ColumnarTableViewCell
 
--(NSString*) getCellText
-{
-	return [NSString stringWithFormat: @"%@ Down %@", nodeLabel, serviceLostDate];
+- (void)dealloc {
+	[columns release];
+    [super dealloc];
 }
 
--(NSString*) description
+- (id)initWithFrame:(CGRect)frame reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier]) {
+		columns = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+- (void)addColumn:(NSString*)value
 {
-	return [NSString stringWithFormat: @"[outage id: %@, node id: %@, node: %@, service: %@, lost: %@]", outageId, nodeId, nodeLabel, serviceLost, serviceLostDate];
+	[columns addObject:value];
 }
 
 @end

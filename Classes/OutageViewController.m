@@ -33,6 +33,7 @@
 
 #import "OutageViewController.h"
 #import "NodeDetailController.h"
+#import "ColumnarTableViewCell.h"
 #import "OpenNMSRestAgent.h"
 #import "OnmsOutage.h"
 #import "OnmsEvent.h"
@@ -44,7 +45,7 @@
 @synthesize outageTable;
 @synthesize nodeDetailController;
 
-static NSString *CellIdentifier = @"Cell";
+static NSString* CellIdentifier = @"OutageView Cell";
 
 -(void) dealloc {
 	[outageTable release];
@@ -98,15 +99,27 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+
+	ColumnarTableViewCell *cell = (ColumnarTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+		cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
 	}
 	
-	// Set up the cell...
-	cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
-	cell.textLabel.text = [[outages objectAtIndex:indexPath.row] getCellText];
+	cell.textLabel.adjustsFontSizeToFitWidth;
+
+	UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
+	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
+	[cell addColumn:outage.nodeLabel];
+	label.font = [UIFont boldSystemFontOfSize:12];
+	label.text = outage.nodeLabel;
+	[cell.contentView addSubview:label];
+
+	label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
+	[cell addColumn:outage.serviceLostDate];
+	label.font = [UIFont boldSystemFontOfSize:12];
+	label.text = outage.serviceLostDate;
+	[cell.contentView addSubview:label];
+	
 	return cell;
 }
 

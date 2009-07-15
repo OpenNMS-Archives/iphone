@@ -50,6 +50,9 @@
 		44C8E295100CD66400A29DA0 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E294100CD66400A29DA0 /* display.png */; };
 		44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */; };
 		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
+		44E2A2AE100E553600DD5A1D /* OnmsIpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2AD100E553600DD5A1D /* OnmsIpInterface.m */; };
+		44E2A2B1100E56F700DD5A1D /* IpInterfaceParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2B0100E56F700DD5A1D /* IpInterfaceParser.m */; };
+		44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,6 +126,12 @@
 		44C8E294100CD66400A29DA0 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = display.png; path = Images/display.png; sourceTree = "<group>"; };
 		44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutWindow.xib; sourceTree = "<group>"; };
 		44E2A161100E195100DD5A1D /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Images/opennms-headingbg.png"; sourceTree = "<group>"; };
+		44E2A2AC100E553600DD5A1D /* OnmsIpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsIpInterface.h; sourceTree = "<group>"; };
+		44E2A2AD100E553600DD5A1D /* OnmsIpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsIpInterface.m; sourceTree = "<group>"; };
+		44E2A2AF100E56F700DD5A1D /* IpInterfaceParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IpInterfaceParser.h; sourceTree = "<group>"; };
+		44E2A2B0100E56F700DD5A1D /* IpInterfaceParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IpInterfaceParser.m; sourceTree = "<group>"; };
+		44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnarTableViewCell.h; sourceTree = "<group>"; };
+		44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnarTableViewCell.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* OpenNMS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenNMS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -157,6 +166,8 @@
 				440B00851008C941005DB69C /* FuzzyDate.m */,
 				44BBA44B100CF1B2001257CB /* AboutViewController.h */,
 				44BBA44C100CF1B2001257CB /* AboutViewController.m */,
+				44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */,
+				44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -243,6 +254,7 @@
 		444CF5BD100D2173009B00BE /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
+				44E2A2AA100E552600DD5A1D /* Interfaces */,
 				44566BF0100D399900C2E850 /* NodeDetailController.h */,
 				44566BF1100D399900C2E850 /* NodeDetailController.m */,
 				4474192D1009889B007E4BCA /* OnmsNode.h */,
@@ -309,6 +321,17 @@
 			);
 			name = KissXML;
 			path = "External Classes/KissXML";
+			sourceTree = "<group>";
+		};
+		44E2A2AA100E552600DD5A1D /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				44E2A2AC100E553600DD5A1D /* OnmsIpInterface.h */,
+				44E2A2AD100E553600DD5A1D /* OnmsIpInterface.m */,
+				44E2A2AF100E56F700DD5A1D /* IpInterfaceParser.h */,
+				44E2A2B0100E56F700DD5A1D /* IpInterfaceParser.m */,
+			);
+			name = Interfaces;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -400,6 +423,9 @@
 				44C8E120100CB71300A29DA0 /* ViewOutage.m in Sources */,
 				44BBA44D100CF1B2001257CB /* AboutViewController.m in Sources */,
 				44566BF2100D399900C2E850 /* NodeDetailController.m in Sources */,
+				44E2A2AE100E553600DD5A1D /* OnmsIpInterface.m in Sources */,
+				44E2A2B1100E56F700DD5A1D /* IpInterfaceParser.m in Sources */,
+				44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

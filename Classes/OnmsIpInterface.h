@@ -31,24 +31,27 @@
  *
  *******************************************************************************/
 
-#import "ViewOutage.h"
+#import <Foundation/Foundation.h>
 
-@implementation ViewOutage
 
-@synthesize outageId;
-@synthesize serviceLostDate;
-@synthesize serviceLost;
-@synthesize nodeId;
-@synthesize nodeLabel;
-
--(NSString*) getCellText
-{
-	return [NSString stringWithFormat: @"%@ Down %@", nodeLabel, serviceLostDate];
+@interface OnmsIpInterface : NSObject {
+	@private NSNumber* interfaceId;
+	@private NSNumber* nodeId;
+	@private NSNumber* ifIndex;
+	@private NSString* ipAddress;
+	@private NSString* hostName;
+	@private NSDate* lastCapsdPoll;
+	@private NSString* isManaged;
+	@private NSString* snmpPrimary;
 }
 
--(NSString*) description
-{
-	return [NSString stringWithFormat: @"[outage id: %@, node id: %@, node: %@, service: %@, lost: %@]", outageId, nodeId, nodeLabel, serviceLost, serviceLostDate];
-}
+@property (nonatomic, retain) NSNumber* interfaceId;
+@property (nonatomic, retain) NSNumber* nodeId;
+@property (nonatomic, retain) NSNumber* ifIndex;
+@property (nonatomic, retain) NSString* ipAddress;
+@property (nonatomic, retain) NSString* hostName;
+@property (nonatomic, retain) NSDate* lastCapsdPoll;
+@property (nonatomic, retain) NSString* isManaged;
+@property (nonatomic, retain) NSString* snmpPrimary;
 
 @end

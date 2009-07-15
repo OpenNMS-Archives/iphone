@@ -84,7 +84,13 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 			}
 		}
 	}
-	
+
+	// IP Address
+	DDXMLElement* ipElement = [xmlOutage elementForName:@"ipAddress"];
+	if (ipElement) {
+		[outage setIpAddress:[[ipElement childAtIndex:0] stringValue]];
+	}
+
 	// Service Lost Date
 	DDXMLElement* slElement = [xmlOutage elementForName:@"ifLostService"];
 	if (slElement) {

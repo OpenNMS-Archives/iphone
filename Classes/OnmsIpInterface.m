@@ -31,24 +31,18 @@
  *
  *******************************************************************************/
 
-#import "ViewOutage.h"
+#import "OnmsIpInterface.h"
 
-@implementation ViewOutage
 
-@synthesize outageId;
-@synthesize serviceLostDate;
-@synthesize serviceLost;
+@implementation OnmsIpInterface
+
+@synthesize interfaceId;
 @synthesize nodeId;
-@synthesize nodeLabel;
-
--(NSString*) getCellText
-{
-	return [NSString stringWithFormat: @"%@ Down %@", nodeLabel, serviceLostDate];
-}
-
--(NSString*) description
-{
-	return [NSString stringWithFormat: @"[outage id: %@, node id: %@, node: %@, service: %@, lost: %@]", outageId, nodeId, nodeLabel, serviceLost, serviceLostDate];
-}
+@synthesize ifIndex;
+@synthesize ipAddress;
+@synthesize hostName;
+@synthesize lastCapsdPoll;
+@synthesize isManaged;
+@synthesize snmpPrimary;
 
 @end

@@ -43,6 +43,7 @@
 	OnmsEvent* serviceLostEvent;
 	OnmsEvent* serviceRegainedEvent;
 	NSString* serviceName;
+	NSString* ipAddress;
 
 }
 
@@ -52,6 +53,7 @@
 @property (retain) OnmsEvent* serviceLostEvent;
 @property (retain) OnmsEvent* serviceRegainedEvent;
 @property (retain) NSString* serviceName;
+@property (retain) NSString* ipAddress;
 
 -(NSString*)description;
 

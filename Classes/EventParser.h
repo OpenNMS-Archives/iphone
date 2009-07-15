@@ -37,7 +37,7 @@
 #import "DDXMLElementAdditions.h"
 
 @interface EventParser : NSObject {
-@private NSMutableArray *events;
+	@private NSMutableArray *events;
 }
 
 -(BOOL)parse:(DDXMLElement *)node;

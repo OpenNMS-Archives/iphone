@@ -32,9 +32,7 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "ASIHTTPRequest.h"
-#import "OutageParser.h"
-#import "NodeParser.h"
+#import "DDXMLDocument.h"
 #import "OnmsNode.h"
 
 @interface OpenNMSRestAgent : NSObject {
@@ -42,8 +40,11 @@
 }
 
 -(OnmsNode*) getNode:(NSNumber*)nodeId;
+-(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
 -(NSArray*) getOutages;
+-(NSArray*) getOutagesForNode:(NSNumber*)nodeId;
 -(NSArray*) getViewOutages;
+-(NSArray*) getViewOutagesForNode:(NSNumber*)nodeId;
 -(DDXMLDocument*) doRequest: (NSString*) path;
 -(void) doError:(NSError*)error message:(NSString*)extra;
 
