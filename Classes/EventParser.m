@@ -133,6 +133,8 @@
 		
 		[events addObject: event];
 	}
+	
+	[dateFormatter release];
 	return true;
 }
 

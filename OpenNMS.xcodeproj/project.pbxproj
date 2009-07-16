@@ -19,7 +19,6 @@
 		44700FC41007D5D8006CE665 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAF1007D5D8006CE665 /* ASIHTTPRequest.m */; };
 		44700FC51007D5D8006CE665 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB11007D5D8006CE665 /* ASINetworkQueue.m */; };
 		44700FC61007D5D8006CE665 /* ASINSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB31007D5D8006CE665 /* ASINSStringAdditions.m */; };
-		44700FC71007D5D8006CE665 /* NSHTTPCookieAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB51007D5D8006CE665 /* NSHTTPCookieAdditions.m */; };
 		44700FC81007D5D8006CE665 /* DDXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB91007D5D8006CE665 /* DDXMLDocument.m */; };
 		44700FC91007D5D8006CE665 /* DDXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FBB1007D5D8006CE665 /* DDXMLElement.m */; };
 		44700FCA1007D5D8006CE665 /* DDXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FBD1007D5D8006CE665 /* DDXMLElementAdditions.m */; };
@@ -78,8 +77,6 @@
 		44700FB11007D5D8006CE665 /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINetworkQueue.m; sourceTree = "<group>"; };
 		44700FB21007D5D8006CE665 /* ASINSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINSStringAdditions.h; sourceTree = "<group>"; };
 		44700FB31007D5D8006CE665 /* ASINSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINSStringAdditions.m; sourceTree = "<group>"; };
-		44700FB41007D5D8006CE665 /* NSHTTPCookieAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSHTTPCookieAdditions.h; sourceTree = "<group>"; };
-		44700FB51007D5D8006CE665 /* NSHTTPCookieAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSHTTPCookieAdditions.m; sourceTree = "<group>"; };
 		44700FB71007D5D8006CE665 /* DDXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXML.h; sourceTree = "<group>"; };
 		44700FB81007D5D8006CE665 /* DDXMLDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLDocument.h; sourceTree = "<group>"; };
 		44700FB91007D5D8006CE665 /* DDXMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLDocument.m; sourceTree = "<group>"; };
@@ -299,8 +296,6 @@
 				44700FB11007D5D8006CE665 /* ASINetworkQueue.m */,
 				44700FB21007D5D8006CE665 /* ASINSStringAdditions.h */,
 				44700FB31007D5D8006CE665 /* ASINSStringAdditions.m */,
-				44700FB41007D5D8006CE665 /* NSHTTPCookieAdditions.h */,
-				44700FB51007D5D8006CE665 /* NSHTTPCookieAdditions.m */,
 			);
 			name = ASIHTTPRequest;
 			path = "External Classes/ASIHTTPRequest";
@@ -409,7 +404,6 @@
 				44700FC41007D5D8006CE665 /* ASIHTTPRequest.m in Sources */,
 				44700FC51007D5D8006CE665 /* ASINetworkQueue.m in Sources */,
 				44700FC61007D5D8006CE665 /* ASINSStringAdditions.m in Sources */,
-				44700FC71007D5D8006CE665 /* NSHTTPCookieAdditions.m in Sources */,
 				44700FC81007D5D8006CE665 /* DDXMLDocument.m in Sources */,
 				44700FC91007D5D8006CE665 /* DDXMLElement.m in Sources */,
 				44700FCA1007D5D8006CE665 /* DDXMLElementAdditions.m in Sources */,

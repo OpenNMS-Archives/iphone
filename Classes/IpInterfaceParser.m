@@ -61,6 +61,8 @@
 		
 		[interfaces addObject:iface];
 	}
+	
+	[dateFormatter release];
 	return true;
 }
 

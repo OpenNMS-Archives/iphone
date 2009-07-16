@@ -42,9 +42,12 @@
 
 @interface OutageParser : NSObject {
 	@private NSMutableArray* outages;
+
 	@private FuzzyDate* fuzzyDate;
+	@private NSDateFormatter* dateFormatter;
 }
 
+-(OnmsOutage*)getOutage:(DDXMLElement*)xmlOutage;
 -(BOOL)parse:(DDXMLElement*)node skipRegained:(BOOL)skip;
 -(NSArray*)getViewOutages: (DDXMLElement*)node distinctNodes:(BOOL)distinct;
 -(NSArray*)outages;

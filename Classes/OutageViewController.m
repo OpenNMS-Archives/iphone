@@ -99,7 +99,6 @@
 	if (outages) {
 		retVal = [outages count];
 	}
-	NSLog(@"number of rows: %d", retVal);
 	return retVal;
 }
 

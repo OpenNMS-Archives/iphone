@@ -52,11 +52,18 @@ static double SECONDS_PER_MINUTE = 60.0;
 	return self;
 }
 
-static NSString* formatNumber(NSTimeInterval time, NSString* small, NSString* singular, NSString* plural, NSNumberFormatter* formatter, BOOL mini)
+-(void) dealloc
+{
+	[now release];
+	[numberFormatter release];
+	[super dealloc];
+}
+
+-(NSString*) formatInterval:(NSTimeInterval)time small:(NSString*)small singular:(NSString*)singular plural:(NSString*)plural
 {
 	NSNumber* num = [NSNumber numberWithDouble:time];
-	NSString* value = [formatter stringFromNumber:num];
-	NSString* retVal = @"return";
+	NSString* value = [numberFormatter stringFromNumber:num];
+	NSString* retVal = nil;
 	if (mini) {
 		retVal = [NSString stringWithFormat:@"%@%@", value, small];
 	} else if ([value isEqual:@"1"]) {
@@ -78,21 +85,21 @@ static NSString* formatNumber(NSTimeInterval time, NSString* small, NSString* si
 		if (hours < 1.0) {
 			NSTimeInterval minutes = (difference / SECONDS_PER_MINUTE);
 			if (minutes < 1.0) {
-				return formatNumber(difference, @"s", @"second", @"seconds", numberFormatter, mini);
+				return [self formatInterval:difference small:@"s" singular:@"second" plural:@"seconds"];
 			} else {
-				return formatNumber(minutes, @"m", @"minute", @"minutes", numberFormatter, mini);
+				return [self formatInterval:minutes small:@"m" singular:@"minute" plural:@"minutes"];
 			}
 		} else {
-			return formatNumber(hours, @"h", @"hour", @"hours", numberFormatter, mini);
+			return [self formatInterval:hours small:@"h" singular:@"hour" plural:@"hours"];
 		}
 	} else if (days >= 365) {
-		return formatNumber((days / 365.0), @"y", @"year", @"years", numberFormatter, mini);
+		return [self formatInterval:(days / 365.0) small:@"y" singular:@"year" plural:@"years"];
 	} else if (days >= 30) {
-		return formatNumber((days / 30.0), @"mon", @"month", @"months", numberFormatter, mini);
+		return [self formatInterval:(days / 30.0) small:@"mon" singular:@"month" plural:@"months"];
 	} else if (days >= 7) {
-		return formatNumber((days / 7.0), @"w", @"week", @"weeks", numberFormatter, mini);
+		return [self formatInterval:(days / 7.0) small:@"w" singular:@"week" plural:@"weeks"];
 	} else if (days >= 1.0) {
-		return formatNumber(days, @"d", @"day", @"days", numberFormatter, mini);
+		return [self formatInterval:days small:@"d" singular:@"day" plural:@"days"];
 	}
 
 	return [d description];

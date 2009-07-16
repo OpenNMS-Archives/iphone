@@ -42,9 +42,16 @@
 @synthesize nodeTable;
 @synthesize nodeId;
 
--(void) dealloc {
+-(id) init
+{
+	if (self = [super init]) {
+	}
+	return self;
+}
+
+-(void) dealloc
+{
 	[nodeTable release];
-	[fuzzyDate release];
 	
 	[nodeId release];
 	[node release];
@@ -58,16 +65,19 @@
 {
 	fuzzyDate = [[FuzzyDate alloc] init];
 	fuzzyDate.mini = YES;
+
 	[super viewDidLoad];
 }
 
 - (void) viewDidUnload
 {
 	[fuzzyDate release];
+
 	[sections release];
 	[node release];
 	[outages release];
 	[interfaces release];
+	
 	[super viewDidUnload];
 }
 
@@ -92,12 +102,20 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-	[self initializeData];
+	[super viewWillAppear:animated];
 	self.title = node.label;
 	nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
 	nodeTable.rowHeight = 34.0;
+	[self initializeData];
 	[nodeTable reloadData];
 }
+
+/*
+-(void) viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+}
+ */
 
 #pragma mark UITableView delegates
 
@@ -136,7 +154,7 @@
 
 	UIColor* white = [UIColor colorWithWhite:1.0 alpha:1.0];
 	UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
-	UIFont* font = [UIFont boldSystemFontOfSize:11];
+	UIFont* font   = [UIFont boldSystemFontOfSize:11];
 
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 	cell.backgroundColor = white;

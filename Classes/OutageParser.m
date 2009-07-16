@@ -37,35 +37,30 @@
 
 @implementation OutageParser
 
-static NSDateFormatter* dateFormatter;
-
 - (id) init
 {
 	if (self = [super init]) {
 		fuzzyDate = [[FuzzyDate alloc] init];
 		fuzzyDate.mini = NO;
+		dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setLenient:true];
+		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 	}
 	return self;
 }
 
 - (void)dealloc
 {
+	[fuzzyDate release];
+	[dateFormatter release];
+
 	[outages release];
 	[super dealloc];
 }
 
-static NSDateFormatter* getFormatter() {
-	if (!dateFormatter) {
-		dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setLenient:true];
-		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
-	}
-	return dateFormatter;
-}
-
-static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
+- (OnmsOutage*) getOutage:(DDXMLElement*)xmlOutage
+{
 	OnmsOutage* outage = [[OnmsOutage alloc] init];
-	NSDateFormatter* formatter = getFormatter();
 
 	// ID
 	for (id attr in [xmlOutage attributes]) {
@@ -95,13 +90,13 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 	// Service Lost Date
 	DDXMLElement* slElement = [xmlOutage elementForName:@"ifLostService"];
 	if (slElement) {
-		[outage setIfLostService:[formatter dateFromString:[[slElement childAtIndex:0] stringValue]]];
+		[outage setIfLostService:[dateFormatter dateFromString:[[slElement childAtIndex:0] stringValue]]];
 	}
 	
 	// Service Regained Date
 	DDXMLElement* srElement = [xmlOutage elementForName:@"ifRegainedService"];
 	if (srElement) {
-		[outage setIfRegainedService:[formatter dateFromString:[[srElement childAtIndex:0] stringValue]]];
+		[outage setIfRegainedService:[dateFormatter dateFromString:[[srElement childAtIndex:0] stringValue]]];
 	}
 	
 	EventParser* eParser = [[EventParser alloc] init];
@@ -125,7 +120,7 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 			NSLog(@"warning: unable to parse %@", sreElement);
 		}
 	}
-	
+
 	return outage;
 }
 
@@ -139,22 +134,25 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 	NSMutableArray* viewOutages = [[NSMutableArray alloc] init];
 	for (id xmlOutage in [node elementsForName:@"outage"]) {
 		ViewOutage* viewOutage = [[ViewOutage alloc] init];
-		OnmsOutage* outage = getOutage(xmlOutage);
-		viewOutage.outageId = outage.outageId;
+		OnmsOutage* outage = [self getOutage:xmlOutage];
+		
+		viewOutage.outageId = [outage.outageId copy];
 		viewOutage.serviceLostDate = [fuzzyDate format:outage.ifLostService];
 		viewOutage.serviceRegainedDate = [fuzzyDate format:outage.ifRegainedService];
-		viewOutage.serviceName = outage.serviceName;
-		viewOutage.nodeId = outage.serviceLostEvent.nodeId;
-		viewOutage.ipAddress = outage.ipAddress;
+		viewOutage.serviceName = [outage.serviceName copy];
+		viewOutage.nodeId = [outage.serviceLostEvent.nodeId copy];
+		viewOutage.ipAddress = [outage.ipAddress copy];
 
 		if (distinct) {
 			if ([labelCount countForObject:outage.serviceLostEvent.nodeId] == 0) {
 				[viewOutages addObject:viewOutage];
 			}
-			[labelCount addObject:outage.serviceLostEvent.nodeId];
+			[labelCount addObject:[outage.serviceLostEvent.nodeId copy]];
 		} else {
 			[viewOutages addObject:viewOutage];
 		}
+		
+		[outage release];
 	}
 	return viewOutages;
 }
@@ -169,7 +167,7 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 
 	NSArray* xmlOutages = [node elementsForName:@"outage"];
 	for (id xmlOutage in xmlOutages) {
-		OnmsOutage* outage = getOutage(xmlOutage);
+		OnmsOutage* outage = [self getOutage:xmlOutage];
 		if (!skip || outage.serviceRegainedEvent == nil) {
 			[outages addObject: outage];
 		}
