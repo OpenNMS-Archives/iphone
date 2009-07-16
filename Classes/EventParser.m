@@ -66,7 +66,7 @@
 	for (id xmlEvent in xmlEvents) {
 		OnmsEvent *event = [[OnmsEvent alloc] init];
 
-		// ID
+		// Attributes
 		for (id attr in [xmlEvent attributes]) {
 			if ([[attr name] isEqual:@"id"]) {
 				[event setEventId: [NSNumber numberWithInt:[[attr stringValue] intValue]]];

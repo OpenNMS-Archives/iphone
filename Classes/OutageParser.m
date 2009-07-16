@@ -121,6 +121,7 @@
 		}
 	}
 
+	[eParser release];
 	return outage;
 }
 

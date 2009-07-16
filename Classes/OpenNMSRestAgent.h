@@ -39,10 +39,10 @@
 }
 
 -(OnmsNode*) getNode:(NSNumber*)nodeId;
+
+-(NSArray*) getAlarms;
 -(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
 -(NSArray*) getOutages:(NSNumber*)nodeId;
 -(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct;
--(CXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller;
--(void) doError:(NSError*)error message:(NSString*)extra;
 
 @end

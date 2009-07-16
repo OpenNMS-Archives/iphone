@@ -31,21 +31,31 @@
  *
  *******************************************************************************/
 
-#import <UIKit/UIKit.h>
-#import "NodeDetailController.h"
+#import <Foundation/Foundation.h>
+#import "OnmsEvent.h"
 
-#define INDICATOR_TAG 1
+@interface OnmsAlarm : NSObject {
 
-@interface OutageViewController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private UITableView* outageTable;
-	@private NodeDetailController* nodeDetailController;
-
-	@private NSArray* outages;
+	@private NSNumber* alarmId;
+	@private NSString* uei;
+	@private NSString* severity;
+	@private NSNumber* count;
+	@private NSString* logMessage;
+	@private NSDate* firstEventTime;
+	@private NSDate* lastEventTime;
+	@private OnmsEvent* lastEvent;
+	
 }
 
-@property (nonatomic, retain) IBOutlet UITableView* outageTable;
-@property (nonatomic, retain) IBOutlet NodeDetailController* nodeDetailController;
+@property (retain) NSNumber* alarmId;
+@property (retain) NSString* uei;
+@property (retain) NSString* severity;
+@property (retain) NSNumber* count;
+@property (retain) NSString* logMessage;
+@property (retain) NSDate* firstEventTime;
+@property (retain) NSDate* lastEventTime;
+@property (retain) OnmsEvent* lastEvent;
 
-- (IBAction) reload:(id) sender;
+-(NSString*) description;
 
 @end

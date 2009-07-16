@@ -31,21 +31,15 @@
  *
  *******************************************************************************/
 
-#import <UIKit/UIKit.h>
-#import "NodeDetailController.h"
+#import <Foundation/Foundation.h>
+#import "OnmsAlarm.h"
 
-#define INDICATOR_TAG 1
-
-@interface OutageViewController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private UITableView* outageTable;
-	@private NodeDetailController* nodeDetailController;
-
-	@private NSArray* outages;
+@interface AlarmParser : NSObject {
+	@private NSMutableArray *alarms;
 }
 
-@property (nonatomic, retain) IBOutlet UITableView* outageTable;
-@property (nonatomic, retain) IBOutlet NodeDetailController* nodeDetailController;
-
-- (IBAction) reload:(id) sender;
+-(BOOL)parse:(CXMLElement*)node;
+-(NSArray*)alarms;
+-(OnmsAlarm*)alarm;
 
 @end

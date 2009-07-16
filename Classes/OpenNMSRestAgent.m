@@ -32,16 +32,20 @@
  *******************************************************************************/
 
 #import "OpenNMSRestAgent.h"
+
+#import "AlarmParser.h"
+#import "IpInterfaceParser.h"
 #import "OutageParser.h"
+#import "NodeParser.h"
+
+#import "OnmsIpInterface.h"
+#import "OnmsNode.h"
 #import "OnmsOutage.h"
 #import "ViewOutage.h"
-#import "NodeParser.h"
-#import "OnmsNode.h"
-#import "IpInterfaceParser.h"
-#import "OnmsIpInterface.h"
+
+#define GET_LIMIT 100
 
 @implementation OpenNMSRestAgent
-
 
 - (id) init
 {
@@ -54,6 +58,50 @@
 - (void) dealloc
 {
 	[super dealloc];
+}
+
+-(void) doError:(NSError*)error message:(NSString*)extra
+{
+	NSString* errorMessage;
+	if (extra) {
+		errorMessage = [[NSString stringWithFormat:@"Error: %@: %@", [error localizedDescription], extra] autorelease];
+	} else {
+		errorMessage = [[NSString stringWithFormat:@"Error: %@", [error localizedDescription]] autorelease];
+	}
+	NSLog(errorMessage);
+}
+
+- (CXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller
+{
+	// NSLog(@"requesting path %@: (%@)", path, caller);
+	NSString* url = [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@%@",
+					 [[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http",
+					 [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"],
+					 [[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"],
+					 [[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"],
+					 [[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"],
+					 [[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"],
+					 path
+					 ];
+	
+	ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]] autorelease];
+	[request start];
+	NSError* error = [request error];
+	if (error) {
+		[self doError:error message:url];
+		return nil;
+	} else {
+		NSString* response = [[request responseString] copy];
+		error = [NSError alloc];
+		CXMLDocument* document = [[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error];
+		if (!document) {
+			[self doError:error message:@"An error occurred parsing the XML document"];
+			return nil;
+		} else {
+			return document;
+		}
+	}
+	return nil;
 }
 
 - (OnmsNode*) getNode:(NSNumber*)nodeId
@@ -75,15 +123,32 @@
 	return node;
 }
 
+- (NSArray*) getAlarms
+{
+	AlarmParser* alarmParser = [[AlarmParser alloc] init];
+	NSArray* alarms = nil;
+	CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/alarms?limit=%d&orderBy=lastEventTime&order=desc", GET_LIMIT] caller: @"getAlarms"];
+	if (document) {
+		CXMLElement* rootNode = [document rootElement];
+		[alarmParser parse:rootNode];
+		alarms = [[alarmParser alarms] copy];
+	} else {
+		alarms = [[NSArray alloc] init];
+	}
+	[alarmParser release];
+	[document release];
+	return alarms;
+}
+
 - (NSArray*) getOutages:(NSNumber*)nodeId
 {
 	OutageParser* outageParser = [[OutageParser alloc] init];
 	NSArray* outages = nil;
 	CXMLDocument* document;
 	if (nodeId == nil) {
-		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null" caller: @"getOutages without nodeId"];
+		document = [self doRequest: [NSString stringWithFormat:@"/outages?limit=%d&orderBy=ifLostService&order=desc&ifRegainedService=null", GET_LIMIT] caller: @"getOutages without nodeId"];
 	} else {
-		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId] caller: @"getOutages with nodeId"];
+		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=%d&orderBy=ifLostService&order=desc", nodeId, GET_LIMIT] caller: @"getOutages with nodeId"];
 	}
 	if (document) {
 		CXMLElement* rootNode = [document rootElement];
@@ -103,9 +168,9 @@
 	NSArray* viewOutages = nil;
 	CXMLDocument* document;
 	if (nodeId == nil) {
-		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null" caller: @"getViewOutages without nodeId"];
+		document = [self doRequest: [NSString stringWithFormat:@"/outages?limit=%d&orderBy=ifLostService&order=desc&ifRegainedService=null", GET_LIMIT] caller: @"getViewOutages without nodeId"];
 	} else {
-		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId] caller: @"getViewOutages with nodeId"];
+		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=%d&orderBy=ifLostService&order=desc", nodeId, GET_LIMIT] caller: @"getViewOutages with nodeId"];
 	}
 	if (document) {
 		CXMLElement* rootNode = [document rootElement];
@@ -134,7 +199,7 @@
 	IpInterfaceParser* interfaceParser = [[IpInterfaceParser alloc] init];
 	NSArray* interfaces = nil;
 	CXMLDocument* document;
-	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/ipinterfaces", nodeId] caller: @"getIpInterfaces"];
+	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/ipinterfaces?limit=%d", nodeId, GET_LIMIT] caller: @"getIpInterfaces"];
 	if (document) {
 		CXMLElement* rootNode = [document rootElement];
 		[interfaceParser parse:rootNode];
@@ -145,50 +210,6 @@
 	[interfaceParser release];
 	[document release];
 	return interfaces;
-}
-
-- (CXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller
-{
-	// NSLog(@"requesting path %@: (%@)", path, caller);
-	NSString* url = [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@%@",
-		[[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http",
-		[[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"],
-		[[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"],
-		[[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"],
-		[[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"],
-		[[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"],
-		path
-	];
-
-	ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]] autorelease];
-	[request start];
-	NSError* error = [request error];
-	if (error) {
-		[self doError:error message:url];
-		return nil;
-	} else {
-		NSString* response = [[request responseString] copy];
-		error = [NSError alloc];
-		CXMLDocument* document = [[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error];
-		if (!document) {
-			[self doError:error message:@"An error occurred parsing the XML document"];
-			return nil;
-		} else {
-			return document;
-		}
-	}
-	return nil;
-}
-
--(void) doError:(NSError*)error message:(NSString*)extra
-{
-	NSString* errorMessage;
-	if (extra) {
-		errorMessage = [[NSString stringWithFormat:@"Error: %@: %@", [error localizedDescription], extra] autorelease];
-	} else {
-		errorMessage = [[NSString stringWithFormat:@"Error: %@", [error localizedDescription]] autorelease];
-	}
-	NSLog(errorMessage);
 }
 
 @end

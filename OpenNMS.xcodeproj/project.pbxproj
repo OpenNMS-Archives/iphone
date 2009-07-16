@@ -46,6 +46,9 @@
 		44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */; };
 		44D023E6100F9CB0000C5EAA /* CXMLNode_XPathExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E653100F9901000B8A22 /* CXMLNode_XPathExtensions.m */; };
 		44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */; };
+		44D024A9100FB224000C5EAA /* AlarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D024A8100FB224000C5EAA /* AlarmViewController.m */; };
+		44D024CF100FB328000C5EAA /* OnmsAlarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D024CE100FB328000C5EAA /* OnmsAlarm.m */; };
+		44D024D3100FB8DC000C5EAA /* AlarmParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D024D2100FB8DC000C5EAA /* AlarmParser.m */; };
 		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
 		44E2A2AE100E553600DD5A1D /* OnmsIpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2AD100E553600DD5A1D /* OnmsIpInterface.m */; };
 		44E2A2B1100E56F700DD5A1D /* IpInterfaceParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2B0100E56F700DD5A1D /* IpInterfaceParser.m */; };
@@ -120,6 +123,12 @@
 		44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutWindow.xib; sourceTree = "<group>"; };
 		44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsXMLElementAdditions.h; sourceTree = "<group>"; };
 		44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsXMLElementAdditions.m; sourceTree = "<group>"; };
+		44D024A7100FB224000C5EAA /* AlarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmViewController.h; sourceTree = "<group>"; };
+		44D024A8100FB224000C5EAA /* AlarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmViewController.m; sourceTree = "<group>"; };
+		44D024CD100FB328000C5EAA /* OnmsAlarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsAlarm.h; sourceTree = "<group>"; };
+		44D024CE100FB328000C5EAA /* OnmsAlarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsAlarm.m; sourceTree = "<group>"; };
+		44D024D1100FB8DC000C5EAA /* AlarmParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmParser.h; sourceTree = "<group>"; };
+		44D024D2100FB8DC000C5EAA /* AlarmParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmParser.m; sourceTree = "<group>"; };
 		44E2A161100E195100DD5A1D /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Images/opennms-headingbg.png"; sourceTree = "<group>"; };
 		44E2A2AC100E553600DD5A1D /* OnmsIpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsIpInterface.h; sourceTree = "<group>"; };
 		44E2A2AD100E553600DD5A1D /* OnmsIpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsIpInterface.m; sourceTree = "<group>"; };
@@ -171,21 +180,22 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */,
-				44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */,
+				44D024A6100FB1DD000C5EAA /* Alarms */,
 				444CF5BE100D2180009B00BE /* Events */,
 				444CF5BD100D2173009B00BE /* Nodes */,
 				444CF5B3100D2158009B00BE /* Outages */,
-				44700FEC1007D746006CE665 /* OpenNMSRestAgent.h */,
-				44700FED1007D746006CE665 /* OpenNMSRestAgent.m */,
-				1D3623240D0F684500981E51 /* OpenNMSAppDelegate.h */,
-				1D3623250D0F684500981E51 /* OpenNMSAppDelegate.m */,
-				440B00841008C941005DB69C /* FuzzyDate.h */,
-				440B00851008C941005DB69C /* FuzzyDate.m */,
 				44BBA44B100CF1B2001257CB /* AboutViewController.h */,
 				44BBA44C100CF1B2001257CB /* AboutViewController.m */,
 				44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */,
 				44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */,
+				440B00841008C941005DB69C /* FuzzyDate.h */,
+				440B00851008C941005DB69C /* FuzzyDate.m */,
+				1D3623240D0F684500981E51 /* OpenNMSAppDelegate.h */,
+				1D3623250D0F684500981E51 /* OpenNMSAppDelegate.m */,
+				44700FEC1007D746006CE665 /* OpenNMSRestAgent.h */,
+				44700FED1007D746006CE665 /* OpenNMSRestAgent.m */,
+				44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */,
+				44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -318,6 +328,19 @@
 			);
 			name = ASIHTTPRequest;
 			path = "External Classes/ASIHTTPRequest";
+			sourceTree = "<group>";
+		};
+		44D024A6100FB1DD000C5EAA /* Alarms */ = {
+			isa = PBXGroup;
+			children = (
+				44D024A7100FB224000C5EAA /* AlarmViewController.h */,
+				44D024A8100FB224000C5EAA /* AlarmViewController.m */,
+				44D024CD100FB328000C5EAA /* OnmsAlarm.h */,
+				44D024CE100FB328000C5EAA /* OnmsAlarm.m */,
+				44D024D1100FB8DC000C5EAA /* AlarmParser.h */,
+				44D024D2100FB8DC000C5EAA /* AlarmParser.m */,
+			);
+			name = Alarms;
 			sourceTree = "<group>";
 		};
 		44E2A2AA100E552600DD5A1D /* Interfaces */ = {
@@ -457,6 +480,9 @@
 				44F0E6AB100F9B8C000B8A22 /* CXMLElement_ElementTreeExtensions.m in Sources */,
 				44D023E6100F9CB0000C5EAA /* CXMLNode_XPathExtensions.m in Sources */,
 				44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */,
+				44D024A9100FB224000C5EAA /* AlarmViewController.m in Sources */,
+				44D024CF100FB328000C5EAA /* OnmsAlarm.m in Sources */,
+				44D024D3100FB8DC000C5EAA /* AlarmParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
