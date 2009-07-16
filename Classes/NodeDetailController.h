@@ -52,4 +52,6 @@
 @property (nonatomic, retain) IBOutlet UITableView* nodeTable;
 @property (nonatomic, retain) NSNumber* nodeId;
 
+-(void)initializeData;
+
 @end

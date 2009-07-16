@@ -42,7 +42,6 @@
 	@private NodeDetailController* nodeDetailController;
 
 	@private OpenNMSRestAgent* agent;
-
 	@private NSArray* outages;
 }
 

@@ -55,15 +55,26 @@
 	[super dealloc];
 }
 
--(void) awakeFromNib {
+- (void) viewDidLoad
+{
 	agent = [[OpenNMSRestAgent alloc] init];
 	fuzzyDate = [[FuzzyDate alloc] init];
 	fuzzyDate.mini = YES;
+	[super viewDidLoad];
 }
 
-#pragma mark UIViewController delegates
+- (void) viewDidUnload
+{
+	[agent release];
+	[fuzzyDate release];
+	[sections release];
+	[node release];
+	[outages release];
+	[interfaces release];
+	[super viewDidUnload];
+}
 
--(void) viewWillAppear:(BOOL)animated
+- (void) initializeData
 {
 	sections = [[NSMutableArray alloc] init];
 	node = [agent getNode:nodeId];
@@ -72,16 +83,22 @@
 	if ([outages count] > 0) {
 		[sections addObject:@"Recent Outages"];
 	}
-
+	
 	interfaces = [agent getIpInterfaces:nodeId];
 	if ([interfaces count] > 0) {
 		[sections addObject:@"IP Interfaces"];
 	}
+}
 
+#pragma mark UIViewController delegates
+
+-(void) viewWillAppear:(BOOL)animated
+{
+	[self initializeData];
+	[nodeTable reloadData];
 	self.title = node.label;
 	nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
 	nodeTable.rowHeight = 32.0;
-	[nodeTable reloadData];
 }
 
 #pragma mark UITableView delegates
@@ -132,7 +149,7 @@
 		ViewOutage* outage = [outages objectAtIndex:indexPath.row];
 
 		// IP Address
-		UILabel* label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 120.0, tableView.rowHeight)] autorelease];
+		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 115.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = outage.ipAddress;
@@ -140,7 +157,7 @@
 		[cell.contentView addSubview:label];
 
 		// Service
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(130.0, 0, 70.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(130.0, 0, 60.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = outage.serviceName;
@@ -148,7 +165,7 @@
 		[cell.contentView addSubview:label];
 
 		// Up/Down
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(200.0, 0, 45.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(195.0, 0, 45.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		if (outage.serviceRegainedDate != nil) {
@@ -161,7 +178,7 @@
 		[cell.contentView addSubview:label];
 
 		// time
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(245.0, 0, 52.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(240.0, 0, 57.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		if (outage.serviceRegainedDate != nil) {
@@ -178,7 +195,7 @@
 		OnmsIpInterface* iface = [interfaces objectAtIndex:indexPath.row];
 
 		// IP Address
-		UILabel* label = [[[UILabel	alloc] initWithFrame:CGRectMake(5.0, 0, 80.0, tableView.rowHeight)] autorelease];
+		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 80.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ipAddress;
@@ -186,7 +203,7 @@
 		[cell.contentView addSubview:label];
 		
 		// Host Name
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(85.0, 0, 143.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(85.0, 0, 143.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.hostName;
@@ -194,7 +211,7 @@
 		[cell.contentView addSubview:label];
 		
 		// Host Name
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(228.0, 0, 72, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(228.0, 0, 72, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.isManaged isEqual:@"M"]? @"Managed" : @"Unmanaged";

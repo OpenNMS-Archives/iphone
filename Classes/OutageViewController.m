@@ -63,6 +63,20 @@
 
 #pragma mark UIViewController delegates
 
+- (void) viewDidLoad
+{
+	agent = [[OpenNMSRestAgent alloc] init];
+	outages = [agent getViewOutages:nil distinct:YES];
+	[super viewDidLoad];
+}
+
+- (void) viewDidUnload
+{
+	[agent release];
+	[outages release];
+	[super viewDidUnload];
+}
+
 -(void) viewWillAppear:(BOOL)animated
 {
 	NSIndexPath* tableSelection = [outageTable indexPathForSelectedRow];
@@ -76,13 +90,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (!agent) {
-		agent = [[OpenNMSRestAgent alloc] init];
-	}
-	if (!outages) {
-		outages = [agent getViewOutages:nil distinct:YES];
-	}
-	
 	NSInteger retVal = 0;
 	if (outages) {
 		retVal = [outages count];

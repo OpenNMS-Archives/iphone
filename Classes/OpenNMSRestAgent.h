@@ -43,7 +43,7 @@
 -(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
 -(NSArray*) getOutages:(NSNumber*)nodeId;
 -(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct;
--(DDXMLDocument*) doRequest: (NSString*) path;
+-(DDXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller;
 -(void) doError:(NSError*)error message:(NSString*)extra;
 
 @end

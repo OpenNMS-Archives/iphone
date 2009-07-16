@@ -64,7 +64,7 @@
 	NodeParser* nodeParser = [[NodeParser alloc] init];
 	OnmsNode* node = [nodes objectForKey:nodeId];
 	if (!node) {
-		DDXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@", [nodeId stringValue]]];
+		DDXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@", [nodeId stringValue]] caller: @"getNode"];
 		if (document) {
 			DDXMLElement* rootNode = [document rootElement];
 			[nodeParser parse:rootNode];
@@ -84,9 +84,9 @@
 	NSArray* outages = nil;
 	DDXMLDocument* document;
 	if (nodeId == nil) {
-		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null"];
+		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null" caller: @"getOutages without nodeId"];
 	} else {
-		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId]];
+		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId] caller: @"getOutages with nodeId"];
 	}
 	if (document) {
 		DDXMLElement* rootNode = [document rootElement];
@@ -106,9 +106,9 @@
 	NSArray* viewOutages = nil;
 	DDXMLDocument* document;
 	if (nodeId == nil) {
-		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null"];
+		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null" caller: @"getViewOutages without nodeId"];
 	} else {
-		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId]];
+		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId] caller: @"getViewOutages with nodeId"];
 	}
 	if (document) {
 		DDXMLElement* rootNode = [document rootElement];
@@ -137,7 +137,7 @@
 	IpInterfaceParser* interfaceParser = [[IpInterfaceParser alloc] init];
 	NSArray* interfaces = nil;
 	DDXMLDocument* document;
-	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/ipinterfaces", nodeId]];
+	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/ipinterfaces", nodeId] caller: @"getIpInterfaces"];
 	if (document) {
 		DDXMLElement* rootNode = [document rootElement];
 		[interfaceParser parse:rootNode];
@@ -150,8 +150,9 @@
 	return interfaces;
 }
 
-- (DDXMLDocument*) doRequest: (NSString*) path
+- (DDXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller
 {
+	// NSLog(@"requesting path %@: (%@)", path, caller);
 	NSString* url = [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@%@",
 		[[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http",
 		[[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"],
