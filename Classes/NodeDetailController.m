@@ -44,7 +44,6 @@
 
 -(void) dealloc {
 	[nodeTable release];
-	[agent release];
 	[fuzzyDate release];
 	
 	[nodeId release];
@@ -57,7 +56,6 @@
 
 - (void) viewDidLoad
 {
-	agent = [[OpenNMSRestAgent alloc] init];
 	fuzzyDate = [[FuzzyDate alloc] init];
 	fuzzyDate.mini = YES;
 	[super viewDidLoad];
@@ -65,7 +63,6 @@
 
 - (void) viewDidUnload
 {
-	[agent release];
 	[fuzzyDate release];
 	[sections release];
 	[node release];
@@ -77,6 +74,7 @@
 - (void) initializeData
 {
 	sections = [[NSMutableArray alloc] init];
+	OpenNMSRestAgent* agent = [[[OpenNMSRestAgent alloc] init] autorelease];
 	node = [agent getNode:nodeId];
 	
 	outages = [agent getViewOutages:nodeId distinct:NO];

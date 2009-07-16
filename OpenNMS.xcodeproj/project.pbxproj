@@ -458,6 +458,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "OpenNMS-Info.plist";
 				PRODUCT_NAME = OpenNMS;
 			};

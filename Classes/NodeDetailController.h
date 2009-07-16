@@ -38,7 +38,6 @@
 
 @interface NodeDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* nodeTable;
-	@private OpenNMSRestAgent* agent;
 	@private FuzzyDate* fuzzyDate;
 
 	@private NSMutableArray* sections;

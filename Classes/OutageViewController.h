@@ -41,7 +41,6 @@
 	@private UITableView* outageTable;
 	@private NodeDetailController* nodeDetailController;
 
-	@private OpenNMSRestAgent* agent;
 	@private NSArray* outages;
 }
 
@@ -49,5 +48,6 @@
 @property (nonatomic, retain) IBOutlet NodeDetailController* nodeDetailController;
 
 - (IBAction) reload:(id) sender;
+- (void) initializeData;
 
 @end

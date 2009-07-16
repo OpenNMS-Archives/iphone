@@ -45,19 +45,24 @@
 @synthesize outageTable;
 @synthesize nodeDetailController;
 
--(void) dealloc {
+-(void) dealloc
+{
 	[outageTable release];
 	[nodeDetailController release];
-	[agent release];
 	[outages release];
 	
     [super dealloc];
 }
 
+-(void) initializeData
+{
+	OpenNMSRestAgent* agent = [[[OpenNMSRestAgent alloc] init] autorelease];
+	outages = [agent getViewOutages:nil distinct:YES];
+}
+
 -(IBAction) reload:(id) sender
 {
-	agent = [[OpenNMSRestAgent alloc] init];
-	outages = [agent getViewOutages:nil distinct:YES];
+	[self initializeData];
 	[outageTable reloadData];
 }
 
@@ -65,14 +70,12 @@
 
 - (void) viewDidLoad
 {
-	agent = [[OpenNMSRestAgent alloc] init];
-	outages = [agent getViewOutages:nil distinct:YES];
+	[self initializeData];
 	[super viewDidLoad];
 }
 
 - (void) viewDidUnload
 {
-	[agent release];
 	[outages release];
 	[super viewDidUnload];
 }
@@ -80,7 +83,9 @@
 -(void) viewWillAppear:(BOOL)animated
 {
 	NSIndexPath* tableSelection = [outageTable indexPathForSelectedRow];
-	[outageTable deselectRowAtIndexPath:tableSelection animated:NO];
+	if (tableSelection) {
+		[outageTable deselectRowAtIndexPath:tableSelection animated:NO];
+	}
 }
 
 #pragma mark UITableView delegates
@@ -94,6 +99,7 @@
 	if (outages) {
 		retVal = [outages count];
 	}
+	NSLog(@"number of rows: %d", retVal);
 	return retVal;
 }
 

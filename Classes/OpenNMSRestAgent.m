@@ -163,16 +163,14 @@
 		path
 	];
 
-	ASIHTTPRequest* request = [[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]];
+	ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]] autorelease];
 	[request start];
 	NSError* error = [request error];
 	if (error) {
 		[self doError:error message:url];
-		[request release];
 		return nil;
 	} else {
 		NSString* response = [[request responseString] copy];
-		[request release];
 		error = [NSError alloc];
 		DDXMLDocument* document = [[DDXMLDocument alloc] initWithXMLString: response options: 0 error: &error];
 		if (!document) {
@@ -189,22 +187,11 @@
 {
 	NSString* errorMessage;
 	if (extra) {
-		errorMessage = [NSString stringWithFormat:@"Error: %@: %@", [error localizedDescription], extra];
+		errorMessage = [[NSString stringWithFormat:@"Error: %@: %@", [error localizedDescription], extra] autorelease];
 	} else {
-		errorMessage = [NSString stringWithFormat:@"Error: %@", [error localizedDescription]];
+		errorMessage = [[NSString stringWithFormat:@"Error: %@", [error localizedDescription]] autorelease];
 	}
 	NSLog(errorMessage);
-	/*
-	UIAlertView* errorView = [[UIAlertView alloc] initWithTitle:@"Error"
-		message:errorMessage
-		delegate:self
-		cancelButtonTitle:@"OK"
-		otherButtonTitles:nil
-	];
-	[errorView show];
-	[errorView release];
-	 */
-	[errorMessage release];
 }
 
 @end
