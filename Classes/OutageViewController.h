@@ -32,17 +32,16 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
+#import "OpenNMSRestAgent.h"
+#import "NodeDetailController.h"
 
 #define INDICATOR_TAG 1
-
-@class FuzzyDate, OpenNMSRestAgent, NodeDetailController;
 
 @interface OutageViewController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* outageTable;
 	@private NodeDetailController* nodeDetailController;
 
 	@private OpenNMSRestAgent* agent;
-	@private FuzzyDate* fuzzyDate;
 
 	@private NSArray* outages;
 }

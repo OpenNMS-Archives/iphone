@@ -41,16 +41,14 @@
     [super dealloc];
 }
 
-- (id)initWithFrame:(CGRect)frame reuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier]) {
-		columns = [[NSMutableArray alloc] init];
-    }
-    return self;
-}
-
 - (void)addColumn:(NSString*)value
 {
-	[columns addObject:value];
+	if (value) {
+		if (!columns) {
+			columns = [[NSMutableArray alloc] init];
+		}
+		[columns addObject:value];
+	}
 }
 
 @end

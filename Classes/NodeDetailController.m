@@ -34,15 +34,13 @@
 #import "NodeDetailController.h"
 #import "ColumnarTableViewCell.h"
 #import "OpenNMSRestAgent.h"
-#import "OnmsOutage.h"
+#import "ViewOutage.h"
 #import "OnmsIpInterface.h"
 
 @implementation NodeDetailController
 
 @synthesize nodeTable;
 @synthesize nodeId;
-
-static NSString *CellIdentifier = @"Cell";
 
 -(void) dealloc {
 	[nodeTable release];
@@ -60,6 +58,7 @@ static NSString *CellIdentifier = @"Cell";
 -(void) awakeFromNib {
 	agent = [[OpenNMSRestAgent alloc] init];
 	fuzzyDate = [[FuzzyDate alloc] init];
+	fuzzyDate.mini = YES;
 }
 
 #pragma mark UIViewController delegates
@@ -69,7 +68,7 @@ static NSString *CellIdentifier = @"Cell";
 	sections = [[NSMutableArray alloc] init];
 	node = [agent getNode:nodeId];
 	
-	outages = [agent getOutagesForNode:nodeId];
+	outages = [agent getViewOutages:nodeId distinct:NO];
 	if ([outages count] > 0) {
 		[sections addObject:@"Recent Outages"];
 	}
@@ -81,6 +80,8 @@ static NSString *CellIdentifier = @"Cell";
 
 	self.title = node.label;
 	nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
+	nodeTable.rowHeight = 32.0;
+	[nodeTable reloadData];
 }
 
 #pragma mark UITableView delegates
@@ -100,15 +101,15 @@ static NSString *CellIdentifier = @"Cell";
 	return 0;
 }
 
+/*
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	/*
 	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
 	[nodeDetailController setNodeId:outage.nodeId];
 	UINavigationController* cont = [self navigationController];
 	[cont pushViewController:nodeDetailController animated:YES];
-	 */
 }
+*/
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
@@ -116,42 +117,90 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	ColumnarTableViewCell *cell = (ColumnarTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil) {
-		cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
-	}
-
-	cell.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-	cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
-
 	NSString* sectionName = [sections objectAtIndex:indexPath.section];
+
+	UIColor* white = [UIColor colorWithWhite:1.0 alpha:1.0];
+	UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
+	UIFont* font = [UIFont boldSystemFontOfSize:11];
+
+	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
+	cell.backgroundColor = white;
+	cell.textLabel.font = font;
+
 	if (sectionName == @"Recent Outages") {
-		OnmsOutage* outage = [outages objectAtIndex:indexPath.row];
-		if (outage.serviceRegainedEvent != nil) {
-			cell.textLabel.text = [NSString stringWithFormat:@"%@:%@ Regained %@ ago", outage.ipAddress, outage.serviceName, [fuzzyDate format:outage.ifRegainedService]];
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		ViewOutage* outage = [outages objectAtIndex:indexPath.row];
+
+		// IP Address
+		UILabel* label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 120.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = outage.ipAddress;
+		[cell addColumn:outage.ipAddress];
+		[cell.contentView addSubview:label];
+
+		// Service
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(130.0, 0, 70.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = outage.serviceName;
+		[cell addColumn:outage.serviceName];
+		[cell.contentView addSubview:label];
+
+		// Up/Down
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(200.0, 0, 45.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		if (outage.serviceRegainedDate != nil) {
+			label.text = @"Regained";
+			[cell addColumn:@"Regained"];
 		} else {
-			cell.textLabel.text = [NSString stringWithFormat:@"%@:%@ Lost %@ ago", outage.ipAddress, outage.serviceName, [fuzzyDate format:outage.ifLostService]];
+			label.text = @"Lost";
+			[cell addColumn:@"Lost"];
 		}
+		[cell.contentView addSubview:label];
+
+		// time
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(245.0, 0, 52.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		if (outage.serviceRegainedDate != nil) {
+			label.text = outage.serviceRegainedDate;
+			[cell addColumn:outage.serviceRegainedDate];
+		} else {
+			label.text = outage.serviceLostDate;
+			[cell addColumn:outage.serviceLostDate];
+		}
+		[cell.contentView addSubview:label];
+		
 	} else if (sectionName == @"IP Interfaces") {
-		cell.textLabel.text = @"test";
-		/*
-		 ColumnarTableViewCell *cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
-		 cell.textLabel.adjustsFontSizeToFitWidth;
-		 
-		 UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 230.0, tableView.rowHeight)] autorelease];
-		 ViewOutage* outage = [outages objectAtIndex:indexPath.row];
-		 [cell addColumn:outage.nodeLabel];
-		 label.font = [UIFont boldSystemFontOfSize:12];
-		 label.text = outage.nodeLabel;
-		 [cell.contentView addSubview:label];
-		 
-		 label = [[[UILabel	alloc] initWithFrame:CGRectMake(250.0, 0, 60.0, tableView.rowHeight)] autorelease];
-		 [cell addColumn:outage.serviceLostDate];
-		 label.font = [UIFont boldSystemFontOfSize:12];
-		 label.text = outage.serviceLostDate;
-		 [cell.contentView addSubview:label];
-			*/
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		OnmsIpInterface* iface = [interfaces objectAtIndex:indexPath.row];
+
+		// IP Address
+		UILabel* label = [[[UILabel	alloc] initWithFrame:CGRectMake(5.0, 0, 80.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = iface.ipAddress;
+		[cell addColumn:iface.ipAddress];
+		[cell.contentView addSubview:label];
+		
+		// Host Name
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(85.0, 0, 143.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = iface.hostName;
+		[cell addColumn:iface.hostName];
+		[cell.contentView addSubview:label];
+		
+		// Host Name
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(228.0, 0, 72, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = [iface.isManaged isEqual:@"M"]? @"Managed" : @"Unmanaged";
+		[cell addColumn:([iface.isManaged isEqual:@"M"]? @"Managed" : @"Unmanaged")];
+		[cell.contentView addSubview:label];
+		
 	}
 
 	return cell;

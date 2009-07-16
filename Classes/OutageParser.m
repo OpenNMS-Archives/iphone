@@ -43,6 +43,7 @@ static NSDateFormatter* dateFormatter;
 {
 	if (self = [super init]) {
 		fuzzyDate = [[FuzzyDate alloc] init];
+		fuzzyDate.mini = NO;
 	}
 	return self;
 }
@@ -141,9 +142,11 @@ static OnmsOutage* getOutage(DDXMLElement* xmlOutage) {
 		OnmsOutage* outage = getOutage(xmlOutage);
 		viewOutage.outageId = outage.outageId;
 		viewOutage.serviceLostDate = [fuzzyDate format:outage.ifLostService];
-		viewOutage.serviceLost = outage.serviceName;
+		viewOutage.serviceRegainedDate = [fuzzyDate format:outage.ifRegainedService];
+		viewOutage.serviceName = outage.serviceName;
 		viewOutage.nodeId = outage.serviceLostEvent.nodeId;
-		
+		viewOutage.ipAddress = outage.ipAddress;
+
 		if (distinct) {
 			if ([labelCount countForObject:outage.serviceLostEvent.nodeId] == 0) {
 				[viewOutages addObject:viewOutage];

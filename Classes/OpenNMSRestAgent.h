@@ -41,10 +41,8 @@
 
 -(OnmsNode*) getNode:(NSNumber*)nodeId;
 -(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
--(NSArray*) getOutages;
--(NSArray*) getOutagesForNode:(NSNumber*)nodeId;
--(NSArray*) getViewOutages;
--(NSArray*) getViewOutagesForNode:(NSNumber*)nodeId;
+-(NSArray*) getOutages:(NSNumber*)nodeId;
+-(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct;
 -(DDXMLDocument*) doRequest: (NSString*) path;
 -(void) doError:(NSError*)error message:(NSString*)extra;
 

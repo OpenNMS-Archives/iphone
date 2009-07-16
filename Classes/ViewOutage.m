@@ -37,9 +37,11 @@
 
 @synthesize outageId;
 @synthesize serviceLostDate;
-@synthesize serviceLost;
+@synthesize serviceRegainedDate;
+@synthesize serviceName;
 @synthesize nodeId;
 @synthesize nodeLabel;
+@synthesize ipAddress;
 
 -(NSString*) getCellText
 {
@@ -48,7 +50,7 @@
 
 -(NSString*) description
 {
-	return [NSString stringWithFormat: @"[outage id: %@, node id: %@, node: %@, service: %@, lost: %@]", outageId, nodeId, nodeLabel, serviceLost, serviceLostDate];
+	return [NSString stringWithFormat: @"[outage id: %@, node id: %@, node: %@, service: %@, lost: %@, regained: %@]", outageId, nodeId, nodeLabel, serviceName, serviceLostDate, serviceRegainedDate];
 }
 
 @end

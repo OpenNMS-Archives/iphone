@@ -9,6 +9,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="162"/>
+			<integer value="137"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -56,6 +57,7 @@
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">ekg.png</string>
 						</object>
+						<reference key="IBUITabBar"/>
 					</object>
 					<reference key="IBUIParentViewController" ref="1034742383"/>
 					<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics"/>
@@ -100,6 +102,7 @@
 								<bool key="EncodedWithXMLCoder">YES</bool>
 							</object>
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="55478112">
+								<reference key="IBUINavigationBar"/>
 								<string key="IBUITitle">Outages</string>
 								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="272254443">
 									<int key="IBUIStyle">1</int>
@@ -122,6 +125,7 @@
 								<string key="NSClassName">NSImage</string>
 								<string key="NSResourceName">clock.png</string>
 							</object>
+							<reference key="IBUITabBar"/>
 						</object>
 						<reference key="IBUIParentViewController" ref="1034742383"/>
 						<string key="IBUINibName">AlarmView</string>
@@ -133,6 +137,7 @@
 								<string key="NSClassName">NSImage</string>
 								<string key="NSResourceName">display.png</string>
 							</object>
+							<reference key="IBUITabBar"/>
 						</object>
 						<object class="NSArray" key="IBUIToolbarItems">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -146,6 +151,7 @@
 								<string key="NSClassName">NSImage</string>
 								<string key="NSResourceName">o.png</string>
 							</object>
+							<reference key="IBUITabBar"/>
 						</object>
 						<object class="NSArray" key="IBUIToolbarItems">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -232,14 +238,6 @@
 					<int key="connectionID">113</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">reload:</string>
-						<reference key="source" ref="272254443"/>
-						<reference key="destination" ref="16638109"/>
-					</object>
-					<int key="connectionID">141</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">nodeDetailController</string>
 						<reference key="source" ref="16638109"/>
@@ -270,6 +268,14 @@
 						<reference key="destination" ref="909863750"/>
 					</object>
 					<int key="connectionID">165</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">reload:</string>
+						<reference key="source" ref="272254443"/>
+						<reference key="destination" ref="16638109"/>
+					</object>
+					<int key="connectionID">166</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -529,7 +535,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">165</int>
+			<int key="maxID">166</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

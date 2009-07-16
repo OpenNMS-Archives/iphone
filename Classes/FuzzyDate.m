@@ -39,23 +39,28 @@ static double SECONDS_PER_MINUTE = 60.0;
 
 @implementation FuzzyDate
 
+@synthesize mini;
+
 -(id) init
 {
 	if (self = [super init]) {
 		now = [[NSDate alloc] init];
 		numberFormatter = [[NSNumberFormatter alloc] init];
 		[numberFormatter setMaximumFractionDigits:1];
+		mini = NO;
 	}
 	return self;
 }
 
-static NSString* formatNumber(NSTimeInterval time, NSString* singular, NSString* plural, NSNumberFormatter* formatter)
+static NSString* formatNumber(NSTimeInterval time, NSString* small, NSString* singular, NSString* plural, NSNumberFormatter* formatter, BOOL mini)
 {
 	NSNumber* num = [NSNumber numberWithDouble:time];
 	NSString* value = [formatter stringFromNumber:num];
 	NSString* retVal = @"return";
-	if ([value isEqual:@"1"]) {
-		retVal = [NSString stringWithFormat:@"%@ %@ ago", value, singular];
+	if (mini) {
+		retVal = [NSString stringWithFormat:@"%@%@", value, small];
+	} else if ([value isEqual:@"1"]) {
+		retVal = [NSString stringWithFormat:@"%@ %@", value, singular];
 	} else {
 		retVal = [NSString stringWithFormat:@"%@ %@", value, plural];
 	}
@@ -73,21 +78,21 @@ static NSString* formatNumber(NSTimeInterval time, NSString* singular, NSString*
 		if (hours < 1.0) {
 			NSTimeInterval minutes = (difference / SECONDS_PER_MINUTE);
 			if (minutes < 1.0) {
-				return formatNumber(difference, @"second", @"seconds", numberFormatter);
+				return formatNumber(difference, @"s", @"second", @"seconds", numberFormatter, mini);
 			} else {
-				return formatNumber(minutes, @"minute", @"minutes", numberFormatter);
+				return formatNumber(minutes, @"m", @"minute", @"minutes", numberFormatter, mini);
 			}
 		} else {
-			return formatNumber(hours, @"hour", @"hours", numberFormatter);
+			return formatNumber(hours, @"h", @"hour", @"hours", numberFormatter, mini);
 		}
 	} else if (days >= 365) {
-		return formatNumber((days / 365.0), @"year", @"years", numberFormatter);
+		return formatNumber((days / 365.0), @"y", @"year", @"years", numberFormatter, mini);
 	} else if (days >= 30) {
-		return formatNumber((days / 30.0), @"month", @"months", numberFormatter);
+		return formatNumber((days / 30.0), @"mon", @"month", @"months", numberFormatter, mini);
 	} else if (days >= 7) {
-		return formatNumber((days / 7.0), @"week", @"weeks", numberFormatter);
+		return formatNumber((days / 7.0), @"w", @"week", @"weeks", numberFormatter, mini);
 	} else if (days >= 1.0) {
-		return formatNumber(days, @"day", @"days", numberFormatter);
+		return formatNumber(days, @"d", @"day", @"days", numberFormatter, mini);
 	}
 
 	return [d description];

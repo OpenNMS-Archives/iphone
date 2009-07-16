@@ -45,9 +45,13 @@
 
 @class ViewOutage;
 
-- (void) initialize
+
+- (id) init
 {
-	nodes = [[NSMutableDictionary alloc] init];
+	if (self = [super init]) {
+		nodes = [[NSMutableDictionary alloc] init];
+	}
+	return self;
 }
 
 - (void) dealloc
@@ -74,12 +78,29 @@
 	return node;
 }
 
-- (NSArray*) getViewOutages
+- (NSArray*) getOutages:(NSNumber*)nodeId
 {
-	return [self getViewOutagesForNode:nil];
+	OutageParser* outageParser = [[OutageParser alloc] init];
+	NSArray* outages = nil;
+	DDXMLDocument* document;
+	if (nodeId == nil) {
+		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null"];
+	} else {
+		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId]];
+	}
+	if (document) {
+		DDXMLElement* rootNode = [document rootElement];
+		[outageParser parse:rootNode skipRegained:YES];
+		outages = [[outageParser outages] copy];
+	} else {
+		outages = [[NSArray alloc] init];
+	}
+	[outageParser release];
+	[document release];
+	return outages;
 }
 
-- (NSArray*) getViewOutagesForNode:(NSNumber*)nodeId
+- (NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct
 {
 	OutageParser* outageParser = [[OutageParser alloc] init];
 	NSArray* viewOutages = nil;
@@ -92,7 +113,7 @@
 	if (document) {
 		DDXMLElement* rootNode = [document rootElement];
 		
-		viewOutages = [outageParser getViewOutages:rootNode distinctNodes:true];
+		viewOutages = [outageParser getViewOutages:rootNode distinctNodes:distinct];
 		
 		for (int i = 0; i < [viewOutages count]; i++) {
 			ViewOutage* vo = [viewOutages objectAtIndex:i];
@@ -103,6 +124,8 @@
 				}
 			}
 		}
+	} else {
+		viewOutages = [[NSArray alloc] init];
 	}
 	[outageParser release];
 	[document release];
@@ -127,33 +150,6 @@
 	return interfaces;
 }
 
-- (NSArray*) getOutages
-{
-	return [self getOutagesForNode:nil];
-}
-
-- (NSArray*) getOutagesForNode:(NSNumber*)nodeId
-{
-	OutageParser* outageParser = [[OutageParser alloc] init];
-	NSArray* outages = nil;
-	DDXMLDocument* document;
-	if (nodeId == nil) {
-		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null"];
-	} else {
-		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId]];
-	}
-	if (document) {
-		DDXMLElement* rootNode = [document rootElement];
-		[outageParser parse:rootNode skipRegained:true];
-		outages = [[outageParser outages] copy];
-	} else {
-		outages = [[NSArray alloc] init];
-	}
-	[outageParser release];
-	[document release];
-	return outages;
-}
-
 - (DDXMLDocument*) doRequest: (NSString*) path
 {
 	NSString* url = [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@%@",
@@ -166,15 +162,16 @@
 		path
 	];
 
-	NSLog(@"requesting %@", url);
-	ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]] autorelease];
+	ASIHTTPRequest* request = [[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]];
 	[request start];
 	NSError* error = [request error];
 	if (error) {
 		[self doError:error message:url];
+		[request release];
 		return nil;
 	} else {
-		NSString* response = [request responseString];
+		NSString* response = [[request responseString] copy];
+		[request release];
 		error = [NSError alloc];
 		DDXMLDocument* document = [[DDXMLDocument alloc] initWithXMLString: response options: 0 error: &error];
 		if (!document) {
@@ -196,6 +193,7 @@
 		errorMessage = [NSString stringWithFormat:@"Error: %@", [error localizedDescription]];
 	}
 	NSLog(errorMessage);
+	/*
 	UIAlertView* errorView = [[UIAlertView alloc] initWithTitle:@"Error"
 		message:errorMessage
 		delegate:self
@@ -204,6 +202,7 @@
 	];
 	[errorView show];
 	[errorView release];
+	 */
 	[errorMessage release];
 }
 

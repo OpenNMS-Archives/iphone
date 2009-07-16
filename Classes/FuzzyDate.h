@@ -36,8 +36,11 @@
 @interface FuzzyDate : NSObject {
 	NSDate* now;
 	NSNumberFormatter* numberFormatter;
+	BOOL mini;
 }
 
--(NSString*) format: (NSDate *)d;
+@property (nonatomic) BOOL mini;
+
+-(NSString*) format: (NSDate*)d;
 
 @end

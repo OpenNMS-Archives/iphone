@@ -35,17 +35,21 @@
 
 @interface ViewOutage : NSObject {
 	@private NSNumber* outageId;
+	@private NSString* serviceName;
 	@private NSString* serviceLostDate;
-	@private NSString* serviceLost;
+	@private NSString* serviceRegainedDate;
 	@private NSNumber* nodeId;
 	@private NSString* nodeLabel;
+	@private NSString* ipAddress;
 }
 
 @property (nonatomic,retain) NSNumber* outageId;
+@property (nonatomic,retain) NSString* serviceName;
 @property (nonatomic,retain) NSString* serviceLostDate;
-@property (nonatomic,retain) NSString* serviceLost;
+@property (nonatomic,retain) NSString* serviceRegainedDate;
 @property (nonatomic,retain) NSNumber* nodeId;
 @property (nonatomic,retain) NSString* nodeLabel;
+@property (nonatomic,retain) NSString* ipAddress;
 
 -(NSString*) getCellText;
 -(NSString*) description;

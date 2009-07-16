@@ -45,29 +45,19 @@
 @synthesize outageTable;
 @synthesize nodeDetailController;
 
-static NSString* CellIdentifier = @"OutageView Cell";
-
 -(void) dealloc {
 	[outageTable release];
 	[nodeDetailController release];
-	
 	[agent release];
-	[fuzzyDate release];
-	
 	[outages release];
 	
     [super dealloc];
 }
 
--(void) awakeFromNib {
-	self.title = @"Outages";
-	agent = [[OpenNMSRestAgent alloc] init];
-	outages = [agent getViewOutages];
-}
-
 -(IBAction) reload:(id) sender
 {
-	outages = [agent getViewOutages];
+	agent = [[OpenNMSRestAgent alloc] init];
+	outages = [agent getViewOutages:nil distinct:YES];
 	[outageTable reloadData];
 }
 
@@ -75,7 +65,6 @@ static NSString* CellIdentifier = @"OutageView Cell";
 
 -(void) viewWillAppear:(BOOL)animated
 {
-	[outageTable reloadData];
 	NSIndexPath* tableSelection = [outageTable indexPathForSelectedRow];
 	[outageTable deselectRowAtIndexPath:tableSelection animated:NO];
 }
@@ -87,39 +76,51 @@ static NSString* CellIdentifier = @"OutageView Cell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [outages count];
+	if (!agent) {
+		agent = [[OpenNMSRestAgent alloc] init];
+	}
+	if (!outages) {
+		outages = [agent getViewOutages:nil distinct:YES];
+	}
+	
+	NSInteger retVal = 0;
+	if (outages) {
+		retVal = [outages count];
+	}
+	return retVal;
 }
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
-	[nodeDetailController setNodeId:outage.nodeId];
-	UINavigationController* cont = [self navigationController];
-	[cont pushViewController:nodeDetailController animated:YES];
+	if (outages && [outages count] > 0) {
+		ViewOutage* outage = [outages objectAtIndex:indexPath.row];
+		[nodeDetailController setNodeId:outage.nodeId];
+		UINavigationController* cont = [self navigationController];
+		[cont pushViewController:nodeDetailController animated:YES];
+	}
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 
-	ColumnarTableViewCell *cell = (ColumnarTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil) {
-		cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:CellIdentifier] autorelease];
+	if (outages && [outages count] > 0) {
+	
+		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
+		ViewOutage* outage = [outages objectAtIndex:indexPath.row];
+		[cell addColumn:outage.nodeLabel];
+		label.font = [UIFont boldSystemFontOfSize:12];
+		label.text = outage.nodeLabel;
+		[cell.contentView addSubview:label];
+
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
+		[cell addColumn:outage.serviceLostDate];
+		label.font = [UIFont boldSystemFontOfSize:12];
+		label.text = outage.serviceLostDate;
+		[cell.contentView addSubview:label];
+	} else {
+		cell.textLabel.text = @"";
 	}
-	
-	cell.textLabel.adjustsFontSizeToFitWidth;
 
-	UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
-	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
-	[cell addColumn:outage.nodeLabel];
-	label.font = [UIFont boldSystemFontOfSize:12];
-	label.text = outage.nodeLabel;
-	[cell.contentView addSubview:label];
-
-	label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
-	[cell addColumn:outage.serviceLostDate];
-	label.font = [UIFont boldSystemFontOfSize:12];
-	label.text = outage.serviceLostDate;
-	[cell.contentView addSubview:label];
-	
 	return cell;
 }
 
