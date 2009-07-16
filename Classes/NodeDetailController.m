@@ -95,10 +95,10 @@
 -(void) viewWillAppear:(BOOL)animated
 {
 	[self initializeData];
-	[nodeTable reloadData];
 	self.title = node.label;
 	nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
-	nodeTable.rowHeight = 32.0;
+	nodeTable.rowHeight = 34.0;
+	[nodeTable reloadData];
 }
 
 #pragma mark UITableView delegates
