@@ -76,13 +76,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---
 
-KissXML is used for parsing RESTful XML.
+TouchXML is used for parsing RESTful XML.
 
-     http://code.google.com/p/kissxml/
+     http://code.google.com/p/touchcode/wiki/TouchXML
 
 KissXML is available under the MIT license:
 
-Copyright (C) 2008, Deusty Designs, LLC.
+Copyright (c) 2008 Jonathan Wight
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

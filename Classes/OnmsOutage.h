@@ -32,8 +32,7 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-
-@class OnmsEvent, OnmsNode;
+#import "OnmsEvent.h"
 
 @interface OnmsOutage : NSObject {
 

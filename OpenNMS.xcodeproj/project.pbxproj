@@ -19,11 +19,6 @@
 		44700FC41007D5D8006CE665 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAF1007D5D8006CE665 /* ASIHTTPRequest.m */; };
 		44700FC51007D5D8006CE665 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB11007D5D8006CE665 /* ASINetworkQueue.m */; };
 		44700FC61007D5D8006CE665 /* ASINSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB31007D5D8006CE665 /* ASINSStringAdditions.m */; };
-		44700FC81007D5D8006CE665 /* DDXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB91007D5D8006CE665 /* DDXMLDocument.m */; };
-		44700FC91007D5D8006CE665 /* DDXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FBB1007D5D8006CE665 /* DDXMLElement.m */; };
-		44700FCA1007D5D8006CE665 /* DDXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FBD1007D5D8006CE665 /* DDXMLElementAdditions.m */; };
-		44700FCB1007D5D8006CE665 /* DDXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FBF1007D5D8006CE665 /* DDXMLNode.m */; };
-		44700FCC1007D5D8006CE665 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FC21007D5D8006CE665 /* NSStringAdditions.m */; };
 		44700FCE1007D60B006CE665 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44700FCD1007D60B006CE665 /* CFNetwork.framework */; };
 		44700FD31007D61A006CE665 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44700FCF1007D60B006CE665 /* libz.1.dylib */; };
 		44700FD61007D688006CE665 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44700FD51007D688006CE665 /* libxml2.dylib */; };
@@ -49,10 +44,21 @@
 		44C8E120100CB71300A29DA0 /* ViewOutage.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C8E11F100CB71300A29DA0 /* ViewOutage.m */; };
 		44C8E295100CD66400A29DA0 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E294100CD66400A29DA0 /* display.png */; };
 		44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */; };
+		44D023E6100F9CB0000C5EAA /* CXMLNode_XPathExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E653100F9901000B8A22 /* CXMLNode_XPathExtensions.m */; };
+		44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */; };
 		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
 		44E2A2AE100E553600DD5A1D /* OnmsIpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2AD100E553600DD5A1D /* OnmsIpInterface.m */; };
 		44E2A2B1100E56F700DD5A1D /* IpInterfaceParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2B0100E56F700DD5A1D /* IpInterfaceParser.m */; };
 		44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */; };
+		44F0E655100F9901000B8A22 /* CXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E645100F9901000B8A22 /* CXMLDocument.m */; };
+		44F0E656100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E647100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m */; };
+		44F0E657100F9901000B8A22 /* CXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E649100F9901000B8A22 /* CXMLElement.m */; };
+		44F0E65A100F9901000B8A22 /* CXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E64F100F9901000B8A22 /* CXMLNode.m */; };
+		44F0E65B100F9901000B8A22 /* CXMLNode_PrivateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E651100F9901000B8A22 /* CXMLNode_PrivateExtensions.m */; };
+		44F0E6A6100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E6A3100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.m */; };
+		44F0E6A7100F9B1F000B8A22 /* CXMLNode_CreationExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E6A5100F9B1F000B8A22 /* CXMLNode_CreationExtensions.m */; };
+		44F0E6AA100F9B8B000B8A22 /* CXMLElement_CreationExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E64B100F9901000B8A22 /* CXMLElement_CreationExtensions.m */; };
+		44F0E6AB100F9B8C000B8A22 /* CXMLElement_ElementTreeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E64D100F9901000B8A22 /* CXMLElement_ElementTreeExtensions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,18 +83,6 @@
 		44700FB11007D5D8006CE665 /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINetworkQueue.m; sourceTree = "<group>"; };
 		44700FB21007D5D8006CE665 /* ASINSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINSStringAdditions.h; sourceTree = "<group>"; };
 		44700FB31007D5D8006CE665 /* ASINSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINSStringAdditions.m; sourceTree = "<group>"; };
-		44700FB71007D5D8006CE665 /* DDXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXML.h; sourceTree = "<group>"; };
-		44700FB81007D5D8006CE665 /* DDXMLDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLDocument.h; sourceTree = "<group>"; };
-		44700FB91007D5D8006CE665 /* DDXMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLDocument.m; sourceTree = "<group>"; };
-		44700FBA1007D5D8006CE665 /* DDXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLElement.h; sourceTree = "<group>"; };
-		44700FBB1007D5D8006CE665 /* DDXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLElement.m; sourceTree = "<group>"; };
-		44700FBC1007D5D8006CE665 /* DDXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLElementAdditions.h; sourceTree = "<group>"; };
-		44700FBD1007D5D8006CE665 /* DDXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLElementAdditions.m; sourceTree = "<group>"; };
-		44700FBE1007D5D8006CE665 /* DDXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLNode.h; sourceTree = "<group>"; };
-		44700FBF1007D5D8006CE665 /* DDXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDXMLNode.m; sourceTree = "<group>"; };
-		44700FC01007D5D8006CE665 /* DDXMLPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXMLPrivate.h; sourceTree = "<group>"; };
-		44700FC11007D5D8006CE665 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
-		44700FC21007D5D8006CE665 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		44700FCD1007D60B006CE665 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		44700FCF1007D60B006CE665 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
 		44700FD51007D688006CE665 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -124,6 +118,8 @@
 		44C8E11F100CB71300A29DA0 /* ViewOutage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewOutage.m; sourceTree = "<group>"; };
 		44C8E294100CD66400A29DA0 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = display.png; path = Images/display.png; sourceTree = "<group>"; };
 		44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutWindow.xib; sourceTree = "<group>"; };
+		44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsXMLElementAdditions.h; sourceTree = "<group>"; };
+		44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsXMLElementAdditions.m; sourceTree = "<group>"; };
 		44E2A161100E195100DD5A1D /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Images/opennms-headingbg.png"; sourceTree = "<group>"; };
 		44E2A2AC100E553600DD5A1D /* OnmsIpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsIpInterface.h; sourceTree = "<group>"; };
 		44E2A2AD100E553600DD5A1D /* OnmsIpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsIpInterface.m; sourceTree = "<group>"; };
@@ -131,6 +127,27 @@
 		44E2A2B0100E56F700DD5A1D /* IpInterfaceParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IpInterfaceParser.m; sourceTree = "<group>"; };
 		44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnarTableViewCell.h; sourceTree = "<group>"; };
 		44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnarTableViewCell.m; sourceTree = "<group>"; };
+		44F0E644100F9901000B8A22 /* CXMLDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLDocument.h; path = "External Classes/TouchXML/CXMLDocument.h"; sourceTree = "<group>"; };
+		44F0E645100F9901000B8A22 /* CXMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLDocument.m; path = "External Classes/TouchXML/CXMLDocument.m"; sourceTree = "<group>"; };
+		44F0E646100F9901000B8A22 /* CXMLDocument_PrivateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLDocument_PrivateExtensions.h; path = "External Classes/TouchXML/CXMLDocument_PrivateExtensions.h"; sourceTree = "<group>"; };
+		44F0E647100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLDocument_PrivateExtensions.m; path = "External Classes/TouchXML/CXMLDocument_PrivateExtensions.m"; sourceTree = "<group>"; };
+		44F0E648100F9901000B8A22 /* CXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLElement.h; path = "External Classes/TouchXML/CXMLElement.h"; sourceTree = "<group>"; };
+		44F0E649100F9901000B8A22 /* CXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLElement.m; path = "External Classes/TouchXML/CXMLElement.m"; sourceTree = "<group>"; };
+		44F0E64A100F9901000B8A22 /* CXMLElement_CreationExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLElement_CreationExtensions.h; path = "External Classes/TouchXML/CXMLElement_CreationExtensions.h"; sourceTree = "<group>"; };
+		44F0E64B100F9901000B8A22 /* CXMLElement_CreationExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLElement_CreationExtensions.m; path = "External Classes/TouchXML/CXMLElement_CreationExtensions.m"; sourceTree = "<group>"; };
+		44F0E64C100F9901000B8A22 /* CXMLElement_ElementTreeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLElement_ElementTreeExtensions.h; path = "External Classes/TouchXML/CXMLElement_ElementTreeExtensions.h"; sourceTree = "<group>"; };
+		44F0E64D100F9901000B8A22 /* CXMLElement_ElementTreeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLElement_ElementTreeExtensions.m; path = "External Classes/TouchXML/CXMLElement_ElementTreeExtensions.m"; sourceTree = "<group>"; };
+		44F0E64E100F9901000B8A22 /* CXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLNode.h; path = "External Classes/TouchXML/CXMLNode.h"; sourceTree = "<group>"; };
+		44F0E64F100F9901000B8A22 /* CXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLNode.m; path = "External Classes/TouchXML/CXMLNode.m"; sourceTree = "<group>"; };
+		44F0E650100F9901000B8A22 /* CXMLNode_PrivateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLNode_PrivateExtensions.h; path = "External Classes/TouchXML/CXMLNode_PrivateExtensions.h"; sourceTree = "<group>"; };
+		44F0E651100F9901000B8A22 /* CXMLNode_PrivateExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLNode_PrivateExtensions.m; path = "External Classes/TouchXML/CXMLNode_PrivateExtensions.m"; sourceTree = "<group>"; };
+		44F0E652100F9901000B8A22 /* CXMLNode_XPathExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLNode_XPathExtensions.h; path = "External Classes/TouchXML/CXMLNode_XPathExtensions.h"; sourceTree = "<group>"; };
+		44F0E653100F9901000B8A22 /* CXMLNode_XPathExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLNode_XPathExtensions.m; path = "External Classes/TouchXML/CXMLNode_XPathExtensions.m"; sourceTree = "<group>"; };
+		44F0E654100F9901000B8A22 /* TouchXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TouchXML.h; path = "External Classes/TouchXML/TouchXML.h"; sourceTree = "<group>"; };
+		44F0E6A2100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLDocument_CreationExtensions.h; path = "External Classes/TouchXML/Creation/CXMLDocument_CreationExtensions.h"; sourceTree = "<group>"; };
+		44F0E6A3100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLDocument_CreationExtensions.m; path = "External Classes/TouchXML/Creation/CXMLDocument_CreationExtensions.m"; sourceTree = "<group>"; };
+		44F0E6A4100F9B1F000B8A22 /* CXMLNode_CreationExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLNode_CreationExtensions.h; path = "External Classes/TouchXML/Creation/CXMLNode_CreationExtensions.h"; sourceTree = "<group>"; };
+		44F0E6A5100F9B1F000B8A22 /* CXMLNode_CreationExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLNode_CreationExtensions.m; path = "External Classes/TouchXML/Creation/CXMLNode_CreationExtensions.m"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* OpenNMS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenNMS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,6 +171,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */,
+				44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */,
 				444CF5BE100D2180009B00BE /* Events */,
 				444CF5BD100D2173009B00BE /* Nodes */,
 				444CF5B3100D2158009B00BE /* Outages */,
@@ -279,8 +298,8 @@
 		44700FAA1007D5C8006CE665 /* External Classes */ = {
 			isa = PBXGroup;
 			children = (
+				44F0E640100F98CA000B8A22 /* TouchXML */,
 				44700FAB1007D5D8006CE665 /* ASIHTTPRequest */,
-				44700FB61007D5D8006CE665 /* KissXML */,
 			);
 			name = "External Classes";
 			sourceTree = "<group>";
@@ -301,26 +320,6 @@
 			path = "External Classes/ASIHTTPRequest";
 			sourceTree = "<group>";
 		};
-		44700FB61007D5D8006CE665 /* KissXML */ = {
-			isa = PBXGroup;
-			children = (
-				44700FB71007D5D8006CE665 /* DDXML.h */,
-				44700FB81007D5D8006CE665 /* DDXMLDocument.h */,
-				44700FB91007D5D8006CE665 /* DDXMLDocument.m */,
-				44700FBA1007D5D8006CE665 /* DDXMLElement.h */,
-				44700FBB1007D5D8006CE665 /* DDXMLElement.m */,
-				44700FBC1007D5D8006CE665 /* DDXMLElementAdditions.h */,
-				44700FBD1007D5D8006CE665 /* DDXMLElementAdditions.m */,
-				44700FBE1007D5D8006CE665 /* DDXMLNode.h */,
-				44700FBF1007D5D8006CE665 /* DDXMLNode.m */,
-				44700FC01007D5D8006CE665 /* DDXMLPrivate.h */,
-				44700FC11007D5D8006CE665 /* NSStringAdditions.h */,
-				44700FC21007D5D8006CE665 /* NSStringAdditions.m */,
-			);
-			name = KissXML;
-			path = "External Classes/KissXML";
-			sourceTree = "<group>";
-		};
 		44E2A2AA100E552600DD5A1D /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
@@ -330,6 +329,34 @@
 				44E2A2B0100E56F700DD5A1D /* IpInterfaceParser.m */,
 			);
 			name = Interfaces;
+			sourceTree = "<group>";
+		};
+		44F0E640100F98CA000B8A22 /* TouchXML */ = {
+			isa = PBXGroup;
+			children = (
+				44F0E6A2100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.h */,
+				44F0E6A3100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.m */,
+				44F0E6A4100F9B1F000B8A22 /* CXMLNode_CreationExtensions.h */,
+				44F0E6A5100F9B1F000B8A22 /* CXMLNode_CreationExtensions.m */,
+				44F0E644100F9901000B8A22 /* CXMLDocument.h */,
+				44F0E645100F9901000B8A22 /* CXMLDocument.m */,
+				44F0E646100F9901000B8A22 /* CXMLDocument_PrivateExtensions.h */,
+				44F0E647100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m */,
+				44F0E648100F9901000B8A22 /* CXMLElement.h */,
+				44F0E649100F9901000B8A22 /* CXMLElement.m */,
+				44F0E64A100F9901000B8A22 /* CXMLElement_CreationExtensions.h */,
+				44F0E64B100F9901000B8A22 /* CXMLElement_CreationExtensions.m */,
+				44F0E64C100F9901000B8A22 /* CXMLElement_ElementTreeExtensions.h */,
+				44F0E64D100F9901000B8A22 /* CXMLElement_ElementTreeExtensions.m */,
+				44F0E64E100F9901000B8A22 /* CXMLNode.h */,
+				44F0E64F100F9901000B8A22 /* CXMLNode.m */,
+				44F0E650100F9901000B8A22 /* CXMLNode_PrivateExtensions.h */,
+				44F0E651100F9901000B8A22 /* CXMLNode_PrivateExtensions.m */,
+				44F0E652100F9901000B8A22 /* CXMLNode_XPathExtensions.h */,
+				44F0E653100F9901000B8A22 /* CXMLNode_XPathExtensions.m */,
+				44F0E654100F9901000B8A22 /* TouchXML.h */,
+			);
+			name = TouchXML;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -404,11 +431,6 @@
 				44700FC41007D5D8006CE665 /* ASIHTTPRequest.m in Sources */,
 				44700FC51007D5D8006CE665 /* ASINetworkQueue.m in Sources */,
 				44700FC61007D5D8006CE665 /* ASINSStringAdditions.m in Sources */,
-				44700FC81007D5D8006CE665 /* DDXMLDocument.m in Sources */,
-				44700FC91007D5D8006CE665 /* DDXMLElement.m in Sources */,
-				44700FCA1007D5D8006CE665 /* DDXMLElementAdditions.m in Sources */,
-				44700FCB1007D5D8006CE665 /* DDXMLNode.m in Sources */,
-				44700FCC1007D5D8006CE665 /* NSStringAdditions.m in Sources */,
 				44700FF01007D746006CE665 /* EventParser.m in Sources */,
 				44700FF11007D746006CE665 /* OnmsEvent.m in Sources */,
 				44700FF21007D746006CE665 /* OnmsOutage.m in Sources */,
@@ -424,6 +446,17 @@
 				44E2A2AE100E553600DD5A1D /* OnmsIpInterface.m in Sources */,
 				44E2A2B1100E56F700DD5A1D /* IpInterfaceParser.m in Sources */,
 				44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */,
+				44F0E655100F9901000B8A22 /* CXMLDocument.m in Sources */,
+				44F0E656100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m in Sources */,
+				44F0E657100F9901000B8A22 /* CXMLElement.m in Sources */,
+				44F0E65A100F9901000B8A22 /* CXMLNode.m in Sources */,
+				44F0E65B100F9901000B8A22 /* CXMLNode_PrivateExtensions.m in Sources */,
+				44F0E6A6100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.m in Sources */,
+				44F0E6A7100F9B1F000B8A22 /* CXMLNode_CreationExtensions.m in Sources */,
+				44F0E6AA100F9B8B000B8A22 /* CXMLElement_CreationExtensions.m in Sources */,
+				44F0E6AB100F9B8C000B8A22 /* CXMLElement_ElementTreeExtensions.m in Sources */,
+				44D023E6100F9CB0000C5EAA /* CXMLNode_XPathExtensions.m in Sources */,
+				44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

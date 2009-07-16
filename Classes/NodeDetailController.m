@@ -33,9 +33,9 @@
 
 #import "NodeDetailController.h"
 #import "ColumnarTableViewCell.h"
-#import "OpenNMSRestAgent.h"
 #import "ViewOutage.h"
 #import "OnmsIpInterface.h"
+#import "OpenNMSRestAgent.h"
 
 @implementation NodeDetailController
 

@@ -34,11 +34,11 @@
 #import "OutageViewController.h"
 #import "NodeDetailController.h"
 #import "ColumnarTableViewCell.h"
-#import "OpenNMSRestAgent.h"
 #import "OnmsOutage.h"
 #import "OnmsEvent.h"
 #import "OnmsNode.h"
 #import "ViewOutage.h"
+#import "OpenNMSRestAgent.h"
 
 @implementation OutageViewController
 

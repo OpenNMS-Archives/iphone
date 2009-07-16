@@ -17,7 +17,7 @@
 	[super dealloc];
 }
 
--(BOOL)parse:(DDXMLElement*)node
+-(BOOL)parse:(CXMLElement*)node
 {
 	[interfaces release];
 	interfaces = [[NSMutableArray alloc] init];
@@ -44,17 +44,17 @@
 			}
 		}
 		
-		DDXMLElement* ipElement = [xmlInterface elementForName:@"ipAddress"];
+		CXMLElement* ipElement = [xmlInterface elementForName:@"ipAddress"];
 		if (ipElement) {
 			[iface setIpAddress:[[ipElement childAtIndex:0] stringValue]];
 		}
 		
-		DDXMLElement* hostElement = [xmlInterface elementForName:@"hostName"];
+		CXMLElement* hostElement = [xmlInterface elementForName:@"hostName"];
 		if (hostElement) {
 			[iface setHostName:[[hostElement childAtIndex:0] stringValue]];
 		}
 		
-		DDXMLElement* capsdElement = [xmlInterface elementForName:@"lastCapsdPoll"];
+		CXMLElement* capsdElement = [xmlInterface elementForName:@"lastCapsdPoll"];
 		if (capsdElement) {
 			[iface setLastCapsdPoll:[dateFormatter dateFromString:[[capsdElement childAtIndex:0] stringValue]]];
 		}

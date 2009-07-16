@@ -33,8 +33,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FuzzyDate.h"
-
-@class OpenNMSRestAgent, OnmsNode, FuzzyDate;
+#import "OnmsNode.h"
 
 @interface NodeDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* nodeTable;

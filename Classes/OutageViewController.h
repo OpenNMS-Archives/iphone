@@ -32,7 +32,6 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "OpenNMSRestAgent.h"
 #import "NodeDetailController.h"
 
 #define INDICATOR_TAG 1

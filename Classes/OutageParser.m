@@ -58,7 +58,7 @@
 	[super dealloc];
 }
 
-- (OnmsOutage*) getOutage:(DDXMLElement*)xmlOutage
+- (OnmsOutage*) getOutage:(CXMLElement*)xmlOutage
 {
 	OnmsOutage* outage = [[OnmsOutage alloc] init];
 
@@ -68,13 +68,13 @@
 			outage.outageId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
 		}
 	}
-	
+
 	// Service Name
-	DDXMLElement* msElement = [xmlOutage elementForName:@"monitoredService"];
+	CXMLElement* msElement = [xmlOutage elementForName:@"monitoredService"];
 	if (msElement) {
-		DDXMLElement* stElement = [msElement elementForName:@"serviceType"];
+		CXMLElement* stElement = [msElement elementForName:@"serviceType"];
 		if (stElement) {
-			DDXMLElement* snElement = [stElement elementForName:@"name"];
+			CXMLElement* snElement = [stElement elementForName:@"name"];
 			if (snElement) {
 				[outage setServiceName:[[snElement childAtIndex:0] stringValue]];
 			}
@@ -82,19 +82,19 @@
 	}
 
 	// IP Address
-	DDXMLElement* ipElement = [xmlOutage elementForName:@"ipAddress"];
+	CXMLElement* ipElement = [xmlOutage elementForName:@"ipAddress"];
 	if (ipElement) {
 		[outage setIpAddress:[[ipElement childAtIndex:0] stringValue]];
 	}
 
 	// Service Lost Date
-	DDXMLElement* slElement = [xmlOutage elementForName:@"ifLostService"];
+	CXMLElement* slElement = [xmlOutage elementForName:@"ifLostService"];
 	if (slElement) {
 		[outage setIfLostService:[dateFormatter dateFromString:[[slElement childAtIndex:0] stringValue]]];
 	}
 	
 	// Service Regained Date
-	DDXMLElement* srElement = [xmlOutage elementForName:@"ifRegainedService"];
+	CXMLElement* srElement = [xmlOutage elementForName:@"ifRegainedService"];
 	if (srElement) {
 		[outage setIfRegainedService:[dateFormatter dateFromString:[[srElement childAtIndex:0] stringValue]]];
 	}
@@ -102,7 +102,7 @@
 	EventParser* eParser = [[EventParser alloc] init];
 	
 	// Service Lost Event
-	DDXMLElement* sleElement = [xmlOutage elementForName:@"serviceLostEvent"];
+	CXMLElement* sleElement = [xmlOutage elementForName:@"serviceLostEvent"];
 	if (sleElement) {
 		if ([eParser parse:sleElement]) {
 			[outage setServiceLostEvent: [eParser event]];
@@ -112,7 +112,7 @@
 	}
 	
 	// Service Regained Event
-	DDXMLElement* sreElement = [xmlOutage elementForName:@"serviceRegainedEvent"];
+	CXMLElement* sreElement = [xmlOutage elementForName:@"serviceRegainedEvent"];
 	if (sreElement) {
 		if ([eParser parse:sreElement]) {
 			[outage setServiceRegainedEvent: [eParser event]];
@@ -124,7 +124,7 @@
 	return outage;
 }
 
-- (NSArray*)getViewOutages:(DDXMLElement*)node distinctNodes:(BOOL)distinct
+- (NSArray*)getViewOutages:(CXMLElement*)node distinctNodes:(BOOL)distinct
 {
 	NSCountedSet* labelCount;
 	if (distinct) {
@@ -157,7 +157,7 @@
 	return viewOutages;
 }
 
-- (BOOL)parse:(DDXMLElement*)node skipRegained:(BOOL)skip
+- (BOOL)parse:(CXMLElement*)node skipRegained:(BOOL)skip
 {
     // Release the old outageArray
     [outages release];

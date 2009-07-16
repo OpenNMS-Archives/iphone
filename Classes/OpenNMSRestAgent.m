@@ -31,19 +31,16 @@
  *
  *******************************************************************************/
 
-
 #import "OpenNMSRestAgent.h"
-#import "ASIHTTPRequest.h"
 #import "OutageParser.h"
 #import "OnmsOutage.h"
+#import "ViewOutage.h"
 #import "NodeParser.h"
 #import "OnmsNode.h"
 #import "IpInterfaceParser.h"
 #import "OnmsIpInterface.h"
 
 @implementation OpenNMSRestAgent
-
-@class ViewOutage;
 
 
 - (id) init
@@ -64,9 +61,9 @@
 	NodeParser* nodeParser = [[NodeParser alloc] init];
 	OnmsNode* node = [nodes objectForKey:nodeId];
 	if (!node) {
-		DDXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@", [nodeId stringValue]] caller: @"getNode"];
+		CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@", [nodeId stringValue]] caller: @"getNode"];
 		if (document) {
-			DDXMLElement* rootNode = [document rootElement];
+			CXMLElement* rootNode = [document rootElement];
 			[nodeParser parse:rootNode];
 			node = [nodeParser node];
 			if (node != nil) {
@@ -82,14 +79,14 @@
 {
 	OutageParser* outageParser = [[OutageParser alloc] init];
 	NSArray* outages = nil;
-	DDXMLDocument* document;
+	CXMLDocument* document;
 	if (nodeId == nil) {
 		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null" caller: @"getOutages without nodeId"];
 	} else {
 		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId] caller: @"getOutages with nodeId"];
 	}
 	if (document) {
-		DDXMLElement* rootNode = [document rootElement];
+		CXMLElement* rootNode = [document rootElement];
 		[outageParser parse:rootNode skipRegained:YES];
 		outages = [[outageParser outages] copy];
 	} else {
@@ -104,14 +101,14 @@
 {
 	OutageParser* outageParser = [[OutageParser alloc] init];
 	NSArray* viewOutages = nil;
-	DDXMLDocument* document;
+	CXMLDocument* document;
 	if (nodeId == nil) {
 		document = [self doRequest: @"/outages?limit=0&orderBy=ifLostService&order=desc&ifRegainedService=null" caller: @"getViewOutages without nodeId"];
 	} else {
 		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=0&orderBy=ifLostService&order=desc", nodeId] caller: @"getViewOutages with nodeId"];
 	}
 	if (document) {
-		DDXMLElement* rootNode = [document rootElement];
+		CXMLElement* rootNode = [document rootElement];
 		
 		viewOutages = [outageParser getViewOutages:rootNode distinctNodes:distinct];
 		
@@ -136,10 +133,10 @@
 {
 	IpInterfaceParser* interfaceParser = [[IpInterfaceParser alloc] init];
 	NSArray* interfaces = nil;
-	DDXMLDocument* document;
+	CXMLDocument* document;
 	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/ipinterfaces", nodeId] caller: @"getIpInterfaces"];
 	if (document) {
-		DDXMLElement* rootNode = [document rootElement];
+		CXMLElement* rootNode = [document rootElement];
 		[interfaceParser parse:rootNode];
 		interfaces = [[interfaceParser interfaces] copy];
 	} else {
@@ -150,7 +147,7 @@
 	return interfaces;
 }
 
-- (DDXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller
+- (CXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller
 {
 	// NSLog(@"requesting path %@: (%@)", path, caller);
 	NSString* url = [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@%@",
@@ -172,7 +169,7 @@
 	} else {
 		NSString* response = [[request responseString] copy];
 		error = [NSError alloc];
-		DDXMLDocument* document = [[DDXMLDocument alloc] initWithXMLString: response options: 0 error: &error];
+		CXMLDocument* document = [[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error];
 		if (!document) {
 			[self doError:error message:@"An error occurred parsing the XML document"];
 			return nil;

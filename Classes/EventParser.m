@@ -41,7 +41,7 @@
 	[super dealloc];
 }
 
-- (BOOL)parse:(DDXMLElement *)node
+- (BOOL)parse:(CXMLElement *)node
 {
     // Release the old eventArray
     [events release];
@@ -82,49 +82,49 @@
 		}
 		
 		// Time
-		DDXMLElement *timeElement = [xmlEvent elementForName:@"time"];
+		CXMLElement *timeElement = [xmlEvent elementForName:@"time"];
 		if (timeElement) {
 			[event setTime: [dateFormatter dateFromString:[[timeElement childAtIndex:0] stringValue]]];
 		}
 
 		// CreateTime
-		DDXMLElement *ctElement = [xmlEvent elementForName:@"createTime"];
+		CXMLElement *ctElement = [xmlEvent elementForName:@"createTime"];
 		if (ctElement) {
 			[event setCreateTime: [dateFormatter dateFromString:[[ctElement childAtIndex:0] stringValue]]];
 		}
 		
 		// Description
-		DDXMLElement *descrElement = [xmlEvent elementForName:@"description"];
+		CXMLElement *descrElement = [xmlEvent elementForName:@"description"];
 		if (descrElement) {
 			[event setEventDescr:[[descrElement childAtIndex:0] stringValue]];
 		}
 
 		// Host
-		DDXMLElement *hostElement = [xmlEvent elementForName:@"host"];
+		CXMLElement *hostElement = [xmlEvent elementForName:@"host"];
 		if (hostElement) {
 			[event setEventHost:[[hostElement childAtIndex:0] stringValue]];
 		}
 
 		// Log Message
-		DDXMLElement *lmElement = [xmlEvent elementForName:@"logMessage"];
+		CXMLElement *lmElement = [xmlEvent elementForName:@"logMessage"];
 		if (lmElement) {
 			[event setEventLogMessage:[[lmElement childAtIndex:0] stringValue]];
 		}
 		
 		// Source
-		DDXMLElement *sourceElement = [xmlEvent elementForName:@"source"];
+		CXMLElement *sourceElement = [xmlEvent elementForName:@"source"];
 		if (sourceElement) {
 			[event setSource:[[sourceElement childAtIndex:0] stringValue]];
 		}
 
 		// UEI
-		DDXMLElement *ueiElement = [xmlEvent elementForName:@"uei"];
+		CXMLElement *ueiElement = [xmlEvent elementForName:@"uei"];
 		if (ueiElement) {
 			[event setUei:[[ueiElement childAtIndex:0] stringValue]];
 		}
 
 		// Node ID
-		DDXMLElement *nodeElement = [xmlEvent elementForName:@"nodeId"];
+		CXMLElement *nodeElement = [xmlEvent elementForName:@"nodeId"];
 		if (nodeElement) {
 			[event setNodeId:[NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]]];
 		}

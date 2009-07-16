@@ -8,14 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "OnmsIpInterface.h"
-#import "DDXMLDocument.h"
-#import "DDXMLElementAdditions.h"
 
 @interface IpInterfaceParser : NSObject {
 	@private NSMutableArray *interfaces;
 }
 
--(BOOL)parse:(DDXMLElement*)node;
+-(BOOL)parse:(CXMLElement*)node;
 -(NSArray*)interfaces;
 -(OnmsIpInterface*)interface;
 

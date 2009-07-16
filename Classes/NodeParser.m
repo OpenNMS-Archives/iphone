@@ -41,7 +41,7 @@
 	[super dealloc];
 }
 
-- (BOOL)parse:(DDXMLElement*)n
+- (BOOL)parse:(CXMLElement*)n
 {
 	// Reinitialize the node array
 	[nodes release];

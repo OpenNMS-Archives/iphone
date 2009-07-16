@@ -32,8 +32,6 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "DDXMLDocument.h"
-#import "DDXMLElementAdditions.h"
 
 #import "OnmsOutage.h"
 #import "ViewOutage.h"
@@ -47,9 +45,9 @@
 	@private NSDateFormatter* dateFormatter;
 }
 
--(OnmsOutage*)getOutage:(DDXMLElement*)xmlOutage;
--(BOOL)parse:(DDXMLElement*)node skipRegained:(BOOL)skip;
--(NSArray*)getViewOutages: (DDXMLElement*)node distinctNodes:(BOOL)distinct;
+-(OnmsOutage*)getOutage:(CXMLElement*)xmlOutage;
+-(BOOL)parse:(CXMLElement*)node skipRegained:(BOOL)skip;
+-(NSArray*)getViewOutages: (CXMLElement*)node distinctNodes:(BOOL)distinct;
 -(NSArray*)outages;
 -(OnmsOutage*)outage;
 

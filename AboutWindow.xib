@@ -3,7 +3,7 @@
 	<data>
 		<int key="IBDocument.SystemTarget">768</int>
 		<string key="IBDocument.SystemVersion">9J61</string>
-		<string key="IBDocument.InterfaceBuilderVersion">677</string>
+		<string key="IBDocument.InterfaceBuilderVersion">680</string>
 		<string key="IBDocument.AppKitVersion">949.46</string>
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
@@ -79,8 +79,8 @@ cGVubm1zLm9yZy8KCjNyZC1QYXJ0eSBJbmNsdXNpb25zOgoKU29tZSBpY29ucyBjb3B5cmlnaHQgwqkg
 Sm9zZXBoIFdhaW4sIGZyb20gaHR0cDovL3d3dy5nbHlwaGlzaC5jb20vLgoKSFRUUCBSRVNUZnVsIGxp
 YnJhcnkgQVNJSFRUUFJlcXVlc3QgY29weXJpZ2h0IMKpIEFsbC1TZWVpbmcgSW50ZXJhY3RpdmUsIGZy
 b20gaHR0cDovL2FsbHNlZWluZy1pLmNvbS9BU0lIVFRQUmVxdWVzdC8uCgpYTUwgcGFyc2luZyBsaWJy
-YXJ5IEtpc3NYTUwgwqkgRGV1c3R5IERlc2lnbnMsIExMQy4sIGZyb20gaHR0cDovL2NvZGUuZ29vZ2xl
-LmNvbS9wL2tpc3N4bWwvLg</string>
+YXJ5IFRvdWNoWE1MIMKpIEpvbmF0aGFuIFdpZ2h0LCBmcm9tIGh0dHA6Ly9jb2RlLmdvb2dsZS5jb20v
+cC90b3VjaGNvZGUvLg</string>
 							<object class="IBUITextInputTraits" key="IBUITextInputTraits">
 								<int key="IBUIAutocapitalizationType">2</int>
 							</object>
@@ -262,6 +262,6 @@ LmNvbS9wL2tpc3N4bWwvLg</string>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.LastKnownRelativeProjectPath">OpenNMS.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<string key="IBCocoaTouchPluginVersion">3.0</string>
+		<string key="IBCocoaTouchPluginVersion">3.1</string>
 	</data>
 </archive>
