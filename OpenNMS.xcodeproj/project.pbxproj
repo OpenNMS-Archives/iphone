@@ -43,7 +43,6 @@
 		44BBA44D100CF1B2001257CB /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BBA44C100CF1B2001257CB /* AboutViewController.m */; };
 		44C8E120100CB71300A29DA0 /* ViewOutage.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C8E11F100CB71300A29DA0 /* ViewOutage.m */; };
 		44C8E295100CD66400A29DA0 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E294100CD66400A29DA0 /* display.png */; };
-		44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */; };
 		44D023E6100F9CB0000C5EAA /* CXMLNode_XPathExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E653100F9901000B8A22 /* CXMLNode_XPathExtensions.m */; };
 		44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */; };
 		44D024A9100FB224000C5EAA /* AlarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D024A8100FB224000C5EAA /* AlarmViewController.m */; };
@@ -120,7 +119,6 @@
 		44C8E11E100CB71300A29DA0 /* ViewOutage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewOutage.h; sourceTree = "<group>"; };
 		44C8E11F100CB71300A29DA0 /* ViewOutage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewOutage.m; sourceTree = "<group>"; };
 		44C8E294100CD66400A29DA0 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = display.png; path = Images/display.png; sourceTree = "<group>"; };
-		44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutWindow.xib; sourceTree = "<group>"; };
 		44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsXMLElementAdditions.h; sourceTree = "<group>"; };
 		44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsXMLElementAdditions.m; sourceTree = "<group>"; };
 		44D024A7100FB224000C5EAA /* AlarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmViewController.h; sourceTree = "<group>"; };
@@ -240,7 +238,6 @@
 				44E2A161100E195100DD5A1D /* opennms-headingbg.png */,
 				44BBA449100CE90B001257CB /* o.png */,
 				44BBA447100CE84F001257CB /* question-mark-helvetica.png */,
-				44C8E298100CD6FB00A29DA0 /* AboutWindow.xib */,
 				44C8E294100CD66400A29DA0 /* display.png */,
 				4470101E1007F0D7006CE665 /* AlarmView.xib */,
 				4470101F1007F0D7006CE665 /* OutageView.xib */,
@@ -433,7 +430,6 @@
 				447010211007F0D7006CE665 /* OutageView.xib in Resources */,
 				448AC2C510097B6700C2621C /* Settings.bundle in Resources */,
 				44C8E295100CD66400A29DA0 /* display.png in Resources */,
-				44C8E299100CD6FB00A29DA0 /* AboutWindow.xib in Resources */,
 				44BBA448100CE84F001257CB /* question-mark-helvetica.png in Resources */,
 				44BBA44A100CE90B001257CB /* o.png in Resources */,
 				44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */,
