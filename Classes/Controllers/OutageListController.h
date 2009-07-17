@@ -32,16 +32,19 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "FuzzyDate.h"
+#import "NodeDetailController.h"
 
-@interface AlarmViewController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private UITableView* alarmTable;
-	@private FuzzyDate* fuzzyDate;
+#define INDICATOR_TAG 1
 
-	@private NSArray* alarms;
+@interface OutageListController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+	@private UITableView* outageTable;
+	@private NodeDetailController* nodeDetailController;
+
+	@private NSArray* outages;
 }
 
-@property (nonatomic, retain) IBOutlet UITableView* alarmTable;
+@property (nonatomic, retain) IBOutlet UITableView* outageTable;
+@property (nonatomic, retain) IBOutlet NodeDetailController* nodeDetailController;
 
 - (IBAction) reload:(id) sender;
 

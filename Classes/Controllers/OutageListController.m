@@ -31,7 +31,7 @@
  *
  *******************************************************************************/
 
-#import "OutageViewController.h"
+#import "OutageListController.h"
 #import "NodeDetailController.h"
 #import "ColumnarTableViewCell.h"
 #import "OnmsOutage.h"
@@ -40,7 +40,7 @@
 #import "ViewOutage.h"
 #import "OpenNMSRestAgent.h"
 
-@implementation OutageViewController
+@implementation OutageListController
 
 @synthesize outageTable;
 @synthesize nodeDetailController;

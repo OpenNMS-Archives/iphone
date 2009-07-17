@@ -154,7 +154,7 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>OutageViewController</string>
+					<string>OutageListController</string>
 					<string>UIResponder</string>
 					<string>{{666, 427}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -199,7 +199,7 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">OutageViewController</string>
+					<string key="className">OutageListController</string>
 					<string key="superclassName">UIViewController</string>
 					<object class="NSMutableDictionary" key="actions">
 						<string key="NS.key.0">reload:</string>
@@ -220,11 +220,11 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/OutageViewController.h</string>
+						<string key="minorKey">Classes/OutageListController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">OutageViewController</string>
+					<string key="className">OutageListController</string>
 					<string key="superclassName">UIViewController</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>

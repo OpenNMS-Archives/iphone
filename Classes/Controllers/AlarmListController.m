@@ -31,12 +31,12 @@
  *
  *******************************************************************************/
 
-#import "AlarmViewController.h"
+#import "AlarmListController.h"
 #import "ColumnarTableViewCell.h"
 #import "OpenNMSRestAgent.h"
 #import "OnmsAlarm.h"
 
-@implementation AlarmViewController
+@implementation AlarmListController
 
 @synthesize alarmTable;
 
@@ -141,19 +141,39 @@
 }
 */
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (alarms && [alarms count] > 0) {
+		OnmsAlarm* alarm = [alarms objectAtIndex:indexPath.row];
+		CGSize size = [alarm.logMessage sizeWithFont:[UIFont boldSystemFontOfSize:12]
+						constrainedToSize:CGSizeMake(220.0, 1000.0)
+						lineBreakMode:UILineBreakModeWordWrap];
+		if ((size.height + 10) >= tableView.rowHeight) {
+			NSLog(@"returning height %f for %@ (row height = %f)", (size.height + 10), alarm.logMessage, tableView.rowHeight);
+			return (size.height + 10);
+		}
+		NSLog(@"returning height %f for %@", tableView.rowHeight, alarm.logMessage);
+	}
+	return tableView.rowHeight;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 
 	if (alarms && [alarms count] > 0) {
+		tableView.separatorColor = [UIColor colorWithWhite:0.0 alpha:1.0];
 		OnmsAlarm* alarm = [alarms objectAtIndex:indexPath.row];
+		
+		NSLog(@"alarm %@: row height = %f", alarm, tableView.rowHeight);
 		UIColor* color = [self getColorForSeverity:alarm.severity];
 		cell.contentView.backgroundColor = color;
-
+		
 		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
 		[cell addColumn:alarm.logMessage];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = alarm.logMessage;
 		label.backgroundColor = color;
+		label.lineBreakMode = UILineBreakModeWordWrap;
+		label.numberOfLines = 0;
 		[cell.contentView addSubview:label];
 
 		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];

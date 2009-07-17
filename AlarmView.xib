@@ -151,7 +151,7 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>AlarmViewController</string>
+					<string>AlarmListController</string>
 					<string>UIResponder</string>
 					<string>{{748, 97}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -184,7 +184,7 @@
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">AlarmViewController</string>
+					<string key="className">AlarmListController</string>
 					<string key="superclassName">UIViewController</string>
 					<object class="NSMutableDictionary" key="actions">
 						<string key="NS.key.0">reload:</string>
@@ -196,7 +196,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/AlarmViewController.h</string>
+						<string key="minorKey">Classes/AlarmListController.h</string>
 					</object>
 				</object>
 			</object>
