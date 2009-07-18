@@ -115,6 +115,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 
+	// Set the selected color.
+	UIView* backgroundView = [[[UIView alloc] init] autorelease];
+	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
+	cell.selectedBackgroundView = backgroundView;
+
 	if (outages && [outages count] > 0) {
 	
 		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];

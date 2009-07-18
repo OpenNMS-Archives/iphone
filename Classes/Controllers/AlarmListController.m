@@ -148,10 +148,8 @@
 						constrainedToSize:CGSizeMake(220.0, 1000.0)
 						lineBreakMode:UILineBreakModeWordWrap];
 		if ((size.height + 10) >= tableView.rowHeight) {
-			NSLog(@"returning height %f for %@ (row height = %f)", (size.height + 10), alarm.logMessage, tableView.rowHeight);
 			return (size.height + 10);
 		}
-		NSLog(@"returning height %f for %@", tableView.rowHeight, alarm.logMessage);
 	}
 	return tableView.rowHeight;
 }
@@ -159,11 +157,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 
+	UIView* backgroundView = [[[UIView alloc] init] autorelease];
+	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
+	cell.selectedBackgroundView = backgroundView;
+	
 	if (alarms && [alarms count] > 0) {
 		tableView.separatorColor = [UIColor colorWithWhite:0.0 alpha:1.0];
 		OnmsAlarm* alarm = [alarms objectAtIndex:indexPath.row];
 		
-		NSLog(@"alarm %@: row height = %f", alarm, tableView.rowHeight);
 		UIColor* color = [self getColorForSeverity:alarm.severity];
 		cell.contentView.backgroundColor = color;
 		

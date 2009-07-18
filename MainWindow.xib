@@ -9,7 +9,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="162"/>
-			<integer value="106"/>
+			<integer value="134"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -50,152 +50,74 @@
 			<object class="IBUITabBarController" id="1034742383">
 				<object class="IBUISimulatedTabBarMetrics" key="IBUISimulatedBottomBarMetrics"/>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics"/>
-				<object class="IBUIViewController" key="IBUISelectedViewController" id="493901519">
-					<object class="IBUIView" key="IBUIView" id="969988115">
-						<reference key="NSNextResponder"/>
-						<int key="NSvFlags">292</int>
-						<object class="NSMutableArray" key="NSSubviews">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBUINavigationBar" id="840313730">
-								<reference key="NSNextResponder" ref="969988115"/>
-								<int key="NSvFlags">290</int>
-								<string key="NSFrameSize">{320, 44}</string>
-								<reference key="NSSuperview" ref="969988115"/>
-								<object class="NSColor" key="IBUIBackgroundColor">
-									<int key="NSColorSpace">2</int>
-									<bytes key="NSRGB">MC4yNTQ5MDE5OCAwLjQ1NDkwMTk5IDAuMDU0OTAxOTY1AA</bytes>
-								</object>
-								<bool key="IBUIOpaque">NO</bool>
-								<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
-								<bool key="IBUIUserInteractionEnabled">NO</bool>
-								<object class="NSColor" key="IBUITintColor">
-									<int key="NSColorSpace">2</int>
-									<bytes key="NSRGB">MC4yMTE3NjQ3MiAwLjQxMTc2NDc0IDAuMDExNzY0NzA3AA</bytes>
-								</object>
-								<object class="NSArray" key="IBUIItems">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<object class="IBUINavigationItem" id="763112622">
-										<reference key="IBUINavigationBar" ref="840313730"/>
-										<string key="IBUITitle">About OpenNMS</string>
-									</object>
-								</object>
-							</object>
-							<object class="IBUITextView" id="118539429">
-								<reference key="NSNextResponder" ref="969988115"/>
-								<int key="NSvFlags">274</int>
-								<string key="NSFrame">{{0, 44}, {320, 367}}</string>
-								<reference key="NSSuperview" ref="969988115"/>
-								<bool key="IBUIOpaque">NO</bool>
-								<bool key="IBUIClipsSubviews">YES</bool>
-								<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
-								<bool key="IBUIDelaysContentTouches">NO</bool>
-								<bool key="IBUICanCancelContentTouches">NO</bool>
-								<bool key="IBUIBouncesZoom">NO</bool>
-								<bool key="IBUIEditable">NO</bool>
-								<string type="base64-UTF8" key="IBUIText">T3Blbk5NU8KuIGlzIGEgUmVnaXN0ZXJlZCBUcmFkZW1hcmsgb2YgVGhlIE9wZW5OTVMgR3JvdXAsIElu
-Yy4KCkNvcHlyaWdodCDCqSAyMDA5LCBUaGUgT3Blbk5NUyBHcm91cCwgSW5jLgoKaHR0cDovL3d3dy5v
-cGVubm1zLm9yZy8KCjNyZC1QYXJ0eSBJbmNsdXNpb25zOgoKU29tZSBpY29ucyBjb3B5cmlnaHQgwqkg
-Sm9zZXBoIFdhaW4sIGZyb20gaHR0cDovL3d3dy5nbHlwaGlzaC5jb20vLgoKSFRUUCBSRVNUZnVsIGxp
-YnJhcnkgQVNJSFRUUFJlcXVlc3QgY29weXJpZ2h0IMKpIEFsbC1TZWVpbmcgSW50ZXJhY3RpdmUsIGZy
-b20gaHR0cDovL2FsbHNlZWluZy1pLmNvbS9BU0lIVFRQUmVxdWVzdC8uCgpYTUwgcGFyc2luZyBsaWJy
-YXJ5IFRvdWNoWE1MIMKpIEpvbmF0aGFuIFdpZ2h0LCBmcm9tIGh0dHA6Ly9jb2RlLmdvb2dsZS5jb20v
-cC90b3VjaGNvZGUvLg</string>
-								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
-									<int key="IBUIAutocapitalizationType">2</int>
-								</object>
-								<int key="IBUIDataDetectorTypes">2</int>
-							</object>
-						</object>
-						<string key="NSFrameSize">{320, 411}</string>
-						<reference key="NSSuperview"/>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MQA</bytes>
-							<object class="NSColorSpace" key="NSCustomColorSpace">
-								<int key="NSID">2</int>
-							</object>
-						</object>
-						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
-					</object>
-					<object class="IBUITabBarItem" key="IBUITabBarItem" id="548751342">
-						<string key="IBUITitle">About</string>
+				<object class="IBUINavigationController" key="IBUISelectedViewController" id="1819890">
+					<object class="IBUITabBarItem" key="IBUITabBarItem" id="255937433">
+						<string key="IBUITitle">Outages</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">o.png</string>
+							<string key="NSResourceName">ekg.png</string>
 						</object>
 						<reference key="IBUITabBar"/>
 					</object>
-					<object class="NSArray" key="IBUIToolbarItems">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-					</object>
 					<reference key="IBUIParentViewController" ref="1034742383"/>
+					<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics"/>
+					<object class="IBUINavigationBar" key="IBUINavigationBar" id="84936450">
+						<nil key="NSNextResponder"/>
+						<int key="NSvFlags">256</int>
+						<string key="NSFrameSize">{0, 0}</string>
+						<object class="NSColor" key="IBUIBackgroundColor">
+							<int key="NSColorSpace">2</int>
+							<bytes key="NSRGB">MC4yNTA5ODA0MSAwLjQ1ODgyMzU2IDAuMDMxMzcyNTUxAA</bytes>
+						</object>
+						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIClipsSubviews">YES</bool>
+						<bool key="IBUIMultipleTouchEnabled">YES</bool>
+						<object class="NSColor" key="IBUITintColor">
+							<int key="NSColorSpace">2</int>
+							<bytes key="NSRGB">MC4yMTE3NjQ3MiAwLjQxMTc2NDc0IDAuMDExNzY0NzA3AA</bytes>
+						</object>
+					</object>
+					<object class="IBUIToolbar" key="IBUIToolbar" id="375929891">
+						<nil key="NSNextResponder"/>
+						<int key="NSvFlags">256</int>
+						<string key="NSFrame">{{0, 416}, {320, 44}}</string>
+						<object class="NSColor" key="IBUIBackgroundColor">
+							<int key="NSColorSpace">2</int>
+							<bytes key="NSRGB">MC40NDMxMzcyOSAwLjYzOTIxNTcxIDAuMjExNzY0NzIAA</bytes>
+						</object>
+						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIClipsSubviews">YES</bool>
+						<int key="IBUIContentMode">4</int>
+						<bool key="IBUIMultipleTouchEnabled">YES</bool>
+						<object class="NSColor" key="IBUITintColor">
+							<int key="NSColorSpace">2</int>
+							<bytes key="NSRGB">MC40NDMxMzcyOSAwLjYzOTIxNTcxIDAuMjExNzY0NzIAA</bytes>
+						</object>
+					</object>
+					<object class="NSMutableArray" key="IBUIViewControllers">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="IBUIViewController" id="16638109">
+							<string key="IBUITitle">Outages</string>
+							<object class="NSArray" key="IBUIToolbarItems">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+							</object>
+							<object class="IBUINavigationItem" key="IBUINavigationItem" id="55478112">
+								<reference key="IBUINavigationBar"/>
+								<string key="IBUITitle">Outages</string>
+								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="272254443">
+									<int key="IBUIStyle">1</int>
+									<int key="IBUISystemItemIdentifier">13</int>
+								</object>
+							</object>
+							<reference key="IBUIParentViewController" ref="1819890"/>
+							<string key="IBUINibName">OutageView</string>
+							<object class="IBUISimulatedToolbarMetrics" key="IBUISimulatedBottomBarMetrics"/>
+						</object>
+					</object>
 				</object>
 				<object class="NSMutableArray" key="IBUIViewControllers">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUINavigationController" id="1819890">
-						<object class="IBUITabBarItem" key="IBUITabBarItem" id="255937433">
-							<string key="IBUITitle">Outages</string>
-							<object class="NSCustomResource" key="IBUIImage">
-								<string key="NSClassName">NSImage</string>
-								<string key="NSResourceName">ekg.png</string>
-							</object>
-							<reference key="IBUITabBar"/>
-						</object>
-						<reference key="IBUIParentViewController" ref="1034742383"/>
-						<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics"/>
-						<object class="IBUINavigationBar" key="IBUINavigationBar" id="84936450">
-							<nil key="NSNextResponder"/>
-							<int key="NSvFlags">256</int>
-							<string key="NSFrameSize">{0, 0}</string>
-							<object class="NSColor" key="IBUIBackgroundColor">
-								<int key="NSColorSpace">2</int>
-								<bytes key="NSRGB">MC4yNTA5ODA0MSAwLjQ1ODgyMzU2IDAuMDMxMzcyNTUxAA</bytes>
-							</object>
-							<bool key="IBUIOpaque">NO</bool>
-							<bool key="IBUIClipsSubviews">YES</bool>
-							<bool key="IBUIMultipleTouchEnabled">YES</bool>
-							<object class="NSColor" key="IBUITintColor">
-								<int key="NSColorSpace">2</int>
-								<bytes key="NSRGB">MC4yMTE3NjQ3MiAwLjQxMTc2NDc0IDAuMDExNzY0NzA3AA</bytes>
-							</object>
-						</object>
-						<object class="IBUIToolbar" key="IBUIToolbar" id="375929891">
-							<nil key="NSNextResponder"/>
-							<int key="NSvFlags">256</int>
-							<string key="NSFrame">{{0, 416}, {320, 44}}</string>
-							<object class="NSColor" key="IBUIBackgroundColor">
-								<int key="NSColorSpace">2</int>
-								<bytes key="NSRGB">MC40NDMxMzcyOSAwLjYzOTIxNTcxIDAuMjExNzY0NzIAA</bytes>
-							</object>
-							<bool key="IBUIOpaque">NO</bool>
-							<bool key="IBUIClipsSubviews">YES</bool>
-							<int key="IBUIContentMode">4</int>
-							<bool key="IBUIMultipleTouchEnabled">YES</bool>
-							<object class="NSColor" key="IBUITintColor">
-								<int key="NSColorSpace">2</int>
-								<bytes key="NSRGB">MC40NDMxMzcyOSAwLjYzOTIxNTcxIDAuMjExNzY0NzIAA</bytes>
-							</object>
-						</object>
-						<object class="NSMutableArray" key="IBUIViewControllers">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBUIViewController" id="16638109">
-								<string key="IBUITitle">Outages</string>
-								<object class="NSArray" key="IBUIToolbarItems">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-								</object>
-								<object class="IBUINavigationItem" key="IBUINavigationItem" id="55478112">
-									<string key="IBUITitle">Outages</string>
-									<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="272254443">
-										<int key="IBUIStyle">1</int>
-										<int key="IBUISystemItemIdentifier">13</int>
-									</object>
-								</object>
-								<reference key="IBUIParentViewController" ref="1819890"/>
-								<string key="IBUINibName">OutageView</string>
-								<object class="IBUISimulatedToolbarMetrics" key="IBUISimulatedBottomBarMetrics"/>
-							</object>
-						</object>
-					</object>
+					<reference ref="1819890"/>
 					<object class="IBUIViewController" id="268481961">
 						<object class="IBUITabBarItem" key="IBUITabBarItem" id="807309489">
 							<string key="IBUITitle">Alarms</string>
@@ -226,7 +148,85 @@ cC90b3VjaGNvZGUvLg</string>
 						</object>
 						<reference key="IBUIParentViewController" ref="1034742383"/>
 					</object>
-					<reference ref="493901519"/>
+					<object class="IBUIViewController" id="493901519">
+						<object class="IBUIView" key="IBUIView" id="969988115">
+							<nil key="NSNextResponder"/>
+							<int key="NSvFlags">292</int>
+							<object class="NSMutableArray" key="NSSubviews">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="IBUINavigationBar" id="840313730">
+									<reference key="NSNextResponder" ref="969988115"/>
+									<int key="NSvFlags">290</int>
+									<string key="NSFrameSize">{320, 44}</string>
+									<reference key="NSSuperview" ref="969988115"/>
+									<object class="NSColor" key="IBUIBackgroundColor">
+										<int key="NSColorSpace">2</int>
+										<bytes key="NSRGB">MC4yNTQ5MDE5OCAwLjQ1NDkwMTk5IDAuMDU0OTAxOTY1AA</bytes>
+									</object>
+									<bool key="IBUIOpaque">NO</bool>
+									<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
+									<bool key="IBUIUserInteractionEnabled">NO</bool>
+									<object class="NSColor" key="IBUITintColor">
+										<int key="NSColorSpace">2</int>
+										<bytes key="NSRGB">MC4yMTE3NjQ3MiAwLjQxMTc2NDc0IDAuMDExNzY0NzA3AA</bytes>
+									</object>
+									<object class="NSArray" key="IBUIItems">
+										<bool key="EncodedWithXMLCoder">YES</bool>
+										<object class="IBUINavigationItem" id="763112622">
+											<reference key="IBUINavigationBar" ref="840313730"/>
+											<string key="IBUITitle">About OpenNMS</string>
+										</object>
+									</object>
+								</object>
+								<object class="IBUITextView" id="118539429">
+									<reference key="NSNextResponder" ref="969988115"/>
+									<int key="NSvFlags">274</int>
+									<string key="NSFrame">{{0, 44}, {320, 367}}</string>
+									<reference key="NSSuperview" ref="969988115"/>
+									<bool key="IBUIOpaque">NO</bool>
+									<bool key="IBUIClipsSubviews">YES</bool>
+									<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
+									<bool key="IBUIDelaysContentTouches">NO</bool>
+									<bool key="IBUICanCancelContentTouches">NO</bool>
+									<bool key="IBUIBouncesZoom">NO</bool>
+									<bool key="IBUIEditable">NO</bool>
+									<string type="base64-UTF8" key="IBUIText">T3Blbk5NU8KuIGlzIGEgUmVnaXN0ZXJlZCBUcmFkZW1hcmsgb2YgVGhlIE9wZW5OTVMgR3JvdXAsIElu
+Yy4KCkNvcHlyaWdodCDCqSAyMDA5LCBUaGUgT3Blbk5NUyBHcm91cCwgSW5jLgoKaHR0cDovL3d3dy5v
+cGVubm1zLm9yZy8KCjNyZC1QYXJ0eSBJbmNsdXNpb25zOgoKU29tZSBpY29ucyBjb3B5cmlnaHQgwqkg
+Sm9zZXBoIFdhaW4sIGZyb20gaHR0cDovL3d3dy5nbHlwaGlzaC5jb20vLgoKSFRUUCBSRVNUZnVsIGxp
+YnJhcnkgQVNJSFRUUFJlcXVlc3QgY29weXJpZ2h0IMKpIEFsbC1TZWVpbmcgSW50ZXJhY3RpdmUsIGZy
+b20gaHR0cDovL2FsbHNlZWluZy1pLmNvbS9BU0lIVFRQUmVxdWVzdC8uCgpYTUwgcGFyc2luZyBsaWJy
+YXJ5IFRvdWNoWE1MIMKpIEpvbmF0aGFuIFdpZ2h0LCBmcm9tIGh0dHA6Ly9jb2RlLmdvb2dsZS5jb20v
+cC90b3VjaGNvZGUvLg</string>
+									<object class="IBUITextInputTraits" key="IBUITextInputTraits">
+										<int key="IBUIAutocapitalizationType">2</int>
+									</object>
+									<int key="IBUIDataDetectorTypes">2</int>
+								</object>
+							</object>
+							<string key="NSFrameSize">{320, 411}</string>
+							<object class="NSColor" key="IBUIBackgroundColor">
+								<int key="NSColorSpace">3</int>
+								<bytes key="NSWhite">MQA</bytes>
+								<object class="NSColorSpace" key="NSCustomColorSpace">
+									<int key="NSID">2</int>
+								</object>
+							</object>
+							<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
+						</object>
+						<object class="IBUITabBarItem" key="IBUITabBarItem" id="548751342">
+							<string key="IBUITitle">About</string>
+							<object class="NSCustomResource" key="IBUIImage">
+								<string key="NSClassName">NSImage</string>
+								<string key="NSResourceName">o.png</string>
+							</object>
+							<reference key="IBUITabBar"/>
+						</object>
+						<object class="NSArray" key="IBUIToolbarItems">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<reference key="IBUIParentViewController" ref="1034742383"/>
+					</object>
 				</object>
 				<object class="IBUITabBar" key="IBUITabBar" id="795333663">
 					<nil key="NSNextResponder"/>
@@ -595,7 +595,7 @@ cC90b3VjaGNvZGUvLg</string>
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>UIApplication</string>
 					<string>UIResponder</string>
-					<string>{{51, 627}, {320, 480}}</string>
+					<string>{{559, 627}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>AlarmListController</string>
@@ -611,7 +611,7 @@ cC90b3VjaGNvZGUvLg</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>NodeDetailController</string>
-					<string>{{498, 427}, {320, 480}}</string>
+					<string>{{559, 427}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -669,7 +669,7 @@ cC90b3VjaGNvZGUvLg</string>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/AboutViewController.h</string>
+						<string key="minorKey">Classes/Controllers/AboutViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -685,7 +685,7 @@ cC90b3VjaGNvZGUvLg</string>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/AlarmListController.h</string>
+						<string key="minorKey">Classes/Controllers/AlarmListController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -697,7 +697,7 @@ cC90b3VjaGNvZGUvLg</string>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/NodeDetailController.h</string>
+						<string key="minorKey">Classes/Controllers/NodeDetailController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -743,7 +743,7 @@ cC90b3VjaGNvZGUvLg</string>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Classes/OutageListController.h</string>
+						<string key="minorKey">Classes/Controllers/OutageListController.h</string>
 					</object>
 				</object>
 			</object>
