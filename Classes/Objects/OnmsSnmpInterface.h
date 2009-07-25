@@ -32,18 +32,28 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "OnmsNode.h"
 
-@interface OpenNMSRestAgent : NSObject {
-	NSMutableDictionary* nodes;
+
+@interface OnmsSnmpInterface : NSObject {
+	@private NSNumber* interfaceId;
+	@private NSNumber* nodeId;
+	@private NSNumber* ifIndex;
+	@private NSString* collect;
+	@private NSString* ifDescription;
+	@private NSNumber* ifStatus;
+	@private NSString* ipAddress;
+	@private NSString* physAddr;
+	@private NSNumber* ifSpeed;
 }
 
--(OnmsNode*) getNode:(NSNumber*)nodeId;
--(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
--(NSArray*) getSnmpInterfaces:(NSNumber*)nodeId;
-
--(NSArray*) getAlarms;
--(NSArray*) getOutages:(NSNumber*)nodeId;
--(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct;
+@property (nonatomic, retain) NSNumber* interfaceId;
+@property (nonatomic, retain) NSNumber* nodeId;
+@property (nonatomic, retain) NSNumber* ifIndex;
+@property (nonatomic, retain) NSString* collect;
+@property (nonatomic, retain) NSString* ifDescription;
+@property (nonatomic, retain) NSNumber* ifStatus;
+@property (nonatomic, retain) NSString* ipAddress;
+@property (nonatomic, retain) NSString* physAddr;
+@property (nonatomic, retain) NSNumber* ifSpeed;
 
 @end

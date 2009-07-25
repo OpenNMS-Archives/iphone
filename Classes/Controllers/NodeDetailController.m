@@ -35,6 +35,7 @@
 #import "ColumnarTableViewCell.h"
 #import "ViewOutage.h"
 #import "OnmsIpInterface.h"
+#import "OnmsSnmpInterface.h"
 #import "OpenNMSRestAgent.h"
 
 @implementation NodeDetailController
@@ -57,6 +58,7 @@
 	[node release];
 	[outages release];
 	[interfaces release];
+	[snmpInterfaces release];
 
 	[super dealloc];
 }
@@ -77,6 +79,7 @@
 	[node release];
 	[outages release];
 	[interfaces release];
+	[snmpInterfaces release];
 	
 	[super viewDidUnload];
 }
@@ -95,6 +98,11 @@
 	interfaces = [agent getIpInterfaces:nodeId];
 	if ([interfaces count] > 0) {
 		[sections addObject:@"IP Interfaces"];
+	}
+
+	snmpInterfaces = [agent getSnmpInterfaces:nodeId];
+	if ([snmpInterfaces count] > 0) {
+		[sections addObject:@"SNMP Interfaces"];
 	}
 }
 
@@ -130,6 +138,9 @@
 	}
 	if ([sections objectAtIndex:section] == @"IP Interfaces") {
 		return [interfaces count];
+	}
+	if ([sections objectAtIndex:section] == @"SNMP Interfaces") {
+		return [snmpInterfaces count];
 	}
 	return 0;
 }
@@ -209,7 +220,7 @@
 	} else if (sectionName == @"IP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		OnmsIpInterface* iface = [interfaces objectAtIndex:indexPath.row];
-
+		
 		// IP Address
 		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 80.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
@@ -226,12 +237,40 @@
 		[cell addColumn:iface.hostName];
 		[cell.contentView addSubview:label];
 		
-		// Host Name
+		// Managed/Unmanaged
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(228.0, 0, 72, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.isManaged isEqual:@"M"]? @"Managed" : @"Unmanaged";
 		[cell addColumn:([iface.isManaged isEqual:@"M"]? @"Managed" : @"Unmanaged")];
+		[cell.contentView addSubview:label];
+		
+	} else if (sectionName == @"SNMP Interfaces") {
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		OnmsSnmpInterface* iface = [snmpInterfaces objectAtIndex:indexPath.row];
+
+		// IfIndex
+		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 32.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = [iface.ifIndex stringValue];
+		[cell addColumn:[iface.ifIndex stringValue]];
+		[cell.contentView addSubview:label];
+		
+		// IP Address
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(37.0, 0, 123.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = iface.ipAddress;
+		[cell addColumn:iface.ipAddress];
+		[cell.contentView addSubview:label];
+		
+		// MAC
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(160.0, 0, 145.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = iface.physAddr;
+		[cell addColumn:iface.physAddr];
 		[cell.contentView addSubview:label];
 		
 	}

@@ -31,10 +31,9 @@
  *
  *******************************************************************************/
 
-#import "IpInterfaceParser.h"
+#import "SnmpInterfaceParser.h"
 
-
-@implementation IpInterfaceParser
+@implementation SnmpInterfaceParser
 
 - (void)dealloc
 {
@@ -51,37 +50,48 @@
 	[dateFormatter setLenient:true];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 	
-	NSArray* xmlInterfaces = [node elementsForName:@"ipInterface"];
+	NSArray* xmlInterfaces = [node elementsForName:@"snmpInterface"];
 	for (id xmlInterface in xmlInterfaces) {
-		OnmsIpInterface* iface = [[OnmsIpInterface alloc] init];
+		OnmsSnmpInterface* iface = [[OnmsSnmpInterface alloc] init];
 		
 		for (id attr in [xmlInterface attributes]) {
 			if ([[attr name] isEqual:@"id"]) {
 				[iface setInterfaceId:[NSNumber numberWithInt:[[attr stringValue] intValue]]];
 			} else if ([[attr name] isEqual:@"ifIndex"]) {
 				[iface setIfIndex:[NSNumber numberWithInt:[[attr stringValue] intValue]]];
-			} else if ([[attr name] isEqual:@"isDown"]) {
-				// ignore for now, we come from outages
-			} else if ([[attr name] isEqual:@"snmpPrimary"]) {
-				[iface setSnmpPrimary:[attr stringValue]];
-			} else if ([[attr name] isEqual:@"isManaged"]) {
-				[iface setIsManaged:[attr stringValue]];
+			} else if ([[attr name] isEqual:@"collect"]) {
+				[iface setCollect:[attr stringValue]];
 			}
+		}
+		
+		CXMLElement* nodeElement = [xmlInterface elementForName:@"nodeId"];
+		if (nodeElement) {
+			[iface setNodeId:[NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]]];
+		}
+
+		CXMLElement* descElement = [xmlInterface elementForName:@"ifDescr"];
+		if (descElement) {
+			[iface setIfDescription:[[descElement childAtIndex:0] stringValue]];
+		}
+		
+		CXMLElement* statusElement = [xmlInterface elementForName:@"ifOperStatus"];
+		if (statusElement) {
+			[iface setIfStatus:[NSNumber numberWithInt:[[[statusElement childAtIndex:0] stringValue] intValue]]];
 		}
 		
 		CXMLElement* ipElement = [xmlInterface elementForName:@"ipAddress"];
 		if (ipElement) {
 			[iface setIpAddress:[[ipElement childAtIndex:0] stringValue]];
 		}
-		
-		CXMLElement* hostElement = [xmlInterface elementForName:@"hostName"];
-		if (hostElement) {
-			[iface setHostName:[[hostElement childAtIndex:0] stringValue]];
+
+		CXMLElement* macElement = [xmlInterface elementForName:@"physAddr"];
+		if (macElement) {
+			[iface setPhysAddr:[[macElement childAtIndex:0] stringValue]];
 		}
 		
-		CXMLElement* capsdElement = [xmlInterface elementForName:@"lastCapsdPoll"];
-		if (capsdElement) {
-			[iface setLastCapsdPoll:[dateFormatter dateFromString:[[capsdElement childAtIndex:0] stringValue]]];
+		CXMLElement* speedElement = [xmlInterface elementForName:@"ifSpeed"];
+		if (speedElement) {
+			[iface setIfStatus:[NSNumber numberWithLongLong:[[[statusElement childAtIndex:0] stringValue] longLongValue]]];
 		}
 		
 		[interfaces addObject:iface];
@@ -96,7 +106,7 @@
 	return interfaces;
 }
 
--(OnmsIpInterface*)interface
+-(OnmsSnmpInterface*)interface
 {
 	if ([interfaces count] > 0) {
 		return [interfaces objectAtIndex:0];

@@ -32,18 +32,14 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "OnmsNode.h"
+#import "OnmsSnmpInterface.h"
 
-@interface OpenNMSRestAgent : NSObject {
-	NSMutableDictionary* nodes;
+@interface SnmpInterfaceParser : NSObject {
+	@private NSMutableArray *interfaces;
 }
 
--(OnmsNode*) getNode:(NSNumber*)nodeId;
--(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
--(NSArray*) getSnmpInterfaces:(NSNumber*)nodeId;
-
--(NSArray*) getAlarms;
--(NSArray*) getOutages:(NSNumber*)nodeId;
--(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct;
+-(BOOL)parse:(CXMLElement*)node;
+-(NSArray*)interfaces;
+-(OnmsSnmpInterface*)interface;
 
 @end

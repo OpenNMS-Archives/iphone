@@ -33,10 +33,11 @@
 
 #import "OpenNMSRestAgent.h"
 
-#import "AlarmParser.h"
-#import "IpInterfaceParser.h"
-#import "OutageParser.h"
 #import "NodeParser.h"
+#import "IpInterfaceParser.h"
+#import "SnmpInterfaceParser.h"
+#import "AlarmParser.h"
+#import "OutageParser.h"
 
 #import "OnmsIpInterface.h"
 #import "OnmsNode.h"
@@ -211,5 +212,24 @@
 	[document release];
 	return interfaces;
 }
+
+- (NSArray*) getSnmpInterfaces:(NSNumber*)nodeId
+{
+	SnmpInterfaceParser* interfaceParser = [[SnmpInterfaceParser alloc] init];
+	NSArray* interfaces = nil;
+	CXMLDocument* document;
+	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/snmpinterfaces?limit=%d&orderBy=ifIndex&order=asc", nodeId, GET_LIMIT] caller: @"getSnmpInterfaces"];
+	if (document) {
+		CXMLElement* rootNode = [document rootElement];
+		[interfaceParser parse:rootNode];
+		interfaces = [[interfaceParser interfaces] copy];
+	} else {
+		interfaces = [[NSArray alloc] init];
+	}
+	[interfaceParser release];
+	[document release];
+	return interfaces;
+}
+
 
 @end

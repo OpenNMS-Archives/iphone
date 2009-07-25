@@ -44,6 +44,7 @@
 	@private OnmsNode* node;
 	@private NSArray* outages;
 	@private NSArray* interfaces;
+	@private NSArray* snmpInterfaces;
 
 }
 

@@ -14,6 +14,7 @@
 		288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765070DF74369002DB57D /* CoreGraphics.framework */; };
 		28AD73880D9D96C1002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD73870D9D96C1002E5188 /* MainWindow.xib */; };
 		440B00861008C941005DB69C /* FuzzyDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 440B00851008C941005DB69C /* FuzzyDate.m */; };
+		4425F1641018E572000DDDAE /* OnmsSnmpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */; };
 		44263CFC10112F4100717409 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF510112F4100717409 /* AboutViewController.m */; };
 		44263CFE10112F4100717409 /* NodeDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF910112F4100717409 /* NodeDetailController.m */; };
 		44263D0B10112F6800717409 /* OnmsAlarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D0210112F6800717409 /* OnmsAlarm.m */; };
@@ -52,6 +53,7 @@
 		44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */; };
 		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
 		44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */; };
+		44EEAF2C101A58D30023D5BD /* SnmpInterfaceParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */; };
 		44F0E655100F9901000B8A22 /* CXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E645100F9901000B8A22 /* CXMLDocument.m */; };
 		44F0E656100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E647100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m */; };
 		44F0E657100F9901000B8A22 /* CXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E649100F9901000B8A22 /* CXMLElement.m */; };
@@ -75,6 +77,8 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		440B00841008C941005DB69C /* FuzzyDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuzzyDate.h; sourceTree = "<group>"; };
 		440B00851008C941005DB69C /* FuzzyDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FuzzyDate.m; sourceTree = "<group>"; };
+		4425F1621018E572000DDDAE /* OnmsSnmpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsSnmpInterface.h; path = Objects/OnmsSnmpInterface.h; sourceTree = "<group>"; };
+		4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsSnmpInterface.m; path = Objects/OnmsSnmpInterface.m; sourceTree = "<group>"; };
 		44263CF410112F4100717409 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = Controllers/AboutViewController.h; sourceTree = "<group>"; };
 		44263CF510112F4100717409 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = Controllers/AboutViewController.m; sourceTree = "<group>"; };
 		44263CF810112F4100717409 /* NodeDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeDetailController.h; path = Controllers/NodeDetailController.h; sourceTree = "<group>"; };
@@ -134,6 +138,8 @@
 		44E2A161100E195100DD5A1D /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Images/opennms-headingbg.png"; sourceTree = "<group>"; };
 		44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnarTableViewCell.h; sourceTree = "<group>"; };
 		44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnarTableViewCell.m; sourceTree = "<group>"; };
+		44EEAF2A101A58D30023D5BD /* SnmpInterfaceParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterfaceParser.h; path = Parsers/SnmpInterfaceParser.h; sourceTree = "<group>"; };
+		44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceParser.m; path = Parsers/SnmpInterfaceParser.m; sourceTree = "<group>"; };
 		44F0E644100F9901000B8A22 /* CXMLDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLDocument.h; path = "External Classes/TouchXML/CXMLDocument.h"; sourceTree = "<group>"; };
 		44F0E645100F9901000B8A22 /* CXMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLDocument.m; path = "External Classes/TouchXML/CXMLDocument.m"; sourceTree = "<group>"; };
 		44F0E646100F9901000B8A22 /* CXMLDocument_PrivateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLDocument_PrivateExtensions.h; path = "External Classes/TouchXML/CXMLDocument_PrivateExtensions.h"; sourceTree = "<group>"; };
@@ -289,6 +295,8 @@
 				44263D0810112F6800717409 /* OnmsNode.m */,
 				44263D0910112F6800717409 /* OnmsOutage.h */,
 				44263D0A10112F6800717409 /* OnmsOutage.m */,
+				4425F1621018E572000DDDAE /* OnmsSnmpInterface.h */,
+				4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -306,6 +314,8 @@
 				44263D1B10112FA900717409 /* NodeParser.m */,
 				44263D1C10112FA900717409 /* OutageParser.h */,
 				44263D1D10112FA900717409 /* OutageParser.m */,
+				44EEAF2A101A58D30023D5BD /* SnmpInterfaceParser.h */,
+				44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */,
 			);
 			name = Parsers;
 			sourceTree = "<group>";
@@ -463,6 +473,8 @@
 				44263D2210112FA900717409 /* OutageParser.m in Sources */,
 				44263D261011301500717409 /* OutageListController.m in Sources */,
 				44263D2D1011309700717409 /* AlarmListController.m in Sources */,
+				4425F1641018E572000DDDAE /* OnmsSnmpInterface.m in Sources */,
+				44EEAF2C101A58D30023D5BD /* SnmpInterfaceParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
