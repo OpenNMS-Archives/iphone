@@ -63,32 +63,56 @@
 
 -(UIColor*) getColorForSeverity:(NSString*)severity
 {
-	/*
-	static UIColor* color_INDETERMINATE = [UIColor colorWithRed:0.6784 green:0.8470 blue:0.9019 alpha:1.0];
-	static UIColor* color_CLEARED       = [UIColor colorWithWhite:1.0 alpha:1.0];
-	static UIColor* color_NORMAL        = [UIColor colorWithRed:0.0 green:0.5 blue:0.0 alpha:1.0];
-	static UIColor* color_WARNING       = [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:1.0];
-	static UIColor* color_MINOR         = [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:1.0];
-	static UIColor* color_MAJOR         = [UIColor colorWithRed:1.0 green:0.6470 blue:0.0 alpha:1.0];
-	static UIColor* color_CRITICAL      = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0];
-	*/
-	
 	if ([severity isEqual:@"INDETERMINATE"]) {
-		return [UIColor colorWithRed:0.6784 green:0.8470 blue:0.9019 alpha:1.0];
+		// #EBEBCD
+		return [UIColor colorWithRed:0.92157 green:0.92157 blue:0.80392 alpha:1.0];
 	} else if ([severity isEqual:@"CLEARED"]) {
-		return [UIColor colorWithWhite:1.0 alpha:1.0];
+		// #EEEEEE
+		return [UIColor colorWithWhite:0.93333 alpha:1.0];
 	} else if ([severity isEqual:@"NORMAL"]) {
-		return [UIColor colorWithRed:0.0 green:0.5 blue:0.0 alpha:1.0];
+		// #D7E1CD
+		return [UIColor colorWithRed:0.843134 green:0.88235 blue:0.80392 alpha:1.0];
 	} else if ([severity isEqual:@"WARNING"]) {
-		return [UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:1.0];
+		// #FFF5CD
+		return [UIColor colorWithRed:1.0 green:0.96078 blue:0.80392 alpha:1.0];
 	} else if ([severity isEqual:@"MINOR"]) {
-		return [UIColor colorWithRed:1.0 green:1.0 blue:0.0 alpha:1.0];
+		// #FFEBCD
+		return [UIColor colorWithRed:1.0 green:0.92157 blue:0.80392 alpha:1.0];
 	} else if ([severity isEqual:@"MAJOR"]) {
-		return [UIColor colorWithRed:1.0 green:0.6470 blue:0.0 alpha:1.0];
+		// #FFD7CD
+		return [UIColor colorWithRed:1.0 green:0.843134 blue:0.80392 alpha:1.0];
 	} else if ([severity isEqual:@"CRITICAL"]) {
-		return [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0];
+		// #F5CDCD
+		return [UIColor colorWithRed:0.96078 green:0.80392 blue:0.80392 alpha:1.0];
 	}
 	return [UIColor colorWithWhite:1.0 alpha:1.0];
+}
+
+-(UIColor*) getSeparatorColorForSeverity:(NSString*)severity
+{
+	if ([severity isEqual:@"INDETERMINATE"]) {
+		// #999900
+		return [UIColor colorWithRed:0.6 green:0.6 blue:0.0 alpha:1.0];
+	} else if ([severity isEqual:@"CLEARED"]) {
+		// #999999
+		return [UIColor colorWithWhite:0.6 alpha:1.0];
+	} else if ([severity isEqual:@"NORMAL"]) {
+		// #336600
+		return [UIColor colorWithRed:0.2 green:0.4 blue:0.0 alpha:1.0];
+	} else if ([severity isEqual:@"WARNING"]) {
+		// #FFCC00
+		return [UIColor colorWithRed:1.0 green:0.8 blue:0.0 alpha:1.0];
+	} else if ([severity isEqual:@"MINOR"]) {
+		// #FF9900
+		return [UIColor colorWithRed:1.0 green:0.6 blue:0.0 alpha:1.0];
+	} else if ([severity isEqual:@"MAJOR"]) {
+		// #FF3300
+		return [UIColor colorWithRed:1.0 green:0.2 blue:0.0 alpha:1.0];
+	} else if ([severity isEqual:@"CRITICAL"]) {
+		// #CC0000
+		return [UIColor colorWithRed:0.8 green:0.0 blue:0.0 alpha:1.0];
+	}
+	return [UIColor colorWithWhite:0.5 alpha:1.0];
 }
 
 #pragma mark UIViewController delegates
@@ -162,9 +186,11 @@
 	cell.selectedBackgroundView = backgroundView;
 	
 	if (alarms && [alarms count] > 0) {
-		tableView.separatorColor = [UIColor colorWithWhite:0.0 alpha:1.0];
+		// set the border based on the severity (can only set entire table background color :( )
+		// tableView.separatorColor = [self getSeparatorColorForSeverity:alarm.severity];
+
 		OnmsAlarm* alarm = [alarms objectAtIndex:indexPath.row];
-		
+
 		UIColor* color = [self getColorForSeverity:alarm.severity];
 		cell.contentView.backgroundColor = color;
 		

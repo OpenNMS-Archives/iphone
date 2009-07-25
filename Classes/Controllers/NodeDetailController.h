@@ -45,6 +45,7 @@
 	@private NSArray* outages;
 	@private NSArray* interfaces;
 	@private NSArray* snmpInterfaces;
+	@private NSArray* events;
 
 }
 

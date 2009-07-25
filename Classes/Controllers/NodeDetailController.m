@@ -250,29 +250,36 @@
 		OnmsSnmpInterface* iface = [snmpInterfaces objectAtIndex:indexPath.row];
 
 		// IfIndex
-		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 32.0, tableView.rowHeight)] autorelease];
+		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 30.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifIndex stringValue];
 		[cell addColumn:[iface.ifIndex stringValue]];
 		[cell.contentView addSubview:label];
+
+		// IfDescr
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(35.0, 0, 64.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = iface.ifDescription;
+		[cell addColumn:iface.ifDescription];
+		[cell.contentView addSubview:label];
+		
+		// IfSpeed
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(99.0, 0, 99.0, tableView.rowHeight)] autorelease];
+		label.backgroundColor = clear;
+		label.font = font;
+		label.text = [iface.ifSpeed stringValue];
+		[cell addColumn:[iface.ifSpeed stringValue]];
+		[cell.contentView addSubview:label];
 		
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(37.0, 0, 123.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(198.0, 0, 102.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ipAddress;
 		[cell addColumn:iface.ipAddress];
 		[cell.contentView addSubview:label];
-		
-		// MAC
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(160.0, 0, 145.0, tableView.rowHeight)] autorelease];
-		label.backgroundColor = clear;
-		label.font = font;
-		label.text = iface.physAddr;
-		[cell addColumn:iface.physAddr];
-		[cell.contentView addSubview:label];
-		
 	}
 
 	return cell;

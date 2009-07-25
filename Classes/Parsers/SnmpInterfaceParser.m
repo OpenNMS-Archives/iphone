@@ -59,7 +59,7 @@
 				[iface setInterfaceId:[NSNumber numberWithInt:[[attr stringValue] intValue]]];
 			} else if ([[attr name] isEqual:@"ifIndex"]) {
 				[iface setIfIndex:[NSNumber numberWithInt:[[attr stringValue] intValue]]];
-			} else if ([[attr name] isEqual:@"collect"]) {
+			} else if ([[attr name] isEqual:@"collectFlag"]) {
 				[iface setCollect:[attr stringValue]];
 			}
 		}
