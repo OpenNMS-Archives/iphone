@@ -31,20 +31,18 @@
  *
  *******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "OnmsNode.h"
+#import <UIKit/UIKit.h>
 
-@interface OpenNMSRestAgent : NSObject {
-	NSMutableDictionary* nodes;
+@interface NodeListController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
+	@private NSString* savedSearchTerm;
+	@private NSInteger savedScopeButtonIndex;
+	@private BOOL searchWasActive;
+	@private NSArray* nodeList;
 }
 
--(OnmsNode*) getNode:(NSNumber*)nodeId;
--(NSArray*) getNodesForSearch:(NSString*)searchText;
--(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
--(NSArray*) getSnmpInterfaces:(NSNumber*)nodeId;
-
--(NSArray*) getAlarms;
--(NSArray*) getOutages:(NSNumber*)nodeId;
--(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct;
+@property (nonatomic, copy) NSString* savedSearchTerm;
+@property (nonatomic) NSInteger savedScopeButtonIndex;
+@property (nonatomic) BOOL searchWasActive;
+@property (nonatomic, retain) NSArray* nodeList;
 
 @end

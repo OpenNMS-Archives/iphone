@@ -54,6 +54,8 @@
 		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
 		44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */; };
 		44EEAF2C101A58D30023D5BD /* SnmpInterfaceParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */; };
+		44EEAFB0101BA7340023D5BD /* NodeListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44EEAFAF101BA7340023D5BD /* NodeListView.xib */; };
+		44EEAFB4101BA7A70023D5BD /* NodeListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EEAFB3101BA7A70023D5BD /* NodeListController.m */; };
 		44F0E655100F9901000B8A22 /* CXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E645100F9901000B8A22 /* CXMLDocument.m */; };
 		44F0E656100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E647100F9901000B8A22 /* CXMLDocument_PrivateExtensions.m */; };
 		44F0E657100F9901000B8A22 /* CXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E649100F9901000B8A22 /* CXMLElement.m */; };
@@ -140,6 +142,9 @@
 		44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnarTableViewCell.m; sourceTree = "<group>"; };
 		44EEAF2A101A58D30023D5BD /* SnmpInterfaceParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterfaceParser.h; path = Parsers/SnmpInterfaceParser.h; sourceTree = "<group>"; };
 		44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceParser.m; path = Parsers/SnmpInterfaceParser.m; sourceTree = "<group>"; };
+		44EEAFAF101BA7340023D5BD /* NodeListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NodeListView.xib; sourceTree = "<group>"; };
+		44EEAFB2101BA7A70023D5BD /* NodeListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeListController.h; path = Controllers/NodeListController.h; sourceTree = "<group>"; };
+		44EEAFB3101BA7A70023D5BD /* NodeListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeListController.m; path = Controllers/NodeListController.m; sourceTree = "<group>"; };
 		44F0E644100F9901000B8A22 /* CXMLDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLDocument.h; path = "External Classes/TouchXML/CXMLDocument.h"; sourceTree = "<group>"; };
 		44F0E645100F9901000B8A22 /* CXMLDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLDocument.m; path = "External Classes/TouchXML/CXMLDocument.m"; sourceTree = "<group>"; };
 		44F0E646100F9901000B8A22 /* CXMLDocument_PrivateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLDocument_PrivateExtensions.h; path = "External Classes/TouchXML/CXMLDocument_PrivateExtensions.h"; sourceTree = "<group>"; };
@@ -237,6 +242,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				44EEAFAF101BA7340023D5BD /* NodeListView.xib */,
 				44981CCA100EA9C3006BB193 /* Default.png */,
 				44E2A161100E195100DD5A1D /* opennms-headingbg.png */,
 				44BBA449100CE90B001257CB /* o.png */,
@@ -274,6 +280,8 @@
 				44263D2C1011309700717409 /* AlarmListController.m */,
 				44263CF810112F4100717409 /* NodeDetailController.h */,
 				44263CF910112F4100717409 /* NodeDetailController.m */,
+				44EEAFB2101BA7A70023D5BD /* NodeListController.h */,
+				44EEAFB3101BA7A70023D5BD /* NodeListController.m */,
 				44263D241011301500717409 /* OutageListController.h */,
 				44263D251011301500717409 /* OutageListController.m */,
 			);
@@ -428,6 +436,7 @@
 				44BBA44A100CE90B001257CB /* o.png in Resources */,
 				44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */,
 				44981CCB100EA9C3006BB193 /* Default.png in Resources */,
+				44EEAFB0101BA7340023D5BD /* NodeListView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +484,7 @@
 				44263D2D1011309700717409 /* AlarmListController.m in Sources */,
 				4425F1641018E572000DDDAE /* OnmsSnmpInterface.m in Sources */,
 				44EEAF2C101A58D30023D5BD /* SnmpInterfaceParser.m in Sources */,
+				44EEAFB4101BA7A70023D5BD /* NodeListController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

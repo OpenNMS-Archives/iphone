@@ -124,6 +124,23 @@
 	return node;
 }
 
+-(NSArray*) getNodesForSearch:(NSString*)searchText
+{
+	NSArray* foundNodes = nil;
+	NodeParser* nodeParser = [[NodeParser alloc] init];
+	CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@&ipInterface.ipAddress=%@", searchText, searchText] caller: @"getNodesForSearch"];
+	if (document) {
+		CXMLElement* rootNode = [document rootElement];
+		[nodeParser parse:rootNode];
+		foundNodes = [nodeParser nodes];
+	} else {
+		foundNodes = [[NSArray alloc] init];
+	}
+	[nodeParser release];
+	[document release];
+	return foundNodes;
+}
+
 - (NSArray*) getAlarms
 {
 	AlarmParser* alarmParser = [[AlarmParser alloc] init];
