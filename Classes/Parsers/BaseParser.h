@@ -32,12 +32,12 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "OnmsAlarm.h"
-#import "BaseParser.h"
 
-@interface AlarmParser : BaseParser {
+
+@interface BaseParser : NSObject {
+
 }
 
--(NSArray*)parse:(CXMLElement*)node;
+- (NSString *)cleanUpString:(NSString *)html;
 
 @end

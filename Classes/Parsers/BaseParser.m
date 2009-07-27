@@ -31,13 +31,21 @@
  *
  *******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "OnmsAlarm.h"
 #import "BaseParser.h"
+#import "RegexKitLite.h"
 
-@interface AlarmParser : BaseParser {
+@implementation BaseParser
+
+- (NSString *)cleanUpString:(NSString *)html {
+
+	NSMutableString* string = [NSMutableString stringWithString:html];
+	[html release];
+
+	[string replaceOccurrencesOfRegex:@"^\\s*(.*?)\\s*$" withString:@"{$1}"];
+	[string replaceOccurrencesOfRegex:@"<[^>]*>" withString:@""];
+	
+	return string;
 }
 
--(NSArray*)parse:(CXMLElement*)node;
 
 @end

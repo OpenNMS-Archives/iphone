@@ -40,6 +40,7 @@
 
 -(OnmsNode*) getNode:(NSNumber*)nodeId;
 -(NSArray*) getNodesForSearch:(NSString*)searchText;
+-(NSArray*) getEvents:(NSNumber*)nodeId;
 -(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
 -(NSArray*) getSnmpInterfaces:(NSNumber*)nodeId;
 

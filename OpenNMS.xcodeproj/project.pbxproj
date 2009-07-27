@@ -45,6 +45,10 @@
 		447010201007F0D7006CE665 /* AlarmView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4470101E1007F0D7006CE665 /* AlarmView.xib */; };
 		447010211007F0D7006CE665 /* OutageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4470101F1007F0D7006CE665 /* OutageView.xib */; };
 		448AC2C510097B6700C2621C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 448AC2C410097B6700C2621C /* Settings.bundle */; };
+		448EE92C101E0CF800063B32 /* OnmsSeverity.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EE92B101E0CF800063B32 /* OnmsSeverity.m */; };
+		448EEA24101E30B800063B32 /* BaseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EEA23101E30B800063B32 /* BaseParser.m */; };
+		448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EEA98101E3A2600063B32 /* RegexKitLite.m */; };
+		448EEAA4101E3B7400063B32 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 448EEAA3101E3B7400063B32 /* libicucore.dylib */; };
 		44981CCB100EA9C3006BB193 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 44981CCA100EA9C3006BB193 /* Default.png */; };
 		44BBA448100CE84F001257CB /* question-mark-helvetica.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA447100CE84F001257CB /* question-mark-helvetica.png */; };
 		44BBA44A100CE90B001257CB /* o.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA449100CE90B001257CB /* o.png */; };
@@ -131,6 +135,13 @@
 		4470101E1007F0D7006CE665 /* AlarmView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlarmView.xib; sourceTree = "<group>"; };
 		4470101F1007F0D7006CE665 /* OutageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OutageView.xib; sourceTree = "<group>"; };
 		448AC2C410097B6700C2621C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		448EE92A101E0CF800063B32 /* OnmsSeverity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsSeverity.h; path = Objects/OnmsSeverity.h; sourceTree = "<group>"; };
+		448EE92B101E0CF800063B32 /* OnmsSeverity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsSeverity.m; path = Objects/OnmsSeverity.m; sourceTree = "<group>"; };
+		448EEA22101E30B800063B32 /* BaseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseParser.h; path = Parsers/BaseParser.h; sourceTree = "<group>"; };
+		448EEA23101E30B800063B32 /* BaseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseParser.m; path = Parsers/BaseParser.m; sourceTree = "<group>"; };
+		448EEA97101E3A2600063B32 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegexKitLite.h; path = "External Classes/RegexKitLite/RegexKitLite.h"; sourceTree = "<group>"; };
+		448EEA98101E3A2600063B32 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = "External Classes/RegexKitLite/RegexKitLite.m"; sourceTree = "<group>"; };
+		448EEAA3101E3B7400063B32 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		44981CCA100EA9C3006BB193 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Default.png; sourceTree = "<group>"; };
 		44BBA447100CE84F001257CB /* question-mark-helvetica.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "question-mark-helvetica.png"; path = "Images/question-mark-helvetica.png"; sourceTree = "<group>"; };
 		44BBA449100CE90B001257CB /* o.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = o.png; path = Images/o.png; sourceTree = "<group>"; };
@@ -180,6 +191,7 @@
 				44700FCE1007D60B006CE665 /* CFNetwork.framework in Frameworks */,
 				44700FD31007D61A006CE665 /* libz.1.dylib in Frameworks */,
 				44700FD61007D688006CE665 /* libxml2.dylib in Frameworks */,
+				448EEAA4101E3B7400063B32 /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +238,7 @@
 				44700FCD1007D60B006CE665 /* CFNetwork.framework */,
 				44700FCF1007D60B006CE665 /* libz.1.dylib */,
 				44700FD51007D688006CE665 /* libxml2.dylib */,
+				448EEAA3101E3B7400063B32 /* libicucore.dylib */,
 			);
 			name = OpenNMS;
 			sourceTree = "<group>";
@@ -303,6 +316,8 @@
 				44263D0810112F6800717409 /* OnmsNode.m */,
 				44263D0910112F6800717409 /* OnmsOutage.h */,
 				44263D0A10112F6800717409 /* OnmsOutage.m */,
+				448EE92A101E0CF800063B32 /* OnmsSeverity.h */,
+				448EE92B101E0CF800063B32 /* OnmsSeverity.m */,
 				4425F1621018E572000DDDAE /* OnmsSnmpInterface.h */,
 				4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */,
 			);
@@ -324,6 +339,8 @@
 				44263D1D10112FA900717409 /* OutageParser.m */,
 				44EEAF2A101A58D30023D5BD /* SnmpInterfaceParser.h */,
 				44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */,
+				448EEA22101E30B800063B32 /* BaseParser.h */,
+				448EEA23101E30B800063B32 /* BaseParser.m */,
 			);
 			name = Parsers;
 			sourceTree = "<group>";
@@ -331,8 +348,9 @@
 		44700FAA1007D5C8006CE665 /* External Classes */ = {
 			isa = PBXGroup;
 			children = (
-				44F0E640100F98CA000B8A22 /* TouchXML */,
 				44700FAB1007D5D8006CE665 /* ASIHTTPRequest */,
+				448EEA95101E3A1100063B32 /* RegExKitLite */,
+				44F0E640100F98CA000B8A22 /* TouchXML */,
 			);
 			name = "External Classes";
 			sourceTree = "<group>";
@@ -351,6 +369,15 @@
 			);
 			name = ASIHTTPRequest;
 			path = "External Classes/ASIHTTPRequest";
+			sourceTree = "<group>";
+		};
+		448EEA95101E3A1100063B32 /* RegExKitLite */ = {
+			isa = PBXGroup;
+			children = (
+				448EEA97101E3A2600063B32 /* RegexKitLite.h */,
+				448EEA98101E3A2600063B32 /* RegexKitLite.m */,
+			);
+			name = RegExKitLite;
 			sourceTree = "<group>";
 		};
 		44F0E640100F98CA000B8A22 /* TouchXML */ = {
@@ -485,6 +512,9 @@
 				4425F1641018E572000DDDAE /* OnmsSnmpInterface.m in Sources */,
 				44EEAF2C101A58D30023D5BD /* SnmpInterfaceParser.m in Sources */,
 				44EEAFB4101BA7A70023D5BD /* NodeListController.m in Sources */,
+				448EE92C101E0CF800063B32 /* OnmsSeverity.m in Sources */,
+				448EEA24101E30B800063B32 /* BaseParser.m in Sources */,
+				448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

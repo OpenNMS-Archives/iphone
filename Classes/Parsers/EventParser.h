@@ -33,8 +33,9 @@
 
 #import <Foundation/Foundation.h>
 #import "OnmsEvent.h"
+#import "BaseParser.h"
 
-@interface EventParser : NSObject {
+@interface EventParser : BaseParser {
 }
 
 -(NSArray*)parse:(CXMLElement *)node;

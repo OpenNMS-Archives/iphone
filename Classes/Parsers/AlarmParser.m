@@ -77,7 +77,7 @@
 		// Log Message
 		CXMLElement *lmElement = [xmlAlarm elementForName:@"logMessage"];
 		if (lmElement) {
-			[alarm setLogMessage:[[lmElement childAtIndex:0] stringValue]];
+			[alarm setLogMessage:[self cleanUpString:[[lmElement childAtIndex:0] stringValue]]];
 		}
 
 		// First Event Time

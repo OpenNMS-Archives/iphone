@@ -41,7 +41,7 @@
 	@private NSString* host;
 	@private NSNumber* nodeId;
 	@private NSString* source;
-	@private NSNumber* severity;
+	@private NSString* severity;
 	@private NSString* eventDescr;
 	@private NSString* eventHost;
 	@private NSString* eventLogMessage;
@@ -56,7 +56,7 @@
 @property (retain) NSString* host;
 @property (retain) NSNumber* nodeId;
 @property (retain) NSString* source;
-@property (retain) NSNumber* severity;
+@property (retain) NSString* severity;
 @property (retain) NSString* eventDescr;
 @property (retain) NSString* eventHost;
 @property (retain) NSString* eventLogMessage;

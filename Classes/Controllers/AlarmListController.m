@@ -35,6 +35,7 @@
 #import "ColumnarTableViewCell.h"
 #import "OpenNMSRestAgent.h"
 #import "OnmsAlarm.h"
+#import "OnmsSeverity.h"
 
 @implementation AlarmListController
 
@@ -65,60 +66,6 @@
 	[self initializeData];
 }
 
--(UIColor*) getColorForSeverity:(NSString*)severity
-{
-	if ([severity isEqual:@"INDETERMINATE"]) {
-		// #EBEBCD
-		return [UIColor colorWithRed:0.92157 green:0.92157 blue:0.80392 alpha:1.0];
-	} else if ([severity isEqual:@"CLEARED"]) {
-		// #EEEEEE
-		return [UIColor colorWithWhite:0.93333 alpha:1.0];
-	} else if ([severity isEqual:@"NORMAL"]) {
-		// #D7E1CD
-		return [UIColor colorWithRed:0.843134 green:0.88235 blue:0.80392 alpha:1.0];
-	} else if ([severity isEqual:@"WARNING"]) {
-		// #FFF5CD
-		return [UIColor colorWithRed:1.0 green:0.96078 blue:0.80392 alpha:1.0];
-	} else if ([severity isEqual:@"MINOR"]) {
-		// #FFEBCD
-		return [UIColor colorWithRed:1.0 green:0.92157 blue:0.80392 alpha:1.0];
-	} else if ([severity isEqual:@"MAJOR"]) {
-		// #FFD7CD
-		return [UIColor colorWithRed:1.0 green:0.843134 blue:0.80392 alpha:1.0];
-	} else if ([severity isEqual:@"CRITICAL"]) {
-		// #F5CDCD
-		return [UIColor colorWithRed:0.96078 green:0.80392 blue:0.80392 alpha:1.0];
-	}
-	return [UIColor colorWithWhite:1.0 alpha:1.0];
-}
-
--(UIColor*) getSeparatorColorForSeverity:(NSString*)severity
-{
-	if ([severity isEqual:@"INDETERMINATE"]) {
-		// #999900
-		return [UIColor colorWithRed:0.6 green:0.6 blue:0.0 alpha:1.0];
-	} else if ([severity isEqual:@"CLEARED"]) {
-		// #999999
-		return [UIColor colorWithWhite:0.6 alpha:1.0];
-	} else if ([severity isEqual:@"NORMAL"]) {
-		// #336600
-		return [UIColor colorWithRed:0.2 green:0.4 blue:0.0 alpha:1.0];
-	} else if ([severity isEqual:@"WARNING"]) {
-		// #FFCC00
-		return [UIColor colorWithRed:1.0 green:0.8 blue:0.0 alpha:1.0];
-	} else if ([severity isEqual:@"MINOR"]) {
-		// #FF9900
-		return [UIColor colorWithRed:1.0 green:0.6 blue:0.0 alpha:1.0];
-	} else if ([severity isEqual:@"MAJOR"]) {
-		// #FF3300
-		return [UIColor colorWithRed:1.0 green:0.2 blue:0.0 alpha:1.0];
-	} else if ([severity isEqual:@"CRITICAL"]) {
-		// #CC0000
-		return [UIColor colorWithRed:0.8 green:0.0 blue:0.0 alpha:1.0];
-	}
-	return [UIColor colorWithWhite:0.5 alpha:1.0];
-}
-
 #pragma mark UIViewController delegates
 
 - (void) viewDidLoad
@@ -133,6 +80,7 @@
 	[self.alarmTable release];
 	[self.fuzzyDate release];
 	[self.alarmList release];
+
 	[super viewDidUnload];
 }
 
@@ -160,8 +108,8 @@
 		CGSize size = [alarm.logMessage sizeWithFont:[UIFont boldSystemFontOfSize:12]
 						constrainedToSize:CGSizeMake(220.0, 1000.0)
 						lineBreakMode:UILineBreakModeWordWrap];
-		if ((size.height + 10) >= tableView.rowHeight) {
-			return (size.height + 10);
+		if ((size.height + 20) >= tableView.rowHeight) {
+			return (size.height + 20);
 		}
 	}
 	return tableView.rowHeight;
@@ -175,21 +123,26 @@
 	cell.selectedBackgroundView = backgroundView;
 	
 	if ([self.alarmList count] > 0) {
+		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
+		
 		// set the border based on the severity (can only set entire table background color :( )
 		// tableView.separatorColor = [self getSeparatorColorForSeverity:alarm.severity];
 
 		OnmsAlarm* alarm = [self.alarmList objectAtIndex:indexPath.row];
-
-		UIColor* color = [self getColorForSeverity:alarm.severity];
+		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:alarm.severity] autorelease];
+		UIColor* color = [sev getDisplayColor];
 		cell.contentView.backgroundColor = color;
 		
 		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
 		[cell addColumn:alarm.logMessage];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = alarm.logMessage;
-		label.backgroundColor = color;
+		label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 		label.lineBreakMode = UILineBreakModeWordWrap;
 		label.numberOfLines = 0;
+		label.backgroundColor = clear;
+		label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[label sizeToFit];
 		[cell.contentView addSubview:label];
 
 		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
@@ -197,7 +150,10 @@
 		[cell addColumn:eventString];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = eventString;
-		label.backgroundColor = color;
+		label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+		label.backgroundColor = clear;
+		label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[label sizeToFit];
 		[cell.contentView addSubview:label];
 	} else {
 		cell.textLabel.text = @"";

@@ -32,12 +32,16 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "OnmsAlarm.h"
-#import "BaseParser.h"
 
-@interface AlarmParser : BaseParser {
+@interface OnmsSeverity : NSObject {
+	@private NSString* severity;
 }
 
--(NSArray*)parse:(CXMLElement*)node;
+@property (nonatomic, retain) NSString* severity;
+
+-(id) initWithSeverity:(NSString*)sev;
+
+-(UIColor*) getDisplayColor;
+-(UIColor*) getSeparatorColor;
 
 @end

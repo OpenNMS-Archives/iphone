@@ -37,6 +37,7 @@
 #import "IpInterfaceParser.h"
 #import "SnmpInterfaceParser.h"
 #import "AlarmParser.h"
+#import "EventParser.h"
 #import "OutageParser.h"
 
 #import "OnmsIpInterface.h"
@@ -83,7 +84,7 @@
 					 path
 					 ];
 
-	NSLog(@"requesting %@", url);
+	NSLog(@"%@: requesting %@", caller, url);
 	ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]] autorelease];
 	[request start];
 	NSError* error = [request error];
@@ -139,6 +140,23 @@
 		[nodeParser release];
 	}
 	return foundNodes;
+}
+
+- (NSArray*) getEvents:(NSNumber*)nodeId
+{
+	NSArray* events = [NSArray array];
+	EventParser* eventParser = [[EventParser alloc] init];
+	CXMLDocument* document = nil;
+	if (nodeId) {
+		document = [self doRequest: [NSString stringWithFormat:@"/events?limit=%d&node.id=%@", GET_LIMIT, nodeId] caller: @"getEvents"];
+	} else {
+		document = [self doRequest: [NSString stringWithFormat:@"/events?limit=%d", GET_LIMIT] caller: @"getEvents"];
+	}
+	if (document) {
+		events = [eventParser parse:[document rootElement]];
+	}
+	[eventParser release];
+	return events;
 }
 
 - (NSArray*) getAlarms
@@ -215,13 +233,15 @@
 - (NSArray*) getSnmpInterfaces:(NSNumber*)nodeId
 {
 	NSArray* interfaces = [NSArray array];
-	SnmpInterfaceParser* interfaceParser = [[SnmpInterfaceParser alloc] init];
-	CXMLDocument* document;
-	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/snmpinterfaces?limit=%d&orderBy=ifIndex&order=asc", nodeId, GET_LIMIT] caller: @"getSnmpInterfaces"];
-	if (document) {
-		interfaces = [interfaceParser parse:[document rootElement]];
+	if (nodeId) {
+		SnmpInterfaceParser* interfaceParser = [[SnmpInterfaceParser alloc] init];
+		CXMLDocument* document;
+		document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/snmpinterfaces?limit=%d&orderBy=ifIndex&order=asc", nodeId, GET_LIMIT] caller: @"getSnmpInterfaces"];
+		if (document) {
+			interfaces = [interfaceParser parse:[document rootElement]];
+		}
+		[interfaceParser release];
 	}
-	[interfaceParser release];
 	return interfaces;
 }
 

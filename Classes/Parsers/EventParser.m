@@ -67,7 +67,7 @@
 			} else if ([[attr name] isEqual:@"log"]) {
 				[event setEventLog: [[attr stringValue] boolValue]];
 			} else if ([[attr name] isEqual:@"severity"]) {
-				[event setSeverity: [NSNumber numberWithInt:[[attr stringValue] intValue]]];
+				[event setSeverity: [attr stringValue]];
 			} else {
 				NSLog(@"unknown event attribute: %@", [attr name]);
 			}
@@ -88,7 +88,7 @@
 		// Description
 		CXMLElement *descrElement = [xmlEvent elementForName:@"description"];
 		if (descrElement) {
-			[event setEventDescr:[[descrElement childAtIndex:0] stringValue]];
+			[event setEventDescr:[self cleanUpString:[[descrElement childAtIndex:0] stringValue]]];
 		}
 
 		// Host
@@ -100,7 +100,7 @@
 		// Log Message
 		CXMLElement *lmElement = [xmlEvent elementForName:@"logMessage"];
 		if (lmElement) {
-			[event setEventLogMessage:[[lmElement childAtIndex:0] stringValue]];
+			[event setEventLogMessage:[self cleanUpString:[[lmElement childAtIndex:0] stringValue]]];
 		}
 		
 		// Source
