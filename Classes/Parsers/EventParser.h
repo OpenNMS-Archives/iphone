@@ -35,10 +35,7 @@
 #import "OnmsEvent.h"
 
 @interface EventParser : NSObject {
-	@private NSMutableArray *events;
 }
 
--(BOOL)parse:(CXMLElement *)node;
--(NSArray *)events;
--(OnmsEvent *)event;
+-(NSArray*)parse:(CXMLElement *)node;
 @end

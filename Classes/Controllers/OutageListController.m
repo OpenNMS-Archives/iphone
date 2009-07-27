@@ -44,26 +44,31 @@
 
 @synthesize outageTable;
 @synthesize nodeDetailController;
-
--(void) dealloc
-{
-	[outageTable release];
-	[nodeDetailController release];
-	[outages release];
-	
-    [super dealloc];
-}
+@synthesize outageList;
 
 -(void) initializeData
 {
-	OpenNMSRestAgent* agent = [[[OpenNMSRestAgent alloc] init] autorelease];
-	outages = [agent getViewOutages:nil distinct:YES];
+	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
+	self.outageList = [agent getViewOutages:nil distinct:YES];
+	[agent release];
+	[outageTable reloadData];
 }
 
 -(IBAction) reload:(id) sender
 {
 	[self initializeData];
-	[outageTable reloadData];
+}
+
+#pragma mark -
+#pragma mark Lifecycle methods
+
+-(void) dealloc
+{
+	[outageTable release];
+	[nodeDetailController release];
+	[outageList release];
+	
+    [super dealloc];
 }
 
 #pragma mark UIViewController delegates
@@ -71,13 +76,11 @@
 - (void) viewDidLoad
 {
 	[self initializeData];
-	[super viewDidLoad];
 }
 
 - (void) viewDidUnload
 {
-	[outages release];
-	[super viewDidUnload];
+	outageList = nil;
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -95,17 +98,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	NSInteger retVal = 0;
-	if (outages) {
-		retVal = [outages count];
-	}
-	return retVal;
+	return [self.outageList count];
 }
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	if (outages && [outages count] > 0) {
-		ViewOutage* outage = [outages objectAtIndex:indexPath.row];
+	if ([self.outageList count] > 0) {
+		ViewOutage* outage = [self.outageList objectAtIndex:indexPath.row];
 		[nodeDetailController setNodeId:outage.nodeId];
 		UINavigationController* cont = [self navigationController];
 		[cont pushViewController:nodeDetailController animated:YES];
@@ -120,10 +119,10 @@
 	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
 	cell.selectedBackgroundView = backgroundView;
 
-	if (outages && [outages count] > 0) {
+	if ([self.outageList count] > 0) {
 	
 		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
-		ViewOutage* outage = [outages objectAtIndex:indexPath.row];
+		ViewOutage* outage = [self.outageList objectAtIndex:indexPath.row];
 		[cell addColumn:outage.nodeLabel];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = outage.nodeLabel;
@@ -134,8 +133,7 @@
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = outage.serviceLostDate;
 		[cell.contentView addSubview:label];
-	} else {
-		cell.textLabel.text = @"";
+
 	}
 
 	return cell;

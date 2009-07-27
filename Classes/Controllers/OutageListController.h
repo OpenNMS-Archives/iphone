@@ -40,11 +40,12 @@
 	@private UITableView* outageTable;
 	@private NodeDetailController* nodeDetailController;
 
-	@private NSArray* outages;
+	@private NSArray* outageList;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView* outageTable;
 @property (nonatomic, retain) IBOutlet NodeDetailController* nodeDetailController;
+@property (nonatomic, retain) NSArray* outageList;
 
 - (IBAction) reload:(id) sender;
 

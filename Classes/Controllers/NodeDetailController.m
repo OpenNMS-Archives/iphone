@@ -41,14 +41,47 @@
 @implementation NodeDetailController
 
 @synthesize nodeTable;
-@synthesize nodeId;
+@synthesize fuzzyDate;
 
--(id) init
+@synthesize nodeId;
+@synthesize sections;
+@synthesize node;
+@synthesize outages;
+@synthesize interfaces;
+@synthesize snmpInterfaces;
+@synthesize events;
+
+- (void) initializeData
 {
-	if (self = [super init]) {
+	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
+
+	self.title = self.node.label;
+	self.nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
+	self.nodeTable.rowHeight = 34.0;
+	
+	self.sections = [NSMutableArray array];
+	self.node = [agent getNode:nodeId];
+	
+	self.outages = [agent getViewOutages:nodeId distinct:NO];
+	if ([self.outages count] > 0) {
+		[self.sections addObject:@"Recent Outages"];
 	}
-	return self;
+	
+	self.interfaces = [agent getIpInterfaces:nodeId];
+	if ([self.interfaces count] > 0) {
+		[self.sections addObject:@"IP Interfaces"];
+	}
+	
+	self.snmpInterfaces = [agent getSnmpInterfaces:nodeId];
+	if ([self.snmpInterfaces count] > 0) {
+		[self.sections addObject:@"SNMP Interfaces"];
+	}
+	[self.nodeTable reloadData];
+	[agent release];
 }
+
+#pragma mark -
+#pragma mark Lifecycle methods
 
 -(void) dealloc
 {
@@ -63,84 +96,52 @@
 	[super dealloc];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+	[self initializeData];
+	[super viewWillAppear:animated];
+}
+
 - (void) viewDidLoad
 {
 	fuzzyDate = [[FuzzyDate alloc] init];
 	fuzzyDate.mini = YES;
+
+	[self initializeData];
 
 	[super viewDidLoad];
 }
 
 - (void) viewDidUnload
 {
-	[fuzzyDate release];
+	[self.fuzzyDate release];
 
-	[sections release];
-	[node release];
-	[outages release];
-	[interfaces release];
-	[snmpInterfaces release];
+	[self.sections release];
+	[self.node release];
+	[self.outages release];
+	[self.interfaces release];
+	[self.snmpInterfaces release];
+	[self.events release];
 	
 	[super viewDidUnload];
 }
 
-- (void) initializeData
-{
-	sections = [[NSMutableArray alloc] init];
-	OpenNMSRestAgent* agent = [[[OpenNMSRestAgent alloc] init] autorelease];
-	node = [agent getNode:nodeId];
-	
-	outages = [agent getViewOutages:nodeId distinct:NO];
-	if ([outages count] > 0) {
-		[sections addObject:@"Recent Outages"];
-	}
-	
-	interfaces = [agent getIpInterfaces:nodeId];
-	if ([interfaces count] > 0) {
-		[sections addObject:@"IP Interfaces"];
-	}
-
-	snmpInterfaces = [agent getSnmpInterfaces:nodeId];
-	if ([snmpInterfaces count] > 0) {
-		[sections addObject:@"SNMP Interfaces"];
-	}
-}
-
-#pragma mark UIViewController delegates
-
--(void) viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	self.title = node.label;
-	nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
-	nodeTable.rowHeight = 34.0;
-	[self initializeData];
-	[nodeTable reloadData];
-}
-
-/*
--(void) viewDidAppear:(BOOL)animated
-{
-	[super viewDidAppear:animated];
-}
- */
-
 #pragma mark UITableView delegates
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return [sections count];
+	return [self.sections count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if ([sections objectAtIndex:section] == @"Recent Outages") {
-		return [outages count];
+	if ([self.sections objectAtIndex:section] == @"Recent Outages") {
+		return [self.outages count];
 	}
-	if ([sections objectAtIndex:section] == @"IP Interfaces") {
-		return [interfaces count];
+	if ([self.sections objectAtIndex:section] == @"IP Interfaces") {
+		return [self.interfaces count];
 	}
-	if ([sections objectAtIndex:section] == @"SNMP Interfaces") {
-		return [snmpInterfaces count];
+	if ([self.sections objectAtIndex:section] == @"SNMP Interfaces") {
+		return [self.snmpInterfaces count];
 	}
 	return 0;
 }
@@ -157,11 +158,11 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return [sections objectAtIndex:section];
+	return [self.sections objectAtIndex:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSString* sectionName = [sections objectAtIndex:indexPath.section];
+	NSString* sectionName = [self.sections objectAtIndex:indexPath.section];
 
 	UIColor* white = [UIColor colorWithWhite:1.0 alpha:1.0];
 	UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
@@ -173,7 +174,7 @@
 
 	if (sectionName == @"Recent Outages") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		ViewOutage* outage = [outages objectAtIndex:indexPath.row];
+		ViewOutage* outage = [self.outages objectAtIndex:indexPath.row];
 
 		// IP Address
 		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 115.0, tableView.rowHeight)] autorelease];
@@ -219,7 +220,7 @@
 		
 	} else if (sectionName == @"IP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		OnmsIpInterface* iface = [interfaces objectAtIndex:indexPath.row];
+		OnmsIpInterface* iface = [self.interfaces objectAtIndex:indexPath.row];
 		
 		// IP Address
 		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 80.0, tableView.rowHeight)] autorelease];
@@ -247,7 +248,7 @@
 		
 	} else if (sectionName == @"SNMP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		OnmsSnmpInterface* iface = [snmpInterfaces objectAtIndex:indexPath.row];
+		OnmsSnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
 
 		// IfIndex
 		UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 30.0, tableView.rowHeight)] autorelease];

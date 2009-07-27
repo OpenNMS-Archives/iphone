@@ -35,11 +35,8 @@
 #import "OnmsNode.h"
 
 @interface NodeParser : NSObject {
-	@private NSMutableArray *nodes;
 }
 
--(BOOL)parse:(CXMLElement*)node;
--(NSArray*)nodes;
--(OnmsNode*)node;
+-(NSArray*)parse:(CXMLElement*)node;
 
 @end

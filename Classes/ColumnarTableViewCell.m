@@ -36,18 +36,24 @@
 
 @implementation ColumnarTableViewCell
 
+@synthesize columns;
+
+- (id)init {
+	if (self = [super init]) {
+		self.columns = [NSMutableArray array];
+	}
+	return self;
+}
+
 - (void)dealloc {
-	[columns release];
+	[self.columns release];
     [super dealloc];
 }
 
 - (void)addColumn:(NSString*)value
 {
 	if (value) {
-		if (!columns) {
-			columns = [[NSMutableArray alloc] init];
-		}
-		[columns addObject:value];
+		[self.columns addObject:value];
 	}
 }
 

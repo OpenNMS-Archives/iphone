@@ -35,24 +35,16 @@
 
 @implementation NodeParser
 
-- (void)dealloc
+- (NSArray*)parse:(CXMLElement*)n
 {
-	[nodes release];
-	[super dealloc];
-}
-
-- (BOOL)parse:(CXMLElement*)n
-{
-	// Reinitialize the node array
-	[nodes release];
-	nodes = [[NSMutableArray alloc] init];
+	NSMutableArray* nodes = [NSMutableArray array];
 	
 	NSArray* xmlNodes = [n elementsForName:@"node"];
 	if ([xmlNodes count] == 0) {
-		xmlNodes = [[NSArray alloc] initWithObjects:n, nil];
+		xmlNodes = [NSArray arrayWithObjects:&n count:1];
 	}
 	for (id xmlNode in xmlNodes) {
-		OnmsNode* node = [[OnmsNode alloc] init];
+		OnmsNode* node = [[[OnmsNode alloc] init] autorelease];
 
 		for (id attr in [xmlNode attributes]) {
 			if ([[attr name] isEqual:@"id"]) {
@@ -64,21 +56,7 @@
 		
 		[nodes addObject: node];
 	}
-	return true;
-}
-
-- (NSArray*)nodes
-{
 	return nodes;
-}
-
-- (OnmsNode*)node
-{
-	if ([nodes count] > 0) {
-		return [nodes objectAtIndex:0];
-	} else {
-		return nil;
-	}
 }
 
 @end

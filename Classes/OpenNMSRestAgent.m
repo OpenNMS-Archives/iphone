@@ -51,7 +51,7 @@
 - (id) init
 {
 	if (self = [super init]) {
-		nodes = [[NSMutableDictionary alloc] init];
+		nodes = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
@@ -63,13 +63,11 @@
 
 -(void) doError:(NSError*)error message:(NSString*)extra
 {
-	NSString* errorMessage;
 	if (extra) {
-		errorMessage = [[NSString stringWithFormat:@"Error: %@: %@", [error localizedDescription], extra] autorelease];
+		NSLog(@"Error: %@: %@", [error localizedDescription], extra);
 	} else {
-		errorMessage = [[NSString stringWithFormat:@"Error: %@", [error localizedDescription]] autorelease];
+		NSLog(@"Error: %@", [error localizedDescription]);
 	}
-	NSLog(errorMessage);
 }
 
 - (CXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller
@@ -84,7 +82,8 @@
 					 [[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"],
 					 path
 					 ];
-	
+
+	NSLog(@"requesting %@", url);
 	ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]] autorelease];
 	[request start];
 	NSError* error = [request error];
@@ -92,9 +91,9 @@
 		[self doError:error message:url];
 		return nil;
 	} else {
-		NSString* response = [[request responseString] copy];
+		NSString* response = [request responseString];
 		error = [NSError alloc];
-		CXMLDocument* document = [[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error];
+		CXMLDocument* document = [[[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error] autorelease];
 		if (!document) {
 			[self doError:error message:@"An error occurred parsing the XML document"];
 			return nil;
@@ -107,93 +106,82 @@
 
 - (OnmsNode*) getNode:(NSNumber*)nodeId
 {
-	NodeParser* nodeParser = [[NodeParser alloc] init];
-	OnmsNode* node = [nodes objectForKey:nodeId];
-	if (!node) {
-		CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@", [nodeId stringValue]] caller: @"getNode"];
-		if (document) {
-			CXMLElement* rootNode = [document rootElement];
-			[nodeParser parse:rootNode];
-			node = [nodeParser node];
-			if (node != nil) {
-				[nodes setObject:node forKey:nodeId];
+	OnmsNode* node = nil;
+	if (nodeId) {
+		NodeParser* nodeParser = [[NodeParser alloc] init];
+		node = [nodes objectForKey:nodeId];
+		if (!node) {
+			CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@", nodeId] caller: @"getNode"];
+			if (document) {
+				[document retain];
+				NSArray* parsedNodes = [nodeParser parse:[document rootElement]];
+				[document release];
+				node = [parsedNodes objectAtIndex:0];
+				if (node != nil) {
+					[nodes setObject:node forKey:nodeId];
+				}
 			}
 		}
+		[nodeParser release];
 	}
-	[nodeParser release];
 	return node;
 }
 
 -(NSArray*) getNodesForSearch:(NSString*)searchText
 {
-	NSArray* foundNodes = nil;
-	NodeParser* nodeParser = [[NodeParser alloc] init];
-	CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@&ipInterface.ipAddress=%@", searchText, searchText] caller: @"getNodesForSearch"];
-	if (document) {
-		CXMLElement* rootNode = [document rootElement];
-		[nodeParser parse:rootNode];
-		foundNodes = [nodeParser nodes];
-	} else {
-		foundNodes = [[NSArray alloc] init];
+	NSArray* foundNodes = [NSArray array];
+	if (searchText) {
+		NodeParser* nodeParser = [[NodeParser alloc] init];
+		CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@&ipInterface.ipAddress=%@", searchText, searchText] caller: @"getNodesForSearch"];
+		if (document) {
+			foundNodes = [nodeParser parse:[document rootElement]];
+		}
+		[nodeParser release];
 	}
-	[nodeParser release];
-	[document release];
 	return foundNodes;
 }
 
 - (NSArray*) getAlarms
 {
+	NSArray* alarms = [NSArray array];
 	AlarmParser* alarmParser = [[AlarmParser alloc] init];
-	NSArray* alarms = nil;
 	CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/alarms?limit=%d&orderBy=lastEventTime&order=desc", GET_LIMIT] caller: @"getAlarms"];
 	if (document) {
-		CXMLElement* rootNode = [document rootElement];
-		[alarmParser parse:rootNode];
-		alarms = [[alarmParser alarms] copy];
-	} else {
-		alarms = [[NSArray alloc] init];
+		alarms = [alarmParser parse:[document rootElement]];
 	}
 	[alarmParser release];
-	[document release];
 	return alarms;
 }
 
 - (NSArray*) getOutages:(NSNumber*)nodeId
 {
+	NSArray* outages = [NSArray array];
 	OutageParser* outageParser = [[OutageParser alloc] init];
-	NSArray* outages = nil;
 	CXMLDocument* document;
-	if (nodeId == nil) {
-		document = [self doRequest: [NSString stringWithFormat:@"/outages?limit=%d&orderBy=ifLostService&order=desc&ifRegainedService=null", GET_LIMIT] caller: @"getOutages without nodeId"];
-	} else {
+	if (nodeId) {
 		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=%d&orderBy=ifLostService&order=desc", nodeId, GET_LIMIT] caller: @"getOutages with nodeId"];
+	} else {
+		document = [self doRequest: [NSString stringWithFormat:@"/outages?limit=%d&orderBy=ifLostService&order=desc&ifRegainedService=null", GET_LIMIT] caller: @"getOutages without nodeId"];
 	}
 	if (document) {
-		CXMLElement* rootNode = [document rootElement];
-		[outageParser parse:rootNode skipRegained:YES];
-		outages = [[outageParser outages] copy];
-	} else {
-		outages = [[NSArray alloc] init];
+		outages = [outageParser parse:[document rootElement] skipRegained:YES];
 	}
 	[outageParser release];
-	[document release];
 	return outages;
 }
 
 - (NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct
 {
+	NSArray* viewOutages = [NSArray array];
 	OutageParser* outageParser = [[OutageParser alloc] init];
-	NSArray* viewOutages = nil;
 	CXMLDocument* document;
-	if (nodeId == nil) {
-		document = [self doRequest: [NSString stringWithFormat:@"/outages?limit=%d&orderBy=ifLostService&order=desc&ifRegainedService=null", GET_LIMIT] caller: @"getViewOutages without nodeId"];
-	} else {
+	if (nodeId) {
 		document = [self doRequest: [NSString stringWithFormat:@"/outages/forNode/%@?limit=%d&orderBy=ifLostService&order=desc", nodeId, GET_LIMIT] caller: @"getViewOutages with nodeId"];
+	} else {
+		document = [self doRequest: [NSString stringWithFormat:@"/outages?limit=%d&orderBy=ifLostService&order=desc&ifRegainedService=null", GET_LIMIT] caller: @"getViewOutages without nodeId"];
 	}
 	if (document) {
-		CXMLElement* rootNode = [document rootElement];
-		
-		viewOutages = [outageParser getViewOutages:rootNode distinctNodes:distinct];
+		viewOutages = [outageParser getViewOutages:[document rootElement] distinctNodes:distinct];
 		
 		for (int i = 0; i < [viewOutages count]; i++) {
 			ViewOutage* vo = [viewOutages objectAtIndex:i];
@@ -204,47 +192,36 @@
 				}
 			}
 		}
-	} else {
-		viewOutages = [[NSArray alloc] init];
 	}
 	[outageParser release];
-	[document release];
 	return viewOutages;
 }
 
 - (NSArray*) getIpInterfaces:(NSNumber*)nodeId
 {
-	IpInterfaceParser* interfaceParser = [[IpInterfaceParser alloc] init];
-	NSArray* interfaces = nil;
-	CXMLDocument* document;
-	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/ipinterfaces?limit=%d", nodeId, GET_LIMIT] caller: @"getIpInterfaces"];
-	if (document) {
-		CXMLElement* rootNode = [document rootElement];
-		[interfaceParser parse:rootNode];
-		interfaces = [[interfaceParser interfaces] copy];
-	} else {
-		interfaces = [[NSArray alloc] init];
+	NSArray* interfaces = [NSArray array];
+	if (nodeId) {
+		IpInterfaceParser* interfaceParser = [[IpInterfaceParser alloc] init];
+		CXMLDocument* document;
+		document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/ipinterfaces?limit=%d", nodeId, GET_LIMIT] caller: @"getIpInterfaces"];
+		if (document) {
+			interfaces = [interfaceParser parse:[document rootElement]];
+		}
+		[interfaceParser release];
 	}
-	[interfaceParser release];
-	[document release];
 	return interfaces;
 }
 
 - (NSArray*) getSnmpInterfaces:(NSNumber*)nodeId
 {
+	NSArray* interfaces = [NSArray array];
 	SnmpInterfaceParser* interfaceParser = [[SnmpInterfaceParser alloc] init];
-	NSArray* interfaces = nil;
 	CXMLDocument* document;
 	document = [self doRequest: [NSString stringWithFormat:@"/nodes/%@/snmpinterfaces?limit=%d&orderBy=ifIndex&order=asc", nodeId, GET_LIMIT] caller: @"getSnmpInterfaces"];
 	if (document) {
-		CXMLElement* rootNode = [document rootElement];
-		[interfaceParser parse:rootNode];
-		interfaces = [[interfaceParser interfaces] copy];
-	} else {
-		interfaces = [[NSArray alloc] init];
+		interfaces = [interfaceParser parse:[document rootElement]];
 	}
 	[interfaceParser release];
-	[document release];
 	return interfaces;
 }
 

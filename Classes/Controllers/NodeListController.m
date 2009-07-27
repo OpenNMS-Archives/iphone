@@ -49,7 +49,7 @@
 - (void) viewDidLoad
 {
 	self.title = @"Nodes";
-	self.nodeList = [[NSMutableArray alloc] init];
+	self.nodeList = [NSMutableArray array];
 	
 	if (self.savedSearchTerm)
 	{
@@ -155,6 +155,8 @@
 	NSLog(@"scope = %@", scope);
 	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
 	self.nodeList = [agent getNodesForSearch:searchText];
+	NSLog(@"node list = %@", self.nodeList);
+	[agent release];
 }
 
 #pragma mark -

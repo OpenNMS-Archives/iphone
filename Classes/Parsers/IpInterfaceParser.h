@@ -35,11 +35,8 @@
 #import "OnmsIpInterface.h"
 
 @interface IpInterfaceParser : NSObject {
-	@private NSMutableArray *interfaces;
 }
 
--(BOOL)parse:(CXMLElement*)node;
--(NSArray*)interfaces;
--(OnmsIpInterface*)interface;
+-(NSArray*)parse:(CXMLElement*)node;
 
 @end

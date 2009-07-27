@@ -35,11 +35,8 @@
 #import "OnmsAlarm.h"
 
 @interface AlarmParser : NSObject {
-	@private NSMutableArray *alarms;
 }
 
--(BOOL)parse:(CXMLElement*)node;
--(NSArray*)alarms;
--(OnmsAlarm*)alarm;
+-(NSArray*)parse:(CXMLElement*)node;
 
 @end

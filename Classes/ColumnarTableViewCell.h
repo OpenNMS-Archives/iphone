@@ -38,6 +38,8 @@
 	NSMutableArray* columns;
 }
 
+@property (nonatomic, retain) NSMutableArray* columns;
+
 - (void)addColumn:(NSString*)value;
 
 @end

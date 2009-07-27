@@ -36,16 +36,9 @@
 
 @implementation IpInterfaceParser
 
-- (void)dealloc
+-(NSArray*)parse:(CXMLElement*)node
 {
-	[interfaces release];
-	[super dealloc];
-}
-
--(BOOL)parse:(CXMLElement*)node
-{
-	[interfaces release];
-	interfaces = [[NSMutableArray alloc] init];
+	NSMutableArray* interfaces = [NSMutableArray array];
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
@@ -53,7 +46,7 @@
 	
 	NSArray* xmlInterfaces = [node elementsForName:@"ipInterface"];
 	for (id xmlInterface in xmlInterfaces) {
-		OnmsIpInterface* iface = [[OnmsIpInterface alloc] init];
+		OnmsIpInterface* iface = [[[OnmsIpInterface alloc] init] autorelease];
 		
 		for (id attr in [xmlInterface attributes]) {
 			if ([[attr name] isEqual:@"id"]) {
@@ -88,21 +81,7 @@
 	}
 	
 	[dateFormatter release];
-	return true;
-}
-
--(NSArray*)interfaces
-{
 	return interfaces;
-}
-
--(OnmsIpInterface*)interface
-{
-	if ([interfaces count] > 0) {
-		return [interfaces objectAtIndex:0];
-	} else {
-		return nil;
-	}
 }
 
 @end

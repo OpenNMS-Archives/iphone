@@ -35,11 +35,8 @@
 #import "OnmsSnmpInterface.h"
 
 @interface SnmpInterfaceParser : NSObject {
-	@private NSMutableArray *interfaces;
 }
 
--(BOOL)parse:(CXMLElement*)node;
--(NSArray*)interfaces;
--(OnmsSnmpInterface*)interface;
+-(NSArray*)parse:(CXMLElement*)node;
 
 @end

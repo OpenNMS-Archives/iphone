@@ -35,19 +35,10 @@
 
 @implementation EventParser
 
-- (void)dealloc
+- (NSArray*)parse:(CXMLElement *)node
 {
-	[events release];
-	[super dealloc];
-}
-
-- (BOOL)parse:(CXMLElement *)node
-{
-    // Release the old eventArray
-    [events release];
-	
     // Create a new, empty itemArray
-    events = [[NSMutableArray alloc] init];
+	NSMutableArray* events = [NSMutableArray array];
 	
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
@@ -61,10 +52,11 @@
 		xmlEvents = [node elementsForName:@"event"];
 	}
 	if ([xmlEvents count] == 0) {
-		xmlEvents = [[NSArray alloc] initWithObjects:node, nil];
+		xmlEvents = [[[NSArray alloc] initWithObjects:node, nil] autorelease];
 	}
+	[xmlEvents retain];
 	for (id xmlEvent in xmlEvents) {
-		OnmsEvent *event = [[OnmsEvent alloc] init];
+		OnmsEvent *event = [[[OnmsEvent alloc] init] autorelease];
 
 		// Attributes
 		for (id attr in [xmlEvent attributes]) {
@@ -133,22 +125,9 @@
 		
 		[events addObject: event];
 	}
-	
+	[xmlEvents release];
 	[dateFormatter release];
-	return true;
-}
-
-- (NSArray*)events
-{
 	return events;
 }
 
-- (OnmsEvent*)event
-{
-	if ([events count] > 0) {
-		return [events objectAtIndex:0];
-	} else {
-		return nil;
-	}
-}
 @end

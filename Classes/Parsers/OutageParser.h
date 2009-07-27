@@ -39,16 +39,12 @@
 #import "FuzzyDate.h"
 
 @interface OutageParser : NSObject {
-	@private NSMutableArray* outages;
-
 	@private FuzzyDate* fuzzyDate;
 	@private NSDateFormatter* dateFormatter;
 }
 
 -(OnmsOutage*)getOutage:(CXMLElement*)xmlOutage;
--(BOOL)parse:(CXMLElement*)node skipRegained:(BOOL)skip;
+-(NSArray*)parse:(CXMLElement*)node skipRegained:(BOOL)skipRegained;
 -(NSArray*)getViewOutages: (CXMLElement*)node distinctNodes:(BOOL)distinct;
--(NSArray*)outages;
--(OnmsOutage*)outage;
 
 @end

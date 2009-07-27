@@ -54,13 +54,12 @@
 	[fuzzyDate release];
 	[dateFormatter release];
 
-	[outages release];
 	[super dealloc];
 }
 
 - (OnmsOutage*) getOutage:(CXMLElement*)xmlOutage
 {
-	OnmsOutage* outage = [[OnmsOutage alloc] init];
+	OnmsOutage* outage = [[[OnmsOutage alloc] init] autorelease];
 
 	// ID
 	for (id attr in [xmlOutage attributes]) {
@@ -104,8 +103,9 @@
 	// Service Lost Event
 	CXMLElement* sleElement = [xmlOutage elementForName:@"serviceLostEvent"];
 	if (sleElement) {
-		if ([eParser parse:sleElement]) {
-			[outage setServiceLostEvent: [eParser event]];
+		NSArray* events = [eParser parse:sleElement];
+		if (events) {
+			[outage setServiceLostEvent: [events objectAtIndex:0]];
 		} else {
 			NSLog(@"warning: unable to parse %@", sleElement);
 		}
@@ -114,8 +114,9 @@
 	// Service Regained Event
 	CXMLElement* sreElement = [xmlOutage elementForName:@"serviceRegainedEvent"];
 	if (sreElement) {
-		if ([eParser parse:sreElement]) {
-			[outage setServiceRegainedEvent: [eParser event]];
+		NSArray* events = [eParser parse:sreElement];
+		if (events) {
+			[outage setServiceRegainedEvent: [events objectAtIndex:0]];
 		} else {
 			NSLog(@"warning: unable to parse %@", sreElement);
 		}
@@ -129,12 +130,12 @@
 {
 	NSCountedSet* labelCount;
 	if (distinct) {
-		labelCount = [[NSCountedSet alloc] init];
+		labelCount = [NSCountedSet set];
 	}
 
-	NSMutableArray* viewOutages = [[NSMutableArray alloc] init];
+	NSMutableArray* viewOutages = [NSMutableArray array];
 	for (id xmlOutage in [node elementsForName:@"outage"]) {
-		ViewOutage* viewOutage = [[ViewOutage alloc] init];
+		ViewOutage* viewOutage = [[[ViewOutage alloc] init] autorelease];
 		OnmsOutage* outage = [self getOutage:xmlOutage];
 		
 		viewOutage.outageId = [outage.outageId copy];
@@ -148,46 +149,28 @@
 			if ([labelCount countForObject:outage.serviceLostEvent.nodeId] == 0) {
 				[viewOutages addObject:viewOutage];
 			}
-			[labelCount addObject:[outage.serviceLostEvent.nodeId copy]];
+			[labelCount addObject:[outage.serviceLostEvent.nodeId autorelease]];
 		} else {
 			[viewOutages addObject:viewOutage];
 		}
-		
-		[outage release];
 	}
+
 	return viewOutages;
 }
 
-- (BOOL)parse:(CXMLElement*)node skipRegained:(BOOL)skip
+- (NSArray*)parse:(CXMLElement*)node skipRegained:(BOOL)skipRegained
 {
-    // Release the old outageArray
-    [outages release];
-	
     // Create a new, empty itemArray
-    outages = [[NSMutableArray alloc] init];
+    NSMutableArray* outages = [NSMutableArray array];
 
 	NSArray* xmlOutages = [node elementsForName:@"outage"];
 	for (id xmlOutage in xmlOutages) {
 		OnmsOutage* outage = [self getOutage:xmlOutage];
-		if (!skip || outage.serviceRegainedEvent == nil) {
+		if (!skipRegained || outage.serviceRegainedEvent == nil) {
 			[outages addObject: outage];
 		}
 	}
-	return true;
-}
-
-- (NSArray*)outages
-{
 	return outages;
-}
-
-- (OnmsOutage*)outage
-{
-	if ([outages count] > 0) {
-		return [outages objectAtIndex:0];
-	} else {
-		return nil;
-	}
 }
 
 @end

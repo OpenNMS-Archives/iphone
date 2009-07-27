@@ -39,8 +39,8 @@
 	@private UITableView* nodeTable;
 	@private FuzzyDate* fuzzyDate;
 
-	@private NSMutableArray* sections;
 	@private NSNumber* nodeId;
+	@private NSMutableArray* sections;
 	@private OnmsNode* node;
 	@private NSArray* outages;
 	@private NSArray* interfaces;
@@ -50,7 +50,15 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView* nodeTable;
+@property (nonatomic, retain) FuzzyDate* fuzzyDate;
+
 @property (nonatomic, retain) NSNumber* nodeId;
+@property (nonatomic, retain) NSMutableArray* sections;
+@property (nonatomic, retain) OnmsNode* node;
+@property (nonatomic, retain) NSArray* outages;
+@property (nonatomic, retain) NSArray* interfaces;
+@property (nonatomic, retain) NSArray* snmpInterfaces;
+@property (nonatomic, retain) NSArray* events;
 
 -(void)initializeData;
 

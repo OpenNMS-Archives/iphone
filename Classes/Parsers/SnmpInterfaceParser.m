@@ -35,16 +35,9 @@
 
 @implementation SnmpInterfaceParser
 
-- (void)dealloc
+-(NSArray*)parse:(CXMLElement*)node
 {
-	[interfaces release];
-	[super dealloc];
-}
-
--(BOOL)parse:(CXMLElement*)node
-{
-	[interfaces release];
-	interfaces = [[NSMutableArray alloc] init];
+	NSMutableArray* interfaces = [NSMutableArray array];
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
@@ -52,7 +45,7 @@
 	
 	NSArray* xmlInterfaces = [node elementsForName:@"snmpInterface"];
 	for (id xmlInterface in xmlInterfaces) {
-		OnmsSnmpInterface* iface = [[OnmsSnmpInterface alloc] init];
+		OnmsSnmpInterface* iface = [[[OnmsSnmpInterface alloc] init] autorelease];
 		
 		for (id attr in [xmlInterface attributes]) {
 			if ([[attr name] isEqual:@"id"]) {
@@ -91,28 +84,14 @@
 		
 		CXMLElement* speedElement = [xmlInterface elementForName:@"ifSpeed"];
 		if (speedElement) {
-			[iface setIfStatus:[NSNumber numberWithLongLong:[[[statusElement childAtIndex:0] stringValue] longLongValue]]];
+			[iface setIfStatus:[NSNumber numberWithLongLong:[[[speedElement childAtIndex:0] stringValue] longLongValue]]];
 		}
 		
 		[interfaces addObject:iface];
 	}
 	
 	[dateFormatter release];
-	return true;
-}
-
--(NSArray*)interfaces
-{
 	return interfaces;
-}
-
--(OnmsSnmpInterface*)interface
-{
-	if ([interfaces count] > 0) {
-		return [interfaces objectAtIndex:0];
-	} else {
-		return nil;
-	}
 }
 
 @end

@@ -36,28 +36,22 @@
 
 @implementation AlarmParser
 
-- (void)dealloc
+- (NSArray*)parse:(CXMLElement*)node
 {
-	[alarms release];
-	[super dealloc];
-}
+	NSMutableArray* alarms = [NSMutableArray array];
 
-- (BOOL)parse:(CXMLElement*)node
-{
-	[alarms release];
-	alarms = [[NSMutableArray alloc] init];
-	
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
 	NSArray* xmlAlarms = [node elementsForName:@"alarm"];
 	if ([xmlAlarms count] == 0) {
-		xmlAlarms = [[NSArray alloc] initWithObjects:node, nil];
+		xmlAlarms = [[[NSArray alloc] initWithObjects:node, nil] autorelease];
 	}
 
+	[xmlAlarms retain];
 	for (id xmlAlarm in xmlAlarms) {
-		OnmsAlarm* alarm = [[OnmsAlarm alloc] init];
+		OnmsAlarm* alarm = [[[OnmsAlarm alloc] init] autorelease];
 		
 		// Attributes
 		for (id attr in [xmlAlarm attributes]) {
@@ -103,8 +97,9 @@
 		CXMLElement *leElement = [xmlAlarm elementForName:@"lastEvent"];
 		if (leElement) {
 			EventParser* eParser = [[EventParser alloc] init];
-			if([eParser parse:leElement]) {
-				OnmsEvent* event = [eParser event];
+			NSArray* events = [eParser parse:leElement];
+			if (events) {
+				OnmsEvent* event = [events objectAtIndex:0];
 				if (event) {
 					[alarm setLastEvent:event];
 				}
@@ -114,23 +109,9 @@
 		
 		[alarms addObject:alarm];
 	}
-	
+	[xmlAlarms release];
 	[dateFormatter release];
-	return true;
-}
-
-- (NSArray*)alarms
-{
 	return alarms;
-}
-
-- (OnmsAlarm*)alarm
-{
-	if ([alarms count] > 0) {
-		return [alarms objectAtIndex:0];
-	} else {
-		return nil;
-	}
 }
 
 @end

@@ -39,26 +39,30 @@
 @implementation AlarmListController
 
 @synthesize alarmTable;
+@synthesize fuzzyDate;
+
+@synthesize alarmList;
 
 -(void) dealloc
 {
-	[fuzzyDate release];
-	[alarmTable release];
-	[alarms release];
+	[self.fuzzyDate release];
+	[self.alarmTable release];
+	[self.alarmList release];
 
     [super dealloc];
 }
 
 -(void) initializeData
 {
-	OpenNMSRestAgent* agent = [[[OpenNMSRestAgent alloc] init] autorelease];
-	alarms = [agent getAlarms];
+	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
+	self.alarmList = [agent getAlarms];
+	[agent release];
+	[self.alarmTable reloadData];
 }
 
 -(IBAction) reload:(id) sender
 {
 	[self initializeData];
-	[alarmTable reloadData];
 }
 
 -(UIColor*) getColorForSeverity:(NSString*)severity
@@ -119,23 +123,24 @@
 
 - (void) viewDidLoad
 {
-	fuzzyDate = [[FuzzyDate alloc] init];
+	self.fuzzyDate = [[FuzzyDate alloc] init];
 	[self initializeData];
 	[super viewDidLoad];
 }
 
 - (void) viewDidUnload
 {
-	[fuzzyDate release];
-	[alarms release];
+	[self.alarmTable release];
+	[self.fuzzyDate release];
+	[self.alarmList release];
 	[super viewDidUnload];
 }
 
 -(void) viewWillAppear:(BOOL)animated
 {
-	NSIndexPath* tableSelection = [alarmTable indexPathForSelectedRow];
+	NSIndexPath* tableSelection = [self.alarmTable indexPathForSelectedRow];
 	if (tableSelection) {
-		[alarmTable deselectRowAtIndexPath:tableSelection animated:NO];
+		[self.alarmTable deselectRowAtIndexPath:tableSelection animated:NO];
 	}
 }
 
@@ -146,28 +151,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	NSInteger retVal = 0;
-	if (alarms) {
-		retVal = [alarms count];
-	}
-	return retVal;
+	return [self.alarmList count];
 }
-
-/*
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
-{
-	if (alarms && [alarms count] > 0) {
-		OnmsAlarm* alarm = [alarms objectAtIndex:indexPath.row];
-		[nodeDetailController setNodeId:outage.nodeId];
-		UINavigationController* cont = [self navigationController];
-		[cont pushViewController:nodeDetailController animated:YES];
-	}
-}
-*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (alarms && [alarms count] > 0) {
-		OnmsAlarm* alarm = [alarms objectAtIndex:indexPath.row];
+	if ([self.alarmList count] > 0) {
+		OnmsAlarm* alarm = [self.alarmList objectAtIndex:indexPath.row];
 		CGSize size = [alarm.logMessage sizeWithFont:[UIFont boldSystemFontOfSize:12]
 						constrainedToSize:CGSizeMake(220.0, 1000.0)
 						lineBreakMode:UILineBreakModeWordWrap];
@@ -185,11 +174,11 @@
 	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
 	cell.selectedBackgroundView = backgroundView;
 	
-	if (alarms && [alarms count] > 0) {
+	if ([self.alarmList count] > 0) {
 		// set the border based on the severity (can only set entire table background color :( )
 		// tableView.separatorColor = [self getSeparatorColorForSeverity:alarm.severity];
 
-		OnmsAlarm* alarm = [alarms objectAtIndex:indexPath.row];
+		OnmsAlarm* alarm = [self.alarmList objectAtIndex:indexPath.row];
 
 		UIColor* color = [self getColorForSeverity:alarm.severity];
 		cell.contentView.backgroundColor = color;
