@@ -43,9 +43,6 @@
 @synthesize searchWasActive;
 @synthesize nodeList;
 
-#pragma mark -
-#pragma mark Lifecycle methods
-
 - (void) viewDidLoad
 {
 	self.title = @"Nodes";
@@ -72,15 +69,11 @@
 	self.nodeList = nil;
 }
 
-
 -(void) dealloc
 {
-	[self.nodeList release];
+	[nodeList release];
     [super dealloc];
 }
-
-#pragma mark -
-#pragma mark UITableView data source and delegate methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -109,6 +102,11 @@
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
 	
+	// Set the selected color.
+	UIView* backgroundView = [[[UIView alloc] init] autorelease];
+	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
+	cell.selectedBackgroundView = backgroundView;
+	
 	/*
 	 If the requesting table view is the search display controller's table view, configure the cell using the filtered content, otherwise use the main list.
 	 */
@@ -126,18 +124,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if ([self.nodeList count] > 0) {
-		OnmsNode* node = [self.nodeList objectAtIndex:indexPath.row];
-		NodeDetailController* ndc = [[NodeDetailController alloc] initWithNibName:@"NodeDetailView" bundle:nil];
-		[ndc setNodeId:[NSNumber numberWithInt:node.nodeId]];
-		UINavigationController* cont = [self navigationController];
-		[cont pushViewController:ndc animated:YES];
-		[ndc release];
-	}
+	OnmsNode* node = [self.nodeList objectAtIndex:indexPath.row];
+	NSLog(@"displaying %@", node);
+	// NodeDetailController* ndc = [[NodeDetailController alloc] init];
+	// ndc.nodeId = [NSNumber numberWithInt:node.nodeId];
+	UIViewController* ndc = [[UIViewController alloc] init];
+	[self.searchDisplayController.searchContentsController pushViewController:ndc animated:YES];
+	// [[self searchDisplayController] pushViewController:ndc animated:YES];
+	[ndc release];
 }
-
-#pragma mark -
-#pragma mark Content Filtering
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
 {
@@ -150,9 +145,6 @@
 	NSLog(@"node list = %@", self.nodeList);
 	[agent release];
 }
-
-#pragma mark -
-#pragma mark UISearchDisplayController Delegate Methods
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {

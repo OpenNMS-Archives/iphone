@@ -103,7 +103,7 @@
 {
 	if ([self.outageList count] > 0) {
 		ViewOutage* outage = [self.outageList objectAtIndex:indexPath.row];
-		NodeDetailController* ndc = [[NodeDetailController alloc] initWithNibName:@"NodeDetailView" bundle:nil];
+		NodeDetailController* ndc = [[NodeDetailController alloc] init];
 		[ndc setNodeId:outage.nodeId];
 		UINavigationController* cont = [self navigationController];
 		[cont pushViewController:ndc animated:YES];
