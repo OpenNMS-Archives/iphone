@@ -40,12 +40,12 @@
 
 -(OnmsNode*) getNode:(NSNumber*)nodeId;
 -(NSArray*) getNodesForSearch:(NSString*)searchText;
--(NSArray*) getEvents:(NSNumber*)nodeId;
+-(NSArray*) getEvents:(NSNumber*)nodeId limit:(NSNumber*)limit;
 -(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
 -(NSArray*) getSnmpInterfaces:(NSNumber*)nodeId;
 
 -(NSArray*) getAlarms;
 -(NSArray*) getOutages:(NSNumber*)nodeId;
--(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct;
+-(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct mini:(BOOL)doMini;
 
 @end

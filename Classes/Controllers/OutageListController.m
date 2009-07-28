@@ -43,13 +43,12 @@
 @implementation OutageListController
 
 @synthesize outageTable;
-@synthesize nodeDetailController;
 @synthesize outageList;
 
 -(void) initializeData
 {
 	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
-	self.outageList = [agent getViewOutages:nil distinct:YES];
+	self.outageList = [agent getViewOutages:nil distinct:YES mini:NO];
 	[agent release];
 	[outageTable reloadData];
 }
@@ -65,7 +64,6 @@
 -(void) dealloc
 {
 	[outageTable release];
-	[nodeDetailController release];
 	[outageList release];
 	
     [super dealloc];
@@ -105,9 +103,11 @@
 {
 	if ([self.outageList count] > 0) {
 		ViewOutage* outage = [self.outageList objectAtIndex:indexPath.row];
-		[nodeDetailController setNodeId:outage.nodeId];
+		NodeDetailController* ndc = [[NodeDetailController alloc] initWithNibName:@"NodeDetailView" bundle:nil];
+		[ndc setNodeId:outage.nodeId];
 		UINavigationController* cont = [self navigationController];
-		[cont pushViewController:nodeDetailController animated:YES];
+		[cont pushViewController:ndc animated:YES];
+		[ndc release];
 	}
 }
 

@@ -64,7 +64,7 @@
 	self.sections = [NSMutableArray array];
 	self.node = [agent getNode:nodeId];
 	
-	self.outages = [agent getViewOutages:nodeId distinct:NO];
+	self.outages = [agent getViewOutages:nodeId distinct:NO mini:YES];
 	if ([self.outages count] > 0) {
 		[self.sections addObject:@"Recent Outages"];
 	}
@@ -79,7 +79,7 @@
 		[self.sections addObject:@"SNMP Interfaces"];
 	}
 
-	self.events = [agent getEvents:nodeId];
+	self.events = [agent getEvents:nodeId limit:[NSNumber numberWithInt:5]];
 	if ([self.events count] > 0) {
 		[self.sections addObject:@"Recent Events"];
 	}
@@ -212,7 +212,7 @@
 		[cell.contentView addSubview:label];
 
 		// Service
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(130.0, 0, 60.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(130.0, 0, 67.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = outage.serviceName;
@@ -220,7 +220,7 @@
 		[cell.contentView addSubview:label];
 
 		// Up/Down
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(195.0, 0, 45.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(202.0, 0, 45.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		if (outage.serviceRegainedDate != nil) {
@@ -233,7 +233,7 @@
 		[cell.contentView addSubview:label];
 
 		// time
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(240.0, 0, 57.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(247.0, 0, 50.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		if (outage.serviceRegainedDate != nil) {
@@ -322,17 +322,17 @@
 		// cell.contentView.backgroundColor = color;
 		cell.backgroundColor = color;
 			
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(5.0, 0, 220.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(5.0, 0, 240.0, tableView.rowHeight)] autorelease];
 		[cell addColumn:event.eventLogMessage];
-		label.backgroundColor = clear;
+		
 		label.font = font;
 		label.text = event.eventLogMessage;
-		label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-		label.lineBreakMode = UILineBreakModeWordWrap;
-		label.numberOfLines = 0;
+		label.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+		label.numberOfLines = 2;
+		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
-			
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 70.0, tableView.rowHeight)] autorelease];
+		
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(255.0, 0, 50.0, tableView.rowHeight)] autorelease];
 		NSString* eventString = [fuzzyDate format:event.time];
 		[cell addColumn:eventString];
 		label.backgroundColor = clear;

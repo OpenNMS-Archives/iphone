@@ -39,9 +39,8 @@
 - (NSString *)cleanUpString:(NSString *)html {
 
 	NSMutableString* string = [NSMutableString stringWithString:html];
-	[html release];
 
-	[string replaceOccurrencesOfRegex:@"^\\s*(.*?)\\s*$" withString:@"{$1}"];
+	[string replaceOccurrencesOfRegex:@"^\\s*(.*?)\\s*$" withString:@"$1"];
 	[string replaceOccurrencesOfRegex:@"<[^>]*>" withString:@""];
 	
 	return string;

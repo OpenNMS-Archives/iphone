@@ -40,11 +40,12 @@
 
 @interface OutageParser : NSObject {
 	@private FuzzyDate* fuzzyDate;
+	@private FuzzyDate* miniDate;
 	@private NSDateFormatter* dateFormatter;
 }
 
 -(OnmsOutage*)getOutage:(CXMLElement*)xmlOutage;
 -(NSArray*)parse:(CXMLElement*)node skipRegained:(BOOL)skipRegained;
--(NSArray*)getViewOutages: (CXMLElement*)node distinctNodes:(BOOL)distinct;
+-(NSArray*)getViewOutages: (CXMLElement*)node distinctNodes:(BOOL)distinct mini:(BOOL)doMini;
 
 @end

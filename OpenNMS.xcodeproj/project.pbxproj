@@ -49,6 +49,7 @@
 		448EEA24101E30B800063B32 /* BaseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EEA23101E30B800063B32 /* BaseParser.m */; };
 		448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EEA98101E3A2600063B32 /* RegexKitLite.m */; };
 		448EEAA4101E3B7400063B32 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 448EEAA3101E3B7400063B32 /* libicucore.dylib */; };
+		448EEB90101E9B2000063B32 /* NodeDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 448EEB8F101E9B2000063B32 /* NodeDetailView.xib */; };
 		44981CCB100EA9C3006BB193 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 44981CCA100EA9C3006BB193 /* Default.png */; };
 		44BBA448100CE84F001257CB /* question-mark-helvetica.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA447100CE84F001257CB /* question-mark-helvetica.png */; };
 		44BBA44A100CE90B001257CB /* o.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA449100CE90B001257CB /* o.png */; };
@@ -142,6 +143,7 @@
 		448EEA97101E3A2600063B32 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegexKitLite.h; path = "External Classes/RegexKitLite/RegexKitLite.h"; sourceTree = "<group>"; };
 		448EEA98101E3A2600063B32 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = "External Classes/RegexKitLite/RegexKitLite.m"; sourceTree = "<group>"; };
 		448EEAA3101E3B7400063B32 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		448EEB8F101E9B2000063B32 /* NodeDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NodeDetailView.xib; sourceTree = "<group>"; };
 		44981CCA100EA9C3006BB193 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Images/Default.png; sourceTree = "<group>"; };
 		44BBA447100CE84F001257CB /* question-mark-helvetica.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "question-mark-helvetica.png"; path = "Images/question-mark-helvetica.png"; sourceTree = "<group>"; };
 		44BBA449100CE90B001257CB /* o.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = o.png; path = Images/o.png; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				44700FCF1007D60B006CE665 /* libz.1.dylib */,
 				44700FD51007D688006CE665 /* libxml2.dylib */,
 				448EEAA3101E3B7400063B32 /* libicucore.dylib */,
+				448EEB8F101E9B2000063B32 /* NodeDetailView.xib */,
 			);
 			name = OpenNMS;
 			sourceTree = "<group>";
@@ -255,21 +258,21 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8D1107310486CEB800E47090 /* OpenNMS-Info.plist */,
+				448AC2C410097B6700C2621C /* Settings.bundle */,
+				28AD73870D9D96C1002E5188 /* MainWindow.xib */,
+				4470101E1007F0D7006CE665 /* AlarmView.xib */,
 				44EEAFAF101BA7340023D5BD /* NodeListView.xib */,
+				4470101F1007F0D7006CE665 /* OutageView.xib */,
 				44981CCA100EA9C3006BB193 /* Default.png */,
 				44E2A161100E195100DD5A1D /* opennms-headingbg.png */,
 				44BBA449100CE90B001257CB /* o.png */,
 				44BBA447100CE84F001257CB /* question-mark-helvetica.png */,
 				44C8E294100CD66400A29DA0 /* display.png */,
-				4470101E1007F0D7006CE665 /* AlarmView.xib */,
-				4470101F1007F0D7006CE665 /* OutageView.xib */,
 				44700FFE1007DA78006CE665 /* clock.png */,
 				44700FFF1007DA78006CE665 /* ekg.png */,
 				44700FF61007D781006CE665 /* Icon-Small.png */,
 				44700FF71007D781006CE665 /* Icon.png */,
-				28AD73870D9D96C1002E5188 /* MainWindow.xib */,
-				8D1107310486CEB800E47090 /* OpenNMS-Info.plist */,
-				448AC2C410097B6700C2621C /* Settings.bundle */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */,
 				44981CCB100EA9C3006BB193 /* Default.png in Resources */,
 				44EEAFB0101BA7340023D5BD /* NodeListView.xib in Resources */,
+				448EEB90101E9B2000063B32 /* NodeDetailView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

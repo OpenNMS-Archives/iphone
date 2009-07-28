@@ -133,7 +133,7 @@
 	NSArray* foundNodes = [NSArray array];
 	if (searchText) {
 		NodeParser* nodeParser = [[NodeParser alloc] init];
-		CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@&ipInterface.ipAddress=%@", searchText, searchText] caller: @"getNodesForSearch"];
+		CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/nodes?comparator=contains&match=any&label=%@&ipInterface.ipAddress=%@", searchText, searchText] caller: @"getNodesForSearch"];
 		if (document) {
 			foundNodes = [nodeParser parse:[document rootElement]];
 		}
@@ -142,15 +142,18 @@
 	return foundNodes;
 }
 
-- (NSArray*) getEvents:(NSNumber*)nodeId
+- (NSArray*) getEvents:(NSNumber*)nodeId limit:(NSNumber*)limit
 {
 	NSArray* events = [NSArray array];
 	EventParser* eventParser = [[EventParser alloc] init];
 	CXMLDocument* document = nil;
+	if (limit == nil) {
+		limit = [NSNumber numberWithInt:GET_LIMIT];
+	}
 	if (nodeId) {
-		document = [self doRequest: [NSString stringWithFormat:@"/events?limit=%d&node.id=%@", GET_LIMIT, nodeId] caller: @"getEvents"];
+		document = [self doRequest: [NSString stringWithFormat:@"/events?limit=%@&node.id=%@", limit, nodeId] caller: @"getEvents"];
 	} else {
-		document = [self doRequest: [NSString stringWithFormat:@"/events?limit=%d", GET_LIMIT] caller: @"getEvents"];
+		document = [self doRequest: [NSString stringWithFormat:@"/events?limit=%@", limit] caller: @"getEvents"];
 	}
 	if (document) {
 		events = [eventParser parse:[document rootElement]];
@@ -188,7 +191,7 @@
 	return outages;
 }
 
-- (NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct
+- (NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct mini:(BOOL)doMini
 {
 	NSArray* viewOutages = [NSArray array];
 	OutageParser* outageParser = [[OutageParser alloc] init];
@@ -199,7 +202,7 @@
 		document = [self doRequest: [NSString stringWithFormat:@"/outages?limit=%d&orderBy=ifLostService&order=desc&ifRegainedService=null", GET_LIMIT] caller: @"getViewOutages without nodeId"];
 	}
 	if (document) {
-		viewOutages = [outageParser getViewOutages:[document rootElement] distinctNodes:distinct];
+		viewOutages = [outageParser getViewOutages:[document rootElement] distinctNodes:distinct mini:doMini];
 		
 		for (int i = 0; i < [viewOutages count]; i++) {
 			ViewOutage* vo = [viewOutages objectAtIndex:i];

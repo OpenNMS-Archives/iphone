@@ -116,7 +116,9 @@
 	if (tableView == self.searchDisplayController.searchResultsTableView)
 	{
         node = [self.nodeList objectAtIndex:indexPath.row];
-    }
+    } else {
+		NSLog(@"tableview is not in search display controller");
+	}
 	
 	cell.textLabel.text = node.label;
 	return cell;
@@ -124,25 +126,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	/*
-    UIViewController *detailsViewController = [[UIViewController alloc] init];
-    
-	Product *product = nil;
-	if (tableView == self.searchDisplayController.searchResultsTableView)
-	{
-        product = [self.filteredListContent objectAtIndex:indexPath.row];
-    }
-	else
-	{
-        product = [self.listContent objectAtIndex:indexPath.row];
-    }
-	detailsViewController.title = product.name;
-    
-    [[self navigationController] pushViewController:detailsViewController animated:YES];
-    [detailsViewController release];
-	 */
+	if ([self.nodeList count] > 0) {
+		OnmsNode* node = [self.nodeList objectAtIndex:indexPath.row];
+		NodeDetailController* ndc = [[NodeDetailController alloc] initWithNibName:@"NodeDetailView" bundle:nil];
+		[ndc setNodeId:[NSNumber numberWithInt:node.nodeId]];
+		UINavigationController* cont = [self navigationController];
+		[cont pushViewController:ndc animated:YES];
+		[ndc release];
+	}
 }
-
 
 #pragma mark -
 #pragma mark Content Filtering

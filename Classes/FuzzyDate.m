@@ -46,7 +46,7 @@ static double SECONDS_PER_MINUTE = 60.0;
 	if (self = [super init]) {
 		now = [[NSDate alloc] init];
 		numberFormatter = [[NSNumberFormatter alloc] init];
-		[numberFormatter setMaximumFractionDigits:1];
+		[numberFormatter setMaximumFractionDigits:0];
 		mini = NO;
 	}
 	return self;

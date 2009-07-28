@@ -39,7 +39,7 @@
 	BOOL mini;
 }
 
-@property (nonatomic) BOOL mini;
+@property (nonatomic, assign) BOOL mini;
 
 -(NSString*) format: (NSDate*)d;
 

@@ -32,6 +32,7 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
+#import "NodeDetailController.h"
 
 @interface NodeListController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
 	@private NSString* savedSearchTerm;

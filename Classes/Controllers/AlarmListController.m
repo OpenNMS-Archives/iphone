@@ -102,18 +102,20 @@
 	return [self.alarmList count];
 }
 
+/*
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([self.alarmList count] > 0) {
 		OnmsAlarm* alarm = [self.alarmList objectAtIndex:indexPath.row];
 		CGSize size = [alarm.logMessage sizeWithFont:[UIFont boldSystemFontOfSize:12]
 						constrainedToSize:CGSizeMake(220.0, 1000.0)
 						lineBreakMode:UILineBreakModeWordWrap];
-		if ((size.height + 20) >= tableView.rowHeight) {
+		if ((size.height) >= tableView.rowHeight) {
 			return (size.height + 20);
 		}
 	}
 	return tableView.rowHeight;
 }
+*/
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
@@ -137,12 +139,9 @@
 		[cell addColumn:alarm.logMessage];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = alarm.logMessage;
-		label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-		label.lineBreakMode = UILineBreakModeWordWrap;
-		label.numberOfLines = 0;
+		label.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+		label.numberOfLines = 2;
 		label.backgroundColor = clear;
-		label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[label sizeToFit];
 		[cell.contentView addSubview:label];
 
 		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
@@ -150,14 +149,14 @@
 		[cell addColumn:eventString];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = eventString;
-		label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 		label.backgroundColor = clear;
-		label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[label sizeToFit];
 		[cell.contentView addSubview:label];
 	} else {
 		cell.textLabel.text = @"";
 	}
+	
+	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[cell sizeToFit];
 	
 	return cell;
 }

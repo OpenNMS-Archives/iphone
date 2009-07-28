@@ -42,6 +42,8 @@
 	if (self = [super init]) {
 		fuzzyDate = [[FuzzyDate alloc] init];
 		fuzzyDate.mini = NO;
+		miniDate = [[FuzzyDate alloc] init];
+		miniDate.mini = YES;
 		dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setLenient:true];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
@@ -52,6 +54,7 @@
 - (void)dealloc
 {
 	[fuzzyDate release];
+	[miniDate release];
 	[dateFormatter release];
 
 	[super dealloc];
@@ -126,7 +129,7 @@
 	return outage;
 }
 
-- (NSArray*)getViewOutages:(CXMLElement*)node distinctNodes:(BOOL)distinct
+- (NSArray*)getViewOutages:(CXMLElement*)node distinctNodes:(BOOL)distinct mini:(BOOL)doMini
 {
 	NSCountedSet* labelCount;
 	if (distinct) {
@@ -137,10 +140,15 @@
 	for (id xmlOutage in [node elementsForName:@"outage"]) {
 		ViewOutage* viewOutage = [[[ViewOutage alloc] init] autorelease];
 		OnmsOutage* outage = [self getOutage:xmlOutage];
-		
+
 		viewOutage.outageId = [outage.outageId copy];
-		viewOutage.serviceLostDate = [fuzzyDate format:outage.ifLostService];
-		viewOutage.serviceRegainedDate = [fuzzyDate format:outage.ifRegainedService];
+		if (doMini) {
+			viewOutage.serviceLostDate = [miniDate format:outage.ifLostService];
+			viewOutage.serviceRegainedDate = [miniDate format:outage.ifRegainedService];
+		} else {
+			viewOutage.serviceLostDate = [fuzzyDate format:outage.ifLostService];
+			viewOutage.serviceRegainedDate = [fuzzyDate format:outage.ifRegainedService];
+		}
 		viewOutage.serviceName = [outage.serviceName copy];
 		viewOutage.nodeId = [outage.serviceLostEvent.nodeId copy];
 		viewOutage.ipAddress = [outage.ipAddress copy];

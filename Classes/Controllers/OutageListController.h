@@ -38,13 +38,11 @@
 
 @interface OutageListController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* outageTable;
-	@private NodeDetailController* nodeDetailController;
 
 	@private NSArray* outageList;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView* outageTable;
-@property (nonatomic, retain) IBOutlet NodeDetailController* nodeDetailController;
 @property (nonatomic, retain) NSArray* outageList;
 
 - (IBAction) reload:(id) sender;
