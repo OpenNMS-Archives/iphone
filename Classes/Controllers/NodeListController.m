@@ -43,6 +43,12 @@
 @synthesize searchWasActive;
 @synthesize nodeList;
 
+//- (void) viewWillAppear:(BOOL)animated
+//{
+//	[self.navigationController setNavigationBarHidden:YES];
+//	[super viewWillAppear:animated];
+//}
+
 - (void) viewDidLoad
 {
 	self.title = @"Nodes";
@@ -101,11 +107,12 @@
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID] autorelease];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
-	
+
 	// Set the selected color.
 	UIView* backgroundView = [[[UIView alloc] init] autorelease];
 	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
 	cell.selectedBackgroundView = backgroundView;
+	cell.textLabel.highlightedTextColor = [UIColor colorWithWhite:0.0 alpha:1.0];
 	
 	/*
 	 If the requesting table view is the search display controller's table view, configure the cell using the filtered content, otherwise use the main list.
@@ -125,12 +132,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	OnmsNode* node = [self.nodeList objectAtIndex:indexPath.row];
-	NSLog(@"displaying %@", node);
-	// NodeDetailController* ndc = [[NodeDetailController alloc] init];
-	// ndc.nodeId = [NSNumber numberWithInt:node.nodeId];
-	UIViewController* ndc = [[UIViewController alloc] init];
-	[self.searchDisplayController.searchContentsController pushViewController:ndc animated:YES];
-	// [[self searchDisplayController] pushViewController:ndc animated:YES];
+	NodeDetailController* ndc = [[NodeDetailController alloc] init];
+	ndc.nodeId = [NSNumber numberWithInt:node.nodeId];
+	[self.navigationController pushViewController:ndc animated:YES];
 	[ndc release];
 }
 
@@ -139,10 +143,8 @@
 	/*
 	 Search the main list for products whose type matches the scope (if selected) and whose name matches searchText; add items that match to the filtered array.
 	 */
-	NSLog(@"scope = %@", scope);
 	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
 	self.nodeList = [agent getNodesForSearch:searchText];
-	NSLog(@"node list = %@", self.nodeList);
 	[agent release];
 }
 

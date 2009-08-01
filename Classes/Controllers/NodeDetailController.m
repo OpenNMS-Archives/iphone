@@ -125,6 +125,7 @@
 {
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	self.fuzzyDate.mini = YES;
+//	[self.navigationController setNavigationBarHidden:NO];
 
 	[self initializeData];
 
@@ -319,7 +320,6 @@
 		[cell addColumn:iface.ipAddress];
 		[cell.contentView addSubview:label];
 	} else if (sectionName == @"Recent Events") {
-
 		UIView* backgroundView = [[[UIView alloc] init] autorelease];
 		backgroundView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.0];
 		cell.selectedBackgroundView = backgroundView;
@@ -328,7 +328,6 @@
 		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:event.severity] autorelease];
 
 		UIColor* color = [sev getDisplayColor];
-		NSLog(@"color = %@", color);
 		// cell.contentView.backgroundColor = color;
 		cell.backgroundColor = color;
 			

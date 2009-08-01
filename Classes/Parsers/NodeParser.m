@@ -40,7 +40,7 @@
 	NSMutableArray* nodes = [NSMutableArray array];
 	
 	NSArray* xmlNodes = [n elementsForName:@"node"];
-	if ([xmlNodes count] == 0 && [n name] != @"nodes") {
+	if ([xmlNodes count] == 0 && ![[n name] isEqual:@"nodes"]) {
 		xmlNodes = [NSArray arrayWithObjects:&n count:1];
 	}
 	for (id xmlNode in xmlNodes) {

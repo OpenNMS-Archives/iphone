@@ -51,7 +51,7 @@
 	if ([xmlEvents count] == 0) {
 		xmlEvents = [node elementsForName:@"event"];
 	}
-	if ([xmlEvents count] == 0) {
+	if ([xmlEvents count] == 0 && ![[node name] isEqual:@"events"]) {
 		xmlEvents = [[[NSArray alloc] initWithObjects:node, nil] autorelease];
 	}
 	[xmlEvents retain];
