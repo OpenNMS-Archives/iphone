@@ -162,11 +162,16 @@
 	return events;
 }
 
-- (NSArray*) getAlarms
+- (NSArray*) getAlarms:(NSNumber*)alarmId
 {
 	NSArray* alarms = [NSArray array];
 	AlarmParser* alarmParser = [[AlarmParser alloc] init];
-	CXMLDocument* document = [self doRequest: [NSString stringWithFormat:@"/alarms?limit=%d&orderBy=lastEventTime&order=desc", GET_LIMIT] caller: @"getAlarms"];
+	CXMLDocument* document = nil;
+	if (alarmId) {
+		document = [self doRequest: [NSString stringWithFormat:@"/alarms/%@", alarmId] caller: @"getAlarms"];
+	} else {
+		document = [self doRequest: [NSString stringWithFormat:@"/alarms?limit=%d&orderBy=lastEventTime&order=desc", GET_LIMIT] caller: @"getAlarms"];
+	}
 	if (document) {
 		alarms = [alarmParser parse:[document rootElement]];
 	}

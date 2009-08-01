@@ -56,7 +56,6 @@
 - (void) loadView
 {
 	[super loadView];
-	NSLog(@"loading node detail view");
 	nodeTable = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
 	nodeTable.delegate = self;
 	nodeTable.dataSource = self;

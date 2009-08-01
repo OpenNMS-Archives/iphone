@@ -33,6 +33,7 @@
 
 #import "AlarmListController.h"
 #import "ColumnarTableViewCell.h"
+#import "AlarmDetailController.h"
 #import "OpenNMSRestAgent.h"
 #import "OnmsAlarm.h"
 #import "OnmsSeverity.h"
@@ -56,7 +57,7 @@
 -(void) initializeData
 {
 	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
-	self.alarmList = [agent getAlarms];
+	self.alarmList = [agent getAlarms:nil];
 	[agent release];
 	[self.alarmTable reloadData];
 }
@@ -102,6 +103,18 @@
 	return [self.alarmList count];
 }
 
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+{
+	if ([self.alarmList count] > 0) {
+		OnmsAlarm* alarm = [self.alarmList objectAtIndex:indexPath.row];
+		AlarmDetailController* adc = [[AlarmDetailController alloc] init];
+		[adc setAlarm:alarm];
+		UINavigationController* cont = [self navigationController];
+		[cont pushViewController:adc animated:YES];
+		[adc release];
+	}
+}
+
 /*
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([self.alarmList count] > 0) {
@@ -116,6 +129,7 @@
 	return tableView.rowHeight;
 }
 */
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];

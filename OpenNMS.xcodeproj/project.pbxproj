@@ -14,6 +14,7 @@
 		288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765070DF74369002DB57D /* CoreGraphics.framework */; };
 		28AD73880D9D96C1002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD73870D9D96C1002E5188 /* MainWindow.xib */; };
 		440B00861008C941005DB69C /* FuzzyDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 440B00851008C941005DB69C /* FuzzyDate.m */; };
+		442434611024E7C200658DB1 /* AlarmDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442434601024E7C100658DB1 /* AlarmDetailController.m */; };
 		4425F1641018E572000DDDAE /* OnmsSnmpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */; };
 		44263CFC10112F4100717409 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF510112F4100717409 /* AboutViewController.m */; };
 		44263CFE10112F4100717409 /* NodeDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF910112F4100717409 /* NodeDetailController.m */; };
@@ -83,6 +84,8 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		440B00841008C941005DB69C /* FuzzyDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuzzyDate.h; sourceTree = "<group>"; };
 		440B00851008C941005DB69C /* FuzzyDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FuzzyDate.m; sourceTree = "<group>"; };
+		4424345F1024E7C100658DB1 /* AlarmDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmDetailController.h; path = Controllers/AlarmDetailController.h; sourceTree = "<group>"; };
+		442434601024E7C100658DB1 /* AlarmDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmDetailController.m; path = Controllers/AlarmDetailController.m; sourceTree = "<group>"; };
 		4425F1621018E572000DDDAE /* OnmsSnmpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsSnmpInterface.h; path = Objects/OnmsSnmpInterface.h; sourceTree = "<group>"; };
 		4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsSnmpInterface.m; path = Objects/OnmsSnmpInterface.m; sourceTree = "<group>"; };
 		44263CF410112F4100717409 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = Controllers/AboutViewController.h; sourceTree = "<group>"; };
@@ -289,6 +292,8 @@
 			children = (
 				44263CF410112F4100717409 /* AboutViewController.h */,
 				44263CF510112F4100717409 /* AboutViewController.m */,
+				4424345F1024E7C100658DB1 /* AlarmDetailController.h */,
+				442434601024E7C100658DB1 /* AlarmDetailController.m */,
 				44263D2B1011309700717409 /* AlarmListController.h */,
 				44263D2C1011309700717409 /* AlarmListController.m */,
 				44263CF810112F4100717409 /* NodeDetailController.h */,
@@ -515,6 +520,7 @@
 				448EE92C101E0CF800063B32 /* OnmsSeverity.m in Sources */,
 				448EEA24101E30B800063B32 /* BaseParser.m in Sources */,
 				448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */,
+				442434611024E7C200658DB1 /* AlarmDetailController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

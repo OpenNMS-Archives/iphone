@@ -45,7 +45,7 @@
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
 	NSArray* xmlAlarms = [node elementsForName:@"alarm"];
-	if ([xmlAlarms count] == 0) {
+	if ([xmlAlarms count] == 0 && ![[node name] isEqual:@"alarms"]) {
 		xmlAlarms = [[[NSArray alloc] initWithObjects:node, nil] autorelease];
 	}
 
