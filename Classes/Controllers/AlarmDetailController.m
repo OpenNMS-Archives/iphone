@@ -40,22 +40,17 @@
 
 @synthesize alarmTable;
 @synthesize fuzzyDate;
+@synthesize defaultFont;
+@synthesize clear;
+@synthesize white;
 
-// @synthesize alarmId;
 @synthesize sections;
 @synthesize alarm;
-
-/*
-@synthesize outages;
-@synthesize interfaces;
-@synthesize snmpInterfaces;
-@synthesize events;
-*/
 
 - (void) loadView
 {
 	[super loadView];
-	alarmTable = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStylePlain];
+	alarmTable = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
 	alarmTable.delegate = self;
 	alarmTable.dataSource = self;
 	self.view = alarmTable;
@@ -72,28 +67,6 @@
 	
 	self.sections = [NSMutableArray array];
 
-	/*
-	self.outages = [agent getViewOutages:alarmId distinct:NO mini:YES];
-	if ([self.outages count] > 0) {
-		[self.sections addObject:@"Recent Outages"];
-	}
-	
-	self.interfaces = [agent getIpInterfaces:alarmId];
-	if ([self.interfaces count] > 0) {
-		[self.sections addObject:@"IP Interfaces"];
-	}
-	
-	self.snmpInterfaces = [agent getSnmpInterfaces:alarmId];
-	if ([self.snmpInterfaces count] > 0) {
-		[self.sections addObject:@"SNMP Interfaces"];
-	}
-
-	self.events = [agent getEvents:alarmId limit:[NSNumber numberWithInt:5]];
-	if ([self.events count] > 0) {
-		[self.sections addObject:@"Recent Events"];
-	}
-	*/
-
 	[self.alarmTable reloadData];
 }
 
@@ -104,15 +77,7 @@
 {
 	[self.alarmTable release];
 	
-//	[self.alarmId release];
 	[self.alarm release];
-
-	/*
-	[self.outages release];
-	[self.interfaces release];
-	[self.snmpInterfaces release];
-	[self.events release];
-	*/
 
 	[super dealloc];
 }
@@ -127,6 +92,9 @@
 {
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	self.fuzzyDate.mini = YES;
+	self.defaultFont = [UIFont boldSystemFontOfSize:11];
+	self.clear = [UIColor colorWithWhite:1.0 alpha:0.0];
+	self.white = [UIColor colorWithWhite:1.0 alpha:1.0];
 
 	[self initializeData];
 
@@ -136,6 +104,9 @@
 - (void) viewDidUnload
 {
 	[self.fuzzyDate release];
+	[self.defaultFont release];
+	[self.clear release];
+	[self.white release];
 
 	[self.sections release];
 	[self.alarm release];
@@ -157,6 +128,10 @@
 	return 6;
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	return 1;
+}
+
 /*
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
@@ -167,65 +142,85 @@
 }
 */
 
-/*
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([self.sections objectAtIndex:indexPath.section] == @"Recent Events") {
-		OnmsEvent* event = [self.events objectAtIndex:indexPath.row];
-		CGSize size = [event.eventLogMessage sizeWithFont:[UIFont boldSystemFontOfSize:11]
-					   constrainedToSize:CGSizeMake(220.0, 1000.0)
-					   lineBreakMode:UILineBreakModeWordWrap];
-		if ((size.height + 10) >= tableView.rowHeight) {
-			return (size.height + 10);
-		}
+	CGFloat height = tableView.rowHeight;
+	CGSize size;
+	switch(indexPath.row) {
+		case 0:
+			NSLog(@"UEI");
+			size = [alarm.uei sizeWithFont:defaultFont
+					constrainedToSize:CGSizeMake(280.0, 1000.0)
+					lineBreakMode:UILineBreakModeCharacterWrap];
+			height = (size.height + 10.0);
+			break;
+		case 3:
+			NSLog(@"Message");
+			size = [alarm.logMessage sizeWithFont:defaultFont
+					constrainedToSize:CGSizeMake(280.0, 1000.0)
+					lineBreakMode:UILineBreakModeWordWrap];
+			height = (size.height + 10.0);
+			break;
 	}
-	return tableView.rowHeight;
+	NSLog(@"height = %f", height);
+	return MAX(height, tableView.rowHeight);
 }
-*/
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//	NSString* sectionName = [self.sections objectAtIndex:indexPath.section];
+	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
+	cell.backgroundColor = white;
+	cell.textLabel.font = defaultFont;
 
-//	UIColor* white = [UIColor colorWithWhite:1.0 alpha:1.0];
-//	UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
-	UIFont* font   = [UIFont boldSystemFontOfSize:11];
+	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 60.0, tableView.rowHeight)] autorelease];
+	leftLabel.backgroundColor = clear;
+	leftLabel.font = defaultFont;
+	leftLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+	leftLabel.numberOfLines = 0;
+	leftLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+	// leftLabel.textAlignment = UITextAlignmentRight;
 
-	UITableViewCell* cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:nil] autorelease];
-//	cell.backgroundColor = white;
-//	cell.textLabel.font = font;
-	cell.textLabel.textColor = [UIColor colorWithWhite:0.0 alpha:1.0];
+	UILabel* rightLabel = [[[UILabel alloc] initWithFrame:CGRectMake(75.0, 0, 225.0, tableView.rowHeight)] autorelease];
+	rightLabel.backgroundColor = clear;
+	rightLabel.font = defaultFont;
+	rightLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+	rightLabel.numberOfLines = 0;
+	rightLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
 	switch(indexPath.row) {
 		case 0:
-			cell.textLabel.font = font;
-			cell.textLabel.text = @"UEI";
-			cell.detailTextLabel.text = alarm.uei;
+			leftLabel.text = @"UEI";
+			rightLabel.text = alarm.uei;
 			break;
 		case 1:
-			cell.textLabel.font = font;
-			cell.textLabel.text = @"Severity";
-			cell.detailTextLabel.text = alarm.severity;
+			leftLabel.text = @"Severity";
+			rightLabel.text = alarm.severity;
 			break;
 		case 2:
-			cell.textLabel.font = font;
-			cell.textLabel.text = @"# Events";
-			cell.detailTextLabel.text = [alarm.count stringValue];
+			leftLabel.text = @"# Events";
+			rightLabel.text = [alarm.count stringValue];
 			break;
 		case 3:
-			cell.textLabel.font = font;
-			cell.textLabel.text = @"Message";
-			cell.detailTextLabel.text = alarm.logMessage;
+			leftLabel.text = @"Message";
+			rightLabel.text = alarm.logMessage;
+			rightLabel.lineBreakMode = UILineBreakModeCharacterWrap | UILineBreakModeTailTruncation;
 			break;
 		case 4:
-			cell.textLabel.font = font;
-			cell.textLabel.text = @"First Event";
-			cell.detailTextLabel.text = [fuzzyDate format:alarm.firstEventTime];
+			leftLabel.text = @"First Event";
+			rightLabel.text = [fuzzyDate format:alarm.firstEventTime];
 			break;
 		case 5:
-			cell.textLabel.font = font;
-			cell.textLabel.text = @"Last Event";
-			cell.detailTextLabel.text = [fuzzyDate format:alarm.lastEventTime];
+			leftLabel.text = @"Last Event";
+			rightLabel.text = [fuzzyDate format:alarm.lastEventTime];
 			break;
 	}
+
+	[cell addColumn:@"key"];
+	[cell.contentView addSubview:leftLabel];
+	
+	[cell addColumn:@"value"];
+	[cell.contentView addSubview:rightLabel];
+	
+	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[cell sizeToFit];
 	
 	return cell;
 }

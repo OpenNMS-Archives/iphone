@@ -38,32 +38,22 @@
 @interface AlarmDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* alarmTable;
 	@private FuzzyDate* fuzzyDate;
+	@private UIFont* defaultFont;
+	@private UIColor* clear;
+	@private UIColor* white;
 
-//	@private NSNumber* alarmId;
 	@private NSMutableArray* sections;
 	@private OnmsAlarm* alarm;
-/*
-	@private NSArray* outages;
-	@private NSArray* interfaces;
-	@private NSArray* snmpInterfaces;
-	@private NSArray* events;
-*/
-
 }
 
 @property (nonatomic, retain) IBOutlet UITableView* alarmTable;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
+@property (nonatomic, retain) UIFont* defaultFont;
+@property (nonatomic, retain) UIColor* clear;
+@property (nonatomic, retain) UIColor* white;
 
-// @property (nonatomic, retain) NSNumber* alarmId;
 @property (nonatomic, retain) NSMutableArray* sections;
 @property (nonatomic, retain) OnmsAlarm* alarm;
-
-/*
-@property (nonatomic, retain) NSArray* outages;
-@property (nonatomic, retain) NSArray* interfaces;
-@property (nonatomic, retain) NSArray* snmpInterfaces;
-@property (nonatomic, retain) NSArray* events;
-*/
 
 -(void)initializeData;
 
