@@ -43,7 +43,7 @@
 @synthesize logMessage;
 @synthesize firstEventTime;
 @synthesize lastEventTime;
-@synthesize lastEvent;
+@synthesize ackTime;
 
 -(NSString*) description
 {

@@ -37,6 +37,7 @@
 
 @interface AlarmDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* alarmTable;
+	
 	@private FuzzyDate* fuzzyDate;
 	@private UIFont* defaultFont;
 	@private UIColor* clear;
@@ -47,6 +48,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView* alarmTable;
+
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 @property (nonatomic, retain) UIFont* defaultFont;
 @property (nonatomic, retain) UIColor* clear;
@@ -56,5 +58,8 @@
 @property (nonatomic, retain) OnmsAlarm* alarm;
 
 -(void)initializeData;
+
+-(void)acknowledge;
+-(void)unacknowledge;
 
 @end

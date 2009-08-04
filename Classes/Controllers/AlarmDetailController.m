@@ -39,6 +39,7 @@
 @implementation AlarmDetailController
 
 @synthesize alarmTable;
+
 @synthesize fuzzyDate;
 @synthesize defaultFont;
 @synthesize clear;
@@ -125,7 +126,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 6;
+	return 7;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -169,6 +170,7 @@
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 	cell.backgroundColor = white;
 	cell.textLabel.font = defaultFont;
+	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 60.0, tableView.rowHeight)] autorelease];
 	leftLabel.backgroundColor = clear;
@@ -211,19 +213,93 @@
 			leftLabel.text = @"Last Event";
 			rightLabel.text = [fuzzyDate format:alarm.lastEventTime];
 			break;
+		case 6:
+			leftLabel.text = @"Acknowledged";
+			rightLabel.text = [fuzzyDate format:alarm.ackTime];
+			break;
 	}
 
+	
 	[cell addColumn:@"key"];
 	[cell.contentView addSubview:leftLabel];
 	
 	[cell addColumn:@"value"];
 	[cell.contentView addSubview:rightLabel];
-	
+
 	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[cell sizeToFit];
 	
 	return cell;
 }
 
+- (UIView *) tableView: (UITableView *) tableView viewForFooterInSection: (NSInteger) section
+{
+    UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, alarmTable.bounds.size.width, 44.0)] autorelease];
+	footerView.autoresizesSubviews = YES;
+	footerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	footerView.userInteractionEnabled = YES;
+	
+	footerView.hidden = NO;
+	footerView.multipleTouchEnabled = NO;
+	footerView.opaque = NO;
+	footerView.contentMode = UIViewContentModeScaleToFill;
+	
+	UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	button.titleLabel.font = [button.titleLabel.font fontWithSize:11];
+	[button setFrame:CGRectMake(10, 5, 90, 40)];
+	if (alarm.ackTime == nil) {
+		[button addTarget:self action:@selector(acknowledge) forControlEvents:UIControlEventTouchUpInside];
+		[button setTitle:@"Acknowledge" forState:UIControlStateNormal];
+		[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+	} else {
+		[button addTarget:self action:@selector(unacknowledge) forControlEvents:UIControlEventTouchUpInside];
+		[button setTitle:@"Unacknowledge" forState:UIControlStateNormal];
+		[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+	}
+	[footerView addSubview:button];
+	
+	button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	button.titleLabel.font = [button.titleLabel.font fontWithSize:11];
+	[button setFrame:CGRectMake(115, 5, 90, 40)];
+	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+	[footerView addSubview:button];
+	
+	button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	button.titleLabel.font = [button.titleLabel.font fontWithSize:11];
+	[button setFrame:CGRectMake(220, 5, 90, 40)];
+	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+	[footerView addSubview:button];
+	
+	return footerView;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+	return 45.0f;
+}
+
+- (void) doAck:(NSString*)action
+{
+	NSLog(@"performing action %@ on alarm %@", action, alarm.alarmId);
+	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
+	[agent acknowledgeAlarm:alarm.alarmId action:action];
+	NSArray* alarms = [agent getAlarms:alarm.alarmId];
+	if ([alarms count] > 0) {
+		self.alarm = [alarms objectAtIndex:0];
+		[self initializeData];
+	}
+//	[alarms release];
+	[agent release];
+}
+
+- (void) acknowledge
+{
+	[self doAck:@"ack"];
+}
+
+- (void) unacknowledge
+{
+	[self doAck:@"unack"];
+}
 
 @end

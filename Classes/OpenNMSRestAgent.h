@@ -39,13 +39,14 @@
 }
 
 -(OnmsNode*) getNode:(NSNumber*)nodeId;
--(NSArray*) getNodesForSearch:(NSString*)searchText;
--(NSArray*) getIpInterfaces:(NSNumber*)nodeId;
--(NSArray*) getSnmpInterfaces:(NSNumber*)nodeId;
+-(NSArray*)  getNodesForSearch:(NSString*)searchText;
+-(NSArray*)  getIpInterfaces:(NSNumber*)nodeId;
+-(NSArray*)  getSnmpInterfaces:(NSNumber*)nodeId;
 
--(NSArray*) getEvents:(NSNumber*)nodeId limit:(NSNumber*)limit;
--(NSArray*) getAlarms:(NSNumber*)alarmId;
--(NSArray*) getOutages:(NSNumber*)nodeId;
--(NSArray*) getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct mini:(BOOL)doMini;
+-(NSArray*)  getEvents:(NSNumber*)nodeId limit:(NSNumber*)limit;
+-(void)      acknowledgeAlarm:(NSNumber*)alarmId action:(NSString*)action;
+-(NSArray*)  getAlarms:(NSNumber*)alarmId;
+-(NSArray*)  getOutages:(NSNumber*)nodeId;
+-(NSArray*)  getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct mini:(BOOL)doMini;
 
 @end

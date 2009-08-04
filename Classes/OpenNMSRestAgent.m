@@ -71,18 +71,21 @@
 	}
 }
 
+-(NSString*) getBaseUrl
+{
+	return [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@",
+		[[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http",
+		[[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"],
+		[[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"],
+		[[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"],
+		[[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"],
+		[[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"]
+	];
+}
+
 - (CXMLDocument*) doRequest: (NSString*) path caller: (NSString*) caller
 {
-	// NSLog(@"requesting path %@: (%@)", path, caller);
-	NSString* url = [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@%@",
-					 [[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http",
-					 [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"],
-					 [[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"],
-					 [[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"],
-					 [[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"],
-					 [[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"],
-					 path
-					 ];
+	NSString* url = [NSString stringWithFormat:@"%@%@", [self getBaseUrl], path];
 
 	NSLog(@"%@: requesting %@", caller, url);
 	ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]] autorelease];
@@ -160,6 +163,21 @@
 	}
 	[eventParser release];
 	return events;
+}
+
+- (void) acknowledgeAlarm:(NSNumber*)alarmId action:(NSString*)action
+{
+	NSLog(@"alarm ID = %@, action = %@", alarmId, action);
+	NSString* url = [NSString stringWithFormat:@"%@%@", [self getBaseUrl], @"/acks"];
+	
+	ASIHTTPRequest* request = [[[ASIHTTPRequest alloc] initWithURL: [NSURL URLWithString:url]] autorelease];
+	[request appendPostData:[[NSString stringWithFormat:@"alarmId=%@&action=%@", alarmId, action] dataUsingEncoding:NSUTF8StringEncoding]];
+	[request setRequestMethod:@"POST"];
+	[request start];
+	NSError* error = [request error];
+	if (error) {
+		[self doError:error message:url];
+	}
 }
 
 - (NSArray*) getAlarms:(NSNumber*)alarmId

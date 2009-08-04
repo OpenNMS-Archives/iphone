@@ -93,18 +93,10 @@
 			[alarm setLastEventTime: [dateFormatter dateFromString:[[ltElement childAtIndex:0] stringValue]]];
 		}
 		
-		// Last Event
-		CXMLElement *leElement = [xmlAlarm elementForName:@"lastEvent"];
-		if (leElement) {
-			EventParser* eParser = [[EventParser alloc] init];
-			NSArray* events = [eParser parse:leElement];
-			if (events) {
-				OnmsEvent* event = [events objectAtIndex:0];
-				if (event) {
-					[alarm setLastEvent:event];
-				}
-			}
-			[eParser release];
+		// Ack Time
+		CXMLElement *ackElement = [xmlAlarm elementForName:@"ackTime"];
+		if (ackElement) {
+			[alarm setAckTime: [dateFormatter dateFromString:[[ackElement childAtIndex:0] stringValue]]];
 		}
 		
 		[alarms addObject:alarm];

@@ -43,18 +43,18 @@
 	@private NSString* logMessage;
 	@private NSDate* firstEventTime;
 	@private NSDate* lastEventTime;
-	@private OnmsEvent* lastEvent;
-	
+	@private NSDate* ackTime;
+
 }
 
-@property (retain) NSNumber* alarmId;
-@property (retain) NSString* uei;
-@property (retain) NSString* severity;
-@property (retain) NSNumber* count;
-@property (retain) NSString* logMessage;
-@property (retain) NSDate* firstEventTime;
-@property (retain) NSDate* lastEventTime;
-@property (retain) OnmsEvent* lastEvent;
+@property (nonatomic, retain) NSNumber* alarmId;
+@property (nonatomic, retain) NSString* uei;
+@property (nonatomic, retain) NSString* severity;
+@property (nonatomic, retain) NSNumber* count;
+@property (nonatomic, retain) NSString* logMessage;
+@property (nonatomic, retain) NSDate* firstEventTime;
+@property (nonatomic, retain) NSDate* lastEventTime;
+@property (nonatomic, retain) NSDate* ackTime;
 
 -(NSString*) description;
 
