@@ -83,7 +83,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* OpenNMSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNMSAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* OpenNMSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenNMSAppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* OpenNMS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenNMS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* OpenNMS Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenNMS Client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765070DF74369002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AB4B0D9B1048005BE974 /* OpenNMS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNMS_Prefix.pch; sourceTree = "<group>"; };
@@ -200,7 +200,7 @@
 		44F0E6A3100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLDocument_CreationExtensions.m; path = "External Classes/TouchXML/Creation/CXMLDocument_CreationExtensions.m"; sourceTree = "<group>"; };
 		44F0E6A4100F9B1F000B8A22 /* CXMLNode_CreationExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLNode_CreationExtensions.h; path = "External Classes/TouchXML/Creation/CXMLNode_CreationExtensions.h"; sourceTree = "<group>"; };
 		44F0E6A5100F9B1F000B8A22 /* CXMLNode_CreationExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLNode_CreationExtensions.m; path = "External Classes/TouchXML/Creation/CXMLNode_CreationExtensions.m"; sourceTree = "<group>"; };
-		8D1107310486CEB800E47090 /* OpenNMS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenNMS-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* OpenNMS_Client-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenNMS_Client-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,7 +246,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* OpenNMS.app */,
+				1D6058910D05DD3D006BFB54 /* OpenNMS Client.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -282,7 +282,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107310486CEB800E47090 /* OpenNMS-Info.plist */,
+				8D1107310486CEB800E47090 /* OpenNMS_Client-Info.plist */,
 				443DB6E01028F4B300785DE6 /* Images */,
 				443DB6DF1028F4A900785DE6 /* Interfaces */,
 				448AC2C410097B6700C2621C /* Settings.bundle */,
@@ -488,7 +488,7 @@
 			);
 			name = OpenNMS;
 			productName = OpenNMS;
-			productReference = 1D6058910D05DD3D006BFB54 /* OpenNMS.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* OpenNMS Client.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -606,8 +606,8 @@
 				"GCC_VERSION[sdk=iphonesimulator3.0][arch=*]" = 4.2;
 				"GCC_VERSION[sdk=iphonesimulator3.1][arch=*]" = 4.2;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				INFOPLIST_FILE = "OpenNMS-Info.plist";
-				PRODUCT_NAME = OpenNMS;
+				INFOPLIST_FILE = "OpenNMS_Client-Info.plist";
+				PRODUCT_NAME = "OpenNMS Client";
 			};
 			name = Debug;
 		};
@@ -624,8 +624,8 @@
 				"GCC_VERSION[sdk=iphonesimulator3.0][arch=*]" = 4.2;
 				"GCC_VERSION[sdk=iphonesimulator3.1][arch=*]" = 4.2;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				INFOPLIST_FILE = "OpenNMS-Info.plist";
-				PRODUCT_NAME = OpenNMS;
+				INFOPLIST_FILE = "OpenNMS_Client-Info.plist";
+				PRODUCT_NAME = "OpenNMS Client";
 			};
 			name = Release;
 		};

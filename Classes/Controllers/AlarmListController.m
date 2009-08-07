@@ -112,6 +112,7 @@
 	if (tableSelection) {
 		[self.alarmTable deselectRowAtIndexPath:tableSelection animated:NO];
 	}
+	[self.alarmTable reloadData];
 }
 
 #pragma mark UITableView delegates

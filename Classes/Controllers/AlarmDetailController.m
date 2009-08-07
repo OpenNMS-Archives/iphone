@@ -48,9 +48,9 @@
 @synthesize clear;
 @synthesize white;
 
-@synthesize sections;
 @synthesize alarmObjectId;
 @synthesize alarm;
+@synthesize severity;
 @synthesize managedObjectContext;
 
 - (void) loadView
@@ -78,15 +78,13 @@
 		self.alarm = (Alarm*)[array objectAtIndex:0];
 		
 		self.title = [NSString stringWithFormat:@"Alarm #%@", self.alarm.alarmId];
+
+		if (self.severity) {
+			[self.severity release];
+		}
+		self.severity = [[OnmsSeverity alloc] initWithSeverity:self.alarm.severity];
 		
-		OnmsSeverity* severity = [[OnmsSeverity alloc] initWithSeverity:self.alarm.severity];
-		self.alarmTable.backgroundColor = [severity getDisplayColor];
-		self.alarmTable.rowHeight = 34.0;
-		[severity release];
-		
-		self.sections = [NSMutableArray array];
-		
-		[self.alarmTable reloadData];
+//		[self.alarmTable reloadData];
 	} else {
 		if (error) {
 			NSLog(@"error retrieving object %@: %@", alarmObjectId, [error localizedDescription]);
@@ -103,9 +101,17 @@
 -(void) dealloc
 {
 	[self.alarmTable release];
-	
-	[self.alarm release];
 
+	[self.fuzzyDate release];
+	[self.defaultFont release];
+	[self.clear release];
+	[self.white release];
+	
+	[self.alarmObjectId release];
+	[self.alarm release];
+	[self.severity release];
+	[self.managedObjectContext release];
+	
 	[super dealloc];
 }
 
@@ -140,7 +146,6 @@
 	[self.clear release];
 	[self.white release];
 
-	[self.sections release];
 	[self.alarmObjectId release];
 
 	[super viewDidUnload];
@@ -154,6 +159,11 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	if (self.alarm) {
+		self.alarmTable.backgroundColor = [self.severity getDisplayColor];
+		self.alarmTable.rowHeight = 34.0;
+	}
+
 	return 1;
 }
 
@@ -266,14 +276,14 @@
 	footerView.contentMode = UIViewContentModeScaleToFill;
 	
 	UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	button.titleLabel.font = [button.titleLabel.font fontWithSize:11];
+	button.titleLabel.font = [button.titleLabel.font fontWithSize:10];
 	[button setFrame:CGRectMake(10, 5, 90, 40)];
 	if (alarm.ackTime == nil) {
-		[button addTarget:self action:@selector(acknowledge) forControlEvents:UIControlEventTouchUpInside];
+		[button addTarget:self action:@selector(acknowledgeAlarm) forControlEvents:UIControlEventTouchUpInside];
 		[button setTitle:@"Acknowledge" forState:UIControlStateNormal];
 		[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	} else {
-		[button addTarget:self action:@selector(unacknowledge) forControlEvents:UIControlEventTouchUpInside];
+		[button addTarget:self action:@selector(unacknowledgeAlarm) forControlEvents:UIControlEventTouchUpInside];
 		[button setTitle:@"Unacknowledge" forState:UIControlStateNormal];
 		[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	}
@@ -282,12 +292,16 @@
 	button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:11];
 	[button setFrame:CGRectMake(115, 5, 90, 40)];
+	[button addTarget:self action:@selector(escalateAlarm) forControlEvents:UIControlEventTouchUpInside];
+	[button setTitle:@"Escalate" forState:UIControlStateNormal];
 	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	[footerView addSubview:button];
 	
 	button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:11];
 	[button setFrame:CGRectMake(220, 5, 90, 40)];
+	[button addTarget:self action:@selector(clearAlarm) forControlEvents:UIControlEventTouchUpInside];
+	[button setTitle:@"Clear" forState:UIControlStateNormal];
 	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 	[footerView addSubview:button];
 	
@@ -311,14 +325,24 @@
 	[updater update];
 }
 
-- (void) acknowledge
+- (void) acknowledgeAlarm
 {
 	[self doAck:@"ack"];
 }
 
-- (void) unacknowledge
+- (void) unacknowledgeAlarm
 {
 	[self doAck:@"unack"];
+}
+
+- (void) escalateAlarm
+{
+	[self doAck:@"esc"];
+}
+
+- (void) clearAlarm
+{
+	[self doAck:@"clear"];
 }
 
 @end
