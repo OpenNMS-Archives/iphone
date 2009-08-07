@@ -32,12 +32,16 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "OnmsAlarm.h"
-#import "BaseParser.h"
+#import "UpdateHandler.h"
 
-@interface AlarmParser : BaseParser {
+@interface TableUpdateHandler : UpdateHandler {
+	UITableView* tableView;
+	NSMutableArray* objectList;
 }
 
--(NSArray*)parse:(CXMLElement*)node;
+@property (retain) UITableView* tableView;
+@property (retain) NSMutableArray* objectList;
+
+-(id) initWithTableView:(UITableView*)tv objectList:ol;
 
 @end

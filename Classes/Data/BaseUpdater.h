@@ -32,30 +32,25 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "OnmsEvent.h"
+#import "ASINetworkQueue.h"
+#import "UpdateHandler.h"
+#import "config.h"
 
-@interface OnmsAlarm : NSObject {
+#define GET_LIMIT 20
 
-	@private NSNumber* alarmId;
-	@private NSString* uei;
-	@private NSString* severity;
-	@private NSNumber* count;
-	@private NSString* logMessage;
-	@private NSDate* firstEventTime;
-	@private NSDate* lastEventTime;
-	@private NSDate* ackTime;
-
+@interface BaseUpdater : NSObject {
+	NSURL* url;
+	ASINetworkQueue* queue;
+	UpdateHandler* handler;
 }
 
-@property (nonatomic, retain) NSNumber* alarmId;
-@property (nonatomic, retain) NSString* uei;
-@property (nonatomic, retain) NSString* severity;
-@property (nonatomic, retain) NSNumber* count;
-@property (nonatomic, retain) NSString* logMessage;
-@property (nonatomic, retain) NSDate* firstEventTime;
-@property (nonatomic, retain) NSDate* lastEventTime;
-@property (nonatomic, retain) NSDate* ackTime;
+@property (readonly, retain) NSURL* url;
+@property (readonly, retain) ASINetworkQueue* queue;
+@property (retain) UpdateHandler* handler;
 
--(NSString*) description;
+-(id) initWithPath:(NSString*)p;
+
+-(NSString*) getBaseUrl;
+-(void) update;
 
 @end

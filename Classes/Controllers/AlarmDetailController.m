@@ -35,6 +35,9 @@
 #import "ColumnarTableViewCell.h"
 #import "OpenNMSRestAgent.h"
 #import "OnmsSeverity.h"
+#import "OpenNMSAppDelegate.h"
+#import "AlarmUpdater.h"
+#import "AlarmUpdateHandler.h"
 
 @implementation AlarmDetailController
 
@@ -46,7 +49,9 @@
 @synthesize white;
 
 @synthesize sections;
+@synthesize alarmObjectId;
 @synthesize alarm;
+@synthesize managedObjectContext;
 
 - (void) loadView
 {
@@ -59,16 +64,37 @@
 
 - (void) initializeData
 {
-	self.title = [NSString stringWithFormat:@"Alarm #%@", self.alarm.alarmId];
-
-	OnmsSeverity* severity = [[OnmsSeverity alloc] initWithSeverity:self.alarm.severity];
-	self.alarmTable.backgroundColor = [severity getDisplayColor];
-	self.alarmTable.rowHeight = 34.0;
-	[severity release];
+	[fuzzyDate touch];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:managedObjectContext];
+	[request setEntity:entity];
 	
-	self.sections = [NSMutableArray array];
-
-	[self.alarmTable reloadData];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self == %@", alarmObjectId];
+	[request setPredicate:predicate];
+	
+	NSError *error;
+	NSArray *array = [managedObjectContext executeFetchRequest:request error:&error];
+	if (array && [array count] > 0) {
+		self.alarm = (Alarm*)[array objectAtIndex:0];
+		
+		self.title = [NSString stringWithFormat:@"Alarm #%@", self.alarm.alarmId];
+		
+		OnmsSeverity* severity = [[OnmsSeverity alloc] initWithSeverity:self.alarm.severity];
+		self.alarmTable.backgroundColor = [severity getDisplayColor];
+		self.alarmTable.rowHeight = 34.0;
+		[severity release];
+		
+		self.sections = [NSMutableArray array];
+		
+		[self.alarmTable reloadData];
+	} else {
+		if (error) {
+			NSLog(@"error retrieving object %@: %@", alarmObjectId, [error localizedDescription]);
+		} else {
+			NSLog(@"error retrieving object %@", alarmObjectId);
+		}
+	}
+	
 }
 
 #pragma mark -
@@ -97,28 +123,26 @@
 	self.clear = [UIColor colorWithWhite:1.0 alpha:0.0];
 	self.white = [UIColor colorWithWhite:1.0 alpha:1.0];
 
+	if (!managedObjectContext) {
+		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	}
+	
 	[self initializeData];
-
 	[super viewDidLoad];
 }
 
 - (void) viewDidUnload
 {
+	managedObjectContext = nil;
+	
 	[self.fuzzyDate release];
 	[self.defaultFont release];
 	[self.clear release];
 	[self.white release];
 
 	[self.sections release];
-	[self.alarm release];
+	[self.alarmObjectId release];
 
-	/*
-	[self.outages release];
-	[self.interfaces release];
-	[self.snmpInterfaces release];
-	[self.events release];
-	*/
-	
 	[super viewDidUnload];
 }
 
@@ -148,21 +172,18 @@
 	CGSize size;
 	switch(indexPath.row) {
 		case 0:
-			NSLog(@"UEI");
 			size = [alarm.uei sizeWithFont:defaultFont
 					constrainedToSize:CGSizeMake(280.0, 1000.0)
 					lineBreakMode:UILineBreakModeCharacterWrap];
 			height = (size.height + 10.0);
 			break;
 		case 3:
-			NSLog(@"Message");
 			size = [alarm.logMessage sizeWithFont:defaultFont
 					constrainedToSize:CGSizeMake(280.0, 1000.0)
 					lineBreakMode:UILineBreakModeWordWrap];
 			height = (size.height + 10.0);
 			break;
 	}
-	NSLog(@"height = %f", height);
 	return MAX(height, tableView.rowHeight);
 }
 
@@ -283,13 +304,11 @@
 	NSLog(@"performing action %@ on alarm %@", action, alarm.alarmId);
 	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
 	[agent acknowledgeAlarm:alarm.alarmId action:action];
-	NSArray* alarms = [agent getAlarms:alarm.alarmId];
-	if ([alarms count] > 0) {
-		self.alarm = [alarms objectAtIndex:0];
-		[self initializeData];
-	}
-//	[alarms release];
 	[agent release];
+	
+	AlarmUpdater* updater = [[[AlarmUpdater alloc] initWithAlarmId:alarm.alarmId] autorelease];
+	updater.handler = [[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:nil];
+	[updater update];
 }
 
 - (void) acknowledge

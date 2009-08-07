@@ -36,7 +36,6 @@
 #import "NodeParser.h"
 #import "IpInterfaceParser.h"
 #import "SnmpInterfaceParser.h"
-#import "AlarmParser.h"
 #import "EventParser.h"
 #import "OutageParser.h"
 
@@ -178,23 +177,6 @@
 	if (error) {
 		[self doError:error message:url];
 	}
-}
-
-- (NSArray*) getAlarms:(NSNumber*)alarmId
-{
-	NSArray* alarms = [NSArray array];
-	AlarmParser* alarmParser = [[AlarmParser alloc] init];
-	CXMLDocument* document = nil;
-	if (alarmId) {
-		document = [self doRequest: [NSString stringWithFormat:@"/alarms/%@", alarmId] caller: @"getAlarms"];
-	} else {
-		document = [self doRequest: [NSString stringWithFormat:@"/alarms?limit=%d&orderBy=lastEventTime&order=desc", GET_LIMIT] caller: @"getAlarms"];
-	}
-	if (document) {
-		alarms = [alarmParser parse:[document rootElement]];
-	}
-	[alarmParser release];
-	return alarms;
 }
 
 - (NSArray*) getOutages:(NSNumber*)nodeId

@@ -8,4 +8,5 @@
 	#import "ASIHTTPRequest.h"
 	#import "TouchXML.h"
 	#import "OnmsXMLElementAdditions.h"
+	#import <CoreData/CoreData.h>
 #endif

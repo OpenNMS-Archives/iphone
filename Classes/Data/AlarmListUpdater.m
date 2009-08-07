@@ -31,23 +31,14 @@
  *
  *******************************************************************************/
 
-#import "OnmsAlarm.h"
-#import "OnmsEvent.h"
+#import "AlarmListUpdater.h"
 
-@implementation OnmsAlarm
+@implementation AlarmListUpdater
 
-@synthesize alarmId;
-@synthesize uei;
-@synthesize severity;
-@synthesize count;
-@synthesize logMessage;
-@synthesize firstEventTime;
-@synthesize lastEventTime;
-@synthesize ackTime;
-
--(NSString*) description
+-(id) init
 {
-	return [NSString stringWithFormat: @"[%@: id: %@, severity: %@ (%@), uei: %@]", lastEventTime, alarmId, severity, count, uei];
+	self = [super initWithPath:[NSString stringWithFormat:@"/alarms?limit=%d&orderBy=lastEventTime&order=desc", GET_LIMIT]];
+	return self;
 }
 
 @end

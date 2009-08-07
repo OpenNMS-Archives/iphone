@@ -33,7 +33,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FuzzyDate.h"
-#import "OnmsAlarm.h"
+#import "Alarm.h"
 
 @interface AlarmDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* alarmTable;
@@ -44,7 +44,9 @@
 	@private UIColor* white;
 
 	@private NSMutableArray* sections;
-	@private OnmsAlarm* alarm;
+	@private NSManagedObjectID* alarmObjectId;
+	@private Alarm* alarm;
+	@private NSManagedObjectContext* managedObjectContext;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView* alarmTable;
@@ -55,9 +57,9 @@
 @property (nonatomic, retain) UIColor* white;
 
 @property (nonatomic, retain) NSMutableArray* sections;
-@property (nonatomic, retain) OnmsAlarm* alarm;
-
--(void)initializeData;
+@property (nonatomic, retain) NSManagedObjectID* alarmObjectId;
+@property (nonatomic, retain) Alarm* alarm;
+@property (nonatomic, retain) NSManagedObjectContext* managedObjectContext;
 
 -(void)acknowledge;
 -(void)unacknowledge;

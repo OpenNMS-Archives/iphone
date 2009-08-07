@@ -31,17 +31,34 @@
  *
  *******************************************************************************/
 
-#import <Foundation/Foundation.h>
+#import "UpdateHandler.h"
+#import "RegexKitLite.h"
+#import "config.h"
 
-@interface FuzzyDate : NSObject {
-	NSDate* now;
-	NSNumberFormatter* numberFormatter;
-	BOOL mini;
+@implementation UpdateHandler
+
+- (NSString *)cleanUpString:(NSString *)html
+{
+	
+	NSMutableString* string = [NSMutableString stringWithString:html];
+	
+	[string replaceOccurrencesOfRegex:@"^\\s*(.*?)\\s*$" withString:@"$1"];
+	[string replaceOccurrencesOfRegex:@"<[^>]*>" withString:@""];
+	
+	return string;
 }
 
-@property (nonatomic, assign) BOOL mini;
+-(void) requestDidFinish:(ASIHTTPRequest*) request
+{
+#if DEBUG
+	NSLog(@"UpdateHandler: request finished.");
+#endif
+}
 
--(NSString*) format: (NSDate*)d;
--(void) touch;
+-(void) requestFailed:(ASIHTTPRequest*) request
+{
+	NSError* error = [request error];
+	NSLog(@"UpdateHandler: request failed: %@", [error localizedDescription]);
+}
 
 @end

@@ -35,13 +35,17 @@
 #import "ColumnarTableViewCell.h"
 #import "AlarmDetailController.h"
 #import "OpenNMSRestAgent.h"
-#import "OnmsAlarm.h"
+#import "Alarm.h"
 #import "OnmsSeverity.h"
+#import "AlarmListUpdater.h"
+#import "AlarmUpdateHandler.h"
+#import "OpenNMSAppDelegate.h"
 
 @implementation AlarmListController
 
 @synthesize alarmTable;
 @synthesize fuzzyDate;
+@synthesize managedObjectContext;
 
 @synthesize alarmList;
 
@@ -49,6 +53,8 @@
 {
 	[self.fuzzyDate release];
 	[self.alarmTable release];
+	[self.managedObjectContext release];
+
 	[self.alarmList release];
 
     [super dealloc];
@@ -56,10 +62,10 @@
 
 -(void) initializeData
 {
-	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
-	self.alarmList = [agent getAlarms:nil];
-	[agent release];
-	[self.alarmTable reloadData];
+	self.alarmList = [NSMutableArray array];
+	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
+	updater.handler = [[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:self.alarmList];
+	[updater update];
 }
 
 -(IBAction) reload:(id) sender
@@ -71,6 +77,10 @@
 
 - (void) viewDidLoad
 {
+	if (!managedObjectContext) {
+		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	}
+
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	[self initializeData];
 	[super viewDidLoad];
@@ -78,6 +88,8 @@
 
 - (void) viewDidUnload
 {
+	managedObjectContext = nil;
+	
 	[self.alarmTable release];
 	[self.fuzzyDate release];
 	[self.alarmList release];
@@ -106,30 +118,14 @@
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	if ([self.alarmList count] > 0) {
-		OnmsAlarm* alarm = [self.alarmList objectAtIndex:indexPath.row];
+		NSManagedObjectID* objId = [self.alarmList objectAtIndex:indexPath.row];
 		AlarmDetailController* adc = [[AlarmDetailController alloc] init];
-		[adc setAlarm:alarm];
+		[adc setAlarmObjectId:objId];
 		UINavigationController* cont = [self navigationController];
 		[cont pushViewController:adc animated:YES];
 		[adc release];
 	}
 }
-
-/*
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([self.alarmList count] > 0) {
-		OnmsAlarm* alarm = [self.alarmList objectAtIndex:indexPath.row];
-		CGSize size = [alarm.logMessage sizeWithFont:[UIFont boldSystemFontOfSize:12]
-						constrainedToSize:CGSizeMake(220.0, 1000.0)
-						lineBreakMode:UILineBreakModeWordWrap];
-		if ((size.height) >= tableView.rowHeight) {
-			return (size.height + 20);
-		}
-	}
-	return tableView.rowHeight;
-}
-*/
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
@@ -144,7 +140,27 @@
 		// set the border based on the severity (can only set entire table background color :( )
 		// tableView.separatorColor = [self getSeparatorColorForSeverity:alarm.severity];
 
-		OnmsAlarm* alarm = [self.alarmList objectAtIndex:indexPath.row];
+		NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
+
+		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:managedObjectContext];
+		[request setEntity:entity];
+		
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self == %@", alarmObjId];
+		[request setPredicate:predicate];
+		
+		NSError *error;
+		NSArray *array = [managedObjectContext executeFetchRequest:request error:&error];
+		if (!array || [array count] == 0) {
+			if (error) {
+				NSLog(@"error retrieving object %@: %@", alarmObjId, [error localizedDescription]);
+			} else {
+				NSLog(@"error retrieving object %@", alarmObjId);
+			}
+			return cell;
+		}
+
+		Alarm* alarm = (Alarm*)[array objectAtIndex:0];
 		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:alarm.severity] autorelease];
 		UIColor* color = [sev getDisplayColor];
 		cell.contentView.backgroundColor = color;

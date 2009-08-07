@@ -31,17 +31,34 @@
  *
  *******************************************************************************/
 
-#import <Foundation/Foundation.h>
+#import "TableUpdateHandler.h"
 
-@interface FuzzyDate : NSObject {
-	NSDate* now;
-	NSNumberFormatter* numberFormatter;
-	BOOL mini;
+@implementation TableUpdateHandler
+
+@synthesize tableView;
+@synthesize objectList;
+
+-(void) dealloc
+{
+	[self.tableView release];
+	[self.objectList release];
+
+	[super dealloc];
 }
 
-@property (nonatomic, assign) BOOL mini;
+-(id) initWithTableView:(UITableView*)tv objectList:ol
+{
+	if (self = [super init]) {
+		self.tableView = tv;
+		self.objectList = ol;
+	}
+	return self;
+}
 
--(NSString*) format: (NSDate*)d;
--(void) touch;
+-(void) requestDidFinish:(ASIHTTPRequest*) request
+{
+	[super requestDidFinish:request];
+	[self.tableView reloadData];
+}
 
 @end

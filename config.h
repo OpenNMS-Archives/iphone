@@ -31,17 +31,4 @@
  *
  *******************************************************************************/
 
-#import <Foundation/Foundation.h>
-
-@interface FuzzyDate : NSObject {
-	NSDate* now;
-	NSNumberFormatter* numberFormatter;
-	BOOL mini;
-}
-
-@property (nonatomic, assign) BOOL mini;
-
--(NSString*) format: (NSDate*)d;
--(void) touch;
-
-@end
+#define DEBUG 1

@@ -44,11 +44,14 @@ extern NSString* const NetworkRequestErrorDomain;
 	// A queue delegate that should *ALSO* be notified of delegate message (used by ASINetworkQueue)
 	id queue;
 	
-	// HTTP method to use (GET / POST / PUT / DELETE). Defaults to GET
+	// HTTP method to use (GET / POST / PUT / DELETE / HEAD). Defaults to GET
 	NSString *requestMethod;
 	
 	// Request body - only used when the whole body is stored in memory (shouldStreamPostDataFromDisk is false)
 	NSMutableData *postBody;
+	
+	// gzipped request body used when shouldCompressRequestBody is YES
+	NSData *compressedPostBody;
 	
 	// When true, post body will be streamed from a file on disk, rather than loaded into memory at once (useful for large uploads)
 	// Automatically set to true in ASIFormDataRequests when using setFile:forKey:
@@ -57,6 +60,9 @@ extern NSString* const NetworkRequestErrorDomain;
 	// Path to file used to store post body (when shouldStreamPostDataFromDisk is true)
 	// You can set this yourself - useful if you want to PUT a file from local disk 
 	NSString *postBodyFilePath;
+	
+	// Path to a temporary file used to store a deflated post body (when shouldCompressPostBody is YES)
+	NSString *compressedPostBodyFilePath;
 	
 	// Set to true when ASIHTTPRequest automatically created a temporary file containing the request body (when true, the file at postBodyFilePath will be deleted at the end of the request)
 	BOOL didCreateTemporaryPostDataFile;
@@ -91,6 +97,10 @@ extern NSString* const NetworkRequestErrorDomain;
 	// If allowCompressedResponse is true, requests will inform the server they can accept compressed data, and will automatically decompress gzipped responses. Default is true.
 	BOOL allowCompressedResponse;
 	
+	// If shouldCompressRequestBody is true, the request body will be gzipped. Default is false.
+	// You will probably need to enable this feature on your webserver to make this work. Tested with apache only.
+	BOOL shouldCompressRequestBody;
+	
 	// When downloadDestinationPath is set, the result of this request will be downloaded to the file at this location
 	// If downloadDestinationPath is not set, download data will be stored in memory
 	NSString *downloadDestinationPath;
@@ -115,6 +125,13 @@ extern NSString* const NetworkRequestErrorDomain;
 	// Domain used for NTLM authentication
 	NSString *domain;
 	
+	// Username and password used for proxy authentication
+	NSString *proxyUsername;
+	NSString *proxyPassword;
+	
+	// Domain used for NTLM proxy authentication
+	NSString *proxyDomain;
+	
 	// Delegate for displaying upload progress (usually an NSProgressIndicator, but you can supply a different object and handle this yourself)
 	id uploadProgressDelegate;
 	
@@ -131,11 +148,34 @@ extern NSString* const NetworkRequestErrorDomain;
     CFHTTPMessageRef request;	
 	CFReadStreamRef readStream;
 	
-	// Authentication currently being used for prompting and resuming
+	// Used for authentication
     CFHTTPAuthenticationRef requestAuthentication; 
 	NSMutableDictionary *requestCredentials;
+	
+	// Used during NTLM authentication
 	int authenticationRetryCount;
+	
+	// Authentication method (Basic, Digest, NTLM)
 	NSString *authenticationMethod;
+	
+	// Realm for authentication when credentials are required
+	NSString *authenticationRealm;
+	
+	// And now, the same thing, but for authenticating proxies
+	BOOL needsProxyAuthentication;
+	
+	// Used for proxy authentication
+    CFHTTPAuthenticationRef proxyAuthentication; 
+	NSMutableDictionary *proxyCredentials;
+	
+	// Used during authentication with an NTLM proxy
+	int proxyAuthenticationRetryCount;
+	
+	// Authentication method for the proxy (Basic, Digest, NTLM)
+	NSString *proxyAuthenticationMethod;	
+	
+	// Realm for proxy authentication when credentials are required
+	NSString *proxyAuthenticationRealm;
 	
 	// HTTP status code, eg: 200 = OK, 404 = Not found etc
 	int responseStatusCode;
@@ -160,9 +200,6 @@ extern NSString* const NetworkRequestErrorDomain;
 	
 	// Last amount of data sent (used for incrementing progress)
 	unsigned long long lastBytesSent;
-	
-	// Realm for authentication when credentials are required
-	NSString *authenticationRealm;
 	
 	// This lock will block the request until the delegate supplies authentication info
 	NSConditionLock *authenticationLock;
@@ -203,11 +240,18 @@ extern NSString* const NetworkRequestErrorDomain;
 	// Prevents the body of the post being built more than once (largely for subclasses)
 	BOOL haveBuiltPostBody;
 	
+	// Used internally, may reflect the size of the internal used by CFNetwork
+	// POST / PUT operations with body sizes greater than uploadBufferSize will not timeout unless more than uploadBufferSize bytes have been sent
+	// Likely to be 32KB on iPhone 3.0, 128KB on Mac OS X Leopard and iPhone 2.2.x
 	unsigned long long uploadBufferSize;
 	
+	// Text encoding for responses that do not send a Content-Type with a charset value. Defaults to NSISOLatin1StringEncoding
 	NSStringEncoding defaultResponseEncoding;
+	
+	// The text encoding of the response, will be defaultResponseEncoding if the server didn't specify. Can't be set.
 	NSStringEncoding responseEncoding;
 	
+	// Tells ASIHTTPRequest not to delete partial downloads, and allows it to use an existing file to resume a download. Defaults to NO.
 	BOOL allowResumeForFileDownloads;
 	
 	// Custom user information assosiated with the request
@@ -227,7 +271,12 @@ extern NSString* const NetworkRequestErrorDomain;
 	
 	// When NO, requests will not check the secure certificate is valid (use for self-signed cerficates during development, DO NOT USE IN PRODUCTION) Default is YES
 	BOOL validatesSecureCertificate;
-
+	
+	// Details on the proxy to use - you could set these yourself, but it's probably best to let ASIHTTPRequest detect the system proxy settings
+	NSString *proxyHost;
+	int proxyPort;
+	
+	NSURL *PACurl;
 }
 
 #pragma mark init / dealloc
@@ -302,18 +351,22 @@ extern NSString* const NetworkRequestErrorDomain;
 // Called when a request fails, and lets the delegate now via didFailSelector
 - (void)failWithError:(NSError *)theError;
 
-#pragma mark http authentication stuff
+#pragma mark parsing HTTP response headers
 
 // Reads the response headers to find the content length, encoding, cookies for the session 
 // Also initiates request redirection when shouldRedirect is true
 // Returns true if the request needs a username and password (or if those supplied were incorrect)
 - (BOOL)readResponseHeadersReturningAuthenticationFailure;
 
+#pragma mark http authentication stuff
+
 // Apply credentials to this request
 - (BOOL)applyCredentials:(NSMutableDictionary *)newCredentials;
+- (BOOL)applyProxyCredentials:(NSMutableDictionary *)newCredentials;
 
 // Attempt to obtain credentials for this request from the URL, username and password or keychain
 - (NSMutableDictionary *)findCredentials;
+- (NSMutableDictionary *)findProxyCredentials;
 
 // Unlock (unpause) the request thread so it can resume the request
 // Should be called by delegates when they have populated the authentication information after an authentication challenge
@@ -321,7 +374,7 @@ extern NSString* const NetworkRequestErrorDomain;
 
 // Apply authentication information and resume the request after an authentication challenge
 - (void)attemptToApplyCredentialsAndResume;
-
+- (void)attemptToApplyProxyCredentialsAndResume;
 
 #pragma mark stream status handlers
 
@@ -335,6 +388,8 @@ extern NSString* const NetworkRequestErrorDomain;
 
 + (void)setSessionCredentials:(NSMutableDictionary *)newCredentials;
 + (void)setSessionAuthentication:(CFHTTPAuthenticationRef)newAuthentication;
++ (void)setSessionProxyCredentials:(NSMutableDictionary *)newCredentials;
++ (void)setSessionProxyAuthentication:(CFHTTPAuthenticationRef)newAuthentication;
 
 #pragma mark keychain storage
 
@@ -360,7 +415,7 @@ extern NSString* const NetworkRequestErrorDomain;
 // Dump all session data (authentication and cookies)
 + (void)clearSession;
 
-#pragma mark gzip compression
+#pragma mark gzip decompression
 
 // Uncompress gzipped data with zlib
 + (NSData *)uncompressZippedData:(NSData*)compressedData;
@@ -369,11 +424,38 @@ extern NSString* const NetworkRequestErrorDomain;
 + (int)uncompressZippedDataFromFile:(NSString *)sourcePath toFile:(NSString *)destinationPath;
 + (int)uncompressZippedDataFromSource:(FILE *)source toDestination:(FILE *)dest;
 
+#pragma mark gzip compression
+
+// Compress data with gzip using zlib
++ (NSData *)compressData:(NSData*)uncompressedData;
+
+// gzip compress data from a file, saving to another file, used for uploading when shouldCompressRequestBody is true
++ (int)compressDataFromFile:(NSString *)sourcePath toFile:(NSString *)destinationPath;
++ (int)compressDataFromSource:(FILE *)source toDestination:(FILE *)dest;
+
+#pragma mark get user agent
+
+// Will be used as a user agent if requests do not specify a custom user agent
+// Is only used when you have specified a Bundle Display Name (CFDisplayBundleName) or Bundle Name (CFBundleName) in your plist
++ (NSString *)defaultUserAgentString;
+
+#pragma mark proxy autoconfiguration
+
+// Returns an array of proxies to use for a particular url, given the url of a PAC script
++ (NSArray *)proxiesForURL:(NSURL *)theURL fromPAC:(NSURL *)pacScriptURL;
+
 @property (retain) NSString *username;
 @property (retain) NSString *password;
 @property (retain) NSString *domain;
 
-@property (retain,readonly) NSURL *url;
+@property (retain) NSString *proxyUsername;
+@property (retain) NSString *proxyPassword;
+@property (retain) NSString *proxyDomain;
+
+@property (retain) NSString *proxyHost;
+@property (assign) int proxyPort;
+
+@property (retain,setter=setURL:) NSURL *url;
 @property (assign) id delegate;
 @property (assign) id queue;
 @property (assign) id uploadProgressDelegate;
@@ -385,6 +467,7 @@ extern NSString* const NetworkRequestErrorDomain;
 @property (assign) SEL didFinishSelector;
 @property (assign) SEL didFailSelector;
 @property (retain,readonly) NSString *authenticationRealm;
+@property (retain,readonly) NSString *proxyAuthenticationRealm;
 @property (retain) NSError *error;
 @property (assign,readonly) BOOL complete;
 @property (retain,readonly) NSDictionary *responseHeaders;
@@ -393,6 +476,7 @@ extern NSString* const NetworkRequestErrorDomain;
 @property (retain,readonly) NSArray *responseCookies;
 @property (assign) BOOL useCookiePersistance;
 @property (retain) NSDictionary *requestCredentials;
+@property (retain) NSDictionary *proxyCredentials;
 @property (assign,readonly) int responseStatusCode;
 @property (retain,readonly) NSMutableData *rawResponseData;
 @property (assign) NSTimeInterval timeOutSeconds;
@@ -417,4 +501,7 @@ extern NSString* const NetworkRequestErrorDomain;
 @property (assign, readonly) unsigned long long partialDownloadSize;
 @property (assign) BOOL shouldRedirect;
 @property (assign) BOOL validatesSecureCertificate;
+@property (assign) BOOL shouldCompressRequestBody;
+@property (assign) BOOL needsProxyAuthentication;
+@property (retain) NSURL *PACurl;
 @end

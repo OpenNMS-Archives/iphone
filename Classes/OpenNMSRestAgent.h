@@ -45,7 +45,6 @@
 
 -(NSArray*)  getEvents:(NSNumber*)nodeId limit:(NSNumber*)limit;
 -(void)      acknowledgeAlarm:(NSNumber*)alarmId action:(NSString*)action;
--(NSArray*)  getAlarms:(NSNumber*)alarmId;
 -(NSArray*)  getOutages:(NSNumber*)nodeId;
 -(NSArray*)  getViewOutages:(NSNumber*)nodeId distinct:(BOOL)distinct mini:(BOOL)doMini;
 

@@ -33,15 +33,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FuzzyDate : NSObject {
-	NSDate* now;
-	NSNumberFormatter* numberFormatter;
-	BOOL mini;
+@interface UpdateHandler : NSObject {
 }
 
-@property (nonatomic, assign) BOOL mini;
-
--(NSString*) format: (NSDate*)d;
--(void) touch;
+- (NSString *)cleanUpString:(NSString *)html;
+-(void) requestDidFinish:(ASIHTTPRequest*) request;
+-(void) requestFailed:(ASIHTTPRequest*) request;
 
 @end

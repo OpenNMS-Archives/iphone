@@ -32,16 +32,11 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "BaseUpdater.h"
 
-@interface FuzzyDate : NSObject {
-	NSDate* now;
-	NSNumberFormatter* numberFormatter;
-	BOOL mini;
+@interface AlarmUpdater : BaseUpdater {
 }
 
-@property (nonatomic, assign) BOOL mini;
-
--(NSString*) format: (NSDate*)d;
--(void) touch;
+-(id) initWithAlarmId:(NSNumber*)alarmId;
 
 @end

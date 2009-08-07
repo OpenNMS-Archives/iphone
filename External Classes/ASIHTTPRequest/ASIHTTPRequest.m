@@ -14,6 +14,7 @@
 #import <zlib.h>
 #ifndef TARGET_OS_IPHONE
 #import <SystemConfiguration/SystemConfiguration.h>
+#import <Security/Security.h>
 #endif
 
 // We use our own custom run loop mode as CoreAnimation seems to want to hijack our threads otherwise
@@ -25,6 +26,10 @@ static const CFOptionFlags kNetworkEvents = kCFStreamEventOpenCompleted | kCFStr
 
 static CFHTTPAuthenticationRef sessionAuthentication = NULL;
 static NSMutableDictionary *sessionCredentials = nil;
+
+static CFHTTPAuthenticationRef sessionProxyAuthentication = NULL;
+static NSMutableDictionary *sessionProxyCredentials = nil;
+
 static NSMutableArray *sessionCookies = nil;
 
 // The number of times we will allow requests to redirect before we fail with a redirection error
@@ -46,30 +51,40 @@ static NSError *ASITooMuchRedirectionError;
 
 // Private stuff
 @interface ASIHTTPRequest ()
-	@property (retain,setter=setURL:) NSURL *url;
-	@property (assign) BOOL complete;
-	@property (retain) NSDictionary *responseHeaders;
-	@property (retain) NSArray *responseCookies;
-	@property (assign) int responseStatusCode;
-	@property (retain) NSMutableData *rawResponseData;
-	@property (retain, nonatomic) NSDate *lastActivityTime;
-	@property (assign) unsigned long long contentLength;
-	@property (assign) unsigned long long partialDownloadSize;
-	@property (assign, nonatomic) unsigned long long uploadBufferSize;
-	@property (assign) NSStringEncoding responseEncoding;
-	@property (retain, nonatomic) NSOutputStream *postBodyWriteStream;
-	@property (retain, nonatomic) NSInputStream *postBodyReadStream;
-	@property (assign) unsigned long long totalBytesRead;
-	@property (assign) unsigned long long totalBytesSent;
-	@property (assign, nonatomic) unsigned long long lastBytesRead;
-	@property (assign, nonatomic) unsigned long long lastBytesSent;
-	@property (retain) NSLock *cancelledLock;
-	@property (assign, nonatomic) BOOL haveBuiltPostBody;
-	@property (retain, nonatomic) NSOutputStream *fileDownloadOutputStream;
-	@property (assign, nonatomic) int authenticationRetryCount;
-	@property (assign, nonatomic) BOOL updatedProgress;
-	@property (assign, nonatomic) BOOL needsRedirect;
-	@property (assign, nonatomic) int redirectCount;
+
+- (BOOL)askDelegateForCredentials;
+- (BOOL)askDelegateForProxyCredentials;
+
+@property (assign) BOOL complete;
+@property (retain) NSDictionary *responseHeaders;
+@property (retain) NSArray *responseCookies;
+@property (assign) int responseStatusCode;
+@property (retain) NSMutableData *rawResponseData;
+@property (retain, nonatomic) NSDate *lastActivityTime;
+@property (assign) unsigned long long contentLength;
+@property (assign) unsigned long long partialDownloadSize;
+@property (assign, nonatomic) unsigned long long uploadBufferSize;
+@property (assign) NSStringEncoding responseEncoding;
+@property (retain, nonatomic) NSOutputStream *postBodyWriteStream;
+@property (retain, nonatomic) NSInputStream *postBodyReadStream;
+@property (assign) unsigned long long totalBytesRead;
+@property (assign) unsigned long long totalBytesSent;
+@property (assign, nonatomic) unsigned long long lastBytesRead;
+@property (assign, nonatomic) unsigned long long lastBytesSent;
+@property (retain) NSLock *cancelledLock;
+@property (assign, nonatomic) BOOL haveBuiltPostBody;
+@property (retain, nonatomic) NSOutputStream *fileDownloadOutputStream;
+@property (assign, nonatomic) int authenticationRetryCount;
+@property (assign, nonatomic) int proxyAuthenticationRetryCount;
+@property (assign, nonatomic) BOOL updatedProgress;
+@property (assign, nonatomic) BOOL needsRedirect;
+@property (assign, nonatomic) int redirectCount;
+@property (retain, nonatomic) NSData *compressedPostBody;
+@property (retain, nonatomic) NSString *compressedPostBodyFilePath;
+@property (retain) NSConditionLock *authenticationLock;
+@property (retain) NSString *authenticationRealm;
+@property (retain) NSString *proxyAuthenticationRealm;
+
 @end
 
 @implementation ASIHTTPRequest
@@ -118,13 +133,16 @@ static NSError *ASITooMuchRedirectionError;
 
 + (id)requestWithURL:(NSURL *)newURL
 {
-	return [[[ASIHTTPRequest alloc] initWithURL:newURL] autorelease];
+	return [[[self alloc] initWithURL:newURL] autorelease];
 }
 
 - (void)dealloc
 {
 	if (requestAuthentication) {
 		CFRelease(requestAuthentication);
+	}
+	if (proxyAuthentication) {
+		CFRelease(proxyAuthentication);
 	}
 	if (request) {
 		CFRelease(request);
@@ -133,7 +151,7 @@ static NSError *ASITooMuchRedirectionError;
 	[userInfo release];
 	[mainRequest release];
 	[postBody release];
-	[requestCredentials release];
+	[compressedPostBody release];
 	[error release];
 	[requestHeaders release];
 	[requestCookies release];
@@ -144,6 +162,15 @@ static NSError *ASITooMuchRedirectionError;
 	[password release];
 	[domain release];
 	[authenticationRealm release];
+	[authenticationMethod release];
+	[requestCredentials release];
+	[proxyHost release];
+	[proxyUsername release];
+	[proxyPassword release];
+	[proxyDomain release];
+	[proxyAuthenticationRealm release];
+	[proxyAuthenticationMethod release];
+	[proxyCredentials release];
 	[url release];
 	[authenticationLock release];
 	[lastActivityTime release];
@@ -152,8 +179,8 @@ static NSError *ASITooMuchRedirectionError;
 	[responseHeaders release];
 	[requestMethod release];
 	[cancelledLock release];
-	[authenticationMethod release];
 	[postBodyFilePath release];
+	[compressedPostBodyFilePath release];
 	[postBodyWriteStream release];
 	[postBodyReadStream release];
 	[super dealloc];
@@ -177,24 +204,35 @@ static NSError *ASITooMuchRedirectionError;
 	// Are we submitting the request body from a file on disk
 	if ([self postBodyFilePath]) {
 		
-		// If we were writing to the post body via appendPostData or appendPostDataFromFile, close the write tream
+		// If we were writing to the post body via appendPostData or appendPostDataFromFile, close the write stream
 		if ([self postBodyWriteStream]) {
 			[[self postBodyWriteStream] close];
 			[self setPostBodyWriteStream:nil];
 		}
-		[self setPostLength:[[[NSFileManager defaultManager] fileAttributesAtPath:[self postBodyFilePath] traverseLink:NO] fileSize]];
+
+		if ([self shouldCompressRequestBody]) {
+			[self setCompressedPostBodyFilePath:[NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]]];
+			[ASIHTTPRequest compressDataFromFile:[self postBodyFilePath] toFile:[self compressedPostBodyFilePath]];
+			[self setPostLength:[[[NSFileManager defaultManager] fileAttributesAtPath:[self compressedPostBodyFilePath] traverseLink:NO] fileSize]];
+		} else {
+			[self setPostLength:[[[NSFileManager defaultManager] fileAttributesAtPath:[self postBodyFilePath] traverseLink:NO] fileSize]];
+		}
 		
 	// Otherwise, we have an in-memory request body
 	} else {
-		[self setPostLength:[postBody length]];
+		if ([self shouldCompressRequestBody]) {
+			[self setCompressedPostBody:[ASIHTTPRequest compressData:[self postBody]]];
+			[self setPostLength:[[self compressedPostBody] length]];
+		} else {
+			[self setPostLength:[[self postBody] length]];
+		}
 	}
 		
-	if ([self postLength] > 0) 
-	{
+	if ([self postLength] > 0) {
 		if (![requestMethod isEqualToString:@"POST"] && ![requestMethod isEqualToString:@"PUT"]) {
 			[self setRequestMethod:@"POST"];
 		}
-		[self addRequestHeader:@"Content-Length" value:[NSString stringWithFormat:@"%llu",postLength]];
+		[self addRequestHeader:@"Content-Length" value:[NSString stringWithFormat:@"%llu",[self postLength]]];
 	}
 	[self setHaveBuiltPostBody:YES];
 }
@@ -263,6 +301,10 @@ static NSError *ASITooMuchRedirectionError;
 
 - (void)cancel
 {
+	// Request may already be complete
+	if ([self complete] || [self isCancelled]) {
+		return;
+	}
 	[self failWithError:ASIRequestCancelledError];
 	[super cancel];
 	[self cancelLoad];
@@ -318,8 +360,13 @@ static NSError *ASITooMuchRedirectionError;
 		[self buildPostBody];
 	}
 	
+	// If we're redirecting, we'll already have a CFHTTPMessageRef
+	if (request) {
+		CFRelease(request);
+	}
+	
     // Create a new HTTP request.
-	request = CFHTTPMessageCreateRequest(kCFAllocatorDefault, (CFStringRef)requestMethod, (CFURLRef)url, [self useHTTPVersionOne] ? kCFHTTPVersion1_0 : kCFHTTPVersion1_1);
+	request = CFHTTPMessageCreateRequest(kCFAllocatorDefault, (CFStringRef)[self requestMethod], (CFURLRef)[self url], [self useHTTPVersionOne] ? kCFHTTPVersion1_0 : kCFHTTPVersion1_1);
     if (!request) {
 		[self failWithError:ASIUnableToCreateRequestError];
 		return;
@@ -327,18 +374,20 @@ static NSError *ASITooMuchRedirectionError;
 	
 	
 	// If we've already talked to this server and have valid credentials, let's apply them to the request
-	if (useSessionPersistance && sessionCredentials && sessionAuthentication) {
-		if (!CFHTTPMessageApplyCredentialDictionary(request, sessionAuthentication, (CFMutableDictionaryRef)sessionCredentials, NULL)) {
-			[ASIHTTPRequest setSessionAuthentication:NULL];
-			[ASIHTTPRequest setSessionCredentials:nil];
+	if ([self useSessionPersistance]) {
+		if (sessionCredentials && sessionAuthentication) {
+			if (!CFHTTPMessageApplyCredentialDictionary(request, sessionAuthentication, (CFMutableDictionaryRef)sessionCredentials, NULL)) {
+				[ASIHTTPRequest setSessionAuthentication:NULL];
+				[ASIHTTPRequest setSessionCredentials:nil];
+			}
 		}
 	}
 	
 	// Add cookies from the persistant (mac os global) store
-	if (useCookiePersistance) {
-		NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url];
+	if ([self useCookiePersistance] ) {
+		NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[self url]];
 		if (cookies) {
-			[requestCookies addObjectsFromArray:cookies];
+			[[self requestCookies] addObjectsFromArray:cookies];
 		}
 	}
 	
@@ -364,16 +413,29 @@ static NSError *ASITooMuchRedirectionError;
 		}
 	}
 	
+	// Build and set the user agent string if the request does not already have a custom user agent specified
+	if (![[self requestHeaders] objectForKey:@"User-Agent"]) {
+		NSString *userAgentString = [ASIHTTPRequest defaultUserAgentString];
+		if (userAgentString) {
+			[self addRequestHeader:@"User-Agent" value:userAgentString];
+		}
+	}
+
 	
 	// Accept a compressed response
 	if ([self allowCompressedResponse]) {
 		[self addRequestHeader:@"Accept-Encoding" value:@"gzip"];
 	}
 	
+	// Configure a compressed request body
+	if ([self shouldCompressRequestBody]) {
+		[self addRequestHeader:@"Content-Encoding" value:@"gzip"];
+	}
+	
 	// Should this request resume an existing download?
 	if ([self allowResumeForFileDownloads] && [self downloadDestinationPath] && [self temporaryFileDownloadPath] && [[NSFileManager defaultManager] fileExistsAtPath:[self temporaryFileDownloadPath]]) {
 		[self setPartialDownloadSize:[[[NSFileManager defaultManager] fileAttributesAtPath:[self temporaryFileDownloadPath] traverseLink:NO] fileSize]];
-		[self addRequestHeader:@"Range" value:[NSString stringWithFormat:@"bytes=%llu-",partialDownloadSize]];
+		[self addRequestHeader:@"Range" value:[NSString stringWithFormat:@"bytes=%llu-",[self partialDownloadSize]]];
 	}
 	
 	// Add custom headers
@@ -387,12 +449,14 @@ static NSError *ASITooMuchRedirectionError;
 	}	
 	NSString *header;
 	for (header in headers) {
-		CFHTTPMessageSetHeaderFieldValue(request, (CFStringRef)header, (CFStringRef)[requestHeaders objectForKey:header]);
+		CFHTTPMessageSetHeaderFieldValue(request, (CFStringRef)header, (CFStringRef)[[self requestHeaders] objectForKey:header]);
 	}
 
-	// If this is a post request and we have data in memory send, add it to the request
-	if ([self postBody]) {
-		CFHTTPMessageSetBody(request, (CFDataRef)postBody);
+	// If this is a post/put request and we store the request body in memory, add it to the request
+	if ([self shouldCompressRequestBody] && [self compressedPostBody]) {
+		CFHTTPMessageSetBody(request, (CFDataRef)[self compressedPostBody]);
+	} else if ([self postBody]) {
+		CFHTTPMessageSetBody(request, (CFDataRef)[self postBody]);
 	}
 	
 	[self loadRequest];
@@ -401,15 +465,14 @@ static NSError *ASITooMuchRedirectionError;
 
 - (void)startRequest
 {
-	[cancelledLock lock];
+	[[self cancelledLock] lock];
 	
 	if ([self isCancelled]) {
-		[cancelledLock unlock];
+		[[self cancelledLock] unlock];
 		return;
 	}
 	
-	[authenticationLock release];
-	authenticationLock = [[NSConditionLock alloc] initWithCondition:1];
+	[self setAuthenticationLock:[[[NSConditionLock alloc] initWithCondition:1] autorelease]];
 	
 	[self setComplete:NO];
 	[self setTotalBytesRead:0];
@@ -431,14 +494,19 @@ static NSError *ASITooMuchRedirectionError;
     }
     // Create the stream for the request.
 	if ([self shouldStreamPostDataFromDisk] && [self postBodyFilePath] && [[NSFileManager defaultManager] fileExistsAtPath:[self postBodyFilePath]]) {
-		[self setPostBodyReadStream:[[[NSInputStream alloc] initWithFileAtPath:[self postBodyFilePath]] autorelease]];
-		[[self postBodyReadStream] open];
+		
+		// Are we gzipping the request body?
+		if ([self compressedPostBodyFilePath] && [[NSFileManager defaultManager] fileExistsAtPath:[self compressedPostBodyFilePath]]) {
+			[self setPostBodyReadStream:[[[NSInputStream alloc] initWithFileAtPath:[self compressedPostBodyFilePath]] autorelease]];
+		} else {
+			[self setPostBodyReadStream:[[[NSInputStream alloc] initWithFileAtPath:[self postBodyFilePath]] autorelease]];	
+		}
 		readStream = CFReadStreamCreateForStreamedHTTPRequest(kCFAllocatorDefault, request,(CFReadStreamRef)[self postBodyReadStream]);
     } else {
 		readStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, request);
 	}
 	if (!readStream) {
-		[cancelledLock unlock];
+		[[self cancelledLock] unlock];
 		[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileBuildingRequestType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Unable to create read stream",NSLocalizedDescriptionKey,nil]]];
         return;
     }
@@ -448,29 +516,70 @@ static NSError *ASITooMuchRedirectionError;
 		CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, [NSMutableDictionary dictionaryWithObject:(NSString *)kCFBooleanFalse forKey:(NSString *)kCFStreamSSLValidatesCertificateChain]); 
 	}
 	
-	// Detect proxy settings and apply them
-#if TARGET_OS_IPHONE
-	#if TARGET_IPHONE_SIMULATOR
-		#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_2_2
-	NSDictionary *proxySettings = [(NSDictionary *)CFNetworkCopySystemProxySettings() autorelease];
-		#else
-	// Can't detect proxies in 2.2.1 Simulator
-	NSDictionary *proxySettings = [NSMutableDictionary dictionary];	
-		#endif
-	#else
-	NSDictionary *proxySettings = [(NSDictionary *)CFNetworkCopySystemProxySettings() autorelease];
-	#endif
-#else
-	NSDictionary *proxySettings = [(NSDictionary *)SCDynamicStoreCopyProxies(NULL) autorelease];
-#endif
-	CFReadStreamSetProperty(readStream, kCFStreamPropertyHTTPProxy, proxySettings);
+	
+	// Handle proxy settings
+
+	// Have details of the proxy been set on this request
+	if (![self proxyHost] && ![self proxyPort]) {
+		
+		// If not, we need to figure out what they'll be
+		
+		NSArray *proxies = nil;
+		
+		// Have we been given a proxy auto config file?
+		if ([self PACurl]) {
+			
+			proxies = [ASIHTTPRequest proxiesForURL:[self url] fromPAC:[self PACurl]];
+
+		// Detect proxy settings and apply them	
+		} else {
+		
+			#if TARGET_OS_IPHONE
+			#if !defined(TARGET_IPHONE_SIMULATOR) || __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_2_2
+			NSDictionary *proxySettings = [(NSDictionary *)CFNetworkCopySystemProxySettings() autorelease];
+			#else
+			// Can't detect proxies in 2.2.1 Simulator
+			NSDictionary *proxySettings = [NSMutableDictionary dictionary];	
+			#endif
+			#else
+			NSDictionary *proxySettings = [(NSDictionary *)SCDynamicStoreCopyProxies(NULL) autorelease];
+			#endif
+
+			proxies = [(NSArray *)CFNetworkCopyProxiesForURL((CFURLRef)[self url], (CFDictionaryRef)proxySettings) autorelease];
+			
+			// Now check to see if the proxy settings contained a PAC url, we need to run the script to get the real list of proxies if so
+			NSDictionary *settings = [proxies objectAtIndex:0];
+			if ([settings objectForKey:(NSString *)kCFProxyAutoConfigurationURLKey]) {
+				proxies = [ASIHTTPRequest proxiesForURL:[self url] fromPAC:[settings objectForKey:(NSString *)kCFProxyAutoConfigurationURLKey]];
+			}
+		}
+		
+		if (!proxies) {
+			CFRelease(readStream);
+			readStream = NULL;
+			[[self cancelledLock] unlock];
+			[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileBuildingRequestType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Unable to obtain information on proxy servers needed for request",NSLocalizedDescriptionKey,nil]]];
+			return;			
+		}
+		// I don't really understand why the dictionary returned by CFNetworkCopyProxiesForURL uses different key names from CFNetworkCopySystemProxySettings/SCDynamicStoreCopyProxies
+		// and why its key names are documented while those we actually need to use don't seem to be (passing the kCF* keys doesn't seem to work)
+		if ([proxies count] > 0) {
+			NSDictionary *settings = [proxies objectAtIndex:0];
+			[self setProxyHost:[settings objectForKey:(NSString *)kCFProxyHostNameKey]];
+			[self setProxyPort:[[settings objectForKey:(NSString *)kCFProxyPortNumberKey] intValue]];
+		}
+	}
+	if ([self proxyHost] && [self proxyPort]) {
+		NSMutableDictionary *proxyToUse = [NSMutableDictionary dictionaryWithObjectsAndKeys:[self proxyHost],kCFStreamPropertyHTTPProxyHost,[NSNumber numberWithInt:[self proxyPort]],kCFStreamPropertyHTTPProxyPort,nil];
+		CFReadStreamSetProperty(readStream, kCFStreamPropertyHTTPProxy, proxyToUse);
+	}
 	
     // Set the client
 	CFStreamClientContext ctxt = {0, self, NULL, NULL, NULL};
     if (!CFReadStreamSetClient(readStream, kNetworkEvents, ReadStreamClientCallBack, &ctxt)) {
         CFRelease(readStream);
         readStream = NULL;
-		[cancelledLock unlock];
+		[[self cancelledLock] unlock];
 		[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileBuildingRequestType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Unable to setup read stream",NSLocalizedDescriptionKey,nil]]];
         return;
     }
@@ -484,11 +593,11 @@ static NSError *ASITooMuchRedirectionError;
         CFReadStreamUnscheduleFromRunLoop(readStream, CFRunLoopGetCurrent(), ASIHTTPRequestRunMode);
         CFRelease(readStream);
         readStream = NULL;
-		[cancelledLock unlock];
+		[[self cancelledLock] unlock];
 		[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileBuildingRequestType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Unable to start HTTP connection",NSLocalizedDescriptionKey,nil]]];
         return;
     }
-	[cancelledLock unlock];
+	[[self cancelledLock] unlock];
 	
 	
 	if (shouldResetProgressIndicators) {
@@ -498,6 +607,8 @@ static NSError *ASITooMuchRedirectionError;
 		}
 		[self resetUploadProgress:amount];
 	}	
+	// Record when the request started, so we can timeout if nothing happens
+	[self setLastActivityTime:[NSDate date]];	
 }
 
 // This is the 'main loop' for the request. Basically, it runs the runloop that our network stuff is attached to, and checks to see if we should cancel or timeout
@@ -505,8 +616,7 @@ static NSError *ASITooMuchRedirectionError;
 {
 	[self startRequest];
 	
-	// Record when the request started, so we can timeout if nothing happens
-	[self setLastActivityTime:[NSDate date]];
+
 	
 	// Wait for the request to finish
 	while (!complete) {
@@ -523,7 +633,7 @@ static NSError *ASITooMuchRedirectionError;
 			// Prevent timeouts before 128KB* has been sent when the size of data to upload is greater than 128KB* (*32KB on iPhone 3.0 SDK)
 			// This is to workaround the fact that kCFStreamPropertyHTTPRequestBytesWrittenCount is the amount written to the buffer, not the amount actually sent
 			// This workaround prevents erroneous timeouts in low bandwidth situations (eg iPhone)
-			if (contentLength <= uploadBufferSize || (uploadBufferSize > 0 && totalBytesSent > uploadBufferSize)) {
+			if (totalBytesSent || postLength <= uploadBufferSize || (uploadBufferSize > 0 && totalBytesSent > uploadBufferSize)) {
 				[self failWithError:ASIRequestTimedOutError];
 				[self cancelLoad];
 				[self setComplete:YES];
@@ -559,9 +669,13 @@ static NSError *ASITooMuchRedirectionError;
 		}
 		
 		// Find out how much data we've uploaded so far
+		[[self cancelledLock] lock];
 		[self setTotalBytesSent:[[(NSNumber *)CFReadStreamCopyProperty(readStream, kCFStreamPropertyHTTPRequestBytesWrittenCount) autorelease] unsignedLongLongValue]];
-
+		[[self cancelledLock] unlock];
+		
 		[self updateProgressIndicators];
+		
+		
 		
 		// This thread should wait for 1/4 second for the stream to do something. We'll stop early if it does.
 		CFRunLoopRunInMode(ASIHTTPRequestRunMode,0.25,YES);
@@ -574,7 +688,7 @@ static NSError *ASITooMuchRedirectionError;
 // Cancel loading and clean up
 - (void)cancelLoad
 {
-	[cancelledLock lock];
+	[[self cancelledLock] lock];
     if (readStream) {
         CFReadStreamClose(readStream);
         CFReadStreamSetClient(readStream, kCFStreamEventNone, NULL, NULL);
@@ -604,7 +718,7 @@ static NSError *ASITooMuchRedirectionError;
 	}
 	
 	[self setResponseHeaders:nil];
-	[cancelledLock unlock];
+	[[self cancelledLock] unlock];
 }
 
 
@@ -622,13 +736,21 @@ static NSError *ASITooMuchRedirectionError;
 
 - (void)removePostDataFile
 {
-	if (postBodyFilePath) {
+	if ([self postBodyFilePath]) {
 		NSError *removeError = nil;
-		[[NSFileManager defaultManager] removeItemAtPath:postBodyFilePath error:&removeError];
+		[[NSFileManager defaultManager] removeItemAtPath:[self postBodyFilePath] error:&removeError];
 		if (removeError) {
-			[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIFileManagementError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Failed to delete file at %@ with error: %@",postBodyFilePath,removeError],NSLocalizedDescriptionKey,removeError,NSUnderlyingErrorKey,nil]]];
+			[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIFileManagementError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Failed to delete file at %@ with error: %@",[self postBodyFilePath],removeError],NSLocalizedDescriptionKey,removeError,NSUnderlyingErrorKey,nil]]];
 		}
 		[self setPostBodyFilePath:nil];
+	}
+	if ([self compressedPostBodyFilePath]) {
+		NSError *removeError = nil;
+		[[NSFileManager defaultManager] removeItemAtPath:[self compressedPostBodyFilePath] error:&removeError];
+		if (removeError) {
+			[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIFileManagementError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Failed to delete file at %@ with error: %@",[self compressedPostBodyFilePath],removeError],NSLocalizedDescriptionKey,removeError,NSUnderlyingErrorKey,nil]]];
+		}
+		[self setCompressedPostBodyFilePath:nil];
 	}
 }
 
@@ -698,13 +820,13 @@ static NSError *ASITooMuchRedirectionError;
 
 - (void)updateUploadProgress
 {
-	[cancelledLock lock];
+	[[self cancelledLock] lock];
 	if ([self isCancelled]) {
-		[cancelledLock unlock];
+		[[self cancelledLock] unlock];
 		return;
 	}
 	
-	// If this is the first time we've written to the buffer, byteCount will be the size of the buffer (currently seems to be 128KB on both Mac and iPhone 2.2.1, 32KB on iPhone 3.0)
+	// If this is the first time we've written to the buffer, byteCount will be the size of the buffer (currently seems to be 128KB on both Leopard and iPhone 2.2.1, 32KB on iPhone 3.0)
 	// If request body is less than the buffer size, byteCount will be the total size of the request body
 	// We will remove this from any progress display, as kCFStreamPropertyHTTPRequestBytesWrittenCount does not tell us how much data has actually be written
 	if (totalBytesSent > 0 && uploadBufferSize == 0 && totalBytesSent != postLength) {
@@ -723,7 +845,7 @@ static NSError *ASITooMuchRedirectionError;
 	
 
 	
-	[cancelledLock unlock];
+	[[self cancelledLock] unlock];
 
 	if (totalBytesSent == 0) {
 		return;
@@ -793,11 +915,6 @@ static NSError *ASITooMuchRedirectionError;
 	if (responseHeaders) {
 		
 		unsigned long long bytesReadSoFar = totalBytesRead+partialDownloadSize;
-		
-		if (bytesReadSoFar > lastBytesRead) {
-			[self setLastActivityTime:[NSDate date]];
-		}
-		
 
 		// We're using a progress queue or compatible controller to handle progress
 		SEL selector = @selector(incrementDownloadProgressBy:);
@@ -897,9 +1014,10 @@ static NSError *ASITooMuchRedirectionError;
 // If you do this, don't forget to call [super requestFinished] to let the queue / delegate know we're done
 - (void)requestFinished
 {
-	if ([self isCancelled] || [self mainRequest]) {
+	if ([self error] || [self mainRequest]) {
 		return;
 	}
+	
 	// Let the queue know we are done
 	if ([queue respondsToSelector:@selector(requestDidFinish:)]) {
 		[queue performSelectorOnMainThread:@selector(requestDidFinish:) withObject:self waitUntilDone:[NSThread isMainThread]];		
@@ -917,55 +1035,56 @@ static NSError *ASITooMuchRedirectionError;
 {
 	[self setComplete:YES];
 	
-	if ([self isCancelled]) {
+	if ([self isCancelled] || [self error]) {
 		return;
 	}
 	
-	if (!error) {
-		
-		// If this is a HEAD request created by an ASINetworkQueue or compatible queue delegate, make the main request fail
-		if ([self mainRequest]) {
-			ASIHTTPRequest *mRequest = [self mainRequest];
-			[mRequest setError:theError];
+	// If this is a HEAD request created by an ASINetworkQueue or compatible queue delegate, make the main request fail
+	if ([self mainRequest]) {
+		ASIHTTPRequest *mRequest = [self mainRequest];
+		[mRequest setError:theError];
 
-			// Let the queue know something went wrong
-			if ([queue respondsToSelector:@selector(requestDidFail:)]) {
-				[queue performSelectorOnMainThread:@selector(requestDidFail:) withObject:mRequest waitUntilDone:[NSThread isMainThread]];		
-			}
-		
-		} else {
-			[self setError:theError];
-			
-			// Let the queue know something went wrong
-			if ([queue respondsToSelector:@selector(requestDidFail:)]) {
-				[queue performSelectorOnMainThread:@selector(requestDidFail:) withObject:self waitUntilDone:[NSThread isMainThread]];		
-			}
-			
-			// Let the delegate know something went wrong
-			if (didFailSelector && [delegate respondsToSelector:didFailSelector]) {
-				[delegate performSelectorOnMainThread:didFailSelector withObject:self waitUntilDone:[NSThread isMainThread]];	
-			}
+		// Let the queue know something went wrong
+		if ([queue respondsToSelector:@selector(requestDidFail:)]) {
+			[queue performSelectorOnMainThread:@selector(requestDidFail:) withObject:mRequest waitUntilDone:[NSThread isMainThread]];		
 		}
-
+	
+	} else {
+		[self setError:theError];
+		
+		// Let the queue know something went wrong
+		if ([queue respondsToSelector:@selector(requestDidFail:)]) {
+			[queue performSelectorOnMainThread:@selector(requestDidFail:) withObject:self waitUntilDone:[NSThread isMainThread]];		
+		}
+		
+		// Let the delegate know something went wrong
+		if (didFailSelector && [delegate respondsToSelector:didFailSelector]) {
+			[delegate performSelectorOnMainThread:didFailSelector withObject:self waitUntilDone:[NSThread isMainThread]];	
+		}
 	}
 }
 
-
-#pragma mark http authentication
+#pragma mark parsing HTTP response headers
 
 - (BOOL)readResponseHeadersReturningAuthenticationFailure
 {
+	[self setNeedsProxyAuthentication:NO];
 	BOOL isAuthenticationChallenge = NO;
 	CFHTTPMessageRef headers = (CFHTTPMessageRef)CFReadStreamCopyProperty(readStream, kCFStreamPropertyHTTPResponseHeader);
 	if (CFHTTPMessageIsHeaderComplete(headers)) {
 		
 		CFDictionaryRef headerFields = CFHTTPMessageCopyAllHeaderFields(headers);
 		[self setResponseHeaders:(NSDictionary *)headerFields];
+
 		CFRelease(headerFields);
 		[self setResponseStatusCode:CFHTTPMessageGetResponseStatusCode(headers)];
 		
 		// Is the server response a challenge for credentials?
 		isAuthenticationChallenge = ([self responseStatusCode] == 401);
+		if ([self responseStatusCode] == 407) {
+			isAuthenticationChallenge = YES;
+			[self setNeedsProxyAuthentication:YES];
+		}
 		
 		// We won't reset the download progress delegate if we got an authentication challenge
 		if (!isAuthenticationChallenge) {
@@ -1033,6 +1152,11 @@ static NSError *ASITooMuchRedirectionError;
 					}
 					[self setURL:[[NSURL URLWithString:[responseHeaders valueForKey:@"Location"] relativeToURL:[self url]] absoluteURL]];
 					[self setNeedsRedirect:YES];
+					
+					// Clear the request cookies
+					// This means manually added cookies will not be added to the redirect request - only those stored in the global persistent store
+					// But, this is probably the safest option - we might be redirecting to a different domain
+					[self setRequestCookies:[NSMutableArray array]];
 				}
 			}
 			
@@ -1043,6 +1167,19 @@ static NSError *ASITooMuchRedirectionError;
 	return isAuthenticationChallenge;
 }
 
+#pragma mark http authentication
+
+- (void)saveProxyCredentialsToKeychain:(NSMutableDictionary *)newCredentials
+{
+	NSURLCredential *authenticationCredentials = [NSURLCredential credentialWithUser:[newCredentials objectForKey:(NSString *)kCFHTTPAuthenticationUsername]
+																			password:[newCredentials objectForKey:(NSString *)kCFHTTPAuthenticationPassword]
+																		 persistence:NSURLCredentialPersistencePermanent];
+	
+	if (authenticationCredentials) {
+		[ASIHTTPRequest saveCredentials:authenticationCredentials forHost:[self proxyHost] port:[self proxyPort] protocol:[[self url] scheme] realm:[self proxyAuthenticationRealm]];
+	}	
+}
+
 
 - (void)saveCredentialsToKeychain:(NSMutableDictionary *)newCredentials
 {
@@ -1051,8 +1188,32 @@ static NSError *ASITooMuchRedirectionError;
 																		 persistence:NSURLCredentialPersistencePermanent];
 	
 	if (authenticationCredentials) {
-		[ASIHTTPRequest saveCredentials:authenticationCredentials forHost:[url host] port:[[url port] intValue] protocol:[url scheme] realm:authenticationRealm];
+		[ASIHTTPRequest saveCredentials:authenticationCredentials forHost:[[self url] host] port:[[[self url] port] intValue] protocol:[[self url] scheme] realm:[self authenticationRealm]];
 	}	
+}
+
+- (BOOL)applyProxyCredentials:(NSMutableDictionary *)newCredentials
+{
+	[self setProxyAuthenticationRetryCount:[self proxyAuthenticationRetryCount]+1];
+	
+	if (newCredentials && proxyAuthentication && request) {
+
+		// Apply whatever credentials we've built up to the old request
+		if (CFHTTPMessageApplyCredentialDictionary(request, proxyAuthentication, (CFMutableDictionaryRef)newCredentials, NULL)) {
+			
+			//If we have credentials and they're ok, let's save them to the keychain
+			if (useKeychainPersistance) {
+				[self saveProxyCredentialsToKeychain:newCredentials];
+			}
+			if (useSessionPersistance) {
+				[ASIHTTPRequest setSessionProxyAuthentication:proxyAuthentication];
+				[ASIHTTPRequest setSessionProxyCredentials:newCredentials];
+			}
+			[self setProxyCredentials:newCredentials];
+			return YES;
+		}
+	}
+	return NO;
 }
 
 - (BOOL)applyCredentials:(NSMutableDictionary *)newCredentials
@@ -1079,6 +1240,61 @@ static NSError *ASITooMuchRedirectionError;
 	return NO;
 }
 
+- (NSMutableDictionary *)findProxyCredentials
+{
+	NSMutableDictionary *newCredentials = [[[NSMutableDictionary alloc] init] autorelease];
+	
+	// Is an account domain needed? (used currently for NTLM only)
+	if (CFHTTPAuthenticationRequiresAccountDomain(proxyAuthentication)) {
+		if (![self proxyDomain]) {
+			[self setProxyDomain:@""];
+		}
+		[newCredentials setObject:[self proxyDomain] forKey:(NSString *)kCFHTTPAuthenticationAccountDomain];
+	}
+	
+	// Get the authentication realm
+	[self setProxyAuthenticationRealm:nil];
+	if (!CFHTTPAuthenticationRequiresAccountDomain(proxyAuthentication)) {
+		[self setProxyAuthenticationRealm:[(NSString *)CFHTTPAuthenticationCopyRealm(proxyAuthentication) autorelease]];
+	}
+	
+	NSString *user = nil;
+	NSString *pass = nil;
+	
+
+	// If this is a HEAD request generated by an ASINetworkQueue, we'll try to use the details from the main request
+	if ([self mainRequest] && [[self mainRequest] proxyUsername] && [[self mainRequest] proxyPassword]) {
+		user = [[self mainRequest] proxyUsername];
+		pass = [[self mainRequest] proxyPassword];
+		
+		// Let's try to use the ones set in this object
+	} else if ([self proxyUsername] && [self proxyPassword]) {
+		user = [self proxyUsername];
+		pass = [self proxyPassword];
+	}		
+
+	
+	// Ok, that didn't work, let's try the keychain
+	if ((!user || !pass) && useKeychainPersistance) {
+		NSURLCredential *authenticationCredentials = [ASIHTTPRequest savedCredentialsForHost:[self proxyHost] port:[self proxyPort] protocol:[[self url] scheme] realm:[self proxyAuthenticationRealm]];
+		if (authenticationCredentials) {
+			user = [authenticationCredentials user];
+			pass = [authenticationCredentials password];
+		}
+		
+	}
+	
+	// If we have a username and password, let's apply them to the request and continue
+	if (user && pass) {
+		
+		[newCredentials setObject:user forKey:(NSString *)kCFHTTPAuthenticationUsername];
+		[newCredentials setObject:pass forKey:(NSString *)kCFHTTPAuthenticationPassword];
+		return newCredentials;
+	}
+	return nil;
+}
+
+
 - (NSMutableDictionary *)findCredentials
 {
 	NSMutableDictionary *newCredentials = [[[NSMutableDictionary alloc] init] autorelease];
@@ -1092,15 +1308,14 @@ static NSError *ASITooMuchRedirectionError;
 	}
 	
 	// Get the authentication realm
-	[authenticationRealm release];
-	authenticationRealm = nil;
+	[self setAuthenticationRealm:nil];
 	if (!CFHTTPAuthenticationRequiresAccountDomain(requestAuthentication)) {
-		authenticationRealm = (NSString *)CFHTTPAuthenticationCopyRealm(requestAuthentication);
+		[self setAuthenticationRealm:[(NSString *)CFHTTPAuthenticationCopyRealm(requestAuthentication) autorelease]];
 	}
 	
 	// First, let's look at the url to see if the username and password were included
-	NSString *user = [url user];
-	NSString *pass = [url password];
+	NSString *user = [[self url] user];
+	NSString *pass = [[self url] password];
 	
 	// If the username and password weren't in the url
 	if (!user || !pass) {
@@ -1111,18 +1326,16 @@ static NSError *ASITooMuchRedirectionError;
 			pass = [[self mainRequest] password];
 			
 		// Let's try to use the ones set in this object
-		} else if (username && password) {
-			user = username;
-			pass = password;
+		} else if ([self username] && [self password]) {
+			user = [self username];
+			pass = [self password];
 		}		
 		
 	}
 	
-
-	
 	// Ok, that didn't work, let's try the keychain
 	if ((!user || !pass) && useKeychainPersistance) {
-		NSURLCredential *authenticationCredentials = [ASIHTTPRequest savedCredentialsForHost:[url host] port:443 protocol:[url scheme] realm:authenticationRealm];
+		NSURLCredential *authenticationCredentials = [ASIHTTPRequest savedCredentialsForHost:[[self url] host] port:[[[self url] port] intValue] protocol:[[self url] scheme] realm:[self authenticationRealm]];
 		if (authenticationCredentials) {
 			user = [authenticationCredentials user];
 			pass = [authenticationCredentials password];
@@ -1143,12 +1356,139 @@ static NSError *ASITooMuchRedirectionError;
 // Called by delegate to resume loading once authentication info has been populated
 - (void)retryWithAuthentication
 {
-	[authenticationLock lockWhenCondition:1];
-	[authenticationLock unlockWithCondition:2];
+	[[self authenticationLock] lockWhenCondition:1];
+	[[self authenticationLock] unlockWithCondition:2];
+}
+
+- (BOOL)askDelegateForProxyCredentials
+{
+	// If we have a delegate, we'll see if it can handle proxyAuthorizationNeededForRequest:.
+	// Otherwise, we'll try the queue (if this request is part of one) and it will pass the message on to its own delegate
+	id authorizationDelegate = [self delegate];
+	if (!authorizationDelegate) {
+		authorizationDelegate = [self queue];
+	}
+	
+	if ([authorizationDelegate respondsToSelector:@selector(proxyAuthorizationNeededForRequest:)]) {
+		[authorizationDelegate performSelectorOnMainThread:@selector(proxyAuthorizationNeededForRequest:) withObject:self waitUntilDone:[NSThread isMainThread]];
+		[[self authenticationLock] lockWhenCondition:2];
+		[[self authenticationLock] unlockWithCondition:1];
+		
+		return YES;
+	}
+	return NO;
+}
+
+- (void)attemptToApplyProxyCredentialsAndResume
+{
+	
+	// Read authentication data
+	if (!proxyAuthentication) {
+		CFHTTPMessageRef responseHeader = (CFHTTPMessageRef) CFReadStreamCopyProperty(readStream,kCFStreamPropertyHTTPResponseHeader);
+		proxyAuthentication = CFHTTPAuthenticationCreateFromResponse(NULL, responseHeader);
+		CFRelease(responseHeader);
+		proxyAuthenticationMethod = (NSString *)CFHTTPAuthenticationCopyMethod(proxyAuthentication);
+	}
+	
+	// If we haven't got a CFHTTPAuthenticationRef by now, something is badly wrong, so we'll have to give up
+	if (!proxyAuthentication) {
+		[self cancelLoad];
+		[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileApplyingCredentialsType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Failed to get authentication object from response headers",NSLocalizedDescriptionKey,nil]]];
+		return;
+	}
+	
+	// See if authentication is valid
+	CFStreamError err;		
+	if (!CFHTTPAuthenticationIsValid(proxyAuthentication, &err)) {
+		
+		CFRelease(proxyAuthentication);
+		proxyAuthentication = NULL;
+		
+		// check for bad credentials, so we can give the delegate a chance to replace them
+		if (err.domain == kCFStreamErrorDomainHTTP && (err.error == kCFStreamErrorHTTPAuthenticationBadUserName || err.error == kCFStreamErrorHTTPAuthenticationBadPassword)) {
+			
+			[self setProxyCredentials:nil];
+			[self setLastActivityTime:nil];
+			if ([self askDelegateForProxyCredentials]) {
+				[self attemptToApplyProxyCredentialsAndResume];
+				return;
+			}
+		}
+		[self cancelLoad];
+		[self failWithError:ASIAuthenticationError];
+		return;
+	}
+
+	[self cancelLoad];
+	
+	if (proxyCredentials) {
+		
+		// We use startRequest rather than starting all over again in load request because NTLM requires we reuse the request
+		if (((proxyAuthenticationMethod != (NSString *)kCFHTTPAuthenticationSchemeNTLM) || proxyAuthenticationRetryCount < 2) && [self applyCredentials:proxyCredentials]) {
+			[self startRequest];
+			
+		// We've failed NTLM authentication twice, we should assume our credentials are wrong
+		} else if (proxyAuthenticationMethod == (NSString *)kCFHTTPAuthenticationSchemeNTLM && proxyAuthenticationRetryCount == 2) {
+			[self failWithError:ASIAuthenticationError];
+			
+		// Something went wrong, we'll have to give up
+		} else {
+			[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileApplyingCredentialsType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Failed to apply proxy credentials to request",NSLocalizedDescriptionKey,nil]]];
+		}
+		
+	// Are a user name & password needed?
+	}  else if (CFHTTPAuthenticationRequiresUserNameAndPassword(proxyAuthentication)) {
+		
+		NSMutableDictionary *newCredentials = [self findProxyCredentials];
+		
+		//If we have some credentials to use let's apply them to the request and continue
+		if (newCredentials) {
+			
+			if ([self applyProxyCredentials:newCredentials]) {
+				[self startRequest];
+			} else {
+				[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileApplyingCredentialsType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Failed to apply proxy credentials to request",NSLocalizedDescriptionKey,nil]]];
+			}
+			return;
+		}
+		
+		if ([self askDelegateForProxyCredentials]) {
+			[self attemptToApplyProxyCredentialsAndResume];
+			return;
+		}
+		
+		// The delegate isn't interested, we'll have to give up
+		[self failWithError:ASIAuthenticationError];
+		return;
+	}
+	
+}
+
+- (BOOL)askDelegateForCredentials
+{
+	// If we have a delegate, we'll see if it can handle proxyAuthorizationNeededForRequest:.
+	// Otherwise, we'll try the queue (if this request is part of one) and it will pass the message on to its own delegate
+	id authorizationDelegate = [self delegate];
+	if (!authorizationDelegate) {
+		authorizationDelegate = [self queue];
+	}
+	
+	if ([authorizationDelegate respondsToSelector:@selector(authorizationNeededForRequest:)]) {
+		[authorizationDelegate performSelectorOnMainThread:@selector(authorizationNeededForRequest:) withObject:self waitUntilDone:[NSThread isMainThread]];
+		[[self authenticationLock] lockWhenCondition:2];
+		[[self authenticationLock] unlockWithCondition:1];
+		
+		return YES;
+	}
+	return NO;
 }
 
 - (void)attemptToApplyCredentialsAndResume
 {
+	if ([self needsProxyAuthentication]) {
+		[self attemptToApplyProxyCredentialsAndResume];
+		return;
+	}
 	
 	// Read authentication data
 	if (!requestAuthentication) {
@@ -1157,9 +1497,9 @@ static NSError *ASITooMuchRedirectionError;
 		CFRelease(responseHeader);
 		authenticationMethod = (NSString *)CFHTTPAuthenticationCopyMethod(requestAuthentication);
 	}
-
 	
 	if (!requestAuthentication) {
+		[self cancelLoad];
 		[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileApplyingCredentialsType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Failed to get authentication object from response headers",NSLocalizedDescriptionKey,nil]]];
 		return;
 	}
@@ -1178,23 +1518,12 @@ static NSError *ASITooMuchRedirectionError;
 			
 			[self setLastActivityTime:nil];
 			
-			// If we have a delegate, we'll see if it can handle authorizationNeededForRequest.
-			// Otherwise, we'll try the queue (if this request is part of one) and it will pass the message on to its own delegate
-			id authorizationDelegate = [self delegate];
-			if (!authorizationDelegate) {
-				authorizationDelegate = [self queue];
-			}
-			
-			if ([authorizationDelegate respondsToSelector:@selector(authorizationNeededForRequest:)]) {
-				[authorizationDelegate performSelectorOnMainThread:@selector(authorizationNeededForRequest:) withObject:self waitUntilDone:[NSThread isMainThread]];
-				[authenticationLock lockWhenCondition:2];
-				[authenticationLock unlock];
-				
-				// Hopefully, the delegate gave us some credentials, let's apply them and reload
+			if ([self askDelegateForCredentials]) {
 				[self attemptToApplyCredentialsAndResume];
 				return;
 			}
 		}
+		[self cancelLoad];
 		[self failWithError:ASIAuthenticationError];
 		return;
 	}
@@ -1202,14 +1531,14 @@ static NSError *ASITooMuchRedirectionError;
 	[self cancelLoad];
 	
 	if (requestCredentials) {
-
+		
 		if (((authenticationMethod != (NSString *)kCFHTTPAuthenticationSchemeNTLM) || authenticationRetryCount < 2) && [self applyCredentials:requestCredentials]) {
 			[self startRequest];
 			
-		// We've failed NTLM authentication twice, we should assume our credentials are wrong
+			// We've failed NTLM authentication twice, we should assume our credentials are wrong
 		} else if (authenticationMethod == (NSString *)kCFHTTPAuthenticationSchemeNTLM && authenticationRetryCount == 2) {
 			[self failWithError:ASIAuthenticationError];
-	
+			
 		} else {
 			[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileApplyingCredentialsType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Failed to apply credentials to request",NSLocalizedDescriptionKey,nil]]];
 		}
@@ -1230,18 +1559,7 @@ static NSError *ASITooMuchRedirectionError;
 			return;
 		}
 		
-		// We've got no credentials, let's ask the delegate to sort this out
-		// If we have a delegate, we'll see if it can handle authorizationNeededForRequest.
-		// Otherwise, we'll try the queue (if this request is part of one) and it will pass the message on to its own delegate
-		id authorizationDelegate = [self delegate];
-		if (!authorizationDelegate) {
-			authorizationDelegate = [self queue];
-		}
-		
-		if ([authorizationDelegate respondsToSelector:@selector(authorizationNeededForRequest:)]) {
-			[authorizationDelegate performSelectorOnMainThread:@selector(authorizationNeededForRequest:) withObject:self waitUntilDone:[NSThread isMainThread]];
-			[authenticationLock lockWhenCondition:2];
-			[authenticationLock unlock];
+		if ([self askDelegateForCredentials]) {
 			[self attemptToApplyCredentialsAndResume];
 			return;
 		}
@@ -1252,6 +1570,7 @@ static NSError *ASITooMuchRedirectionError;
 	}
 	
 }
+
 
 #pragma mark stream status handlers
 
@@ -1305,10 +1624,11 @@ static NSError *ASITooMuchRedirectionError;
     if (bytesRead < 0) {
         [self handleStreamError];
 		
-		// If zero bytes were read, wait for the EOF to come.
+	// If zero bytes were read, wait for the EOF to come.
     } else if (bytesRead) {
 		
 		[self setTotalBytesRead:[self totalBytesRead]+bytesRead];
+		[self setLastActivityTime:[NSDate date]];
 		
 		// Are we downloading to a file?
 		if ([self downloadDestinationPath]) {
@@ -1325,7 +1645,7 @@ static NSError *ASITooMuchRedirectionError;
 			}
 			[fileDownloadOutputStream write:buffer maxLength:bytesRead];
 			
-			//Otherwise, let's add the data to our in-memory store
+		//Otherwise, let's add the data to our in-memory store
 		} else {
 			[rawResponseData appendBytes:buffer length:bytesRead];
 		}
@@ -1334,7 +1654,7 @@ static NSError *ASITooMuchRedirectionError;
 
 - (void)handleStreamComplete
 {
-	//Try to read the headers (if this is a HEAD request handleBytesAvailable available may not be called)
+	//Try to read the headers (if this is a HEAD request handleBytesAvailable may not be called)
 	if (![self responseHeaders]) {
 		if ([self readResponseHeadersReturningAuthenticationFailure]) {
 			[self attemptToApplyCredentialsAndResume];
@@ -1345,9 +1665,11 @@ static NSError *ASITooMuchRedirectionError;
 		return;
 	}
 	[progressLock lock];	
+	
 	[self setComplete:YES];
 	[self updateProgressIndicators];
 	
+	[[self cancelledLock] lock];
     if (readStream) {
         CFReadStreamClose(readStream);
         CFReadStreamSetClient(readStream, kCFStreamEventNone, NULL, NULL);
@@ -1397,7 +1719,9 @@ static NSError *ASITooMuchRedirectionError;
 			}
 		}
 	}
+	[[self cancelledLock] unlock];
 	[progressLock unlock];
+	
 	if (fileError) {
 		[self failWithError:fileError];
 	} else {
@@ -1450,6 +1774,24 @@ static NSError *ASITooMuchRedirectionError;
 		CFRetain(sessionAuthentication);
 	}
 }
+
++ (void)setSessionProxyCredentials:(NSMutableDictionary *)newCredentials
+{
+	[sessionProxyCredentials release];
+	sessionProxyCredentials = [newCredentials retain];
+}
+
++ (void)setSessionProxyAuthentication:(CFHTTPAuthenticationRef)newAuthentication
+{
+	if (sessionProxyAuthentication) {
+		CFRelease(sessionProxyAuthentication);
+	}
+	sessionProxyAuthentication = newAuthentication;
+	if (newAuthentication) {
+		CFRetain(sessionProxyAuthentication);
+	}
+}
+
 
 #pragma mark keychain storage
 
@@ -1535,8 +1877,7 @@ static NSError *ASITooMuchRedirectionError;
 	[ASIHTTPRequest setSessionCookies:nil];
 }
 
-
-#pragma mark gzip data handling
+#pragma mark gzip decompression
 
 //
 // Contributed by Shaun Harrison of Enormego, see: http://developers.enormego.com/view/asihttprequest_gzip
@@ -1589,24 +1930,29 @@ static NSError *ASITooMuchRedirectionError;
 	}
 }
 
-
+// NOTE: To debug this method, turn off Data Formatters in Xcode or you'll crash on closeFile
 + (int)uncompressZippedDataFromFile:(NSString *)sourcePath toFile:(NSString *)destinationPath
 {
-	// Get a FILE struct for the source file
-	FILE *source = fdopen([[NSFileHandle fileHandleForReadingAtPath:sourcePath] fileDescriptor], "r");
-	
 	// Create an empty file at the destination path
 	[[NSFileManager defaultManager] createFileAtPath:destinationPath contents:[NSData data] attributes:nil];
 	
+	// Get a FILE struct for the source file
+	NSFileHandle *inputFileHandle = [NSFileHandle fileHandleForReadingAtPath:sourcePath];
+	FILE *source = fdopen([inputFileHandle fileDescriptor], "r");
+	
 	// Get a FILE struct for the destination path
-	FILE *dest = fdopen([[NSFileHandle fileHandleForWritingAtPath:destinationPath] fileDescriptor], "w");
+	NSFileHandle *outputFileHandle = [NSFileHandle fileHandleForWritingAtPath:destinationPath];
+	FILE *dest = fdopen([outputFileHandle fileDescriptor], "w");
+	
 	
 	// Uncompress data in source and save in destination
 	int status = [ASIHTTPRequest uncompressZippedDataFromSource:source toDestination:dest];
 	
 	// Close the files
-	fclose(source);
 	fclose(dest);
+	fclose(source);
+	[inputFileHandle closeFile];
+	[outputFileHandle closeFile];	
 	return status;
 }
 
@@ -1615,6 +1961,7 @@ static NSError *ASITooMuchRedirectionError;
 //	http://www.zlib.net/zpipe.c
 //
 #define CHUNK 16384
+
 + (int)uncompressZippedDataFromSource:(FILE *)source toDestination:(FILE *)dest
 {
     int ret;
@@ -1673,9 +2020,212 @@ static NSError *ASITooMuchRedirectionError;
     return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
 }
 
+
+#pragma mark gzip compression
+
+// Based on this from Robbie Hanson: http://deusty.blogspot.com/2007/07/gzip-compressiondecompression.html
+
++ (NSData *)compressData:(NSData*)uncompressedData
+{
+	if ([uncompressedData length] == 0) return uncompressedData;
+	
+	z_stream strm;
+	
+	strm.zalloc = Z_NULL;
+	strm.zfree = Z_NULL;
+	strm.opaque = Z_NULL;
+	strm.total_out = 0;
+	strm.next_in=(Bytef *)[uncompressedData bytes];
+	strm.avail_in = [uncompressedData length];
+	
+	// Compresssion Levels:
+	//   Z_NO_COMPRESSION
+	//   Z_BEST_SPEED
+	//   Z_BEST_COMPRESSION
+	//   Z_DEFAULT_COMPRESSION
+	
+	if (deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, (15+16), 8, Z_DEFAULT_STRATEGY) != Z_OK) return nil;
+	
+	NSMutableData *compressed = [NSMutableData dataWithLength:16384];  // 16K chunks for expansion
+	
+	do {
+		
+		if (strm.total_out >= [compressed length])
+			[compressed increaseLengthBy: 16384];
+		
+		strm.next_out = [compressed mutableBytes] + strm.total_out;
+		strm.avail_out = [compressed length] - strm.total_out;
+		
+		deflate(&strm, Z_FINISH);  
+		
+	} while (strm.avail_out == 0);
+	
+	deflateEnd(&strm);
+	
+	[compressed setLength: strm.total_out];
+	return [NSData dataWithData:compressed];
+}
+
+// NOTE: To debug this method, turn off Data Formatters in Xcode or you'll crash on closeFile
++ (int)compressDataFromFile:(NSString *)sourcePath toFile:(NSString *)destinationPath
+{
+	// Create an empty file at the destination path
+	[[NSFileManager defaultManager] createFileAtPath:destinationPath contents:[NSData data] attributes:nil];
+	
+	// Get a FILE struct for the source file
+	NSFileHandle *inputFileHandle = [NSFileHandle fileHandleForReadingAtPath:sourcePath];
+	FILE *source = fdopen([inputFileHandle fileDescriptor], "r");
+
+	// Get a FILE struct for the destination path
+	NSFileHandle *outputFileHandle = [NSFileHandle fileHandleForWritingAtPath:destinationPath];
+	FILE *dest = fdopen([outputFileHandle fileDescriptor], "w");
+
+	// compress data in source and save in destination
+	int status = [ASIHTTPRequest compressDataFromSource:source toDestination:dest];
+
+	// Close the files
+	fclose(dest);
+	fclose(source);
+	
+	// We have to close both of these explictly because CFReadStreamCreateForStreamedHTTPRequest() seems to go bonkers otherwise
+	[inputFileHandle closeFile];
+	[outputFileHandle closeFile];
+
+	return status;
+}
+
+//
+// Also from the zlib sample code  at http://www.zlib.net/zpipe.c
+// 
++ (int)compressDataFromSource:(FILE *)source toDestination:(FILE *)dest
+{
+    int ret, flush;
+    unsigned have;
+    z_stream strm;
+    unsigned char in[CHUNK];
+    unsigned char out[CHUNK];
+	
+    /* allocate deflate state */
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    ret = deflateInit2(&strm, Z_DEFAULT_COMPRESSION, Z_DEFLATED, (15+16), 8, Z_DEFAULT_STRATEGY);
+    if (ret != Z_OK)
+        return ret;
+	
+    /* compress until end of file */
+    do {
+        strm.avail_in = fread(in, 1, CHUNK, source);
+        if (ferror(source)) {
+            (void)deflateEnd(&strm);
+            return Z_ERRNO;
+        }
+        flush = feof(source) ? Z_FINISH : Z_NO_FLUSH;
+        strm.next_in = in;
+		
+        /* run deflate() on input until output buffer not full, finish
+		 compression if all of source has been read in */
+        do {
+            strm.avail_out = CHUNK;
+            strm.next_out = out;
+            ret = deflate(&strm, flush);    /* no bad return value */
+            assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
+            have = CHUNK - strm.avail_out;
+            if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
+                (void)deflateEnd(&strm);
+                return Z_ERRNO;
+            }
+        } while (strm.avail_out == 0);
+        assert(strm.avail_in == 0);     /* all input will be used */
+		
+        /* done when last data in file processed */
+    } while (flush != Z_FINISH);
+    assert(ret == Z_STREAM_END);        /* stream will be complete */
+	
+    /* clean up and return */
+    (void)deflateEnd(&strm);
+    return Z_OK;
+}
+
+#pragma mark get user agent
+
++ (NSString *)defaultUserAgentString
+{
+	NSBundle *bundle = [NSBundle mainBundle];
+	
+	// Attempt to find a name for this application
+	NSString *appName = [bundle objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+	if (!appName) {
+		appName = [bundle objectForInfoDictionaryKey:@"CFBundleName"];	
+	}
+	// If we couldn't find one, we'll give up (and ASIHTTPRequest will use the standard CFNetwork user agent)
+	if (!appName) {
+		return nil;
+	}
+	NSString *appVersion = [bundle objectForInfoDictionaryKey:@"CFBundleVersion"];
+	NSString *deviceName;;
+	NSString *OSName;
+	NSString *OSVersion;
+	
+	NSString *locale = [[NSLocale currentLocale] localeIdentifier];
+	
+#if TARGET_OS_IPHONE
+	UIDevice *device = [UIDevice currentDevice];
+	deviceName = [device model];
+	OSName = [device systemName];
+	OSVersion = [device systemVersion];
+	
+#else
+	deviceName = @"Macintosh";
+	OSName = @"Mac OS X";
+	
+	// From http://www.cocoadev.com/index.pl?DeterminingOSVersion
+	// We won't bother to check for systems prior to 10.4, since ASIHTTPRequest only works on 10.5+
+    OSErr err;
+    SInt32 versionMajor, versionMinor, versionBugFix;
+	if ((err = Gestalt(gestaltSystemVersionMajor, &versionMajor)) != noErr) return nil;
+	if ((err = Gestalt(gestaltSystemVersionMinor, &versionMinor)) != noErr) return nil;
+	if ((err = Gestalt(gestaltSystemVersionBugFix, &versionBugFix)) != noErr) return nil;
+	OSVersion = [NSString stringWithFormat:@"%u.%u.%u", versionMajor, versionMinor, versionBugFix];
+	
+#endif
+	// Takes the form "My Application 1.0 (Macintosh; Mac OS X 10.5.7; en_GB)"
+	return [NSString stringWithFormat:@"%@ %@ (%@; %@ %@; %@)", appName, appVersion, deviceName, OSName, OSVersion, locale];
+}
+
+#pragma mark proxy autoconfiguration
+
+// Returns an array of proxies to use for a particular url, given the url of a PAC script
++ (NSArray *)proxiesForURL:(NSURL *)theURL fromPAC:(NSURL *)pacScriptURL
+{
+	// From: http://developer.apple.com/samplecode/CFProxySupportTool/listing1.html
+	// Work around <rdar://problem/5530166>.  This dummy call to 
+	// CFNetworkCopyProxiesForURL initialise some state within CFNetwork 
+	// that is required by CFNetworkCopyProxiesForAutoConfigurationScript.
+	(void) CFNetworkCopyProxiesForURL((CFURLRef)theURL, NULL);
+	
+	NSStringEncoding encoding;
+	NSError *err = nil;
+	NSString *script = [NSString stringWithContentsOfURL:pacScriptURL usedEncoding:&encoding error:&err];
+	if (err) {
+		return nil;
+	}
+	CFErrorRef err2 = NULL;
+	// Obtain the list of proxies by running the autoconfiguration script
+	NSArray *proxies = [(NSArray *)CFNetworkCopyProxiesForAutoConfigurationScript((CFStringRef)script,(CFURLRef)theURL, &err2) autorelease];
+	if (err2) {
+		return nil;
+	}
+	return proxies;
+}
+
+
 @synthesize username;
 @synthesize password;
 @synthesize domain;
+@synthesize proxyUsername;
+@synthesize proxyPassword;
+@synthesize proxyDomain;
 @synthesize url;
 @synthesize delegate;
 @synthesize queue;
@@ -1689,6 +2239,7 @@ static NSError *ASITooMuchRedirectionError;
 @synthesize didFinishSelector;
 @synthesize didFailSelector;
 @synthesize authenticationRealm;
+@synthesize proxyAuthenticationRealm;
 @synthesize error;
 @synthesize complete;
 @synthesize requestHeaders;
@@ -1702,6 +2253,7 @@ static NSError *ASITooMuchRedirectionError;
 @synthesize timeOutSeconds;
 @synthesize requestMethod;
 @synthesize postBody;
+@synthesize compressedPostBody;
 @synthesize contentLength;
 @synthesize partialDownloadSize;
 @synthesize postLength;
@@ -1717,6 +2269,7 @@ static NSError *ASITooMuchRedirectionError;
 @synthesize allowResumeForFileDownloads;
 @synthesize userInfo;
 @synthesize postBodyFilePath;
+@synthesize compressedPostBodyFilePath;
 @synthesize postBodyWriteStream;
 @synthesize postBodyReadStream;
 @synthesize shouldStreamPostDataFromDisk;
@@ -1728,9 +2281,18 @@ static NSError *ASITooMuchRedirectionError;
 @synthesize haveBuiltPostBody;
 @synthesize fileDownloadOutputStream;
 @synthesize authenticationRetryCount;
+@synthesize proxyAuthenticationRetryCount;
 @synthesize updatedProgress;
 @synthesize shouldRedirect;
 @synthesize validatesSecureCertificate;
 @synthesize needsRedirect;
 @synthesize redirectCount;
+@synthesize shouldCompressRequestBody;
+@synthesize authenticationLock;
+@synthesize needsProxyAuthentication;
+@synthesize proxyCredentials;
+
+@synthesize proxyHost;
+@synthesize proxyPort;
+@synthesize PACurl;
 @end

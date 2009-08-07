@@ -59,6 +59,11 @@ static double SECONDS_PER_MINUTE = 60.0;
 	[super dealloc];
 }
 
+-(void) touch
+{
+	now = [[NSDate alloc] init];
+}
+
 -(NSString*) formatInterval:(NSTimeInterval)time small:(NSString*)small singular:(NSString*)singular plural:(NSString*)plural
 {
 	NSNumber* num = [NSNumber numberWithDouble:time];
@@ -77,6 +82,9 @@ static double SECONDS_PER_MINUTE = 60.0;
 -(NSString*) format: (NSDate *)d
 {
 	NSTimeInterval difference = [now timeIntervalSinceDate: d];
+	if (difference <= 0) {
+		return @"now";
+	}
 
 	NSTimeInterval days = (difference / SECONDS_PER_DAY);
 	
