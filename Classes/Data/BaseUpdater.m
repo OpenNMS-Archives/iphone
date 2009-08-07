@@ -47,7 +47,7 @@
 		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self getBaseUrl], p]];
 	}
 #if DEBUG
-	NSLog(@"initialized using URL %@", url);
+	NSLog(@"%@: Initialized using URL: %@", self, url);
 #endif
 	return self;
 }
@@ -75,14 +75,18 @@
 -(void) update
 {
 #if DEBUG
-	NSLog(@"update called");
+	NSLog(@"%@: Update called.", self);
 #endif
 	NSURL* requestUrl = [url copy];
 	ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:requestUrl] autorelease];
 	if (!handler) {
 		handler = [[[UpdateHandler alloc] init] autorelease];
 	}
-	
+
+	request.timeOutSeconds = 10;
+	if ([[requestUrl scheme] isEqual:@"https"]) {
+		request.validatesSecureCertificate = NO;
+	}
 	request.delegate = handler;
 	request.didFinishSelector = @selector(requestDidFinish:);
 	request.didFailSelector = @selector(requestFailed:);

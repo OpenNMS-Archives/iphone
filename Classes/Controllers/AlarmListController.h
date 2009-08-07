@@ -36,6 +36,7 @@
 
 @interface AlarmListController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* alarmTable;
+	@private UIActivityIndicatorView* spinner;
 	@private FuzzyDate* fuzzyDate;
 	@private NSManagedObjectContext* managedObjectContext;
 
@@ -43,6 +44,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView* alarmTable;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 @property (nonatomic, retain) NSManagedObjectContext* managedObjectContext;
 

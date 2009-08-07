@@ -37,7 +37,17 @@
 
 @implementation UpdateHandler
 
-- (NSString *)cleanUpString:(NSString *)html
+@synthesize spinner;
+
+-(id) init
+{
+	if (self = [super init]) {
+		spinner = nil;
+	}
+	return self;
+}
+
+-(NSString *) cleanUpString:(NSString *)html
 {
 	
 	NSMutableString* string = [NSMutableString stringWithString:html];
@@ -51,14 +61,16 @@
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
 #if DEBUG
-	NSLog(@"UpdateHandler: request finished.");
+	NSLog(@"%@: Request finished.", self);
 #endif
+	[spinner stopAnimating];
 }
 
 -(void) requestFailed:(ASIHTTPRequest*) request
 {
 	NSError* error = [request error];
-	NSLog(@"UpdateHandler: request failed: %@", [error localizedDescription]);
+	NSLog(@"%@: Request failed: %@", self, [error localizedDescription]);
+	[spinner stopAnimating];
 }
 
 @end

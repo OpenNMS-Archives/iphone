@@ -46,6 +46,7 @@
 @synthesize alarmTable;
 @synthesize fuzzyDate;
 @synthesize managedObjectContext;
+@synthesize spinner;
 
 @synthesize alarmList;
 
@@ -54,6 +55,7 @@
 	[self.fuzzyDate release];
 	[self.alarmTable release];
 	[self.managedObjectContext release];
+	[self.spinner release];
 
 	[self.alarmList release];
 
@@ -62,14 +64,21 @@
 
 -(void) initializeData
 {
-	self.alarmList = [NSMutableArray array];
+	if (!self.alarmList) {
+		[spinner startAnimating];
+		self.alarmList = [NSMutableArray array];
+	}
+	[self.alarmTable reloadData];
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
-	updater.handler = [[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:self.alarmList];
+	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:self.alarmList] autorelease];
+	handler.spinner = spinner;
+	updater.handler = handler;
 	[updater update];
 }
 
 -(IBAction) reload:(id) sender
 {
+	[spinner startAnimating];
 	[self initializeData];
 }
 

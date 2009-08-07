@@ -58,6 +58,7 @@
 	NSError* error = nil;
 	CXMLDocument* document = [[[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error] autorelease];
 	if (!document) {
+		NSLog(@"response = %@", response);
 		if (error) {
 			NSLog(@"error, document not parsed (%@)", [error localizedDescription]);
 		} else {

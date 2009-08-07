@@ -34,7 +34,10 @@
 #import <Foundation/Foundation.h>
 
 @interface UpdateHandler : NSObject {
+	UIActivityIndicatorView* spinner;
 }
+
+@property (retain) UIActivityIndicatorView* spinner;
 
 - (NSString *)cleanUpString:(NSString *)html;
 -(void) requestDidFinish:(ASIHTTPRequest*) request;
