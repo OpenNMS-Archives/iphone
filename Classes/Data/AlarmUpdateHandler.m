@@ -59,11 +59,25 @@
 	CXMLDocument* document = [[[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error] autorelease];
 	if (!document) {
 		NSLog(@"response = %@", response);
+		NSString* title;
+		NSString* message;
 		if (error) {
-			NSLog(@"error, document not parsed (%@)", [error localizedDescription]);
+			title = [error localizedDescription];
+			message = [error localizedFailureReason];
 		} else {
-			NSLog(@"error, document not parsed");
+			title = @"XML Parse Error";
+			message = @"An error occurred parsing the document.";
 		}
+		
+		UIAlertView *errorAlert = [[UIAlertView alloc]
+			initWithTitle: title
+			message: message
+			delegate:self
+			cancelButtonTitle:@"OK"
+			otherButtonTitles:nil];
+		[errorAlert show];
+		[errorAlert autorelease];
+		
 		[self autorelease];
 		return;
 	}
@@ -163,8 +177,7 @@
 	}
 
 	error = nil;
-	[moc save:&error];
-	if (error) {
+	if (![moc save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}

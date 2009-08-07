@@ -71,6 +71,15 @@
 	NSError* error = [request error];
 	NSLog(@"%@: Request failed: %@", self, [error localizedDescription]);
 	[spinner stopAnimating];
+
+	UIAlertView *errorAlert = [[UIAlertView alloc]
+		initWithTitle: [error localizedDescription]
+		message: [error localizedFailureReason]
+		delegate:self
+		cancelButtonTitle:@"OK"
+		otherButtonTitles:nil];
+	[errorAlert show];
+	[errorAlert autorelease];
 }
 
 @end
