@@ -32,41 +32,15 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "FuzzyDate.h"
-#import "Alarm.h"
-#import "OnmsSeverity.h"
-#import "AlarmTableView.h"
 
-@interface AlarmDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private AlarmTableView* alarmTable;
+@class AlarmDetailController;
 
-	@private FuzzyDate* fuzzyDate;
-	@private UIFont* defaultFont;
-	@private UIColor* clear;
-	@private UIColor* white;
-
-	@private NSManagedObjectID* alarmObjectId;
-	@private Alarm* alarm;
-	@private OnmsSeverity* severity;
-	@private NSManagedObjectContext* managedObjectContext;
+@interface AlarmTableView : UITableView {
+	@private AlarmDetailController* alarmDetailController;
 }
 
-@property (nonatomic, retain) AlarmTableView* alarmTable;
+@property (retain) AlarmDetailController* alarmDetailController;
 
-@property (nonatomic, retain) FuzzyDate* fuzzyDate;
-@property (nonatomic, retain) UIFont* defaultFont;
-@property (nonatomic, retain) UIColor* clear;
-@property (nonatomic, retain) UIColor* white;
-
-@property (nonatomic, retain) NSManagedObjectID* alarmObjectId;
-@property (nonatomic, retain) Alarm* alarm;
-@property (nonatomic, retain) OnmsSeverity* severity;
-@property (nonatomic, retain) NSManagedObjectContext* managedObjectContext;
-
--(void) initializeData;
--(void) acknowledgeAlarm;
--(void) unacknowledgeAlarm;
--(void) escalateAlarm;
--(void) clearAlarm;
+-(void) reloadData;
 
 @end

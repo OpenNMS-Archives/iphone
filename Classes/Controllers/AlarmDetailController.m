@@ -56,9 +56,11 @@
 - (void) loadView
 {
 	[super loadView];
-	alarmTable = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
+	alarmTable = [[AlarmTableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
+	alarmTable.alarmDetailController = self;
 	alarmTable.delegate = self;
 	alarmTable.dataSource = self;
+	alarmTable.rowHeight = 34.0;
 	self.view = alarmTable;
 }
 
@@ -83,8 +85,6 @@
 			[self.severity release];
 		}
 		self.severity = [[OnmsSeverity alloc] initWithSeverity:self.alarm.severity];
-		
-//		[self.alarmTable reloadData];
 	} else {
 		if (error) {
 			NSLog(@"error retrieving object %@: %@", alarmObjectId, [error localizedDescription]);
@@ -110,7 +110,6 @@
 	[self.alarmObjectId release];
 	[self.alarm release];
 	[self.severity release];
-	[self.managedObjectContext release];
 	
 	[super dealloc];
 }
@@ -119,6 +118,8 @@
 {
 	[self initializeData];
 	[super viewWillAppear:animated];
+	
+	self.alarmTable.backgroundColor = [self.severity getDisplayColor];
 }
 
 - (void) viewDidLoad
@@ -147,6 +148,7 @@
 	[self.white release];
 
 	[self.alarmObjectId release];
+	[self.alarm release];
 
 	[super viewDidUnload];
 }
@@ -159,11 +161,6 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	if (self.alarm) {
-		self.alarmTable.backgroundColor = [self.severity getDisplayColor];
-		self.alarmTable.rowHeight = 34.0;
-	}
-
 	return 1;
 }
 

@@ -16,6 +16,7 @@
 		440B00861008C941005DB69C /* FuzzyDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 440B00851008C941005DB69C /* FuzzyDate.m */; };
 		44227C3E102B63F900D00033 /* TableUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44227C3D102B63F900D00033 /* TableUpdateHandler.m */; };
 		44227C4F102B6CD200D00033 /* AlarmUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44227C4E102B6CD200D00033 /* AlarmUpdateHandler.m */; };
+		44237785102CC73300D49DFA /* AlarmTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44237784102CC73300D49DFA /* AlarmTableView.m */; };
 		442434611024E7C200658DB1 /* AlarmDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442434601024E7C100658DB1 /* AlarmDetailController.m */; };
 		4425F1641018E572000DDDAE /* OnmsSnmpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */; };
 		44263CFC10112F4100717409 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF510112F4100717409 /* AboutViewController.m */; };
@@ -95,6 +96,8 @@
 		44227C3D102B63F900D00033 /* TableUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TableUpdateHandler.m; path = Data/TableUpdateHandler.m; sourceTree = "<group>"; };
 		44227C4D102B6CD200D00033 /* AlarmUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmUpdateHandler.h; path = Data/AlarmUpdateHandler.h; sourceTree = "<group>"; };
 		44227C4E102B6CD200D00033 /* AlarmUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmUpdateHandler.m; path = Data/AlarmUpdateHandler.m; sourceTree = "<group>"; };
+		44237783102CC73300D49DFA /* AlarmTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmTableView.h; path = Views/AlarmTableView.h; sourceTree = "<group>"; };
+		44237784102CC73300D49DFA /* AlarmTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmTableView.m; path = Views/AlarmTableView.m; sourceTree = "<group>"; };
 		4424345F1024E7C100658DB1 /* AlarmDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmDetailController.h; path = Controllers/AlarmDetailController.h; sourceTree = "<group>"; };
 		442434601024E7C100658DB1 /* AlarmDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmDetailController.m; path = Controllers/AlarmDetailController.m; sourceTree = "<group>"; };
 		4425F1621018E572000DDDAE /* OnmsSnmpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsSnmpInterface.h; path = Objects/OnmsSnmpInterface.h; sourceTree = "<group>"; };
@@ -172,8 +175,8 @@
 		44DEAF3A102A32E700634C2F /* UpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpdateHandler.h; path = Data/UpdateHandler.h; sourceTree = "<group>"; };
 		44DEAF3B102A32E700634C2F /* UpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpdateHandler.m; path = Data/UpdateHandler.m; sourceTree = "<group>"; };
 		44E2A161100E195100DD5A1D /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Resources/Images/opennms-headingbg.png"; sourceTree = "<group>"; };
-		44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColumnarTableViewCell.h; sourceTree = "<group>"; };
-		44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColumnarTableViewCell.m; sourceTree = "<group>"; };
+		44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColumnarTableViewCell.h; path = Views/ColumnarTableViewCell.h; sourceTree = "<group>"; };
+		44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColumnarTableViewCell.m; path = Views/ColumnarTableViewCell.m; sourceTree = "<group>"; };
 		44EEAF2A101A58D30023D5BD /* SnmpInterfaceParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterfaceParser.h; path = Parsers/SnmpInterfaceParser.h; sourceTree = "<group>"; };
 		44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceParser.m; path = Parsers/SnmpInterfaceParser.m; sourceTree = "<group>"; };
 		44EEAFAF101BA7340023D5BD /* NodeListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NodeListView.xib; path = Resources/Interfaces/NodeListView.xib; sourceTree = "<group>"; };
@@ -226,11 +229,10 @@
 			isa = PBXGroup;
 			children = (
 				44263CF310112F3300717409 /* Controllers */,
+				4423777A102CC70C00D49DFA /* Views */,
 				448148651029D00000083FF9 /* Data */,
 				44263D1310112F9700717409 /* Parsers */,
 				44263D0010112F5800717409 /* Objects */,
-				44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */,
-				44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */,
 				440B00841008C941005DB69C /* FuzzyDate.h */,
 				440B00851008C941005DB69C /* FuzzyDate.m */,
 				1D3623240D0F684500981E51 /* OpenNMSAppDelegate.h */,
@@ -299,6 +301,17 @@
 				288765070DF74369002DB57D /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4423777A102CC70C00D49DFA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */,
+				44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */,
+				44237783102CC73300D49DFA /* AlarmTableView.h */,
+				44237784102CC73300D49DFA /* AlarmTableView.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		44263CF310112F3300717409 /* Controllers */ = {
@@ -585,6 +598,7 @@
 				44227C4F102B6CD200D00033 /* AlarmUpdateHandler.m in Sources */,
 				448D5A32102B859B008416E3 /* Alarm.m in Sources */,
 				448D5AF8102BC9F5008416E3 /* AlarmUpdater.m in Sources */,
+				44237785102CC73300D49DFA /* AlarmTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
