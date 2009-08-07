@@ -40,7 +40,6 @@
 
 -(void) reloadData
 {
-	NSLog(@"reloadData called");
 	if (alarmDetailController) {
 		[alarmDetailController initializeData];
 		self.backgroundColor = [alarmDetailController.severity getDisplayColor];
