@@ -34,18 +34,22 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Alarm :  NSManagedObject  
+@interface Event :  NSManagedObject  
 {
 }
 
-@property (nonatomic, retain) NSNumber * alarmId;
+@property (nonatomic, retain) NSString * host;
 @property (nonatomic, retain) NSString * uei;
-@property (nonatomic, retain) NSNumber * count;
-@property (nonatomic, retain) NSDate * firstEventTime;
-@property (nonatomic, retain) NSDate * lastEventTime;
-@property (nonatomic, retain) NSDate * ackTime;
-@property (nonatomic, retain) NSNumber * ifIndex;
+@property (nonatomic, retain) NSString * eventDescription;
+@property (nonatomic, retain) NSNumber * nodeId;
+@property (nonatomic, retain) NSNumber * display;
 @property (nonatomic, retain) NSString * severity;
+@property (nonatomic, retain) NSString * eventHost;
+@property (nonatomic, retain) NSNumber * eventId;
+@property (nonatomic, retain) NSDate * createTime;
+@property (nonatomic, retain) NSNumber * log;
+@property (nonatomic, retain) NSString * source;
+@property (nonatomic, retain) NSDate * time;
 @property (nonatomic, retain) NSString * logMessage;
 
 @end

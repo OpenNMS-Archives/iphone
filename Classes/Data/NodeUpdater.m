@@ -31,24 +31,14 @@
  *
  *******************************************************************************/
 
-#import <CoreData/CoreData.h>
+#import "NodeUpdater.h"
 
+@implementation NodeUpdater
 
-@interface Alarm :  NSManagedObject  
+-(id) initWithNode:(NSNumber*) nodeId
 {
+	self = [super initWithPath:[NSString stringWithFormat:@"/nodes/%@", nodeId]];
+	return self;
 }
 
-@property (nonatomic, retain) NSNumber * alarmId;
-@property (nonatomic, retain) NSString * uei;
-@property (nonatomic, retain) NSNumber * count;
-@property (nonatomic, retain) NSDate * firstEventTime;
-@property (nonatomic, retain) NSDate * lastEventTime;
-@property (nonatomic, retain) NSDate * ackTime;
-@property (nonatomic, retain) NSNumber * ifIndex;
-@property (nonatomic, retain) NSString * severity;
-@property (nonatomic, retain) NSString * logMessage;
-
 @end
-
-
-

@@ -69,6 +69,7 @@
 		self.alarmList = [NSMutableArray array];
 	}
 	[self.alarmTable reloadData];
+
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
 	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:self.alarmList] autorelease];
 	handler.spinner = spinner;

@@ -31,24 +31,20 @@
  *
  *******************************************************************************/
 
-#import <CoreData/CoreData.h>
+#import "SnmpInterface.h"
 
+#import "Node.h"
 
-@interface Alarm :  NSManagedObject  
-{
-}
+@implementation SnmpInterface 
 
-@property (nonatomic, retain) NSNumber * alarmId;
-@property (nonatomic, retain) NSString * uei;
-@property (nonatomic, retain) NSNumber * count;
-@property (nonatomic, retain) NSDate * firstEventTime;
-@property (nonatomic, retain) NSDate * lastEventTime;
-@property (nonatomic, retain) NSDate * ackTime;
-@property (nonatomic, retain) NSNumber * ifIndex;
-@property (nonatomic, retain) NSString * severity;
-@property (nonatomic, retain) NSString * logMessage;
+@dynamic ifDescription;
+@dynamic ifStatus;
+@dynamic ipAddress;
+@dynamic ifSpeed;
+@dynamic interfaceId;
+@dynamic ifIndex;
+@dynamic collectFlag;
+@dynamic physAddr;
+@dynamic node;
 
 @end
-
-
-

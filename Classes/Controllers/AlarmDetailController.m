@@ -312,7 +312,9 @@
 
 - (void) doAck:(NSString*)action
 {
+#if DEBUG
 	NSLog(@"performing action %@ on alarm %@", action, alarm.alarmId);
+#endif
 	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
 	[agent acknowledgeAlarm:alarm.alarmId action:action];
 	[agent release];

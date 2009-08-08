@@ -42,7 +42,6 @@
 {
 	NSMutableString* string = [NSMutableString stringWithString:date];
 	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
-//	NSLog(@"filterDate: before = %@, after = %@", date, string);
 	return string;
 }
 
@@ -54,33 +53,7 @@
 	[dateFormatter setLenient:true];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
-	NSString* response = [request responseString];
-	NSError* error = nil;
-	CXMLDocument* document = [[[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error] autorelease];
-	if (!document) {
-		NSLog(@"response = %@", response);
-		NSString* title;
-		NSString* message;
-		if (error) {
-			title = [error localizedDescription];
-			message = [error localizedFailureReason];
-		} else {
-			title = @"XML Parse Error";
-			message = @"An error occurred parsing the document.";
-		}
-		
-		UIAlertView *errorAlert = [[UIAlertView alloc]
-			initWithTitle: title
-			message: message
-			delegate:self
-			cancelButtonTitle:@"OK"
-			otherButtonTitles:nil];
-		[errorAlert show];
-		[errorAlert autorelease];
-		
-		[self autorelease];
-		return;
-	}
+	CXMLDocument* document = [self getDocumentForRequest:request];
 
 	NSArray* xmlAlarms;
 	if ([[[document rootElement] name] isEqual:@"alarm"]) {
@@ -106,8 +79,10 @@
 				// ignore
 			} else if ([[attr name] isEqual:@"type"]) {
 				// ignore
+#if DEBUG
 			} else {
 				NSLog(@"unknown alarm attribute: %@", [attr name]);
+#endif
 			}
 		}
 
@@ -119,7 +94,7 @@
 		NSPredicate *alarmPredicate = [NSPredicate predicateWithFormat:@"alarmId == %@", alarmId];
 		[alarmRequest setPredicate:alarmPredicate];
 		
-		error = nil;
+		NSError* error = nil;
 		NSArray *alarmArray = [moc executeFetchRequest:alarmRequest error:&error];
 		if (!alarmArray || [alarmArray count] == 0) {
 			if (error) {
@@ -176,7 +151,7 @@
 		}
 	}
 
-	error = nil;
+	NSError* error = nil;
 	if (![moc save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];

@@ -58,6 +58,40 @@
 	return string;
 }
 
+-(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request
+{
+	NSString* response = [request responseString];
+	NSError* error = nil;
+	CXMLDocument* document = [[[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error] autorelease];
+	if (!document) {
+#if DEBUG
+		NSLog(@"response = %@", response);
+#endif
+		NSString* title;
+		NSString* message;
+		if (error) {
+			title = [error localizedDescription];
+			message = [error localizedFailureReason];
+		} else {
+			title = @"XML Parse Error";
+			message = @"An error occurred parsing the document.";
+		}
+		
+		UIAlertView *errorAlert = [[UIAlertView alloc]
+								   initWithTitle: title
+								   message: message
+								   delegate:self
+								   cancelButtonTitle:@"OK"
+								   otherButtonTitles:nil];
+		[errorAlert show];
+		[errorAlert autorelease];
+		
+		[self autorelease];
+		return nil;
+	}
+	return document;
+}
+
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
 #if DEBUG

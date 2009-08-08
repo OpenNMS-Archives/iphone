@@ -33,20 +33,20 @@
 
 #import <CoreData/CoreData.h>
 
+@class Node;
 
-@interface Alarm :  NSManagedObject  
+@interface IpInterface :  NSManagedObject  
 {
 }
 
-@property (nonatomic, retain) NSNumber * alarmId;
-@property (nonatomic, retain) NSString * uei;
-@property (nonatomic, retain) NSNumber * count;
-@property (nonatomic, retain) NSDate * firstEventTime;
-@property (nonatomic, retain) NSDate * lastEventTime;
-@property (nonatomic, retain) NSDate * ackTime;
+@property (nonatomic, retain) NSString * managedFlag;
+@property (nonatomic, retain) NSString * hostName;
+@property (nonatomic, retain) NSString * ipAddress;
+@property (nonatomic, retain) NSDate * lastCapsdPoll;
+@property (nonatomic, retain) NSNumber * interfaceId;
+@property (nonatomic, retain) NSString * snmpPrimaryFlag;
 @property (nonatomic, retain) NSNumber * ifIndex;
-@property (nonatomic, retain) NSString * severity;
-@property (nonatomic, retain) NSString * logMessage;
+@property (nonatomic, retain) Node * node;
 
 @end
 

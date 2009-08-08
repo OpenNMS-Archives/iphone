@@ -32,6 +32,8 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "ASIHTTPRequest.h"
+#import "CXMLDocument.h"
 
 @interface UpdateHandler : NSObject {
 	UIActivityIndicatorView* spinner;
@@ -39,8 +41,9 @@
 
 @property (retain) UIActivityIndicatorView* spinner;
 
-- (NSString *)cleanUpString:(NSString *)html;
--(void) requestDidFinish:(ASIHTTPRequest*) request;
--(void) requestFailed:(ASIHTTPRequest*) request;
+-(NSString *)    cleanUpString:(NSString *)html;
+-(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
+-(void)          requestDidFinish:(ASIHTTPRequest*) request;
+-(void)          requestFailed:(ASIHTTPRequest*) request;
 
 @end

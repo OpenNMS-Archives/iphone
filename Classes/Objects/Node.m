@@ -31,24 +31,12 @@
  *
  *******************************************************************************/
 
-#import <CoreData/CoreData.h>
+#import "Node.h"
 
 
-@interface Alarm :  NSManagedObject  
-{
-}
+@implementation Node 
 
-@property (nonatomic, retain) NSNumber * alarmId;
-@property (nonatomic, retain) NSString * uei;
-@property (nonatomic, retain) NSNumber * count;
-@property (nonatomic, retain) NSDate * firstEventTime;
-@property (nonatomic, retain) NSDate * lastEventTime;
-@property (nonatomic, retain) NSDate * ackTime;
-@property (nonatomic, retain) NSNumber * ifIndex;
-@property (nonatomic, retain) NSString * severity;
-@property (nonatomic, retain) NSString * logMessage;
+@dynamic nodeId;
+@dynamic label;
 
 @end
-
-
-

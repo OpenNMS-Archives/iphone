@@ -34,19 +34,18 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Alarm :  NSManagedObject  
+@interface Outage :  NSManagedObject  
 {
 }
 
-@property (nonatomic, retain) NSNumber * alarmId;
-@property (nonatomic, retain) NSString * uei;
-@property (nonatomic, retain) NSNumber * count;
-@property (nonatomic, retain) NSDate * firstEventTime;
-@property (nonatomic, retain) NSDate * lastEventTime;
-@property (nonatomic, retain) NSDate * ackTime;
-@property (nonatomic, retain) NSNumber * ifIndex;
-@property (nonatomic, retain) NSString * severity;
-@property (nonatomic, retain) NSString * logMessage;
+@property (nonatomic, retain) NSDate * ifRegainedService;
+@property (nonatomic, retain) NSString * serviceName;
+@property (nonatomic, retain) NSNumber * outageId;
+@property (nonatomic, retain) NSString * ipAddress;
+@property (nonatomic, retain) NSDate * ifLostService;
+@property (nonatomic, retain) NSNumber * serviceRegainedEventId;
+@property (nonatomic, retain) NSNumber * serviceLostEventId;
+@property (nonatomic, retain) NSNumber * nodeId;
 
 @end
 

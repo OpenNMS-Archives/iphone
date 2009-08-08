@@ -31,24 +31,37 @@
  *
  *******************************************************************************/
 
-#import <CoreData/CoreData.h>
+#import "NodeFactory.h"
+#import "OpenNMSAppDelegate.h"
 
+@implementation NodeFactory
 
-@interface Alarm :  NSManagedObject  
+static NodeFactory* nodeFactorySingleton = nil;
+static NSManagedObjectContext* managedObjectContext = nil;
+
++(void) initialize
 {
+	static BOOL initialized = NO;
+	if (!initialized)
+	{
+		initialized = YES;
+		nodeFactorySingleton = [[NodeFactory alloc] init];
+		managedObjectContext =  [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	}
 }
 
-@property (nonatomic, retain) NSNumber * alarmId;
-@property (nonatomic, retain) NSString * uei;
-@property (nonatomic, retain) NSNumber * count;
-@property (nonatomic, retain) NSDate * firstEventTime;
-@property (nonatomic, retain) NSDate * lastEventTime;
-@property (nonatomic, retain) NSDate * ackTime;
-@property (nonatomic, retain) NSNumber * ifIndex;
-@property (nonatomic, retain) NSString * severity;
-@property (nonatomic, retain) NSString * logMessage;
++(NodeFactory*) getInstance
+{
+	if (nodeFactorySingleton == nil) {
+		[NodeFactory initialize];
+	}
+	return nodeFactorySingleton;
+}
+
+-(Node*) getNode:(NSNumber*) nodeId
+{
+	
+	return nil;
+}
 
 @end
-
-
-

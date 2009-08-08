@@ -121,8 +121,10 @@
 	if (tableView == self.searchDisplayController.searchResultsTableView)
 	{
         node = [self.nodeList objectAtIndex:indexPath.row];
+#if DEBUG
     } else {
 		NSLog(@"tableview is not in search display controller");
+#endif
 	}
 	
 	cell.textLabel.text = node.label;

@@ -32,6 +32,9 @@
 		44263D2210112FA900717409 /* OutageParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D1D10112FA900717409 /* OutageParser.m */; };
 		44263D261011301500717409 /* OutageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D251011301500717409 /* OutageListController.m */; };
 		44263D2D1011309700717409 /* AlarmListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D2C1011309700717409 /* AlarmListController.m */; };
+		44644847102DE36A005697EF /* SnmpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 44644844102DE36A005697EF /* SnmpInterface.m */; };
+		44644848102DE36A005697EF /* IpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 44644846102DE36A005697EF /* IpInterface.m */; };
+		44644888102DE463005697EF /* NodeFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44644887102DE463005697EF /* NodeFactory.m */; };
 		44700FC31007D5D8006CE665 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */; };
 		44700FC41007D5D8006CE665 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAF1007D5D8006CE665 /* ASIHTTPRequest.m */; };
 		44700FC51007D5D8006CE665 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB11007D5D8006CE665 /* ASINetworkQueue.m */; };
@@ -46,7 +49,6 @@
 		447010011007DA78006CE665 /* ekg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FFF1007DA78006CE665 /* ekg.png */; };
 		447010201007F0D7006CE665 /* AlarmView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4470101E1007F0D7006CE665 /* AlarmView.xib */; };
 		447010211007F0D7006CE665 /* OutageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4470101F1007F0D7006CE665 /* OutageView.xib */; };
-		4481480A1029C1F300083FF9 /* OpenNMS.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 448148091029C1F300083FF9 /* OpenNMS.xcdatamodel */; };
 		448148561029CBDF00083FF9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448148551029CBDF00083FF9 /* CoreData.framework */; };
 		4481486B1029D25A00083FF9 /* BaseUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4481486A1029D25A00083FF9 /* BaseUpdater.m */; };
 		4481488E1029D41400083FF9 /* AlarmListUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4481488D1029D41400083FF9 /* AlarmListUpdater.m */; };
@@ -58,11 +60,18 @@
 		448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EEA98101E3A2600063B32 /* RegexKitLite.m */; };
 		448EEAA4101E3B7400063B32 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 448EEAA3101E3B7400063B32 /* libicucore.dylib */; };
 		44981CCB100EA9C3006BB193 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 44981CCA100EA9C3006BB193 /* Default.png */; };
+		44B8E1A3102DB0A9003DBB9B /* OutageListUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E1A2102DB0A9003DBB9B /* OutageListUpdater.m */; };
+		44B8E1DE102DB478003DBB9B /* Outage.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E1DB102DB478003DBB9B /* Outage.m */; };
+		44B8E1DF102DB478003DBB9B /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E1DD102DB478003DBB9B /* Event.m */; };
+		44B8E1E2102DB4E6003DBB9B /* OutageUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E1E1102DB4E6003DBB9B /* OutageUpdateHandler.m */; };
+		44B8E28D102DC168003DBB9B /* OpenNMS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E28A102DC168003DBB9B /* OpenNMS.xcdatamodeld */; };
 		44BBA448100CE84F001257CB /* question-mark-helvetica.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA447100CE84F001257CB /* question-mark-helvetica.png */; };
 		44BBA44A100CE90B001257CB /* o.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA449100CE90B001257CB /* o.png */; };
 		44C8E295100CD66400A29DA0 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E294100CD66400A29DA0 /* display.png */; };
 		44D023E6100F9CB0000C5EAA /* CXMLNode_XPathExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E653100F9901000B8A22 /* CXMLNode_XPathExtensions.m */; };
 		44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */; };
+		44DD4ABF102DDC50005B4F34 /* OpenNMS.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */; };
+		44DD4AC8102DDCAD005B4F34 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DD4AC7102DDCAD005B4F34 /* Node.m */; };
 		44DEAF3C102A32E700634C2F /* UpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DEAF3B102A32E700634C2F /* UpdateHandler.m */; };
 		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
 		44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */; };
@@ -128,6 +137,12 @@
 		44263D251011301500717409 /* OutageListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageListController.m; path = Controllers/OutageListController.m; sourceTree = "<group>"; };
 		44263D2B1011309700717409 /* AlarmListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmListController.h; path = Controllers/AlarmListController.h; sourceTree = "<group>"; };
 		44263D2C1011309700717409 /* AlarmListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmListController.m; path = Controllers/AlarmListController.m; sourceTree = "<group>"; };
+		44644843102DE36A005697EF /* SnmpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterface.h; path = Objects/SnmpInterface.h; sourceTree = "<group>"; };
+		44644844102DE36A005697EF /* SnmpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterface.m; path = Objects/SnmpInterface.m; sourceTree = "<group>"; };
+		44644845102DE36A005697EF /* IpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterface.h; path = Objects/IpInterface.h; sourceTree = "<group>"; };
+		44644846102DE36A005697EF /* IpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterface.m; path = Objects/IpInterface.m; sourceTree = "<group>"; };
+		44644886102DE463005697EF /* NodeFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeFactory.h; path = Data/NodeFactory.h; sourceTree = "<group>"; };
+		44644887102DE463005697EF /* NodeFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeFactory.m; path = Data/NodeFactory.m; sourceTree = "<group>"; };
 		44700FAC1007D5D8006CE665 /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIFormDataRequest.h; sourceTree = "<group>"; };
 		44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIFormDataRequest.m; sourceTree = "<group>"; };
 		44700FAE1007D5D8006CE665 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequest.h; sourceTree = "<group>"; };
@@ -147,7 +162,6 @@
 		44700FFF1007DA78006CE665 /* ekg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ekg.png; path = Resources/Images/ekg.png; sourceTree = "<group>"; };
 		4470101E1007F0D7006CE665 /* AlarmView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlarmView.xib; path = Resources/Interfaces/AlarmView.xib; sourceTree = "<group>"; };
 		4470101F1007F0D7006CE665 /* OutageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OutageView.xib; path = Resources/Interfaces/OutageView.xib; sourceTree = "<group>"; };
-		448148091029C1F300083FF9 /* OpenNMS.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; name = OpenNMS.xcdatamodel; path = Resources/OpenNMS.xcdatamodel; sourceTree = "<group>"; };
 		448148551029CBDF00083FF9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		448148691029D25A00083FF9 /* BaseUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseUpdater.h; path = Data/BaseUpdater.h; sourceTree = "<group>"; };
 		4481486A1029D25A00083FF9 /* BaseUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseUpdater.m; path = Data/BaseUpdater.m; sourceTree = "<group>"; };
@@ -166,11 +180,22 @@
 		448EEA98101E3A2600063B32 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = "External Classes/RegexKitLite/RegexKitLite.m"; sourceTree = "<group>"; };
 		448EEAA3101E3B7400063B32 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		44981CCA100EA9C3006BB193 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Images/Default.png; sourceTree = "<group>"; };
+		44B8E1A1102DB0A9003DBB9B /* OutageListUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutageListUpdater.h; path = Data/OutageListUpdater.h; sourceTree = "<group>"; };
+		44B8E1A2102DB0A9003DBB9B /* OutageListUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageListUpdater.m; path = Data/OutageListUpdater.m; sourceTree = "<group>"; };
+		44B8E1DA102DB478003DBB9B /* Outage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Outage.h; path = Objects/Outage.h; sourceTree = "<group>"; };
+		44B8E1DB102DB478003DBB9B /* Outage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Outage.m; path = Objects/Outage.m; sourceTree = "<group>"; };
+		44B8E1DC102DB478003DBB9B /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
+		44B8E1DD102DB478003DBB9B /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = Objects/Event.m; sourceTree = "<group>"; };
+		44B8E1E0102DB4E6003DBB9B /* OutageUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutageUpdateHandler.h; path = Data/OutageUpdateHandler.h; sourceTree = "<group>"; };
+		44B8E1E1102DB4E6003DBB9B /* OutageUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageUpdateHandler.m; path = Data/OutageUpdateHandler.m; sourceTree = "<group>"; };
 		44BBA447100CE84F001257CB /* question-mark-helvetica.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "question-mark-helvetica.png"; path = "Resources/Images/question-mark-helvetica.png"; sourceTree = "<group>"; };
 		44BBA449100CE90B001257CB /* o.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = o.png; path = Resources/Images/o.png; sourceTree = "<group>"; };
 		44C8E294100CD66400A29DA0 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = display.png; path = Resources/Images/display.png; sourceTree = "<group>"; };
 		44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsXMLElementAdditions.h; sourceTree = "<group>"; };
 		44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsXMLElementAdditions.m; sourceTree = "<group>"; };
+		44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenNMS.xcdatamodel; sourceTree = "<group>"; };
+		44DD4AC6102DDCAD005B4F34 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Node.h; path = Objects/Node.h; sourceTree = "<group>"; };
+		44DD4AC7102DDCAD005B4F34 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Node.m; path = Objects/Node.m; sourceTree = "<group>"; };
 		44DEAE411029E02300634C2F /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		44DEAF3A102A32E700634C2F /* UpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpdateHandler.h; path = Data/UpdateHandler.h; sourceTree = "<group>"; };
 		44DEAF3B102A32E700634C2F /* UpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpdateHandler.m; path = Data/UpdateHandler.m; sourceTree = "<group>"; };
@@ -284,11 +309,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				44B8E28A102DC168003DBB9B /* OpenNMS.xcdatamodeld */,
 				8D1107310486CEB800E47090 /* OpenNMS_Client-Info.plist */,
 				443DB6E01028F4B300785DE6 /* Images */,
 				443DB6DF1028F4A900785DE6 /* Interfaces */,
 				448AC2C410097B6700C2621C /* Settings.bundle */,
-				448148091029C1F300083FF9 /* OpenNMS.xcdatamodel */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -336,6 +361,16 @@
 		44263D0010112F5800717409 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				44644843102DE36A005697EF /* SnmpInterface.h */,
+				44644844102DE36A005697EF /* SnmpInterface.m */,
+				44644845102DE36A005697EF /* IpInterface.h */,
+				44644846102DE36A005697EF /* IpInterface.m */,
+				44DD4AC6102DDCAD005B4F34 /* Node.h */,
+				44DD4AC7102DDCAD005B4F34 /* Node.m */,
+				44B8E1DA102DB478003DBB9B /* Outage.h */,
+				44B8E1DB102DB478003DBB9B /* Outage.m */,
+				44B8E1DC102DB478003DBB9B /* Event.h */,
+				44B8E1DD102DB478003DBB9B /* Event.m */,
 				448D5A30102B859B008416E3 /* Alarm.h */,
 				448D5A31102B859B008416E3 /* Alarm.m */,
 				44263D1010112F7E00717409 /* ViewOutage.h */,
@@ -443,6 +478,12 @@
 				4481488D1029D41400083FF9 /* AlarmListUpdater.m */,
 				44227C4D102B6CD200D00033 /* AlarmUpdateHandler.h */,
 				44227C4E102B6CD200D00033 /* AlarmUpdateHandler.m */,
+				44B8E1A1102DB0A9003DBB9B /* OutageListUpdater.h */,
+				44B8E1A2102DB0A9003DBB9B /* OutageListUpdater.m */,
+				44B8E1E0102DB4E6003DBB9B /* OutageUpdateHandler.h */,
+				44B8E1E1102DB4E6003DBB9B /* OutageUpdateHandler.m */,
+				44644886102DE463005697EF /* NodeFactory.h */,
+				44644887102DE463005697EF /* NodeFactory.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -590,7 +631,6 @@
 				448EEA24101E30B800063B32 /* BaseParser.m in Sources */,
 				448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */,
 				442434611024E7C200658DB1 /* AlarmDetailController.m in Sources */,
-				4481480A1029C1F300083FF9 /* OpenNMS.xcdatamodel in Sources */,
 				4481486B1029D25A00083FF9 /* BaseUpdater.m in Sources */,
 				4481488E1029D41400083FF9 /* AlarmListUpdater.m in Sources */,
 				44DEAF3C102A32E700634C2F /* UpdateHandler.m in Sources */,
@@ -599,6 +639,16 @@
 				448D5A32102B859B008416E3 /* Alarm.m in Sources */,
 				448D5AF8102BC9F5008416E3 /* AlarmUpdater.m in Sources */,
 				44237785102CC73300D49DFA /* AlarmTableView.m in Sources */,
+				44B8E1A3102DB0A9003DBB9B /* OutageListUpdater.m in Sources */,
+				44B8E1DE102DB478003DBB9B /* Outage.m in Sources */,
+				44B8E1DF102DB478003DBB9B /* Event.m in Sources */,
+				44B8E1E2102DB4E6003DBB9B /* OutageUpdateHandler.m in Sources */,
+				44B8E28D102DC168003DBB9B /* OpenNMS.xcdatamodeld in Sources */,
+				44DD4ABF102DDC50005B4F34 /* OpenNMS.xcdatamodel in Sources */,
+				44DD4AC8102DDCAD005B4F34 /* Node.m in Sources */,
+				44644847102DE36A005697EF /* SnmpInterface.m in Sources */,
+				44644848102DE36A005697EF /* IpInterface.m in Sources */,
+				44644888102DE463005697EF /* NodeFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,6 +744,20 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		44B8E28A102DC168003DBB9B /* OpenNMS.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */,
+			);
+			currentVersion = 44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */;
+			name = OpenNMS.xcdatamodeld;
+			path = Resources/OpenNMS.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
 }

@@ -31,24 +31,19 @@
  *
  *******************************************************************************/
 
-#import <CoreData/CoreData.h>
+#import "IpInterface.h"
 
+#import "Node.h"
 
-@interface Alarm :  NSManagedObject  
-{
-}
+@implementation IpInterface 
 
-@property (nonatomic, retain) NSNumber * alarmId;
-@property (nonatomic, retain) NSString * uei;
-@property (nonatomic, retain) NSNumber * count;
-@property (nonatomic, retain) NSDate * firstEventTime;
-@property (nonatomic, retain) NSDate * lastEventTime;
-@property (nonatomic, retain) NSDate * ackTime;
-@property (nonatomic, retain) NSNumber * ifIndex;
-@property (nonatomic, retain) NSString * severity;
-@property (nonatomic, retain) NSString * logMessage;
+@dynamic managedFlag;
+@dynamic hostName;
+@dynamic ipAddress;
+@dynamic lastCapsdPoll;
+@dynamic interfaceId;
+@dynamic snmpPrimaryFlag;
+@dynamic ifIndex;
+@dynamic node;
 
 @end
-
-
-
