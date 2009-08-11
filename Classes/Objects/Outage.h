@@ -33,6 +33,7 @@
 
 #import <CoreData/CoreData.h>
 
+@class Node;
 
 @interface Outage :  NSManagedObject  
 {
@@ -44,8 +45,10 @@
 @property (nonatomic, retain) NSString * ipAddress;
 @property (nonatomic, retain) NSDate * ifLostService;
 @property (nonatomic, retain) NSNumber * serviceRegainedEventId;
-@property (nonatomic, retain) NSNumber * serviceLostEventId;
 @property (nonatomic, retain) NSNumber * nodeId;
+@property (nonatomic, retain) NSNumber * serviceLostEventId;
+@property (nonatomic, retain) NSDate * lastModified;
+@property (nonatomic, retain) Node * node;
 
 @end
 

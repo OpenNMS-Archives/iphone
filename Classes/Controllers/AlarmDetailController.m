@@ -318,7 +318,7 @@
 	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
 	[agent acknowledgeAlarm:alarm.alarmId action:action];
 	[agent release];
-	
+
 	AlarmUpdater* updater = [[[AlarmUpdater alloc] initWithAlarmId:alarm.alarmId] autorelease];
 	updater.handler = [[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:nil];
 	[updater update];

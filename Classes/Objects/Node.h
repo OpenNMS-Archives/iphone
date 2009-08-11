@@ -33,15 +33,39 @@
 
 #import <CoreData/CoreData.h>
 
+@class SnmpInterface;
+@class IpInterface;
+@class Outage;
 
 @interface Node :  NSManagedObject  
 {
 }
 
 @property (nonatomic, retain) NSNumber * nodeId;
+@property (nonatomic, retain) NSDate * lastModified;
 @property (nonatomic, retain) NSString * label;
+@property (nonatomic, retain) NSSet* snmpInterfaces;
+@property (nonatomic, retain) NSSet* ipInterfaces;
+@property (nonatomic, retain) NSSet* outages;
 
 @end
 
 
+@interface Node (CoreDataGeneratedAccessors)
+- (void)addSnmpInterfacesObject:(SnmpInterface *)value;
+- (void)removeSnmpInterfacesObject:(SnmpInterface *)value;
+- (void)addSnmpInterfaces:(NSSet *)value;
+- (void)removeSnmpInterfaces:(NSSet *)value;
+
+- (void)addIpInterfacesObject:(IpInterface *)value;
+- (void)removeIpInterfacesObject:(IpInterface *)value;
+- (void)addIpInterfaces:(NSSet *)value;
+- (void)removeIpInterfaces:(NSSet *)value;
+
+- (void)addOutagesObject:(Outage *)value;
+- (void)removeOutagesObject:(Outage *)value;
+- (void)addOutages:(NSSet *)value;
+- (void)removeOutages:(NSSet *)value;
+
+@end
 

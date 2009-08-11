@@ -33,6 +33,7 @@
 
 #import "BaseUpdater.h"
 #import "UpdateHandler.h"
+#import "RegexKitLite.h"
 
 @implementation BaseUpdater
 
@@ -60,16 +61,39 @@
 	[super dealloc];
 }
 
+-(NSString*) filterDate:(NSString*)date
+{
+	NSMutableString* string = [NSMutableString stringWithString:date];
+	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
+	return string;
+}
+
 -(NSString*) getBaseUrl
 {
-	return [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@",
-			[[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http",
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"],
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"],
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"],
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"],
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"]
-			];
+	NSString* https = [[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http";
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"];
+	NSString* password = [[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"];
+	NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"];
+	NSString* port = [[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"];
+	NSString* path = [[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"];
+	
+	if (username == nil) {
+		username = @"admin";
+	}
+	if (password == nil) {
+		password = @"admin";
+	}
+	if (host == nil) {
+		host = @"localhost";
+	}
+	if (port == nil) {
+		port = @"8980";
+	}
+	if (path == nil) {
+		path = @"/opennms/rest";
+	}
+
+	return [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@", https, username, password, host, port, path ];
 }
 
 -(void) update
@@ -83,7 +107,7 @@
 		handler = [[[UpdateHandler alloc] init] autorelease];
 	}
 
-	request.timeOutSeconds = 10;
+	request.timeOutSeconds = 5;
 	if ([[requestUrl scheme] isEqual:@"https"]) {
 		request.validatesSecureCertificate = NO;
 	}

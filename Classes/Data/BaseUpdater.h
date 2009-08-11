@@ -50,6 +50,7 @@
 
 -(id) initWithPath:(NSString*)p;
 
+-(NSString*) filterDate:(NSString*)date;
 -(NSString*) getBaseUrl;
 -(void) update;
 

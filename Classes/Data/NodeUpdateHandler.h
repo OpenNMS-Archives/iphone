@@ -31,27 +31,10 @@
  *
  *******************************************************************************/
 
-#import "OutageListUpdater.h"
+#import <Foundation/Foundation.h>
+#import "TableUpdateHandler.h"
 
-@implementation OutageListUpdater
-
--(id) init
-{
-	self = [super initWithPath:[NSString stringWithFormat:@"/outages?limit=%d&orderBy=ifLostService&order=desc&ifRegainedService=null", GET_LIMIT]];
-	return self;
-}
-
--(id) initWithOutage:(NSNumber*)outageId
-{
-	self = [super initWithPath:[NSString stringWithFormat:@"/outages/%@", outageId]];
-	return self;
-}
-
-
--(id) initWithNode:(NSNumber*)nodeId
-{
-	self = [super initWithPath:[NSString stringWithFormat:@"/outages/forNode/%@?limit=%d&orderBy=ifLostService&order=desc", nodeId, GET_LIMIT]];
-	return self;
+@interface NodeUpdateHandler : TableUpdateHandler {
 }
 
 @end

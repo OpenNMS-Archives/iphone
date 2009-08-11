@@ -33,6 +33,7 @@
 
 #import "Outage.h"
 
+#import "Node.h"
 
 @implementation Outage 
 
@@ -42,7 +43,9 @@
 @dynamic ipAddress;
 @dynamic ifLostService;
 @dynamic serviceRegainedEventId;
-@dynamic serviceLostEventId;
 @dynamic nodeId;
+@dynamic serviceLostEventId;
+@dynamic lastModified;
+@dynamic node;
 
 @end

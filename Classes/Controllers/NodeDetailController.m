@@ -39,11 +39,15 @@
 #import "OpenNMSRestAgent.h"
 #import "OnmsEvent.h"
 #import "OnmsSeverity.h"
+#import "NodeFactory.h"
+#import "OutageFactory.h"
+#import "OpenNMSAppDelegate.h"
 
 @implementation NodeDetailController
 
 @synthesize nodeTable;
 @synthesize fuzzyDate;
+@synthesize managedObjectContext;
 
 @synthesize nodeId;
 @synthesize sections;
@@ -64,20 +68,28 @@
 
 - (void) initializeData
 {
-	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
+	if (!managedObjectContext) {
+		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	}
+
+	self.sections = [NSMutableArray array];
+
+	NodeFactory* nodeFactory = [NodeFactory getInstance];
+	self.node = [nodeFactory getNode:nodeId];
 
 	self.title = self.node.label;
 	self.nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
 	self.nodeTable.rowHeight = 34.0;
-	
-	self.sections = [NSMutableArray array];
-	self.node = [agent getNode:nodeId];
-	
-	self.outages = [agent getViewOutages:nodeId distinct:NO mini:YES];
+
+//	OutageFactory* outageFactory = [OutageFactory getInstance];
+//	self.outages = [outageFactory getOutagesForNode:nodeId];
+	NSSortDescriptor* descriptor = [[[NSSortDescriptor alloc] initWithKey:@"ifLostService" ascending:NO selector:@selector(compare:)] autorelease];
+	self.outages = [[node.outages allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
 	if ([self.outages count] > 0) {
 		[self.sections addObject:@"Recent Outages"];
 	}
-	
+
+	/*
 	self.interfaces = [agent getIpInterfaces:nodeId];
 	if ([self.interfaces count] > 0) {
 		[self.sections addObject:@"IP Interfaces"];
@@ -92,8 +104,8 @@
 	if ([self.events count] > 0) {
 		[self.sections addObject:@"Recent Events"];
 	}
+	 */
 
-	[agent release];
 	[self.nodeTable reloadData];
 }
 
@@ -103,6 +115,7 @@
 -(void) dealloc
 {
 	[self.nodeTable release];
+	[self.managedObjectContext release];
 	
 	[self.nodeId release];
 	[self.node release];
@@ -211,7 +224,7 @@
 	
 	if (sectionName == @"Recent Outages") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		ViewOutage* outage = [self.outages objectAtIndex:indexPath.row];
+		Outage* outage = [self.outages objectAtIndex:indexPath.row];
 
 		// IP Address
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 115.0, tableView.rowHeight)] autorelease];
@@ -229,11 +242,14 @@
 		[cell addColumn:outage.serviceName];
 		[cell.contentView addSubview:label];
 
+		NSString* regained = [fuzzyDate format:outage.ifRegainedService];
+		NSString* lost = [fuzzyDate format:outage.ifLostService];
+
 		// Up/Down
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(202.0, 0, 45.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
-		if (outage.serviceRegainedDate != nil) {
+		if (regained != nil) {
 			label.text = @"Regained";
 			[cell addColumn:@"Regained"];
 		} else {
@@ -246,12 +262,12 @@
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(247.0, 0, 50.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
-		if (outage.serviceRegainedDate != nil) {
-			label.text = outage.serviceRegainedDate;
-			[cell addColumn:outage.serviceRegainedDate];
+		if (regained != nil) {
+			label.text = regained;
+			[cell addColumn:regained];
 		} else {
-			label.text = outage.serviceLostDate;
-			[cell addColumn:outage.serviceLostDate];
+			label.text = lost;
+			[cell addColumn:lost];
 		}
 		[cell.contentView addSubview:label];
 		

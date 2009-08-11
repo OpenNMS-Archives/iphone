@@ -33,15 +33,16 @@
 
 #import <UIKit/UIKit.h>
 #import "FuzzyDate.h"
-#import "OnmsNode.h"
+#import "Node.h"
 
 @interface NodeDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* nodeTable;
 	@private FuzzyDate* fuzzyDate;
+	@private NSManagedObjectContext* managedObjectContext;
 
-	@private NSNumber* nodeId;
 	@private NSMutableArray* sections;
-	@private OnmsNode* node;
+	@private NSNumber* nodeId;
+	@private Node* node;
 	@private NSArray* outages;
 	@private NSArray* interfaces;
 	@private NSArray* snmpInterfaces;
@@ -49,12 +50,13 @@
 
 }
 
-@property (nonatomic, retain) IBOutlet UITableView* nodeTable;
+@property (retain) IBOutlet UITableView* nodeTable;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
+@property (retain) NSManagedObjectContext* managedObjectContext;
 
-@property (nonatomic, retain) NSNumber* nodeId;
 @property (nonatomic, retain) NSMutableArray* sections;
-@property (nonatomic, retain) OnmsNode* node;
+@property (retain) NSNumber* nodeId;
+@property (retain) Node* node;
 @property (nonatomic, retain) NSArray* outages;
 @property (nonatomic, retain) NSArray* interfaces;
 @property (nonatomic, retain) NSArray* snmpInterfaces;

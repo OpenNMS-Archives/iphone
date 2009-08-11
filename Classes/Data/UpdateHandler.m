@@ -38,18 +38,28 @@
 @implementation UpdateHandler
 
 @synthesize spinner;
+@synthesize stateLock;
 
 -(id) init
 {
 	if (self = [super init]) {
 		spinner = nil;
+		stateLock = nil;
 	}
 	return self;
 }
 
+-(void) dealloc
+{
+	[spinner release];
+	[stateLock release];
+
+	[super dealloc];
+}
+
+
 -(NSString *) cleanUpString:(NSString *)html
 {
-	
 	NSMutableString* string = [NSMutableString stringWithString:html];
 	
 	[string replaceOccurrencesOfRegex:@"^\\s*(.*?)\\s*$" withString:@"$1"];
@@ -58,15 +68,27 @@
 	return string;
 }
 
+-(NSString*) stringForDate:(NSString*)date
+{
+	NSMutableString* string = [NSMutableString stringWithString:date];
+	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
+	return string;
+}
+
+
 -(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request
 {
 	NSString* response = [request responseString];
+#if DEBUG
+	NSLog(@"response = %@", response);
+#endif
+	if (!response || [response isEqual:@""]) {
+		return nil;
+	}
+
 	NSError* error = nil;
 	CXMLDocument* document = [[[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error] autorelease];
 	if (!document) {
-#if DEBUG
-		NSLog(@"response = %@", response);
-#endif
 		NSString* title;
 		NSString* message;
 		if (error) {
@@ -97,11 +119,14 @@
 #if DEBUG
 	NSLog(@"%@: Request finished.", self);
 #endif
+	[stateLock lock];
 	[spinner stopAnimating];
+	[stateLock unlock];
 }
 
 -(void) requestFailed:(ASIHTTPRequest*) request
 {
+	[stateLock lock];
 	NSError* error = [request error];
 	NSLog(@"%@: Request failed: %@", self, [error localizedDescription]);
 	[spinner stopAnimating];
@@ -114,6 +139,7 @@
 		otherButtonTitles:nil];
 	[errorAlert show];
 	[errorAlert autorelease];
+	[stateLock unlock];
 }
 
 @end

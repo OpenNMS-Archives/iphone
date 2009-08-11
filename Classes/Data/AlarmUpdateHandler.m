@@ -38,23 +38,23 @@
 
 @implementation AlarmUpdateHandler
 
--(NSString*) filterDate:(NSString*)date
-{
-	NSMutableString* string = [NSMutableString stringWithString:date];
-	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
-	return string;
-}
-
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
-	NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
-	
+	[stateLock lock];
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
 	CXMLDocument* document = [self getDocumentForRequest:request];
 
+	if (!document) {
+		[stateLock unlock];
+		[dateFormatter release];
+		[super requestDidFinish:request];
+		[self autorelease];
+		return;
+	}
+	
 	NSArray* xmlAlarms;
 	if ([[[document rootElement] name] isEqual:@"alarm"]) {
 		xmlAlarms = [NSArray arrayWithObject:[document rootElement]];
@@ -86,8 +86,10 @@
 			}
 		}
 
-		NSFetchRequest *alarmRequest = [[[NSFetchRequest alloc] init] autorelease];
+		NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 
+		NSFetchRequest *alarmRequest = [[[NSFetchRequest alloc] init] autorelease];
+		
 		NSEntityDescription *alarmEntity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:moc];
 		[alarmRequest setEntity:alarmEntity];
 		
@@ -129,7 +131,7 @@
 		// First Event Time
 		CXMLElement *ftElement = [xmlAlarm elementForName:@"firstEventTime"];
 		if (ftElement) {
-			alarm.firstEventTime = [dateFormatter dateFromString:[self filterDate:[[ftElement childAtIndex:0] stringValue]]];
+			alarm.firstEventTime = [dateFormatter dateFromString:[self stringForDate:[[ftElement childAtIndex:0] stringValue]]];
 		} else {
 			alarm.firstEventTime = nil;
 		}
@@ -137,7 +139,7 @@
 		// Last Event Time
 		CXMLElement *ltElement = [xmlAlarm elementForName:@"lastEventTime"];
 		if (ltElement) {
-			alarm.lastEventTime = [dateFormatter dateFromString:[self filterDate:[[ltElement childAtIndex:0] stringValue]]];
+			alarm.lastEventTime = [dateFormatter dateFromString:[self stringForDate:[[ltElement childAtIndex:0] stringValue]]];
 		} else {
 			alarm.lastEventTime = nil;
 		}
@@ -145,31 +147,35 @@
 		// Ack Time
 		CXMLElement *ackElement = [xmlAlarm elementForName:@"ackTime"];
 		if (ackElement) {
-			alarm.ackTime = [dateFormatter dateFromString:[self filterDate:[[ackElement childAtIndex:0] stringValue]]];
+			alarm.ackTime = [dateFormatter dateFromString:[self stringForDate:[[ackElement childAtIndex:0] stringValue]]];
 		} else {
 			alarm.ackTime = nil;
 		}
 	}
 
+	/*
 	NSError* error = nil;
+	NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 	if (![moc save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
+	 */
 
 	if (self.objectList) {
+		NSManagedObjectContext *context = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
 		[req setResultType:NSManagedObjectIDResultType];
 
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:moc];
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
 		[req setEntity:entity];
 
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
 		[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 		[sortDescriptor release];
 
-		error = nil;
-		NSArray *array = [moc executeFetchRequest:req error:&error];
+		NSError* error = nil;
+		NSArray *array = [context executeFetchRequest:req error:&error];
 		if (array == nil) {
 			if (error) {
 				NSLog(@"error fetching alarms: %@", [error localizedDescription]);
@@ -183,6 +189,7 @@
 	}
 
 	[dateFormatter release];
+	[stateLock unlock];
 	[super requestDidFinish:request];
 	[self autorelease];
 }

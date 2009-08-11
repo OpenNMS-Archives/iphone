@@ -35,7 +35,13 @@
 #import "Node.h"
 
 @interface NodeFactory : NSObject {
+	NSFetchRequest* request;
 }
+
+@property (retain) NSFetchRequest* request;
+
++(void) initialize;
++(NodeFactory*) getInstance;
 
 -(Node*) getNode:(NSNumber*) nodeId;
 

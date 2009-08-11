@@ -33,10 +33,17 @@
 
 #import "Node.h"
 
+#import "SnmpInterface.h"
+#import "IpInterface.h"
+#import "Outage.h"
 
 @implementation Node 
 
 @dynamic nodeId;
+@dynamic lastModified;
 @dynamic label;
+@dynamic snmpInterfaces;
+@dynamic ipInterfaces;
+@dynamic outages;
 
 @end

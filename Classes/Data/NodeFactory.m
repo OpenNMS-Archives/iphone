@@ -34,10 +34,20 @@
 #import "NodeFactory.h"
 #import "OpenNMSAppDelegate.h"
 
+#import "NodeUpdater.h"
+#import "NodeUpdateHandler.h"
+
+#import "OutageFactory.h"
+
 @implementation NodeFactory
+
+@synthesize request;
 
 static NodeFactory* nodeFactorySingleton = nil;
 static NSManagedObjectContext* managedObjectContext = nil;
+
+// 2 weeks
+#define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
 
 +(void) initialize
 {
@@ -58,10 +68,61 @@ static NSManagedObjectContext* managedObjectContext = nil;
 	return nodeFactorySingleton;
 }
 
+-(void) dealloc
+{
+	[request release];
+	
+	[super dealloc];
+}
+
+-(Node*) getCoreDataNode:(NSNumber*) nodeId
+{
+	if (!request) {
+		request = [[NSFetchRequest alloc] init];
+
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:managedObjectContext];
+		[request setEntity:entity];
+		
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"nodeId == %@", nodeId];
+		[request setPredicate:predicate];
+	}
+	
+	NSError* error = nil;
+	NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+	if (!results || [results count] == 0) {
+		if (error) {
+			NSLog(@"error fetching node for ID %@: %@", nodeId, [error localizedDescription]);
+			[error release];
+		}
+		return nil;
+	} else {
+		return (Node*)[results objectAtIndex:0];
+	}
+}
+
 -(Node*) getNode:(NSNumber*) nodeId
 {
-	
-	return nil;
+	Node* node = [self getCoreDataNode:nodeId];
+
+	if (DEBUG == 1 || !node || ([node.lastModified timeIntervalSinceNow] > CUTOFF)) {
+#if DEBUG
+		NSLog(@"node %@ not found, or last modified out of date", nodeId);
+#endif
+		NSRecursiveLock* stateLock = [[NSRecursiveLock alloc] init];
+
+		NodeUpdater* nodeUpdater = [[NodeUpdater alloc] initWithNode:nodeId];
+		NodeUpdateHandler* nodeHandler = [[NodeUpdateHandler alloc] init];
+		nodeHandler.stateLock = stateLock;
+		nodeUpdater.handler = nodeHandler;
+
+		[stateLock lock];
+		[nodeUpdater update];
+		[stateLock unlock];
+		
+		[nodeUpdater release];
+	}
+
+	return node;
 }
 
 @end

@@ -38,6 +38,7 @@
 #import "OutageUpdateHandler.h"
 #import "OpenNMSAppDelegate.h"
 #import "Outage.h"
+#import "OutageFactory.h"
 
 @implementation OutageListController
 
@@ -91,6 +92,7 @@
 	
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	[self initializeData];
+
 	[super viewDidLoad];
 }
 
@@ -125,14 +127,20 @@
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	if ([self.outageList count] > 0) {
-		/* FIXME
 		Outage* outage = [self.outageList objectAtIndex:indexPath.row];
-		NodeDetailController* ndc = [[NodeDetailController alloc] init];
-		[ndc setNodeId:outage.nodeId];
-		UINavigationController* cont = [self navigationController];
-		[cont pushViewController:ndc animated:YES];
-		[ndc release];
-		 */
+		NSLog(@"viewing outage %@", [outage objectID]);
+		if (outage) {
+			[managedObjectContext refreshObject:outage mergeChanges:YES];
+			outage = (Outage*)[managedObjectContext objectWithID:[outage objectID]];
+			NSLog(@"outage = %@");
+			NodeDetailController* ndc = [[NodeDetailController alloc] init];
+			ndc.nodeId = outage.nodeId;
+			UINavigationController* cont = [self navigationController];
+			[cont pushViewController:ndc animated:YES];
+			[ndc release];
+		} else {
+			NSLog(@"warning, no outage object at row %d", indexPath.row);
+		}
 	}
 }
 
@@ -148,18 +156,25 @@
 	
 		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
 		Outage* outage = [[self.outageList objectAtIndex:indexPath.row] retain];
-		[cell addColumn:outage.ipAddress];
-		label.font = [UIFont boldSystemFontOfSize:12];
-		label.text = outage.ipAddress;
-		[cell.contentView addSubview:label];
+		
+		if (outage) {
+			NSString* nodeLabel = outage.ipAddress;
+			if (outage.node != nil) {
+				nodeLabel = outage.node.label;
+			}
+			[cell addColumn:nodeLabel];
+			label.font = [UIFont boldSystemFontOfSize:12];
+			label.text = nodeLabel;
+			[cell.contentView addSubview:label];
 
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
-		NSString* date = [fuzzyDate format:outage.ifLostService];
-		[cell addColumn:date];
-		label.font = [UIFont boldSystemFontOfSize:12];
-		label.text = date;
-		[cell.contentView addSubview:label];
-		[outage release];
+			label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
+			NSString* date = [fuzzyDate format:outage.ifLostService];
+			[cell addColumn:date];
+			label.font = [UIFont boldSystemFontOfSize:12];
+			label.text = date;
+			[cell.contentView addSubview:label];
+			[outage release];
+		}
 	}
 
 	return cell;

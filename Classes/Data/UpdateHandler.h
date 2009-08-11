@@ -37,11 +37,14 @@
 
 @interface UpdateHandler : NSObject {
 	UIActivityIndicatorView* spinner;
+	NSRecursiveLock* stateLock;
 }
 
 @property (retain) UIActivityIndicatorView* spinner;
+@property (retain) NSRecursiveLock* stateLock;
 
 -(NSString *)    cleanUpString:(NSString *)html;
+-(NSString*)     stringForDate:(NSString*)date;
 -(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
 -(void)          requestDidFinish:(ASIHTTPRequest*) request;
 -(void)          requestFailed:(ASIHTTPRequest*) request;

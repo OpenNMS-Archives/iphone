@@ -51,17 +51,17 @@
 	@private NSManagedObjectContext* managedObjectContext;
 }
 
-@property (nonatomic, retain) AlarmTableView* alarmTable;
+@property (retain) AlarmTableView* alarmTable;
 
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 @property (nonatomic, retain) UIFont* defaultFont;
 @property (nonatomic, retain) UIColor* clear;
 @property (nonatomic, retain) UIColor* white;
 
-@property (nonatomic, retain) NSManagedObjectID* alarmObjectId;
-@property (nonatomic, retain) Alarm* alarm;
+@property (retain) NSManagedObjectID* alarmObjectId;
+@property (retain) Alarm* alarm;
 @property (nonatomic, retain) OnmsSeverity* severity;
-@property (nonatomic, retain) NSManagedObjectContext* managedObjectContext;
+@property (retain) NSManagedObjectContext* managedObjectContext;
 
 -(void) initializeData;
 -(void) acknowledgeAlarm;

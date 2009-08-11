@@ -35,6 +35,9 @@
 #import "TableUpdateHandler.h"
 
 @interface OutageUpdateHandler : TableUpdateHandler {
+	@private NSNumber* nodeId;
 }
+
+@property (retain) NSNumber* nodeId;
 
 @end

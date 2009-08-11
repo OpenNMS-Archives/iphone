@@ -35,25 +35,44 @@
 #import "OpenNMSAppDelegate.h"
 #import "Outage.h"
 #import "RegexKitLite.h"
+#import "Node.h"
+#import "NodeFactory.h"
+#import "config.h"
 
 @implementation OutageUpdateHandler
 
--(NSString*) filterDate:(NSString*)date
+@synthesize nodeId;
+
+-(void) dealloc
 {
-	NSMutableString* string = [NSMutableString stringWithString:date];
-	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
-	return string;
+	[nodeId release];
+	[super dealloc];
 }
 
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
-	NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	[stateLock lock];
 	
+	Node *node;
+	if (nodeId) {
+		NSLog(@"nodeId is set: %@", nodeId);
+		NodeFactory* nodeFactory = [NodeFactory getInstance];
+		node = [nodeFactory getNode:nodeId];
+	}
+
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
 	CXMLDocument* document = [self getDocumentForRequest:request];
+
+	if (!document) {
+		[stateLock unlock];
+		[dateFormatter release];
+		[super requestDidFinish:request];
+		[self autorelease];
+		return;
+	}
 
 	NSArray* xmlOutages;
 	if ([[[document rootElement] name] isEqual:@"outage"]) {
@@ -72,6 +91,8 @@
 				outageId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
 			}
 		}
+
+		NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 
 		NSFetchRequest *outageRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
@@ -94,6 +115,7 @@
 		}
 		
 		outage.outageId = outageId;
+		outage.lastModified = [NSDate date];
 
 		// Service Name
 		outage.serviceName = nil;
@@ -156,30 +178,37 @@
 				}
 			}
 		}
+
+		if (nodeId) {
+			[outage setNode:node];
+		}
 #if DEBUG
 		NSLog(@"outage = %@", outage);
 #endif
 	}
 
+	/*
 	NSError* error = nil;
+	NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 	if (![moc save:&error]) {
-		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
-		[error release];
+		NSLog(@"an error occurred saving the managed object context: %@ (%@)", [error localizedDescription], [error localizedFailureReason]);
 	}
+	 */
 
 	if (self.objectList) {
-		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
-//		[req setResultType:NSManagedObjectIDResultType];
+		NSManagedObjectContext *context = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:moc];
+		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
+
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
 		[req setEntity:entity];
 
 		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"ifLostService" ascending:NO];
 		[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 		[sortDescriptor release];
 
-		error = nil;
-		NSArray *array = [moc executeFetchRequest:req error:&error];
+		NSError* error = nil;
+		NSArray *array = [context executeFetchRequest:req error:&error];
 		if (array == nil) {
 			if (error) {
 				NSLog(@"error fetching outages: %@", [error localizedDescription]);
@@ -196,6 +225,7 @@
 				if (![nodeIds containsObject:outage.nodeId]) {
 					[nodeIds addObject:outage.nodeId];
 					[outages insertObject:outage atIndex:0];
+					[context refreshObject:outage mergeChanges:YES];
 				}
 			}
 			[nodeIds release];
@@ -204,6 +234,7 @@
 		}
 	}
 
+	[stateLock unlock];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];

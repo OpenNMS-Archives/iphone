@@ -46,11 +46,11 @@
 	@private NSArray* outageList;
 }
 
-@property (nonatomic, retain) IBOutlet UITableView* outageTable;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
-@property (nonatomic, retain) FuzzyDate* fuzzyDate;
-@property (nonatomic, retain) NSManagedObjectContext* managedObjectContext;
-@property (nonatomic, retain) NSArray* outageList;
+@property (retain) IBOutlet UITableView* outageTable;
+@property (retain) IBOutlet UIActivityIndicatorView* spinner;
+@property (retain) FuzzyDate* fuzzyDate;
+@property (retain) NSManagedObjectContext* managedObjectContext;
+@property (retain) NSArray* outageList;
 
 - (IBAction) reload:(id) sender;
 

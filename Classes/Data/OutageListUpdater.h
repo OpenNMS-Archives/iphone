@@ -37,4 +37,7 @@
 @interface OutageListUpdater : BaseUpdater {
 }
 
+-(id) initWithOutage:(NSNumber*)outageId;
+-(id) initWithNode:(NSNumber*)nodeId;
+
 @end

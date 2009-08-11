@@ -81,6 +81,10 @@ static double SECONDS_PER_MINUTE = 60.0;
 
 -(NSString*) format: (NSDate *)d
 {
+	if (d == nil) {
+		return nil;
+	}
+
 	NSTimeInterval difference = [now timeIntervalSinceDate: d];
 	if (difference <= 0) {
 		return @"now";

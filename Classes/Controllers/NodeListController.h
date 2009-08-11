@@ -44,6 +44,6 @@
 @property (nonatomic, copy) NSString* savedSearchTerm;
 @property (nonatomic) NSInteger savedScopeButtonIndex;
 @property (nonatomic) BOOL searchWasActive;
-@property (nonatomic, retain) NSArray* nodeList;
+@property (retain) NSArray* nodeList;
 
 @end
