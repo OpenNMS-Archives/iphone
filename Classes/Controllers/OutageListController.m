@@ -36,7 +36,6 @@
 #import "ColumnarTableViewCell.h"
 #import "OutageListUpdater.h"
 #import "OutageUpdateHandler.h"
-#import "OpenNMSAppDelegate.h"
 #import "Outage.h"
 #import "OutageFactory.h"
 
@@ -45,7 +44,7 @@
 @synthesize outageTable;
 @synthesize spinner;
 @synthesize fuzzyDate;
-@synthesize managedObjectContext;
+@synthesize contextService;
 
 @synthesize outageList;
 
@@ -53,7 +52,7 @@
 {
 	[self.fuzzyDate release];
 	[self.outageTable release];
-	[self.managedObjectContext release];
+	[self.contextService release];
 	[self.spinner release];
 
 	[self.outageList release];
@@ -86,8 +85,8 @@
 
 - (void) viewDidLoad
 {
-	if (!managedObjectContext) {
-		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	if (!contextService) {
+		contextService = [[ContextService alloc] init];
 	}
 	
 	self.fuzzyDate = [[FuzzyDate alloc] init];
@@ -127,11 +126,12 @@
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	if ([self.outageList count] > 0) {
-		Outage* outage = [self.outageList objectAtIndex:indexPath.row];
-		NSLog(@"viewing outage %@", [outage objectID]);
-		if (outage) {
-			[managedObjectContext refreshObject:outage mergeChanges:YES];
-			outage = (Outage*)[managedObjectContext objectWithID:[outage objectID]];
+		NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
+		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
+		NSLog(@"viewing outage %@", objId);
+		if (objId) {
+			Outage* outage = (Outage*)[managedObjectContext objectWithID:objId];
+			[managedObjectContext refreshObject:outage mergeChanges:NO];
 			NSLog(@"outage = %@");
 			NodeDetailController* ndc = [[NodeDetailController alloc] init];
 			ndc.nodeId = outage.nodeId;
@@ -155,7 +155,9 @@
 	if ([self.outageList count] > 0) {
 	
 		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
-		Outage* outage = [[self.outageList objectAtIndex:indexPath.row] retain];
+		NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
+		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
+		Outage* outage = (Outage*)[managedObjectContext objectWithID:objId];
 		
 		if (outage) {
 			NSString* nodeLabel = outage.ipAddress;
@@ -173,7 +175,6 @@
 			label.font = [UIFont boldSystemFontOfSize:12];
 			label.text = date;
 			[cell.contentView addSubview:label];
-			[outage release];
 		}
 	}
 

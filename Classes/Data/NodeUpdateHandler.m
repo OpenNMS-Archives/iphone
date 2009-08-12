@@ -82,7 +82,7 @@
 			}
 		}
 
-		NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+		NSManagedObjectContext *moc = [contextService managedObjectContext];
 
 		NSFetchRequest *nodeRequest = [[[NSFetchRequest alloc] init] autorelease];
 
@@ -109,13 +109,11 @@
 		node.lastModified = [NSDate date];
 	}
 
-	/*
 	NSError* error = nil;
 	if (![moc save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
-	 */
 
 	if (self.objectList) {
 		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];

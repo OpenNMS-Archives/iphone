@@ -36,10 +36,12 @@
 #import "Alarm.h"
 #import "OnmsSeverity.h"
 #import "AlarmTableView.h"
+#import "ContextService.h"
 
 @interface AlarmDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private AlarmTableView* alarmTable;
-
+	@private ContextService* contextService;
+	
 	@private FuzzyDate* fuzzyDate;
 	@private UIFont* defaultFont;
 	@private UIColor* clear;
@@ -48,11 +50,11 @@
 	@private NSManagedObjectID* alarmObjectId;
 	@private Alarm* alarm;
 	@private OnmsSeverity* severity;
-	@private NSManagedObjectContext* managedObjectContext;
 }
 
 @property (retain) AlarmTableView* alarmTable;
 
+@property (nonatomic, retain) ContextService* contextService;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 @property (nonatomic, retain) UIFont* defaultFont;
 @property (nonatomic, retain) UIColor* clear;
@@ -61,7 +63,6 @@
 @property (retain) NSManagedObjectID* alarmObjectId;
 @property (retain) Alarm* alarm;
 @property (nonatomic, retain) OnmsSeverity* severity;
-@property (retain) NSManagedObjectContext* managedObjectContext;
 
 -(void) initializeData;
 -(void) acknowledgeAlarm;

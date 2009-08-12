@@ -34,6 +34,7 @@
 		44263D2210112FA900717409 /* OutageParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D1D10112FA900717409 /* OutageParser.m */; };
 		44263D261011301500717409 /* OutageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D251011301500717409 /* OutageListController.m */; };
 		44263D2D1011309700717409 /* AlarmListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D2C1011309700717409 /* AlarmListController.m */; };
+		443665361032597400F0B7B6 /* ContextService.m in Sources */ = {isa = PBXBuildFile; fileRef = 443665351032597400F0B7B6 /* ContextService.m */; };
 		445221F71030848500F77B2C /* Alarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EC1030848500F77B2C /* Alarm.m */; };
 		445221F81030848500F77B2C /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EE1030848500F77B2C /* Event.m */; };
 		445221F91030848500F77B2C /* IpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F01030848500F77B2C /* IpInterface.m */; };
@@ -144,6 +145,8 @@
 		44263D251011301500717409 /* OutageListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageListController.m; path = Controllers/OutageListController.m; sourceTree = "<group>"; };
 		44263D2B1011309700717409 /* AlarmListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmListController.h; path = Controllers/AlarmListController.h; sourceTree = "<group>"; };
 		44263D2C1011309700717409 /* AlarmListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmListController.m; path = Controllers/AlarmListController.m; sourceTree = "<group>"; };
+		443665341032597400F0B7B6 /* ContextService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextService.h; sourceTree = "<group>"; };
+		443665351032597400F0B7B6 /* ContextService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextService.m; sourceTree = "<group>"; };
 		445221EB1030848500F77B2C /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
 		445221EC1030848500F77B2C /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
 		445221ED1030848500F77B2C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
@@ -475,6 +478,8 @@
 		448148651029D00000083FF9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				443665341032597400F0B7B6 /* ContextService.h */,
+				443665351032597400F0B7B6 /* ContextService.m */,
 				448148691029D25A00083FF9 /* BaseUpdater.h */,
 				4481486A1029D25A00083FF9 /* BaseUpdater.m */,
 				44DEAF3A102A32E700634C2F /* UpdateHandler.h */,
@@ -667,6 +672,7 @@
 				445221FB1030848500F77B2C /* Outage.m in Sources */,
 				445221FC1030848500F77B2C /* SnmpInterface.m in Sources */,
 				4452229B1030CD3D00F77B2C /* OutageFactory.m in Sources */,
+				443665361032597400F0B7B6 /* ContextService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

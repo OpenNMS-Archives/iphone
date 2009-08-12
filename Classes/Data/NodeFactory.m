@@ -39,12 +39,14 @@
 
 #import "OutageFactory.h"
 
+#import "ContextService.h"
+
 @implementation NodeFactory
 
 @synthesize request;
 
 static NodeFactory* nodeFactorySingleton = nil;
-static NSManagedObjectContext* managedObjectContext = nil;
+static ContextService* contextService = nil;
 
 // 2 weeks
 #define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
@@ -56,7 +58,7 @@ static NSManagedObjectContext* managedObjectContext = nil;
 	{
 		initialized = YES;
 		nodeFactorySingleton = [[NodeFactory alloc] init];
-		managedObjectContext =  [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+		contextService = [[ContextService alloc] init];
 	}
 }
 
@@ -77,10 +79,12 @@ static NSManagedObjectContext* managedObjectContext = nil;
 
 -(Node*) getCoreDataNode:(NSNumber*) nodeId
 {
+	NSManagedObjectContext* context = [contextService managedObjectContext];
+	
 	if (!request) {
 		request = [[NSFetchRequest alloc] init];
 
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:managedObjectContext];
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
 		[request setEntity:entity];
 		
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"nodeId == %@", nodeId];
@@ -88,7 +92,7 @@ static NSManagedObjectContext* managedObjectContext = nil;
 	}
 	
 	NSError* error = nil;
-	NSArray *results = [managedObjectContext executeFetchRequest:request error:&error];
+	NSArray *results = [context executeFetchRequest:request error:&error];
 	if (!results || [results count] == 0) {
 		if (error) {
 			NSLog(@"error fetching node for ID %@: %@", nodeId, [error localizedDescription]);

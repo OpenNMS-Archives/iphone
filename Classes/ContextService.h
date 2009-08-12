@@ -32,24 +32,11 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "ASIHTTPRequest.h"
-#import "CXMLDocument.h"
-#import "ContextService.h"
 
-@interface UpdateHandler : NSObject {
-	UIActivityIndicatorView* spinner;
-	NSRecursiveLock* stateLock;
-	ContextService* contextService;
+@interface ContextService : NSObject {
+    NSManagedObjectContext *managedObjectContext;           
 }
 
-@property (retain) UIActivityIndicatorView* spinner;
-@property (retain) NSRecursiveLock* stateLock;
-@property (retain) ContextService* contextService;
-
--(NSString *)    cleanUpString:(NSString *)html;
--(NSString*)     stringForDate:(NSString*)date;
--(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
--(void)          requestDidFinish:(ASIHTTPRequest*) request;
--(void)          requestFailed:(ASIHTTPRequest*) request;
+@property (retain, readonly) NSManagedObjectContext *managedObjectContext;
 
 @end

@@ -33,12 +33,13 @@
 
 #import <UIKit/UIKit.h>
 #import "FuzzyDate.h"
+#import "ContextService.h"
 
 @interface AlarmListController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* alarmTable;
 	@private UIActivityIndicatorView* spinner;
 	@private FuzzyDate* fuzzyDate;
-	@private NSManagedObjectContext* managedObjectContext;
+	@private ContextService* contextService;
 
 	@private NSMutableArray* alarmList;
 }
@@ -46,7 +47,7 @@
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 @property (retain) IBOutlet UITableView* alarmTable;
-@property (retain) NSManagedObjectContext* managedObjectContext;
+@property (retain) ContextService* contextService;
 
 @property (retain) NSMutableArray* alarmList;
 

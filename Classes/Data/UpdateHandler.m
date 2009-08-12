@@ -39,12 +39,14 @@
 
 @synthesize spinner;
 @synthesize stateLock;
+@synthesize contextService;
 
 -(id) init
 {
 	if (self = [super init]) {
 		spinner = nil;
 		stateLock = nil;
+		contextService = [[ContextService alloc] init];
 	}
 	return self;
 }
@@ -53,6 +55,7 @@
 {
 	[spinner release];
 	[stateLock release];
+	[contextService release];
 
 	[super dealloc];
 }

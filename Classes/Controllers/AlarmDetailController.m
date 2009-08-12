@@ -35,13 +35,13 @@
 #import "ColumnarTableViewCell.h"
 #import "OpenNMSRestAgent.h"
 #import "OnmsSeverity.h"
-#import "OpenNMSAppDelegate.h"
 #import "AlarmUpdater.h"
 #import "AlarmUpdateHandler.h"
 
 @implementation AlarmDetailController
 
 @synthesize alarmTable;
+@synthesize contextService;
 
 @synthesize fuzzyDate;
 @synthesize defaultFont;
@@ -51,7 +51,6 @@
 @synthesize alarmObjectId;
 @synthesize alarm;
 @synthesize severity;
-@synthesize managedObjectContext;
 
 - (void) loadView
 {
@@ -67,6 +66,7 @@
 - (void) initializeData
 {
 	[fuzzyDate touch];
+	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:managedObjectContext];
 	[request setEntity:entity];
@@ -101,6 +101,7 @@
 -(void) dealloc
 {
 	[self.alarmTable release];
+	[self.contextService release];
 
 	[self.fuzzyDate release];
 	[self.defaultFont release];
@@ -124,23 +125,20 @@
 
 - (void) viewDidLoad
 {
+	self.contextService = [[ContextService alloc] init];
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	self.fuzzyDate.mini = YES;
 	self.defaultFont = [UIFont boldSystemFontOfSize:11];
 	self.clear = [UIColor colorWithWhite:1.0 alpha:0.0];
 	self.white = [UIColor colorWithWhite:1.0 alpha:1.0];
 
-	if (!managedObjectContext) {
-		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
-	}
-	
 	[self initializeData];
 	[super viewDidLoad];
 }
 
 - (void) viewDidUnload
 {
-	managedObjectContext = nil;
+	[self.contextService release];
 	
 	[self.fuzzyDate release];
 	[self.defaultFont release];

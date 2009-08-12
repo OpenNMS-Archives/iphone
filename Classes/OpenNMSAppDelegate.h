@@ -32,23 +32,21 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
+#import "ContextService.h"
 
 @interface OpenNMSAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
-    UIWindow *window;
-    UITabBarController *tabBarController;
+    UIWindow* window;
+    UITabBarController* tabBarController;
 
-    NSManagedObjectModel *managedObjectModel;
-    NSManagedObjectContext *managedObjectContext;           
-    NSPersistentStoreCoordinator *persistentStoreCoordinator;
+	ContextService* contextService;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
+@property (nonatomic, retain) IBOutlet UIWindow* window;
+@property (nonatomic, retain) IBOutlet UITabBarController* tabBarController;
 
-@property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (retain, readonly) ContextService* contextService;
 
-- (NSString *)applicationDocumentsDirectory;
+- (ContextService *) contextService;
+- (NSManagedObjectContext *) managedObjectContext;
 
 @end

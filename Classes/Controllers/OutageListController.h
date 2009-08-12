@@ -34,13 +34,14 @@
 #import <UIKit/UIKit.h>
 #import "NodeDetailController.h"
 #import "FuzzyDate.h"
+#import "ContextService.h"
 
 #define INDICATOR_TAG 1
 
 @interface OutageListController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* outageTable;
 	@private UIActivityIndicatorView* spinner;
-	@private NSManagedObjectContext* managedObjectContext;
+	@private ContextService* contextService;
 	@private FuzzyDate* fuzzyDate;
 
 	@private NSArray* outageList;
@@ -49,7 +50,7 @@
 @property (retain) IBOutlet UITableView* outageTable;
 @property (retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (retain) FuzzyDate* fuzzyDate;
-@property (retain) NSManagedObjectContext* managedObjectContext;
+@property (retain) ContextService* contextService;
 @property (retain) NSArray* outageList;
 
 - (IBAction) reload:(id) sender;

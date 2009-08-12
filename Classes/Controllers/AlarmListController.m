@@ -45,7 +45,7 @@
 
 @synthesize alarmTable;
 @synthesize fuzzyDate;
-@synthesize managedObjectContext;
+@synthesize contextService;
 @synthesize spinner;
 
 @synthesize alarmList;
@@ -54,7 +54,7 @@
 {
 	[self.fuzzyDate release];
 	[self.alarmTable release];
-	[self.managedObjectContext release];
+	[self.contextService release];
 	[self.spinner release];
 
 	[self.alarmList release];
@@ -87,8 +87,8 @@
 
 - (void) viewDidLoad
 {
-	if (!managedObjectContext) {
-		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	if (!contextService) {
+		contextService = [[ContextService alloc] init];
 	}
 
 	self.fuzzyDate = [[FuzzyDate alloc] init];
@@ -98,7 +98,8 @@
 
 - (void) viewDidUnload
 {
-	managedObjectContext = nil;
+	[contextService release];
+	contextService = nil;
 	
 	[self.alarmTable release];
 	[self.fuzzyDate release];
@@ -144,6 +145,7 @@
 	UIView* backgroundView = [[[UIView alloc] init] autorelease];
 	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
 	cell.selectedBackgroundView = backgroundView;
+	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
 	
 	if ([self.alarmList count] > 0) {
 		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];

@@ -92,7 +92,8 @@
 			}
 		}
 
-		NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+		NSManagedObjectContext *moc = [contextService managedObjectContext];
+		[moc lock];
 
 		NSFetchRequest *outageRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
@@ -113,6 +114,7 @@
 		} else {
 			outage = (Outage*)[outageArray objectAtIndex:0];
 		}
+		[moc unlock];
 		
 		outage.outageId = outageId;
 		outage.lastModified = [NSDate date];
@@ -187,16 +189,15 @@
 #endif
 	}
 
-	/*
 	NSError* error = nil;
-	NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	NSManagedObjectContext *moc = [contextService managedObjectContext];
 	if (![moc save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@ (%@)", [error localizedDescription], [error localizedFailureReason]);
 	}
-	 */
 
 	if (self.objectList) {
-		NSManagedObjectContext *context = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+		NSManagedObjectContext *context = [contextService managedObjectContext];
+		[context lock];
 
 		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
 
@@ -209,6 +210,7 @@
 
 		NSError* error = nil;
 		NSArray *array = [context executeFetchRequest:req error:&error];
+		[context unlock];
 		if (array == nil) {
 			if (error) {
 				NSLog(@"error fetching outages: %@", [error localizedDescription]);
@@ -224,8 +226,7 @@
 			while ((outage = [iter nextObject]) != NULL) {
 				if (![nodeIds containsObject:outage.nodeId]) {
 					[nodeIds addObject:outage.nodeId];
-					[outages insertObject:outage atIndex:0];
-					[context refreshObject:outage mergeChanges:YES];
+					[outages insertObject:[outage objectID] atIndex:0];
 				}
 			}
 			[nodeIds release];

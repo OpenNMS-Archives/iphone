@@ -86,7 +86,7 @@
 			}
 		}
 
-		NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+		NSManagedObjectContext *moc = [contextService managedObjectContext];
 
 		NSFetchRequest *alarmRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
@@ -153,17 +153,17 @@
 		}
 	}
 
-	/*
 	NSError* error = nil;
 	NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 	if (![moc save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
-	 */
 
 	if (self.objectList) {
-		NSManagedObjectContext *context = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+		NSManagedObjectContext *context = [contextService managedObjectContext];
+		[context lock];
+
 		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
 		[req setResultType:NSManagedObjectIDResultType];
 
@@ -186,6 +186,7 @@
 			[self.objectList removeAllObjects];
 			[self.objectList addObjectsFromArray:array];
 		}
+		[context unlock];
 	}
 
 	[dateFormatter release];

@@ -32,24 +32,21 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "ASIHTTPRequest.h"
-#import "CXMLDocument.h"
-#import "ContextService.h"
+#import "Outage.h"
 
-@interface UpdateHandler : NSObject {
-	UIActivityIndicatorView* spinner;
-	NSRecursiveLock* stateLock;
-	ContextService* contextService;
+@interface OutageFactory : NSObject {
+	NSFetchRequest* outageRequest;
+	NSFetchRequest* nodeOutageRequest;
 }
 
-@property (retain) UIActivityIndicatorView* spinner;
-@property (retain) NSRecursiveLock* stateLock;
-@property (retain) ContextService* contextService;
+@property (retain) NSFetchRequest* outageRequest;
+@property (retain) NSFetchRequest* nodeOutageRequest;
 
--(NSString *)    cleanUpString:(NSString *)html;
--(NSString*)     stringForDate:(NSString*)date;
--(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
--(void)          requestDidFinish:(ASIHTTPRequest*) request;
--(void)          requestFailed:(ASIHTTPRequest*) request;
++(void) initialize;
++(OutageFactory*) getInstance;
+
+-(NSArray*) fetchOutages;
+-(Outage*) getOutage:(NSNumber*) outageId;
+-(NSArray*) getOutagesForNode:(NSNumber*) nodeId;
 
 @end
