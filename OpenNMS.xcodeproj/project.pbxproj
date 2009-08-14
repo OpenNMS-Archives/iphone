@@ -72,6 +72,9 @@
 		44B8E28D102DC168003DBB9B /* OpenNMS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E28A102DC168003DBB9B /* OpenNMS.xcdatamodeld */; };
 		44BBA448100CE84F001257CB /* question-mark-helvetica.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA447100CE84F001257CB /* question-mark-helvetica.png */; };
 		44BBA44A100CE90B001257CB /* o.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA449100CE90B001257CB /* o.png */; };
+		44C1F7FC10359C870087291F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C1F7FB10359C870087291F /* Reachability.m */; };
+		44C1F82010359D140087291F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C1F81F10359D140087291F /* SystemConfiguration.framework */; };
+		44C1F82810359D350087291F /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C1F82710359D350087291F /* ASIInputStream.m */; };
 		44C8E295100CD66400A29DA0 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E294100CD66400A29DA0 /* display.png */; };
 		44D023E6100F9CB0000C5EAA /* CXMLNode_XPathExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E653100F9901000B8A22 /* CXMLNode_XPathExtensions.m */; };
 		44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */; };
@@ -204,6 +207,11 @@
 		44B8E1E1102DB4E6003DBB9B /* OutageUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageUpdateHandler.m; path = Data/OutageUpdateHandler.m; sourceTree = "<group>"; };
 		44BBA447100CE84F001257CB /* question-mark-helvetica.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "question-mark-helvetica.png"; path = "Resources/Images/question-mark-helvetica.png"; sourceTree = "<group>"; };
 		44BBA449100CE90B001257CB /* o.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = o.png; path = Resources/Images/o.png; sourceTree = "<group>"; };
+		44C1F7FA10359C870087291F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		44C1F7FB10359C870087291F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		44C1F81F10359D140087291F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		44C1F82610359D350087291F /* ASIInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIInputStream.h; sourceTree = "<group>"; };
+		44C1F82710359D350087291F /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIInputStream.m; sourceTree = "<group>"; };
 		44C8E294100CD66400A29DA0 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = display.png; path = Resources/Images/display.png; sourceTree = "<group>"; };
 		44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsXMLElementAdditions.h; sourceTree = "<group>"; };
 		44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsXMLElementAdditions.m; sourceTree = "<group>"; };
@@ -256,6 +264,7 @@
 				44700FD61007D688006CE665 /* libxml2.dylib in Frameworks */,
 				448EEAA4101E3B7400063B32 /* libicucore.dylib in Frameworks */,
 				448148561029CBDF00083FF9 /* CoreData.framework in Frameworks */,
+				44C1F82010359D140087291F /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +313,7 @@
 				44700FD51007D688006CE665 /* libxml2.dylib */,
 				448EEAA3101E3B7400063B32 /* libicucore.dylib */,
 				448148551029CBDF00083FF9 /* CoreData.framework */,
+				44C1F81F10359D140087291F /* SystemConfiguration.framework */,
 			);
 			name = OpenNMS;
 			sourceTree = "<group>";
@@ -462,6 +472,10 @@
 		44700FAB1007D5D8006CE665 /* ASIHTTPRequest */ = {
 			isa = PBXGroup;
 			children = (
+				44C1F82610359D350087291F /* ASIInputStream.h */,
+				44C1F82710359D350087291F /* ASIInputStream.m */,
+				44C1F7FA10359C870087291F /* Reachability.h */,
+				44C1F7FB10359C870087291F /* Reachability.m */,
 				44700FAC1007D5D8006CE665 /* ASIFormDataRequest.h */,
 				44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */,
 				44700FAE1007D5D8006CE665 /* ASIHTTPRequest.h */,
@@ -673,6 +687,8 @@
 				445221FC1030848500F77B2C /* SnmpInterface.m in Sources */,
 				4452229B1030CD3D00F77B2C /* OutageFactory.m in Sources */,
 				443665361032597400F0B7B6 /* ContextService.m in Sources */,
+				44C1F7FC10359C870087291F /* Reachability.m in Sources */,
+				44C1F82810359D350087291F /* ASIInputStream.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
