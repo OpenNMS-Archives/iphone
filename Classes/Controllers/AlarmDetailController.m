@@ -52,7 +52,7 @@
 @synthesize alarm;
 @synthesize severity;
 
-- (void) loadView
+-(void) loadView
 {
 	[super loadView];
 	alarmTable = [[AlarmTableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
@@ -63,14 +63,14 @@
 	self.view = alarmTable;
 }
 
-- (void) initializeData
+-(void) initializeData
 {
 	[fuzzyDate touch];
 	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:managedObjectContext];
 	[request setEntity:entity];
-	
+
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self == %@", alarmObjectId];
 	[request setPredicate:predicate];
 	
@@ -92,7 +92,7 @@
 			NSLog(@"error retrieving object %@", alarmObjectId);
 		}
 	}
-	
+	[self.alarmTable reloadData];
 }
 
 #pragma mark -
@@ -115,7 +115,7 @@
 	[super dealloc];
 }
 
-- (void) viewWillAppear:(BOOL)animated
+-(void) viewWillAppear:(BOOL)animated
 {
 	[self initializeData];
 	[super viewWillAppear:animated];
@@ -123,7 +123,7 @@
 	self.alarmTable.backgroundColor = [self.severity getDisplayColor];
 }
 
-- (void) viewDidLoad
+-(void) viewDidLoad
 {
 	self.contextService = [[ContextService alloc] init];
 	self.fuzzyDate = [[FuzzyDate alloc] init];
@@ -136,7 +136,7 @@
 	[super viewDidLoad];
 }
 
-- (void) viewDidUnload
+-(void) viewDidUnload
 {
 	[self.contextService release];
 	
@@ -153,7 +153,7 @@
 
 #pragma mark UITableView delegates
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return 7;
 }
@@ -162,17 +162,7 @@
 	return 1;
 }
 
-/*
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
-{
-	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
-	[alarmDetailController setAlarmId:outage.alarmId];
-	UINavigationController* cont = [self navigationController];
-	[cont pushViewController:alarmDetailController animated:YES];
-}
-*/
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = tableView.rowHeight;
 	CGSize size;
 	switch(indexPath.row) {
@@ -192,7 +182,7 @@
 	return MAX(height, tableView.rowHeight);
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 	cell.backgroundColor = white;
 	cell.textLabel.font = defaultFont;
@@ -258,7 +248,7 @@
 	return cell;
 }
 
-- (UIView *) tableView: (UITableView *) tableView viewForFooterInSection: (NSInteger) section
+-(UIView *) tableView: (UITableView *) tableView viewForFooterInSection: (NSInteger) section
 {
     UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, alarmTable.bounds.size.width, 44.0)] autorelease];
 	footerView.autoresizesSubviews = YES;
@@ -303,12 +293,12 @@
 	return footerView;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	return 45.0f;
 }
 
-- (void) doAck:(NSString*)action
+-(void) doAck:(NSString*)action
 {
 #if DEBUG
 	NSLog(@"performing action %@ on alarm %@", action, alarm.alarmId);
@@ -318,26 +308,26 @@
 	[agent release];
 
 	AlarmUpdater* updater = [[[AlarmUpdater alloc] initWithAlarmId:alarm.alarmId] autorelease];
-	updater.handler = [[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:nil];
+	updater.handler = [[AlarmUpdateHandler alloc] initWithMethod:@selector(initializeData) target:self];
 	[updater update];
 }
 
-- (void) acknowledgeAlarm
+-(void) acknowledgeAlarm
 {
 	[self doAck:@"ack"];
 }
 
-- (void) unacknowledgeAlarm
+-(void) unacknowledgeAlarm
 {
 	[self doAck:@"unack"];
 }
 
-- (void) escalateAlarm
+-(void) escalateAlarm
 {
 	[self doAck:@"esc"];
 }
 
-- (void) clearAlarm
+-(void) clearAlarm
 {
 	[self doAck:@"clear"];
 }

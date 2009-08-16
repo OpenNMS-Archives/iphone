@@ -40,7 +40,8 @@
 
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
-	[stateLock lock];
+	NSManagedObjectContext *moc = [contextService managedObjectContext];
+
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
@@ -48,7 +49,6 @@
 	CXMLDocument* document = [self getDocumentForRequest:request];
 
 	if (!document) {
-		[stateLock unlock];
 		[dateFormatter release];
 		[super requestDidFinish:request];
 		[self autorelease];
@@ -85,8 +85,6 @@
 #endif
 			}
 		}
-
-		NSManagedObjectContext *moc = [contextService managedObjectContext];
 
 		NSFetchRequest *alarmRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
@@ -154,43 +152,12 @@
 	}
 
 	NSError* error = nil;
-	NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 	if (![moc save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
 
-	if (self.objectList) {
-		NSManagedObjectContext *context = [contextService managedObjectContext];
-		[context lock];
-
-		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
-		[req setResultType:NSManagedObjectIDResultType];
-
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
-		[req setEntity:entity];
-
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
-		[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-		[sortDescriptor release];
-
-		NSError* error = nil;
-		NSArray *array = [context executeFetchRequest:req error:&error];
-		if (array == nil) {
-			if (error) {
-				NSLog(@"error fetching alarms: %@", [error localizedDescription]);
-			} else {
-				NSLog(@"error fetching alarms");
-			}
-		} else {
-			[self.objectList removeAllObjects];
-			[self.objectList addObjectsFromArray:array];
-		}
-		[context unlock];
-	}
-
 	[dateFormatter release];
-	[stateLock unlock];
 	[super requestDidFinish:request];
 	[self autorelease];
 }

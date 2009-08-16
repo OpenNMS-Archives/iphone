@@ -32,9 +32,9 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "TableUpdateHandler.h"
+#import "UpdateHandler.h"
 
-@interface OutageUpdateHandler : TableUpdateHandler {
+@interface OutageUpdateHandler : UpdateHandler {
 	@private NSNumber* nodeId;
 }
 

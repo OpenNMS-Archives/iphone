@@ -38,15 +38,19 @@
 
 @interface UpdateHandler : NSObject {
 	UIActivityIndicatorView* spinner;
-	NSRecursiveLock* stateLock;
 	ContextService* contextService;
+	SEL method;
+	NSObject* methodTarget;
 }
 
 @property (retain) UIActivityIndicatorView* spinner;
-@property (retain) NSRecursiveLock* stateLock;
 @property (retain) ContextService* contextService;
+@property (assign) SEL method;
+@property (retain) NSObject* methodTarget;
 
--(NSString *)    cleanUpString:(NSString *)html;
+-(id) initWithMethod:(SEL)selector target:(NSObject*)target;
+
+-(NSString*)     cleanUpString:(NSString *)html;
 -(NSString*)     stringForDate:(NSString*)date;
 -(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
 -(void)          requestDidFinish:(ASIHTTPRequest*) request;

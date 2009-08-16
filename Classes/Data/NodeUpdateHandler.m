@@ -32,9 +32,8 @@
  *******************************************************************************/
 
 #import "NodeUpdateHandler.h"
-#import "OpenNMSAppDelegate.h"
 #import "Node.h"
-#import "RegexKitLite.h"
+#import "ContextService.h"
 
 @implementation NodeUpdateHandler
 
@@ -43,17 +42,18 @@
 #if DEBUG
 	NSLog(@"%@: requestDidFinish called", self);
 #endif
-#if 0
-	[stateLock lock];
+	NSManagedObjectContext *moc = [contextService managedObjectContext];
+	
+	/*
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
+	 */
 
 	CXMLDocument* document = [self getDocumentForRequest:request];
 
 	if (!document) {
-		[stateLock unlock];
-		[dateFormatter release];
+		// [dateFormatter release];
 		[super requestDidFinish:request];
 		[self autorelease];
 	}
@@ -81,8 +81,6 @@
 #endif
 			}
 		}
-
-		NSManagedObjectContext *moc = [contextService managedObjectContext];
 
 		NSFetchRequest *nodeRequest = [[[NSFetchRequest alloc] init] autorelease];
 
@@ -114,45 +112,9 @@
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
-
-	if (self.objectList) {
-		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
-		[req setResultType:NSManagedObjectIDResultType];
-
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:moc];
-		[req setEntity:entity];
-
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"label" ascending:NO];
-		[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-		[sortDescriptor release];
-
-		error = nil;
-		NSArray *array = [moc executeFetchRequest:req error:&error];
-		if (array == nil) {
-			if (error) {
-				NSLog(@"error fetching nodes: %@", [error localizedDescription]);
-			} else {
-				NSLog(@"error fetching nodes");
-			}
-		} else {
-			[self.objectList removeAllObjects];
-			[self.objectList addObjectsFromArray:array];
-		}
-	}
-
-	[stateLock unlock];
-
-	[dateFormatter release];
+	// [dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];
-#endif
-}
-
--(void) requestFailed:(ASIHTTPRequest*) request
-{
-	[stateLock lock];
-	[super requestFailed:request];
-	[stateLock unlock];
 }
 
 @end

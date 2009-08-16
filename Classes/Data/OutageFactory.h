@@ -35,16 +35,15 @@
 #import "Outage.h"
 
 @interface OutageFactory : NSObject {
-	NSFetchRequest* outageRequest;
-	NSFetchRequest* nodeOutageRequest;
+	BOOL isFinished;
 }
 
-@property (retain) NSFetchRequest* outageRequest;
-@property (retain) NSFetchRequest* nodeOutageRequest;
+@property (assign) BOOL isFinished;
 
 +(void) initialize;
 +(OutageFactory*) getInstance;
 
+-(void) finish;
 -(NSArray*) fetchOutages;
 -(Outage*) getOutage:(NSNumber*) outageId;
 -(NSArray*) getOutagesForNode:(NSNumber*) nodeId;

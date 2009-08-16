@@ -40,8 +40,7 @@
 
 @implementation OutageFactory
 
-@synthesize outageRequest;
-@synthesize nodeOutageRequest;
+@synthesize isFinished;
 
 static OutageFactory* outageFactorySingleton = nil;
 static NSManagedObjectContext* managedObjectContext = nil;
@@ -68,30 +67,31 @@ static NSManagedObjectContext* managedObjectContext = nil;
 	return outageFactorySingleton;
 }
 
--(void) dealloc
+-(id) init
 {
-	[outageRequest release];
-	[nodeOutageRequest release];
+	if (self = [super init]) {
+		isFinished = NO;
+	}
+	return self;
+}
 
-	[super dealloc];
+-(void) finish
+{
+	isFinished = YES;
 }
 
 -(Outage*) getCoreDataOutage:(NSNumber*) outageId
 {
-	[managedObjectContext lock];
-	if (!outageRequest) {
-		outageRequest = [[NSFetchRequest alloc] init];
+	NSFetchRequest* outageRequest = [[NSFetchRequest alloc] init];
 
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:managedObjectContext];
-		[outageRequest setEntity:entity];
-		
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"outageId == %@", outageId];
-		[outageRequest setPredicate:predicate];
-	}
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:managedObjectContext];
+	[outageRequest setEntity:entity];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"outageId == %@", outageId];
+	[outageRequest setPredicate:predicate];
 
 	NSError* error = nil;
 	NSArray *results = [managedObjectContext executeFetchRequest:outageRequest error:&error];
-	[managedObjectContext unlock];
 	if (!results || [results count] == 0) {
 		if (error) {
 			NSLog(@"error fetching outage for ID %@: %@", outageId, [error localizedDescription]);
@@ -105,23 +105,17 @@ static NSManagedObjectContext* managedObjectContext = nil;
 
 -(NSArray*) getCoreDataOutagesForNode:(NSNumber*) nodeId
 {
-	[managedObjectContext lock];
-	if (!nodeOutageRequest) {
-		nodeOutageRequest = [[NSFetchRequest alloc] init];
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:managedObjectContext];
-		[nodeOutageRequest setEntity:entity];
-	}
+	NSFetchRequest* nodeOutageRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:managedObjectContext];
+	[nodeOutageRequest setEntity:entity];
 
 	if (nodeId) {
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"nodeId == %@", nodeId];
 		[nodeOutageRequest setPredicate:predicate];
-	} else {
-		[nodeOutageRequest setPredicate:nil];
 	}
 
 	NSError* error = nil;
 	NSArray *results = [managedObjectContext executeFetchRequest:nodeOutageRequest error:&error];
-	[managedObjectContext unlock];
 	if (!results) {
 		if (error) {
 			NSLog(@"error fetching outages for node ID %@: %@", nodeId, [error localizedDescription]);
@@ -157,21 +151,25 @@ static NSManagedObjectContext* managedObjectContext = nil;
 #if DEBUG
 		NSLog(@"outage(s) not found, or last modified(s) out of date");
 #endif
-		NSRecursiveLock* stateLock = [[NSRecursiveLock alloc] init];
-		
 		OutageListUpdater* outageUpdater = [[OutageListUpdater alloc] initWithNode:nodeId];
-		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] init];
+		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		outageHandler.nodeId = nodeId;
-		outageHandler.stateLock = stateLock;
 		outageUpdater.handler = outageHandler;
 		
-		[stateLock lock];
 		[outageUpdater update];
-		[stateLock unlock];
-		
 		[outageUpdater release];
+		
+		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
+		while (!isFinished) {
+#if DEBUG
+			NSLog(@"waiting for getOutagesForNode");
+#endif
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+		}
+		outages = [self getCoreDataOutagesForNode:nodeId];
 	}
 	
+	isFinished = NO;
 	return outages;
 }
 
@@ -183,20 +181,23 @@ static NSManagedObjectContext* managedObjectContext = nil;
 #if DEBUG
 		NSLog(@"outage not found, or last modified out of date");
 #endif
-		NSRecursiveLock* stateLock = [[NSRecursiveLock alloc] init];
-
 		OutageListUpdater* outageUpdater = [[OutageListUpdater alloc] initWithOutage:outageId];
 		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] init];
-		outageHandler.stateLock = stateLock;
 		outageUpdater.handler = outageHandler;
 
-		[stateLock lock];
 		[outageUpdater update];
-		[stateLock unlock];
-		
 		[outageUpdater release];
+
+		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
+		while (!isFinished) {
+#if DEBUG
+			NSLog(@"waiting for getOutage");
+#endif
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+		}
 	}
 
+	isFinished = NO;
 	return outage;
 }
 

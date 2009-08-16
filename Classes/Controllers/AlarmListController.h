@@ -51,6 +51,7 @@
 
 @property (retain) NSMutableArray* alarmList;
 
-- (IBAction) reload:(id) sender;
+-(void) refreshData;
+-(IBAction) reload:(id) sender;
 
 @end

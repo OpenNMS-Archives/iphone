@@ -34,11 +34,11 @@
 #import <UIKit/UIKit.h>
 #import "FuzzyDate.h"
 #import "Node.h"
+#import "ContextService.h"
 
 @interface NodeDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* nodeTable;
 	@private FuzzyDate* fuzzyDate;
-	@private NSManagedObjectContext* managedObjectContext;
 
 	@private NSMutableArray* sections;
 	@private NSNumber* nodeId;
@@ -52,7 +52,6 @@
 
 @property (retain) IBOutlet UITableView* nodeTable;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
-@property (retain) NSManagedObjectContext* managedObjectContext;
 
 @property (nonatomic, retain) NSMutableArray* sections;
 @property (retain) NSNumber* nodeId;

@@ -41,16 +41,26 @@
 @synthesize queue;
 @synthesize handler;
 
+static ASINetworkQueue* threadQueue;
+
 -(id) initWithPath:(NSString*)p
 {
 	if (self = [super init]) {
-		queue = [[ASINetworkQueue alloc] init];
+		queue = [[NSOperationQueue alloc] init];
+		[queue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
 		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self getBaseUrl], p]];
 	}
 #if DEBUG
 	NSLog(@"%@: Initialized using URL: %@", self, url);
 #endif
 	return self;
+}
+
++(void) initialize
+{
+	if (!threadQueue) {
+		threadQueue = [[ASINetworkQueue alloc] init];
+	}
 }
 
 -(void) dealloc
@@ -103,20 +113,24 @@
 #endif
 	NSURL* requestUrl = [url copy];
 	ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:requestUrl] autorelease];
-	if (!handler) {
-		handler = [[[UpdateHandler alloc] init] autorelease];
+	if (!self.handler) {
+		NSLog(@"WARNING: creating a default handler");
+		self.handler = [[[UpdateHandler alloc] init] autorelease];
 	}
+
+	NSLog(@"handler = %@", self.handler);
 
 	request.timeOutSeconds = 5;
 	if ([[requestUrl scheme] isEqual:@"https"]) {
 		request.validatesSecureCertificate = NO;
 	}
-	request.delegate = handler;
+	request.delegate = self.handler;
 	request.didFinishSelector = @selector(requestDidFinish:);
 	request.didFailSelector = @selector(requestFailed:);
 
-	[[self queue] addOperation:request];
-	[[self queue] setSuspended:NO];
+	NSLog(@"queue = %@", queue);
+	[queue addOperation:request];
+	[queue setSuspended:NO];
 }
 
 @end

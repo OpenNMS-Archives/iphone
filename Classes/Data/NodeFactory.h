@@ -35,14 +35,17 @@
 #import "Node.h"
 
 @interface NodeFactory : NSObject {
-	NSFetchRequest* request;
+	BOOL isFinished;
 }
 
-@property (retain) NSFetchRequest* request;
+@property (assign) BOOL isFinished;
 
 +(void) initialize;
 +(NodeFactory*) getInstance;
 
+-(void) finish;
+-(Node*) getCoreDataNode:(NSNumber *)nodeId;
+-(Node*) getRemoteNode:(NSNumber *)nodeId;
 -(Node*) getNode:(NSNumber*) nodeId;
 
 @end

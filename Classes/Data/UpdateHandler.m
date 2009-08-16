@@ -38,24 +38,35 @@
 @implementation UpdateHandler
 
 @synthesize spinner;
-@synthesize stateLock;
 @synthesize contextService;
+@synthesize method;
+@synthesize methodTarget;
 
 -(id) init
 {
 	if (self = [super init]) {
-		spinner = nil;
-		stateLock = nil;
-		contextService = [[ContextService alloc] init];
+		self.spinner = nil;
+		self.contextService = [[ContextService alloc] init];
+	}
+	return self;
+}
+
+-(id) initWithMethod:(SEL)selector target:(NSObject*)target
+{
+	if (self = [super init]) {
+		self.spinner = nil;
+		self.contextService = [[ContextService alloc] init];
+		self.method = selector;
+		self.methodTarget = target;
 	}
 	return self;
 }
 
 -(void) dealloc
 {
-	[spinner release];
-	[stateLock release];
-	[contextService release];
+	[self.spinner release];
+	[self.contextService release];
+	[self.methodTarget release];
 
 	[super dealloc];
 }
@@ -83,7 +94,7 @@
 {
 	NSString* response = [request responseString];
 #if DEBUG
-	NSLog(@"response = %@", response);
+	// NSLog(@"response = %@", response);
 #endif
 	if (!response || [response isEqual:@""]) {
 		return nil;
@@ -122,17 +133,20 @@
 #if DEBUG
 	NSLog(@"%@: Request finished.", self);
 #endif
-	[stateLock lock];
-	[spinner stopAnimating];
-	[stateLock unlock];
+	if (self.methodTarget && self.method) {
+		[self.methodTarget performSelector:self.method];
+	}
+	[self.spinner stopAnimating];
 }
 
 -(void) requestFailed:(ASIHTTPRequest*) request
 {
-	[stateLock lock];
 	NSError* error = [request error];
 	NSLog(@"%@: Request failed: %@", self, [error localizedDescription]);
-	[spinner stopAnimating];
+	if (methodTarget && method) {
+		[methodTarget performSelector:method];
+	}
+	[self.spinner stopAnimating];
 
 	UIAlertView *errorAlert = [[UIAlertView alloc]
 		initWithTitle: [error localizedDescription]
@@ -142,7 +156,6 @@
 		otherButtonTitles:nil];
 	[errorAlert show];
 	[errorAlert autorelease];
-	[stateLock unlock];
 }
 
 @end

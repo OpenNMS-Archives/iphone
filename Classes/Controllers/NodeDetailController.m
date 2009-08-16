@@ -41,13 +41,11 @@
 #import "OnmsSeverity.h"
 #import "NodeFactory.h"
 #import "OutageFactory.h"
-#import "OpenNMSAppDelegate.h"
 
 @implementation NodeDetailController
 
 @synthesize nodeTable;
 @synthesize fuzzyDate;
-@synthesize managedObjectContext;
 
 @synthesize nodeId;
 @synthesize sections;
@@ -68,10 +66,6 @@
 
 - (void) initializeData
 {
-	if (!managedObjectContext) {
-		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
-	}
-
 	self.sections = [NSMutableArray array];
 
 	NodeFactory* nodeFactory = [NodeFactory getInstance];
@@ -81,10 +75,8 @@
 	self.nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
 	self.nodeTable.rowHeight = 34.0;
 
-//	OutageFactory* outageFactory = [OutageFactory getInstance];
-//	self.outages = [outageFactory getOutagesForNode:nodeId];
-	NSSortDescriptor* descriptor = [[[NSSortDescriptor alloc] initWithKey:@"ifLostService" ascending:NO selector:@selector(compare:)] autorelease];
-	self.outages = [[node.outages allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:descriptor]];
+	OutageFactory* outageFactory = [OutageFactory getInstance];
+	self.outages = [outageFactory getOutagesForNode:nodeId];
 	if ([self.outages count] > 0) {
 		[self.sections addObject:@"Recent Outages"];
 	}
@@ -115,8 +107,7 @@
 -(void) dealloc
 {
 	[self.nodeTable release];
-	[self.managedObjectContext release];
-	
+
 	[self.nodeId release];
 	[self.node release];
 	[self.outages release];
@@ -137,7 +128,6 @@
 {
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	self.fuzzyDate.mini = YES;
-//	[self.navigationController setNavigationBarHidden:NO];
 
 	[self initializeData];
 

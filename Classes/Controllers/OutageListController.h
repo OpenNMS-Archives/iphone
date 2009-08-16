@@ -35,6 +35,7 @@
 #import "NodeDetailController.h"
 #import "FuzzyDate.h"
 #import "ContextService.h"
+#import "NodeFactory.h"
 
 #define INDICATOR_TAG 1
 
@@ -43,16 +44,19 @@
 	@private UIActivityIndicatorView* spinner;
 	@private ContextService* contextService;
 	@private FuzzyDate* fuzzyDate;
+	@private NodeFactory* nodeFactory;
 
-	@private NSArray* outageList;
+	@private NSMutableArray* outageList;
 }
 
 @property (retain) IBOutlet UITableView* outageTable;
 @property (retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (retain) FuzzyDate* fuzzyDate;
 @property (retain) ContextService* contextService;
-@property (retain) NSArray* outageList;
+@property (retain) NSMutableArray* outageList;
+@property (retain) NodeFactory* nodeFactory;
 
+-(void) refreshData;
 - (IBAction) reload:(id) sender;
 
 @end

@@ -32,7 +32,6 @@
  *******************************************************************************/
 
 #import "NodeFactory.h"
-#import "OpenNMSAppDelegate.h"
 
 #import "NodeUpdater.h"
 #import "NodeUpdateHandler.h"
@@ -43,7 +42,7 @@
 
 @implementation NodeFactory
 
-@synthesize request;
+@synthesize isFinished;
 
 static NodeFactory* nodeFactorySingleton = nil;
 static ContextService* contextService = nil;
@@ -70,29 +69,35 @@ static ContextService* contextService = nil;
 	return nodeFactorySingleton;
 }
 
--(void) dealloc
+-(id) init
 {
-	[request release];
-	
-	[super dealloc];
+	if (self = [super init]) {
+		isFinished = NO;
+	}
+	return self;
+}
+
+-(void) finish
+{
+	isFinished = YES;
 }
 
 -(Node*) getCoreDataNode:(NSNumber*) nodeId
 {
+	Node* node = nil;
 	NSManagedObjectContext* context = [contextService managedObjectContext];
 	
-	if (!request) {
-		request = [[NSFetchRequest alloc] init];
+	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
-		[request setEntity:entity];
-		
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"nodeId == %@", nodeId];
-		[request setPredicate:predicate];
-	}
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
+	[request setEntity:entity];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"nodeId == %@", nodeId];
+	[request setPredicate:predicate];
 	
 	NSError* error = nil;
-	NSArray *results = [context executeFetchRequest:request error:&error];
+	NSArray* results = [context executeFetchRequest:request error:&error];
+	[request release];
 	if (!results || [results count] == 0) {
 		if (error) {
 			NSLog(@"error fetching node for ID %@: %@", nodeId, [error localizedDescription]);
@@ -100,32 +105,44 @@ static ContextService* contextService = nil;
 		}
 		return nil;
 	} else {
-		return (Node*)[results objectAtIndex:0];
+		node = (Node*)[results objectAtIndex:0];
 	}
+	return node;
 }
+
+-(Node*) getRemoteNode:(NSNumber*) nodeId
+{
+	Node* node = nil;
+	
+	NodeUpdater* nodeUpdater = [[NodeUpdater alloc] initWithNode:nodeId];
+	NodeUpdateHandler* nodeHandler = [[NodeUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
+	nodeUpdater.handler = nodeHandler;
+	[nodeUpdater update];
+	[nodeUpdater release];
+	
+	NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
+	while (!isFinished) {
+		NSLog(@"waiting for getRemoteNode");
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+	}
+	node = [self getCoreDataNode:nodeId];
+
+	return node;
+}
+
 
 -(Node*) getNode:(NSNumber*) nodeId
 {
 	Node* node = [self getCoreDataNode:nodeId];
 
-	if (DEBUG == 1 || !node || ([node.lastModified timeIntervalSinceNow] > CUTOFF)) {
+	if (!node || ([node.lastModified timeIntervalSinceNow] > CUTOFF)) {
 #if DEBUG
 		NSLog(@"node %@ not found, or last modified out of date", nodeId);
 #endif
-		NSRecursiveLock* stateLock = [[NSRecursiveLock alloc] init];
-
-		NodeUpdater* nodeUpdater = [[NodeUpdater alloc] initWithNode:nodeId];
-		NodeUpdateHandler* nodeHandler = [[NodeUpdateHandler alloc] init];
-		nodeHandler.stateLock = stateLock;
-		nodeUpdater.handler = nodeHandler;
-
-		[stateLock lock];
-		[nodeUpdater update];
-		[stateLock unlock];
-		
-		[nodeUpdater release];
+		node = [self getRemoteNode:nodeId];
 	}
 
+	NSLog(@"returning node: %@", node);
 	return node;
 }
 

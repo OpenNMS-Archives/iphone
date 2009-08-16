@@ -62,16 +62,44 @@
     [super dealloc];
 }
 
--(void) initializeData
+-(void) refreshData
 {
 	if (!self.alarmList) {
 		[spinner startAnimating];
 		self.alarmList = [NSMutableArray array];
 	}
+	
+	NSManagedObjectContext *context = [contextService managedObjectContext];
+	
+	NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
+	[req setResultType:NSManagedObjectIDResultType];
+	
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
+	[req setEntity:entity];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
+	[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	[sortDescriptor release];
+	
+	NSError* error = nil;
+	NSArray *array = [context executeFetchRequest:req error:&error];
+	if (array == nil) {
+		if (error) {
+			NSLog(@"error fetching alarms: %@", [error localizedDescription]);
+		} else {
+			NSLog(@"error fetching alarms");
+		}
+	} else {
+		[self.alarmList removeAllObjects];
+		[self.alarmList addObjectsFromArray:array];
+	}
 	[self.alarmTable reloadData];
+}
 
+-(void) initializeData
+{
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
-	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:self.alarmList] autorelease];
+	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
@@ -146,7 +174,7 @@
 	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
 	cell.selectedBackgroundView = backgroundView;
 	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
-	
+
 	if ([self.alarmList count] > 0) {
 		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
 		
@@ -195,6 +223,7 @@
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 	} else {
+		NSLog(@"no alarms to list");
 		cell.textLabel.text = @"";
 	}
 	
@@ -205,4 +234,3 @@
 }
 
 @end
-

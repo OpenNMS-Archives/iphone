@@ -45,6 +45,7 @@
 @synthesize spinner;
 @synthesize fuzzyDate;
 @synthesize contextService;
+@synthesize nodeFactory;
 
 @synthesize outageList;
 
@@ -60,16 +61,59 @@
     [super dealloc];
 }
 
+-(void) refreshData
+{
+	if (!contextService) {
+		contextService = [[ContextService alloc] init];
+	}
+	
+	NSManagedObjectContext *context = [contextService managedObjectContext];
+	
+	NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
+	
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
+	[req setEntity:entity];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"ifLostService" ascending:NO];
+	[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	[sortDescriptor release];
+	
+	NSError* error = nil;
+	NSArray *array = [context executeFetchRequest:req error:&error];
+	if (array == nil) {
+		if (error) {
+			NSLog(@"error fetching outages: %@", [error localizedDescription]);
+		} else {
+			NSLog(@"error fetching outages");
+		}
+	} else {
+		[self.outageList removeAllObjects];
+		NSMutableArray* nodeIds = [[NSMutableArray alloc] initWithCapacity:[array count]];
+//		NSMutableArray* outages = [[NSMutableArray alloc] initWithCapacity:[array count]];
+		NSEnumerator* iter = [array reverseObjectEnumerator];
+		Outage* outage;
+		while ((outage = [iter nextObject]) != NULL) {
+			if (![nodeIds containsObject:outage.nodeId]) {
+				[nodeIds addObject:outage.nodeId];
+				[outageList insertObject:[outage objectID] atIndex:0];
+			}
+		}
+		[nodeIds release];
+//		[outages release];
+	}
+	
+	[self.outageTable reloadData];
+}
+
 -(void) initializeData
 {
 	if (!self.outageList) {
 		[spinner startAnimating];
 		self.outageList = [NSMutableArray array];
 	}
-	[self.outageTable reloadData];
 
 	OutageListUpdater* updater = [[[OutageListUpdater alloc] init] autorelease];
-	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithTableView:self.outageTable objectList:self.outageList] autorelease];
+	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
@@ -85,11 +129,10 @@
 
 - (void) viewDidLoad
 {
-	if (!contextService) {
-		contextService = [[ContextService alloc] init];
-	}
-	
 	self.fuzzyDate = [[FuzzyDate alloc] init];
+	if (!nodeFactory) {
+		self.nodeFactory = [NodeFactory getInstance];
+	}
 	[self initializeData];
 
 	[super viewDidLoad];
@@ -126,13 +169,10 @@
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	if ([self.outageList count] > 0) {
-		NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
 		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
-		NSLog(@"viewing outage %@", objId);
 		if (objId) {
-			Outage* outage = (Outage*)[managedObjectContext objectWithID:objId];
-			[managedObjectContext refreshObject:outage mergeChanges:NO];
-			NSLog(@"outage = %@");
+			NSLog(@"viewing outage with object ID %@", objId);
+			Outage* outage = (Outage*)[[contextService managedObjectContext] objectWithID:objId];
 			NodeDetailController* ndc = [[NodeDetailController alloc] init];
 			ndc.nodeId = outage.nodeId;
 			UINavigationController* cont = [self navigationController];
@@ -155,14 +195,14 @@
 	if ([self.outageList count] > 0) {
 	
 		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
-		NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
 		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
-		Outage* outage = (Outage*)[managedObjectContext objectWithID:objId];
 		
-		if (outage) {
+		if (objId) {
+			Outage* outage = (Outage*)[[contextService managedObjectContext] objectWithID:objId];
 			NSString* nodeLabel = outage.ipAddress;
-			if (outage.node != nil) {
-				nodeLabel = outage.node.label;
+			Node* node = [self.nodeFactory getCoreDataNode:outage.nodeId];
+			if (node != nil) {
+				nodeLabel = node.label;
 			}
 			[cell addColumn:nodeLabel];
 			label.font = [UIFont boldSystemFontOfSize:12];

@@ -35,30 +35,4 @@
 
 @implementation TableUpdateHandler
 
-@synthesize tableView;
-@synthesize objectList;
-
--(void) dealloc
-{
-	[self.tableView release];
-	[self.objectList release];
-
-	[super dealloc];
-}
-
--(id) initWithTableView:(UITableView*)tv objectList:ol
-{
-	if (self = [super init]) {
-		self.tableView = tv;
-		self.objectList = ol;
-	}
-	return self;
-}
-
--(void) requestDidFinish:(ASIHTTPRequest*) request
-{
-	[super requestDidFinish:request];
-	[self.tableView reloadData];
-}
-
 @end

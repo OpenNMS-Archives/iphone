@@ -35,13 +35,6 @@
 #import "UpdateHandler.h"
 
 @interface TableUpdateHandler : UpdateHandler {
-	UITableView* tableView;
-	NSMutableArray* objectList;
 }
-
-@property (retain) UITableView* tableView;
-@property (retain) NSMutableArray* objectList;
-
--(id) initWithTableView:(UITableView*)tv objectList:ol;
 
 @end

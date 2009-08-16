@@ -40,12 +40,12 @@
 
 @interface BaseUpdater : NSObject {
 	NSURL* url;
-	ASINetworkQueue* queue;
+	NSOperationQueue* queue;
 	UpdateHandler* handler;
 }
 
 @property (readonly, retain) NSURL* url;
-@property (readonly, retain) ASINetworkQueue* queue;
+@property (readonly, retain) NSOperationQueue* queue;
 @property (retain) UpdateHandler* handler;
 
 -(id) initWithPath:(NSString*)p;
