@@ -79,7 +79,7 @@
 	[string replaceOccurrencesOfRegex:@"^\\s*(.*?)\\s*$" withString:@"$1"];
 	[string replaceOccurrencesOfRegex:@"<[^>]*>" withString:@""];
 	
-	return string;
+	return [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 -(NSString*) stringForDate:(NSString*)date

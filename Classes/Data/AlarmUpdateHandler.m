@@ -32,9 +32,7 @@
  *******************************************************************************/
 
 #import "AlarmUpdateHandler.h"
-#import "OpenNMSAppDelegate.h"
 #import "Alarm.h"
-#import "RegexKitLite.h"
 
 @implementation AlarmUpdateHandler
 
@@ -109,7 +107,8 @@
 		alarm.alarmId = alarmId;
 		alarm.severity = severity;
 		alarm.count = count;
-		
+		alarm.lastModified = [NSDate date];
+
 		// UEI
 		CXMLElement *ueiElement = [xmlAlarm elementForName:@"uei"];
 		if (ueiElement) {

@@ -74,7 +74,7 @@
 			if ([[attr name] isEqual:@"id"]) {
 				nodeId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
 			} else if ([[attr name] isEqual:@"label"]) {
-				label = [attr stringValue];
+				label = [self cleanUpString:[attr stringValue]];
 #if DEBUG
 			} else {
 				NSLog(@"unknown node attribute: %@", [attr name]);

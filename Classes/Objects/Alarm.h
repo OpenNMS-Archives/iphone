@@ -23,6 +23,7 @@
 @property (nonatomic, retain) NSString * logMessage;
 @property (nonatomic, retain) NSNumber * ifIndex;
 @property (nonatomic, retain) NSString * uei;
+@property (nonatomic, retain) NSDate * lastModified;
 
 @end
 

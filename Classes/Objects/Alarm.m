@@ -21,5 +21,6 @@
 @dynamic logMessage;
 @dynamic ifIndex;
 @dynamic uei;
+@dynamic lastModified;
 
 @end

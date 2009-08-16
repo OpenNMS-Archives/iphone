@@ -39,7 +39,8 @@
 #import "ContextService.h"
 
 @interface AlarmDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private AlarmTableView* alarmTable;
+	@private UITableView* alarmTable;
+	@private UIActivityIndicatorView* spinner;
 	@private ContextService* contextService;
 	
 	@private FuzzyDate* fuzzyDate;
@@ -52,7 +53,8 @@
 	@private OnmsSeverity* severity;
 }
 
-@property (retain) AlarmTableView* alarmTable;
+@property (retain) UITableView* alarmTable;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
 
 @property (nonatomic, retain) ContextService* contextService;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
@@ -63,6 +65,8 @@
 @property (retain) NSManagedObjectID* alarmObjectId;
 @property (retain) Alarm* alarm;
 @property (nonatomic, retain) OnmsSeverity* severity;
+
+-(void) refreshData;
 
 -(void) initializeData;
 -(void) acknowledgeAlarm;

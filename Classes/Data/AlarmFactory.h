@@ -32,29 +32,20 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "ASIHTTPRequest.h"
-#import "CXMLDocument.h"
-#import "ContextService.h"
-#import "config.h"
+#import "Alarm.h"
 
-@interface UpdateHandler : NSObject {
-	UIActivityIndicatorView* spinner;
-	ContextService* contextService;
-	SEL method;
-	NSObject* methodTarget;
+@interface AlarmFactory : NSObject {
+	BOOL isFinished;
 }
 
-@property (retain) UIActivityIndicatorView* spinner;
-@property (retain) ContextService* contextService;
-@property (assign) SEL method;
-@property (retain) NSObject* methodTarget;
+@property (assign) BOOL isFinished;
 
--(id) initWithMethod:(SEL)selector target:(NSObject*)target;
++(void) initialize;
++(AlarmFactory*) getInstance;
 
--(NSString*)     cleanUpString:(NSString *)html;
--(NSString*)     stringForDate:(NSString*)date;
--(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
--(void)          requestDidFinish:(ASIHTTPRequest*) request;
--(void)          requestFailed:(ASIHTTPRequest*) request;
+-(void) finish;
+-(Alarm*) getCoreDataAlarm:(NSNumber *)alarmId;
+-(Alarm*) getRemoteAlarm:(NSNumber *)alarmId;
+-(Alarm*) getAlarm:(NSNumber*) alarmId;
 
 @end

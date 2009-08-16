@@ -40,6 +40,8 @@
 @synthesize url;
 @synthesize queue;
 @synthesize handler;
+@synthesize requestData;
+@synthesize requestMethod;
 
 static ASINetworkQueue* threadQueue;
 
@@ -113,6 +115,12 @@ static ASINetworkQueue* threadQueue;
 #endif
 	NSURL* requestUrl = [url copy];
 	ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:requestUrl] autorelease];
+	if (self.requestData) {
+		[request appendPostData:self.requestData];
+	}
+	if (self.requestMethod) {
+		[request setRequestMethod:self.requestMethod];
+	}
 	if (!self.handler) {
 		NSLog(@"WARNING: creating a default handler");
 		self.handler = [[[UpdateHandler alloc] init] autorelease];

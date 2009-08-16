@@ -161,6 +161,7 @@
 		NSManagedObjectID* objId = [self.alarmList objectAtIndex:indexPath.row];
 		AlarmDetailController* adc = [[AlarmDetailController alloc] init];
 		[adc setAlarmObjectId:objId];
+		[adc setSpinner:self.spinner];
 		UINavigationController* cont = [self navigationController];
 		[cont pushViewController:adc animated:YES];
 		[adc release];

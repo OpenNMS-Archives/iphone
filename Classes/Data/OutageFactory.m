@@ -33,7 +33,6 @@
 
 #import "OutageFactory.h"
 #import "Outage.h"
-#import "OpenNMSAppDelegate.h"
 
 #import "OutageListUpdater.h"
 #import "OutageUpdateHandler.h"
@@ -43,7 +42,7 @@
 @synthesize isFinished;
 
 static OutageFactory* outageFactorySingleton = nil;
-static NSManagedObjectContext* managedObjectContext = nil;
+static ContextService* contextService = nil;
 
 // 2 weeks
 #define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
@@ -55,7 +54,7 @@ static NSManagedObjectContext* managedObjectContext = nil;
 	{
 		initialized = YES;
 		outageFactorySingleton = [[OutageFactory alloc] init];
-		managedObjectContext =  [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+		contextService         = [[ContextService alloc] init];
 	}
 }
 
@@ -82,16 +81,18 @@ static NSManagedObjectContext* managedObjectContext = nil;
 
 -(Outage*) getCoreDataOutage:(NSNumber*) outageId
 {
+	NSManagedObjectContext* context = [contextService managedObjectContext];
 	NSFetchRequest* outageRequest = [[NSFetchRequest alloc] init];
 
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:managedObjectContext];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
 	[outageRequest setEntity:entity];
 	
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"outageId == %@", outageId];
 	[outageRequest setPredicate:predicate];
 
 	NSError* error = nil;
-	NSArray *results = [managedObjectContext executeFetchRequest:outageRequest error:&error];
+	NSArray *results = [context executeFetchRequest:outageRequest error:&error];
+	[outageRequest release];
 	if (!results || [results count] == 0) {
 		if (error) {
 			NSLog(@"error fetching outage for ID %@: %@", outageId, [error localizedDescription]);
@@ -105,8 +106,9 @@ static NSManagedObjectContext* managedObjectContext = nil;
 
 -(NSArray*) getCoreDataOutagesForNode:(NSNumber*) nodeId
 {
+	NSManagedObjectContext* context = [contextService managedObjectContext];
 	NSFetchRequest* nodeOutageRequest = [[NSFetchRequest alloc] init];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:managedObjectContext];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
 	[nodeOutageRequest setEntity:entity];
 
 	if (nodeId) {
@@ -115,7 +117,8 @@ static NSManagedObjectContext* managedObjectContext = nil;
 	}
 
 	NSError* error = nil;
-	NSArray *results = [managedObjectContext executeFetchRequest:nodeOutageRequest error:&error];
+	NSArray *results = [context executeFetchRequest:nodeOutageRequest error:&error];
+	[nodeOutageRequest release];
 	if (!results) {
 		if (error) {
 			NSLog(@"error fetching outages for node ID %@: %@", nodeId, [error localizedDescription]);
@@ -137,7 +140,7 @@ static NSManagedObjectContext* managedObjectContext = nil;
 -(NSArray*) getOutagesForNode:(NSNumber*) nodeId
 {
 	NSArray* outages = [self getCoreDataOutagesForNode:nodeId];
-	BOOL refreshOutages = (DEBUG == 1 || !outages || ([outages count] == 0));
+	BOOL refreshOutages = (!outages || ([outages count] == 0));
 	
 	if (refreshOutages == NO) {
 		for (id outage in outages) {
@@ -177,7 +180,7 @@ static NSManagedObjectContext* managedObjectContext = nil;
 {
 	Outage* outage = [self getCoreDataOutage:outageId];
 
-	if (DEBUG == 1 || !outage || ([outage.lastModified timeIntervalSinceNow] > CUTOFF)) {
+	if (!outage || ([outage.lastModified timeIntervalSinceNow] > CUTOFF)) {
 #if DEBUG
 		NSLog(@"outage not found, or last modified out of date");
 #endif

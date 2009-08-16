@@ -31,20 +31,18 @@
  *
  *******************************************************************************/
 
-#import "NodeFactory.h"
+#import "AlarmFactory.h"
 
-#import "NodeUpdater.h"
-#import "NodeUpdateHandler.h"
-
-#import "OutageFactory.h"
+#import "ALarmUpdater.h"
+#import "AlarmUpdateHandler.h"
 
 #import "ContextService.h"
 
-@implementation NodeFactory
+@implementation AlarmFactory
 
 @synthesize isFinished;
 
-static NodeFactory* nodeFactorySingleton = nil;
+static AlarmFactory* alarmFactorySingleton = nil;
 static ContextService* contextService = nil;
 
 // 2 weeks
@@ -56,17 +54,17 @@ static ContextService* contextService = nil;
 	if (!initialized)
 	{
 		initialized = YES;
-		nodeFactorySingleton = [[NodeFactory alloc] init];
+		alarmFactorySingleton = [[AlarmFactory alloc] init];
 		contextService = [[ContextService alloc] init];
 	}
 }
 
-+(NodeFactory*) getInstance
++(AlarmFactory*) getInstance
 {
-	if (nodeFactorySingleton == nil) {
-		[NodeFactory initialize];
+	if (alarmFactorySingleton == nil) {
+		[AlarmFactory initialize];
 	}
-	return nodeFactorySingleton;
+	return alarmFactorySingleton;
 }
 
 -(id) init
@@ -82,17 +80,17 @@ static ContextService* contextService = nil;
 	isFinished = YES;
 }
 
--(Node*) getCoreDataNode:(NSNumber*) nodeId
+-(Alarm*) getCoreDataAlarm:(NSNumber*) alarmId
 {
-	Node* node = nil;
+	Alarm* alarm = nil;
 	NSManagedObjectContext* context = [contextService managedObjectContext];
 	
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
 	[request setEntity:entity];
 	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"nodeId == %@", nodeId];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"alarmId == %@", alarmId];
 	[request setPredicate:predicate];
 	
 	NSError* error = nil;
@@ -100,52 +98,52 @@ static ContextService* contextService = nil;
 	[request release];
 	if (!results || [results count] == 0) {
 		if (error) {
-			NSLog(@"error fetching node for ID %@: %@", nodeId, [error localizedDescription]);
+			NSLog(@"error fetching alarm for ID %@: %@", alarmId, [error localizedDescription]);
 			[error release];
 		}
 		return nil;
 	} else {
-		node = (Node*)[results objectAtIndex:0];
+		alarm = (Alarm*)[results objectAtIndex:0];
 	}
-	return node;
+	return alarm;
 }
 
--(Node*) getRemoteNode:(NSNumber*) nodeId
+-(Alarm*) getRemoteAlarm:(NSNumber*) alarmId
 {
-	Node* node = nil;
+	Alarm* alarm = nil;
 	
-	NodeUpdater* nodeUpdater = [[NodeUpdater alloc] initWithNode:nodeId];
-	NodeUpdateHandler* nodeHandler = [[NodeUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
-	nodeUpdater.handler = nodeHandler;
-	[nodeUpdater update];
-	[nodeUpdater release];
+	AlarmUpdater* alarmUpdater = [[AlarmUpdater alloc] initWithAlarmId:alarmId];
+	AlarmUpdateHandler* alarmHandler = [[AlarmUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
+	alarmUpdater.handler = alarmHandler;
+	[alarmUpdater update];
+	[alarmUpdater release];
 	
 	NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 	while (!isFinished) {
 #if DEBUG
-		NSLog(@"waiting for getRemoteNode");
+		NSLog(@"waiting for getRemoteAlarm");
 #endif
-		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 	}
-	node = [self getCoreDataNode:nodeId];
+	alarm = [self getCoreDataAlarm:alarmId];
 
-	return node;
+	return alarm;
 }
 
 
--(Node*) getNode:(NSNumber*) nodeId
+-(Alarm*) getAlarm:(NSNumber*) alarmId
 {
-	Node* node = [self getCoreDataNode:nodeId];
+	Alarm* alarm = [self getCoreDataAlarm:alarmId];
 
-	if (!node || ([node.lastModified timeIntervalSinceNow] > CUTOFF)) {
+	if (!alarm || ([alarm.lastModified timeIntervalSinceNow] > CUTOFF)) {
 #if DEBUG
-		NSLog(@"node %@ not found, or last modified out of date", nodeId);
+		NSLog(@"alarm %@ not found, or last modified out of date", alarmId);
 #endif
-		node = [self getRemoteNode:nodeId];
+		alarm = [self getRemoteAlarm:alarmId];
 	}
 
-	NSLog(@"returning node: %@", node);
-	return node;
+	NSLog(@"returning alarm: %@", alarm);
+	return alarm;
 }
 
 @end

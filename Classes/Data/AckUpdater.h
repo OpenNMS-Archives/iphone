@@ -32,9 +32,11 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "UpdateHandler.h"
+#import "BaseUpdater.h"
 
-@interface TableUpdateHandler : UpdateHandler {
+@interface AckUpdater : BaseUpdater {
 }
+
+-(id) initWithAlarmId:(NSNumber*)alarmId action:(NSString*)action;
 
 @end

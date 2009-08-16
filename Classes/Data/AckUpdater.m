@@ -31,8 +31,16 @@
  *
  *******************************************************************************/
 
-#import "TableUpdateHandler.h"
+#import "AckUpdater.h"
 
-@implementation TableUpdateHandler
+@implementation AckUpdater
+
+-(id) initWithAlarmId:(NSNumber*)alarmId action:(NSString*)action
+{
+	self = [super initWithPath:[NSString stringWithFormat:@"/acks"]];
+	self.requestData = [[NSString stringWithFormat:@"alarmId=%@&action=%@", alarmId, action] dataUsingEncoding:NSUTF8StringEncoding];
+	self.requestMethod = @"POST";
+	return self;
+}
 
 @end
