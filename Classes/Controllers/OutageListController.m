@@ -192,7 +192,7 @@
 
 	// Set the selected color.
 	UIView* backgroundView = [[[UIView alloc] init] autorelease];
-	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
+	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
 
 	if ([self.outageList count] > 0) {

@@ -110,9 +110,8 @@
 
 	// Set the selected color.
 	UIView* backgroundView = [[[UIView alloc] init] autorelease];
-	backgroundView.backgroundColor = [UIColor colorWithWhite:0.9333333 alpha:1.0];
+	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
-	cell.textLabel.highlightedTextColor = [UIColor colorWithWhite:0.0 alpha:1.0];
 	
 	/*
 	 If the requesting table view is the search display controller's table view, configure the cell using the filtered content, otherwise use the main list.
