@@ -36,8 +36,17 @@
 
 @implementation SnmpInterfaceUpdateHandler
 
+@synthesize nodeId;
+
+-(void) dealloc
+{
+	[nodeId release];
+	[super dealloc];
+}
+
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
+	int count = 0;
 	NSManagedObjectContext *moc = [contextService managedObjectContext];
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -62,6 +71,7 @@
 		xmlSnmpInterfaces = [[document rootElement] elementsForName:@"snmpInterface"];
 	}
 	for (id xmlSnmpInterface in xmlSnmpInterfaces) {
+		count++;
 		SnmpInterface* snmpInterface;
 
 		NSNumber* snmpInterfaceId = nil;
@@ -111,34 +121,38 @@
 
 		CXMLElement* nodeElement = [xmlSnmpInterface elementForName:@"nodeId"];
 		if (nodeElement) {
-			[snmpInterface setNodeId:[NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]]];
+			snmpInterface.nodeId = [NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]];
 		}
 		
 		CXMLElement* descElement = [xmlSnmpInterface elementForName:@"ifDescr"];
 		if (descElement) {
-			[snmpInterface setIfDescription:[[descElement childAtIndex:0] stringValue]];
+			snmpInterface.ifDescription = [[descElement childAtIndex:0] stringValue];
 		}
 		
 		CXMLElement* statusElement = [xmlSnmpInterface elementForName:@"ifOperStatus"];
 		if (statusElement) {
-			[snmpInterface setIfStatus:[NSNumber numberWithInt:[[[statusElement childAtIndex:0] stringValue] intValue]]];
+			snmpInterface.ifStatus = [NSNumber numberWithInt:[[[statusElement childAtIndex:0] stringValue] intValue]];
 		}
 		
 		CXMLElement* ipElement = [xmlSnmpInterface elementForName:@"ipAddress"];
 		if (ipElement) {
-			[snmpInterface setIpAddress:[[ipElement childAtIndex:0] stringValue]];
+			snmpInterface.ipAddress = [[ipElement childAtIndex:0] stringValue];
 		}
 		
 		CXMLElement* macElement = [xmlSnmpInterface elementForName:@"physAddr"];
 		if (macElement) {
-			[snmpInterface setPhysAddr:[[macElement childAtIndex:0] stringValue]];
+			snmpInterface.physAddr = [[macElement childAtIndex:0] stringValue];
 		}
 		
 		CXMLElement* speedElement = [xmlSnmpInterface elementForName:@"ifSpeed"];
 		if (speedElement) {
-			[snmpInterface setIfStatus:[NSNumber numberWithLongLong:[[[speedElement childAtIndex:0] stringValue] longLongValue]]];
+			snmpInterface.ifSpeed = [NSNumber numberWithLongLong:[[[speedElement childAtIndex:0] stringValue] longLongValue]];
 		}
 	}
+
+#if DEBUG
+	NSLog(@"found %d SNMP interfaces", count);
+#endif
 
 	if (self.clearOldObjects) {
 		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
@@ -146,9 +160,14 @@
 		NSEntityDescription *entity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:moc];
 		[request setEntity:entity];
 		
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lastModified < %@", lastModified];
-		[request setPredicate:predicate];
-		
+		if (nodeId) {
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(lastModified < %@) AND (nodeId == %@)", lastModified, nodeId];
+			[request setPredicate:predicate];
+		} else{
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lastModified < %@", lastModified];
+			[request setPredicate:predicate];
+		}
+
 		NSError* error = nil;
 		NSArray *snmpInterfacesToDelete = [moc executeFetchRequest:request error:&error];
 		if (!snmpInterfacesToDelete) {

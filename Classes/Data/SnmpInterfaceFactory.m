@@ -157,6 +157,8 @@ static ContextService* contextService = nil;
 #endif
 		SnmpInterfaceUpdater* snmpInterfaceUpdater = [[SnmpInterfaceUpdater alloc] initWithNodeId:nodeId];
 		SnmpInterfaceUpdateHandler* snmpInterfaceHandler = [[SnmpInterfaceUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
+		snmpInterfaceHandler.nodeId = nodeId;
+		snmpInterfaceHandler.clearOldObjects = YES;
 		snmpInterfaceUpdater.handler = snmpInterfaceHandler;
 		
 		[snmpInterfaceUpdater update];

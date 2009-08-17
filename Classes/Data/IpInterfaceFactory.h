@@ -32,30 +32,18 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "ASINetworkQueue.h"
-#import "UpdateHandler.h"
-#import "config.h"
+#import "IpInterface.h"
 
-#define GET_LIMIT 100
-
-@interface BaseUpdater : NSObject {
-	NSURL* url;
-	NSOperationQueue* queue;
-	UpdateHandler* handler;
-	NSData* requestData;
-	NSString* requestMethod;
+@interface IpInterfaceFactory : NSObject {
+	BOOL isFinished;
 }
 
-@property (readonly, retain) NSURL* url;
-@property (readonly, retain) NSOperationQueue* queue;
-@property (retain) UpdateHandler* handler;
-@property (retain) NSData* requestData;
-@property (retain) NSString* requestMethod;
+@property (assign) BOOL isFinished;
 
--(id) initWithPath:(NSString*)p;
++(void) initialize;
++(IpInterfaceFactory*) getInstance;
 
--(NSString*) filterDate:(NSString*)date;
--(NSString*) getBaseUrl;
--(void) update;
+-(void) finish;
+-(NSArray*) getIpInterfacesForNode:(NSNumber*) nodeId;
 
 @end

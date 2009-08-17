@@ -31,31 +31,20 @@
  *
  *******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "ASINetworkQueue.h"
-#import "UpdateHandler.h"
-#import "config.h"
+#import "IpInterfaceUpdater.h"
 
-#define GET_LIMIT 100
+@implementation IpInterfaceUpdater
 
-@interface BaseUpdater : NSObject {
-	NSURL* url;
-	NSOperationQueue* queue;
-	UpdateHandler* handler;
-	NSData* requestData;
-	NSString* requestMethod;
+-(id) initWithNodeId:(NSNumber*)nodeId
+{
+	self = [super initWithPath:[NSString stringWithFormat:@"/nodes/%@/ipinterfaces", nodeId]];
+	return self;
 }
 
-@property (readonly, retain) NSURL* url;
-@property (readonly, retain) NSOperationQueue* queue;
-@property (retain) UpdateHandler* handler;
-@property (retain) NSData* requestData;
-@property (retain) NSString* requestMethod;
-
--(id) initWithPath:(NSString*)p;
-
--(NSString*) filterDate:(NSString*)date;
--(NSString*) getBaseUrl;
--(void) update;
+-(id) initWithNodeId:(NSNumber*)nodeId interfaceId:(NSNumber*)interfaceId
+{
+	self = [super initWithPath:[NSString stringWithFormat:@"/nodes/%@/ipinterfaces/%@", nodeId, interfaceId]];
+	return self;
+}
 
 @end

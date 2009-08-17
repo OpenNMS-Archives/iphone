@@ -39,6 +39,12 @@
 		44367B4C1038E273008E6799 /* SnmpInterfaceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367B471038E273008E6799 /* SnmpInterfaceFactory.m */; };
 		44367B4D1038E273008E6799 /* SnmpInterfaceUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367B491038E273008E6799 /* SnmpInterfaceUpdateHandler.m */; };
 		44367B4E1038E273008E6799 /* SnmpInterfaceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367B4B1038E273008E6799 /* SnmpInterfaceUpdater.m */; };
+		44367BE510397226008E6799 /* IpInterfaceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367BE010397225008E6799 /* IpInterfaceFactory.m */; };
+		44367BE610397226008E6799 /* IpInterfaceUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367BE210397225008E6799 /* IpInterfaceUpdateHandler.m */; };
+		44367BE710397226008E6799 /* IpInterfaceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367BE410397225008E6799 /* IpInterfaceUpdater.m */; };
+		44367C4C10397B30008E6799 /* EventFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4710397B30008E6799 /* EventFactory.m */; };
+		44367C4D10397B30008E6799 /* EventUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4910397B30008E6799 /* EventUpdateHandler.m */; };
+		44367C4E10397B30008E6799 /* EventUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4B10397B30008E6799 /* EventUpdater.m */; };
 		445221F71030848500F77B2C /* Alarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EC1030848500F77B2C /* Alarm.m */; };
 		445221F81030848500F77B2C /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EE1030848500F77B2C /* Event.m */; };
 		445221F91030848500F77B2C /* IpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F01030848500F77B2C /* IpInterface.m */; };
@@ -162,6 +168,18 @@
 		44367B491038E273008E6799 /* SnmpInterfaceUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceUpdateHandler.m; path = Data/SnmpInterfaceUpdateHandler.m; sourceTree = "<group>"; };
 		44367B4A1038E273008E6799 /* SnmpInterfaceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterfaceUpdater.h; path = Data/SnmpInterfaceUpdater.h; sourceTree = "<group>"; };
 		44367B4B1038E273008E6799 /* SnmpInterfaceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceUpdater.m; path = Data/SnmpInterfaceUpdater.m; sourceTree = "<group>"; };
+		44367BDF10397225008E6799 /* IpInterfaceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterfaceFactory.h; path = Data/IpInterfaceFactory.h; sourceTree = "<group>"; };
+		44367BE010397225008E6799 /* IpInterfaceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterfaceFactory.m; path = Data/IpInterfaceFactory.m; sourceTree = "<group>"; };
+		44367BE110397225008E6799 /* IpInterfaceUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterfaceUpdateHandler.h; path = Data/IpInterfaceUpdateHandler.h; sourceTree = "<group>"; };
+		44367BE210397225008E6799 /* IpInterfaceUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterfaceUpdateHandler.m; path = Data/IpInterfaceUpdateHandler.m; sourceTree = "<group>"; };
+		44367BE310397225008E6799 /* IpInterfaceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterfaceUpdater.h; path = Data/IpInterfaceUpdater.h; sourceTree = "<group>"; };
+		44367BE410397225008E6799 /* IpInterfaceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterfaceUpdater.m; path = Data/IpInterfaceUpdater.m; sourceTree = "<group>"; };
+		44367C4610397B30008E6799 /* EventFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventFactory.h; path = Data/EventFactory.h; sourceTree = "<group>"; };
+		44367C4710397B30008E6799 /* EventFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventFactory.m; path = Data/EventFactory.m; sourceTree = "<group>"; };
+		44367C4810397B30008E6799 /* EventUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventUpdateHandler.h; path = Data/EventUpdateHandler.h; sourceTree = "<group>"; };
+		44367C4910397B30008E6799 /* EventUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventUpdateHandler.m; path = Data/EventUpdateHandler.m; sourceTree = "<group>"; };
+		44367C4A10397B30008E6799 /* EventUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventUpdater.h; path = Data/EventUpdater.h; sourceTree = "<group>"; };
+		44367C4B10397B30008E6799 /* EventUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventUpdater.m; path = Data/EventUpdater.m; sourceTree = "<group>"; };
 		445221EB1030848500F77B2C /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
 		445221EC1030848500F77B2C /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
 		445221ED1030848500F77B2C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
@@ -526,12 +544,24 @@
 				440AD04A102F91EF00CC63C9 /* NodeUpdater.m */,
 				440AD064102F924E00CC63C9 /* NodeUpdateHandler.h */,
 				440AD065102F924E00CC63C9 /* NodeUpdateHandler.m */,
+				44367C4610397B30008E6799 /* EventFactory.h */,
+				44367C4710397B30008E6799 /* EventFactory.m */,
+				44367C4A10397B30008E6799 /* EventUpdater.h */,
+				44367C4B10397B30008E6799 /* EventUpdater.m */,
+				44367C4810397B30008E6799 /* EventUpdateHandler.h */,
+				44367C4910397B30008E6799 /* EventUpdateHandler.m */,
 				445222991030CD3D00F77B2C /* OutageFactory.h */,
 				4452229A1030CD3D00F77B2C /* OutageFactory.m */,
 				44B8E1A1102DB0A9003DBB9B /* OutageListUpdater.h */,
 				44B8E1A2102DB0A9003DBB9B /* OutageListUpdater.m */,
 				44B8E1E0102DB4E6003DBB9B /* OutageUpdateHandler.h */,
 				44B8E1E1102DB4E6003DBB9B /* OutageUpdateHandler.m */,
+				44367BDF10397225008E6799 /* IpInterfaceFactory.h */,
+				44367BE010397225008E6799 /* IpInterfaceFactory.m */,
+				44367BE310397225008E6799 /* IpInterfaceUpdater.h */,
+				44367BE410397225008E6799 /* IpInterfaceUpdater.m */,
+				44367BE110397225008E6799 /* IpInterfaceUpdateHandler.h */,
+				44367BE210397225008E6799 /* IpInterfaceUpdateHandler.m */,
 				44367B461038E273008E6799 /* SnmpInterfaceFactory.h */,
 				44367B471038E273008E6799 /* SnmpInterfaceFactory.m */,
 				44367B4A1038E273008E6799 /* SnmpInterfaceUpdater.h */,
@@ -713,6 +743,12 @@
 				44367B4C1038E273008E6799 /* SnmpInterfaceFactory.m in Sources */,
 				44367B4D1038E273008E6799 /* SnmpInterfaceUpdateHandler.m in Sources */,
 				44367B4E1038E273008E6799 /* SnmpInterfaceUpdater.m in Sources */,
+				44367BE510397226008E6799 /* IpInterfaceFactory.m in Sources */,
+				44367BE610397226008E6799 /* IpInterfaceUpdateHandler.m in Sources */,
+				44367BE710397226008E6799 /* IpInterfaceUpdater.m in Sources */,
+				44367C4C10397B30008E6799 /* EventFactory.m in Sources */,
+				44367C4D10397B30008E6799 /* EventUpdateHandler.m in Sources */,
+				44367C4E10397B30008E6799 /* EventUpdater.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

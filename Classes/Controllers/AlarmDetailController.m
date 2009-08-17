@@ -294,7 +294,7 @@
 #endif
 	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
 	// FIXME: need to know when the ack has gone through
-	usleep(3500000);
+	usleep(4000000);
 	a = [[AlarmFactory getInstance] getRemoteAlarm:a.alarmId];
 	self.alarmObjectId = [a objectID];
 	[self initializeData];

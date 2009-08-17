@@ -32,30 +32,20 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "ASINetworkQueue.h"
-#import "UpdateHandler.h"
-#import "config.h"
+#import "EventUpdater.h"
 
-#define GET_LIMIT 100
+@implementation EventUpdater
 
-@interface BaseUpdater : NSObject {
-	NSURL* url;
-	NSOperationQueue* queue;
-	UpdateHandler* handler;
-	NSData* requestData;
-	NSString* requestMethod;
+-(id) initWithNodeId:(NSNumber*)nodeId
+{
+	self = [self initWithNodeId:nodeId limit:GET_LIMIT];
+	return self;
 }
 
-@property (readonly, retain) NSURL* url;
-@property (readonly, retain) NSOperationQueue* queue;
-@property (retain) UpdateHandler* handler;
-@property (retain) NSData* requestData;
-@property (retain) NSString* requestMethod;
-
--(id) initWithPath:(NSString*)p;
-
--(NSString*) filterDate:(NSString*)date;
--(NSString*) getBaseUrl;
--(void) update;
+-(id) initWithNodeId:(NSNumber*)nodeId limit:(int)limit
+{
+	self = [super initWithPath:[NSString stringWithFormat:@"/events?limit=%d&node.id=%@", limit, nodeId]];
+	return self;
+}
 
 @end

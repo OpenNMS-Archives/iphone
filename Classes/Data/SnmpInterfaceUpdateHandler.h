@@ -35,6 +35,9 @@
 #import "UpdateHandler.h"
 
 @interface SnmpInterfaceUpdateHandler : UpdateHandler {
+	NSNumber* nodeId;
 }
+
+@property (nonatomic, retain) NSNumber* nodeId;
 
 @end
