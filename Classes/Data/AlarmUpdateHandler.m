@@ -52,7 +52,9 @@
 		[self autorelease];
 		return;
 	}
-	
+
+	NSDate* lastModified = [NSDate date];
+
 	NSArray* xmlAlarms;
 	if ([[[document rootElement] name] isEqual:@"alarm"]) {
 		xmlAlarms = [NSArray arrayWithObject:[document rootElement]];
@@ -107,7 +109,7 @@
 		alarm.alarmId = alarmId;
 		alarm.severity = severity;
 		alarm.count = count;
-		alarm.lastModified = [NSDate date];
+		alarm.lastModified = lastModified;
 
 		// UEI
 		CXMLElement *ueiElement = [xmlAlarm elementForName:@"uei"];
@@ -147,6 +149,32 @@
 			alarm.ackTime = [dateFormatter dateFromString:[self stringForDate:[[ackElement childAtIndex:0] stringValue]]];
 		} else {
 			alarm.ackTime = nil;
+		}
+	}
+
+	if (self.clearOldObjects) {
+		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+		
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:moc];
+		[request setEntity:entity];
+		
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lastModified < %@", lastModified];
+		[request setPredicate:predicate];
+		
+		NSError* error = nil;
+		NSArray *alarmsToDelete = [moc executeFetchRequest:request error:&error];
+		if (!alarmsToDelete) {
+			if (error) {
+				NSLog(@"error fetching alarms to delete (older than %@): %@", lastModified, [error localizedDescription]);
+				[error release];
+			} else {
+				NSLog(@"error fetching alarms to delete (older than %@)", lastModified);
+			}
+		} else {
+			for (id alarm in alarmsToDelete) {
+				NSLog(@"deleting %@", alarm);
+				[moc deleteObject:alarm];
+			}
 		}
 	}
 

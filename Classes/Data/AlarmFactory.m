@@ -104,6 +104,7 @@ static ContextService* contextService = nil;
 		return nil;
 	} else {
 		alarm = (Alarm*)[results objectAtIndex:0];
+		[context refreshObject:alarm mergeChanges:NO];
 	}
 	return alarm;
 }

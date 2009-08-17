@@ -144,7 +144,9 @@ static ContextService* contextService = nil;
 		node = [self getRemoteNode:nodeId];
 	}
 
+#if DEBUG
 	NSLog(@"returning node: %@", node);
+#endif
 	return node;
 }
 

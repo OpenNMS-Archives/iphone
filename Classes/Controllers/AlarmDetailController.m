@@ -50,7 +50,6 @@
 @synthesize white;
 
 @synthesize alarmObjectId;
-@synthesize alarm;
 @synthesize severity;
 
 -(void) loadView
@@ -60,17 +59,29 @@
 	self.alarmTable.delegate = self;
 	self.alarmTable.dataSource = self;
 	self.alarmTable.rowHeight = 34.0;
-	self.view = alarmTable;
+	self.view = self.alarmTable;
+	self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	self.spinner.hidesWhenStopped = YES;
+	self.spinner.center = self.view.center;
+//	self.spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[self.navigationController.view addSubview:self.spinner];
+//	[self.view addSubview:self.spinner];
 }
 
 -(void) initializeData
 {
+#if DEBUG
 	NSLog(@"initializeData called");
+#endif
 	[fuzzyDate touch];
 	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
 	Alarm* a = (Alarm*)[managedObjectContext objectWithID:self.alarmObjectId];
+	[managedObjectContext refreshObject:a mergeChanges:NO];
 	self.severity = [[[OnmsSeverity alloc] initWithSeverity:a.severity] autorelease];
 	self.alarmTable.backgroundColor = [self.severity getDisplayColor];
+#if DEBUG
+	NSLog(@"setting color for severity %@", self.severity);
+#endif
 	self.title = [NSString stringWithFormat:@"Alarm #%@", a.alarmId];
 }
 
@@ -88,7 +99,6 @@
 	[self.white release];
 	
 	[self.alarmObjectId release];
-	[self.alarm release];
 	[self.severity release];
 	
 	[super dealloc];
@@ -123,7 +133,6 @@
 	[self.white release];
 
 	[self.alarmObjectId release];
-	[self.alarm release];
 
 	[super viewDidUnload];
 }
@@ -161,8 +170,6 @@
 }
 
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSLog(@"displaying row %d", indexPath.row);
-	
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 	cell.backgroundColor = white;
 	cell.textLabel.font = defaultFont;
@@ -286,7 +293,8 @@
 	NSLog(@"%@: refreshData called", self);
 #endif
 	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
-	sleep(1);
+	// FIXME: need to know when the ack has gone through
+	usleep(3500000);
 	a = [[AlarmFactory getInstance] getRemoteAlarm:a.alarmId];
 	self.alarmObjectId = [a objectID];
 	[self initializeData];

@@ -126,7 +126,9 @@ static ASINetworkQueue* threadQueue;
 		self.handler = [[[UpdateHandler alloc] init] autorelease];
 	}
 
+#if DEBUG
 	NSLog(@"handler = %@", self.handler);
+#endif
 
 	request.timeOutSeconds = 5;
 	if ([[requestUrl scheme] isEqual:@"https"]) {
@@ -136,7 +138,9 @@ static ASINetworkQueue* threadQueue;
 	request.didFinishSelector = @selector(requestDidFinish:);
 	request.didFailSelector = @selector(requestFailed:);
 
+#if DEBUG
 	NSLog(@"queue = %@", queue);
+#endif
 	[queue addOperation:request];
 	[queue setSuspended:NO];
 }

@@ -114,6 +114,7 @@
 
 	OutageListUpdater* updater = [[[OutageListUpdater alloc] init] autorelease];
 	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
+	handler.clearOldObjects = YES;
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
@@ -171,7 +172,9 @@
 	if ([self.outageList count] > 0) {
 		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
 		if (objId) {
+#ifdef DEBUG
 			NSLog(@"viewing outage with object ID %@", objId);
+#endif
 			Outage* outage = (Outage*)[[contextService managedObjectContext] objectWithID:objId];
 			NodeDetailController* ndc = [[NodeDetailController alloc] init];
 			ndc.nodeId = outage.nodeId;

@@ -42,12 +42,14 @@
 	ContextService* contextService;
 	SEL method;
 	NSObject* methodTarget;
+	BOOL clearOldObjects;
 }
 
 @property (retain) UIActivityIndicatorView* spinner;
 @property (retain) ContextService* contextService;
 @property (assign) SEL method;
 @property (retain) NSObject* methodTarget;
+@property (assign) BOOL clearOldObjects;
 
 -(id) initWithMethod:(SEL)selector target:(NSObject*)target;
 

@@ -44,4 +44,6 @@
 -(UIColor*) getDisplayColor;
 -(UIColor*) getSeparatorColor;
 
+-(NSString*) description;
+
 @end

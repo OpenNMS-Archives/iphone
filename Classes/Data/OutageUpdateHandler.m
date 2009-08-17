@@ -63,7 +63,8 @@
 		[self autorelease];
 		return;
 	}
-
+	
+	NSDate* lastModified = [NSDate date];
 	NSArray* xmlOutages;
 	if ([[[document rootElement] name] isEqual:@"outage"]) {
 		xmlOutages = [NSArray arrayWithObject:[document rootElement]];
@@ -103,7 +104,7 @@
 		}
 		
 		outage.outageId = outageId;
-		outage.lastModified = [NSDate date];
+		outage.lastModified = lastModified;
 
 		// Service Name
 		outage.serviceName = nil;
@@ -167,6 +168,32 @@
 					outage.serviceRegainedEventId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
 					break;
 				}
+			}
+		}
+	}
+
+	if (self.clearOldObjects) {
+		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+		
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:moc];
+		[request setEntity:entity];
+		
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lastModified < %@", lastModified];
+		[request setPredicate:predicate];
+		
+		NSError* error = nil;
+		NSArray *outagesToDelete = [moc executeFetchRequest:request error:&error];
+		if (!outagesToDelete) {
+			if (error) {
+				NSLog(@"error fetching outages to delete (older than %@): %@", lastModified, [error localizedDescription]);
+				[error release];
+			} else {
+				NSLog(@"error fetching outages to delete (older than %@)", lastModified);
+			}
+		} else {
+			for (id outage in outagesToDelete) {
+				NSLog(@"deleting %@", outage);
+				[moc deleteObject:outage];
 			}
 		}
 	}

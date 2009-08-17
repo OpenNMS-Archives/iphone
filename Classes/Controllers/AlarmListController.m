@@ -100,6 +100,7 @@
 {
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
 	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
+	handler.clearOldObjects = YES;
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
@@ -161,7 +162,6 @@
 		NSManagedObjectID* objId = [self.alarmList objectAtIndex:indexPath.row];
 		AlarmDetailController* adc = [[AlarmDetailController alloc] init];
 		[adc setAlarmObjectId:objId];
-		[adc setSpinner:self.spinner];
 		UINavigationController* cont = [self navigationController];
 		[cont pushViewController:adc animated:YES];
 		[adc release];

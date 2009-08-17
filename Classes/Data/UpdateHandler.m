@@ -41,12 +41,14 @@
 @synthesize contextService;
 @synthesize method;
 @synthesize methodTarget;
+@synthesize clearOldObjects;
 
 -(id) init
 {
 	if (self = [super init]) {
 		self.spinner = nil;
 		self.contextService = [[ContextService alloc] init];
+		self.clearOldObjects = NO;
 	}
 	return self;
 }
@@ -58,6 +60,7 @@
 		self.contextService = [[ContextService alloc] init];
 		self.method = selector;
 		self.methodTarget = target;
+		self.clearOldObjects = NO;
 	}
 	return self;
 }

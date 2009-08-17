@@ -49,7 +49,6 @@
 	@private UIColor* white;
 
 	@private NSManagedObjectID* alarmObjectId;
-	@private Alarm* alarm;
 	@private OnmsSeverity* severity;
 }
 
@@ -63,7 +62,6 @@
 @property (nonatomic, retain) UIColor* white;
 
 @property (retain) NSManagedObjectID* alarmObjectId;
-@property (retain) Alarm* alarm;
 @property (nonatomic, retain) OnmsSeverity* severity;
 
 -(void) refreshData;
