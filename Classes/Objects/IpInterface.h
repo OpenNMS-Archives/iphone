@@ -21,6 +21,7 @@
 @property (nonatomic, retain) NSDate * lastCapsdPoll;
 @property (nonatomic, retain) NSNumber * ifIndex;
 @property (nonatomic, retain) NSString * snmpPrimaryFlag;
+@property (nonatomic, retain) NSDate * lastModified;
 
 @end
 

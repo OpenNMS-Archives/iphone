@@ -39,11 +39,8 @@
 
 @implementation OutageUpdateHandler
 
-@synthesize nodeId;
-
 -(void) dealloc
 {
-	[nodeId release];
 	[super dealloc];
 }
 

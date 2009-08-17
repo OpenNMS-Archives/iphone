@@ -32,19 +32,9 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "Outage.h"
+#import "UpdateHandler.h"
 
-@interface OutageFactory : NSObject {
-	BOOL isFinished;
+@interface SnmpInterfaceUpdateHandler : UpdateHandler {
 }
-
-@property (assign) BOOL isFinished;
-
-+(void) initialize;
-+(OutageFactory*) getInstance;
-
--(void) finish;
--(Outage*) getOutage:(NSNumber*) outageId;
--(NSArray*) getOutagesForNode:(NSNumber*) nodeId;
 
 @end

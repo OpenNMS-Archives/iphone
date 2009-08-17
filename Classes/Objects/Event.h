@@ -26,6 +26,7 @@
 @property (nonatomic, retain) NSString * uei;
 @property (nonatomic, retain) NSString * eventDescription;
 @property (nonatomic, retain) NSString * eventHost;
+@property (nonatomic, retain) NSDate * lastModified;
 
 @end
 

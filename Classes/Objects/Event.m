@@ -24,5 +24,6 @@
 @dynamic uei;
 @dynamic eventDescription;
 @dynamic eventHost;
+@dynamic lastModified;
 
 @end

@@ -35,9 +35,6 @@
 #import "UpdateHandler.h"
 
 @interface OutageUpdateHandler : UpdateHandler {
-	@private NSNumber* nodeId;
 }
-
-@property (retain) NSNumber* nodeId;
 
 @end

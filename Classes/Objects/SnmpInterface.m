@@ -20,5 +20,6 @@
 @dynamic ifIndex;
 @dynamic physAddr;
 @dynamic collectFlag;
+@dynamic lastModified;
 
 @end

@@ -132,11 +132,6 @@ static ContextService* contextService = nil;
 	}
 }
 
--(NSArray*) fetchOutages
-{
-	return [self getCoreDataOutagesForNode:nil];
-}
-
 -(NSArray*) getOutagesForNode:(NSNumber*) nodeId
 {
 	NSArray* outages = [self getCoreDataOutagesForNode:nodeId];
@@ -156,7 +151,6 @@ static ContextService* contextService = nil;
 #endif
 		OutageListUpdater* outageUpdater = [[OutageListUpdater alloc] initWithNode:nodeId];
 		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
-		outageHandler.nodeId = nodeId;
 		outageUpdater.handler = outageHandler;
 		
 		[outageUpdater update];

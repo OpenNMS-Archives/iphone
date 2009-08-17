@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSNumber * ifIndex;
 @property (nonatomic, retain) NSString * physAddr;
 @property (nonatomic, retain) NSString * collectFlag;
+@property (nonatomic, retain) NSDate * lastModified;
 
 @end
 

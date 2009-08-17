@@ -41,6 +41,7 @@
 #import "OnmsSeverity.h"
 #import "NodeFactory.h"
 #import "OutageFactory.h"
+#import "SnmpInterfaceFactory.h"
 
 @implementation NodeDetailController
 
@@ -81,17 +82,17 @@
 		[self.sections addObject:@"Recent Outages"];
 	}
 
+	SnmpInterfaceFactory* snmpInterfaceFactory = [SnmpInterfaceFactory getInstance];
+	self.snmpInterfaces = [snmpInterfaceFactory getSnmpInterfacesForNode:nodeId];
+	if ([self.snmpInterfaces count] > 0) {
+		[self.sections addObject:@"SNMP Interfaces"];
+	}
 	/*
 	self.interfaces = [agent getIpInterfaces:nodeId];
 	if ([self.interfaces count] > 0) {
 		[self.sections addObject:@"IP Interfaces"];
 	}
 	
-	self.snmpInterfaces = [agent getSnmpInterfaces:nodeId];
-	if ([self.snmpInterfaces count] > 0) {
-		[self.sections addObject:@"SNMP Interfaces"];
-	}
-
 	self.events = [agent getEvents:nodeId limit:[NSNumber numberWithInt:5]];
 	if ([self.events count] > 0) {
 		[self.sections addObject:@"Recent Events"];
@@ -291,7 +292,7 @@
 		
 	} else if (sectionName == @"SNMP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		OnmsSnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
+		SnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
 
 		// IfIndex
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 30.0, tableView.rowHeight)] autorelease];

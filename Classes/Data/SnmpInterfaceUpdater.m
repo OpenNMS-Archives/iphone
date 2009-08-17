@@ -31,20 +31,20 @@
  *
  *******************************************************************************/
 
-#import <Foundation/Foundation.h>
-#import "Outage.h"
+#import "SnmpInterfaceUpdater.h"
 
-@interface OutageFactory : NSObject {
-	BOOL isFinished;
+@implementation SnmpInterfaceUpdater
+
+-(id) initWithNodeId:(NSNumber*)nodeId
+{
+	self = [super initWithPath:[NSString stringWithFormat:@"/nodes/%@/snmpinterfaces", nodeId]];
+	return self;
 }
 
-@property (assign) BOOL isFinished;
-
-+(void) initialize;
-+(OutageFactory*) getInstance;
-
--(void) finish;
--(Outage*) getOutage:(NSNumber*) outageId;
--(NSArray*) getOutagesForNode:(NSNumber*) nodeId;
+-(id) initWithNodeId:(NSNumber*)nodeId interfaceId:(NSNumber*)interfaceId
+{
+	self = [super initWithPath:[NSString stringWithFormat:@"/nodes/%@/snmpinterfaces/%@", nodeId, interfaceId]];
+	return self;
+}
 
 @end

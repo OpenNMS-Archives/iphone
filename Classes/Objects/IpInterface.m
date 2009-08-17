@@ -19,5 +19,6 @@
 @dynamic lastCapsdPoll;
 @dynamic ifIndex;
 @dynamic snmpPrimaryFlag;
+@dynamic lastModified;
 
 @end
