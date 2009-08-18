@@ -31,6 +31,8 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "AlarmFactory.h"
 
 #import "ALarmUpdater.h"
@@ -41,6 +43,7 @@
 @implementation AlarmFactory
 
 @synthesize isFinished;
+@synthesize factoryLock;
 
 static AlarmFactory* alarmFactorySingleton = nil;
 static ContextService* contextService = nil;
@@ -71,6 +74,7 @@ static ContextService* contextService = nil;
 {
 	if (self = [super init]) {
 		isFinished = NO;
+		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
 }
@@ -112,21 +116,25 @@ static ContextService* contextService = nil;
 -(Alarm*) getRemoteAlarm:(NSNumber*) alarmId
 {
 	Alarm* alarm = nil;
-	
-	AlarmUpdater* alarmUpdater = [[AlarmUpdater alloc] initWithAlarmId:alarmId];
-	AlarmUpdateHandler* alarmHandler = [[AlarmUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
-	alarmUpdater.handler = alarmHandler;
-	[alarmUpdater update];
-	[alarmUpdater release];
-	
-	NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
-	while (!isFinished) {
+
+	if (alarmId) {
+		[factoryLock lock];
+		AlarmUpdater* alarmUpdater = [[AlarmUpdater alloc] initWithAlarmId:alarmId];
+		AlarmUpdateHandler* alarmHandler = [[AlarmUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
+		alarmUpdater.handler = alarmHandler;
+		[alarmUpdater update];
+		[alarmUpdater release];
+		
+		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
+		while (!isFinished) {
 #if DEBUG
-		NSLog(@"waiting for getRemoteAlarm");
+			NSLog(@"waiting for getRemoteAlarm");
 #endif
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+		}
+		alarm = [self getCoreDataAlarm:alarmId];
+		[factoryLock unlock];
 	}
-	alarm = [self getCoreDataAlarm:alarmId];
 
 	return alarm;
 }

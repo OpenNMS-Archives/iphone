@@ -31,6 +31,7 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "AlarmDetailController.h"
 #import "ColumnarTableViewCell.h"
 #import "OnmsSeverity.h"

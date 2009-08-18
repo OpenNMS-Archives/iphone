@@ -31,11 +31,12 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "OutageUpdateHandler.h"
 #import "Outage.h"
 #import "Node.h"
 #import "NodeFactory.h"
-#import "config.h"
 
 @implementation OutageUpdateHandler
 
@@ -189,7 +190,9 @@
 			}
 		} else {
 			for (id outage in outagesToDelete) {
+#ifdef DEBUG
 				NSLog(@"deleting %@", outage);
+#endif
 				[moc deleteObject:outage];
 			}
 		}

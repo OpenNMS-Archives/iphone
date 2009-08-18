@@ -31,6 +31,8 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "SnmpInterfaceUpdateHandler.h"
 #import "SnmpInterface.h"
 
@@ -179,7 +181,9 @@
 			}
 		} else {
 			for (id snmpInterface in snmpInterfacesToDelete) {
+#ifdef DEBUG
 				NSLog(@"deleting %@", snmpInterface);
+#endif
 				[moc deleteObject:snmpInterface];
 			}
 		}

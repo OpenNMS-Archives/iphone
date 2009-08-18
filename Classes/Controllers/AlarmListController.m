@@ -34,7 +34,6 @@
 #import "AlarmListController.h"
 #import "ColumnarTableViewCell.h"
 #import "AlarmDetailController.h"
-#import "OpenNMSRestAgent.h"
 #import "Alarm.h"
 #import "OnmsSeverity.h"
 #import "AlarmListUpdater.h"

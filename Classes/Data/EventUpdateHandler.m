@@ -31,6 +31,8 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "EventUpdateHandler.h"
 #import "Event.h"
 
@@ -75,8 +77,8 @@
 		Event* event;
 
 		NSNumber* eventId = nil;
-		BOOL eventDisplay = nil;
-		BOOL eventLog = nil;
+		BOOL eventDisplay = YES;
+		BOOL eventLog = YES;
 		NSString* eventSeverity = nil;
 
 		for (id attr in [xmlEvent attributes]) {
@@ -198,7 +200,9 @@
 			}
 		} else {
 			for (id event in eventsToDelete) {
+#ifdef DEBUG
 				NSLog(@"deleting %@", event);
+#endif
 				[moc deleteObject:event];
 			}
 		}

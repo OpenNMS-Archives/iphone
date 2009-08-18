@@ -32,11 +32,11 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "OnmsEvent.h"
-#import "BaseParser.h"
+#import "BaseUpdater.h"
 
-@interface EventParser : BaseParser {
+@interface NodeSearchUpdater : BaseUpdater {
 }
 
--(NSArray*)parse:(CXMLElement *)node;
+-(id) initWithSearchString:(NSString*) searchString;
+
 @end

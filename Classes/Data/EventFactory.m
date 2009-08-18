@@ -31,6 +31,8 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "EventFactory.h"
 #import "Event.h"
 
@@ -40,6 +42,7 @@
 @implementation EventFactory
 
 @synthesize isFinished;
+@synthesize factoryLock;
 
 static EventFactory* eventFactorySingleton = nil;
 static ContextService* contextService = nil;
@@ -70,6 +73,7 @@ static ContextService* contextService = nil;
 {
 	if (self = [super init]) {
 		isFinished = NO;
+		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
 }
@@ -153,6 +157,7 @@ static ContextService* contextService = nil;
 #if DEBUG
 		NSLog(@"event(s) not found, or last modified(s) out of date");
 #endif
+		[factoryLock lock];
 		EventUpdater* eventUpdater = [[EventUpdater alloc] initWithNodeId:nodeId limit:10];
 		EventUpdateHandler* eventHandler = [[EventUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		eventHandler.nodeId = nodeId;
@@ -170,6 +175,7 @@ static ContextService* contextService = nil;
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		events = [self getCoreDataEventsForNode:nodeId];
+		[factoryLock unlock];
 	}
 
 	isFinished = NO;

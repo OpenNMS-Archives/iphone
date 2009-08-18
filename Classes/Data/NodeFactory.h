@@ -36,14 +36,17 @@
 
 @interface NodeFactory : NSObject {
 	BOOL isFinished;
+	NSRecursiveLock* factoryLock;
 }
 
 @property (assign) BOOL isFinished;
+@property (retain) NSRecursiveLock* factoryLock;
 
 +(void) initialize;
 +(NodeFactory*) getInstance;
 
 -(void) finish;
+-(NSArray*) getCoreDataNodeObjectIDs:(NSString*) searchTerm;
 -(Node*) getCoreDataNode:(NSNumber *)nodeId;
 -(Node*) getRemoteNode:(NSNumber *)nodeId;
 -(Node*) getNode:(NSNumber*) nodeId;

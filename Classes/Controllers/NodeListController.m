@@ -31,10 +31,13 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "NodeListController.h"
 #import "ColumnarTableViewCell.h"
-#import "OpenNMSRestAgent.h"
-#import "OnmsNode.h"
+#import "NodeFactory.h"
+#import "NodeSearchUpdater.h"
+#import "NodeUpdateHandler.h"
+#import "Node.h"
 
 @implementation NodeListController
 
@@ -42,6 +45,7 @@
 @synthesize savedScopeButtonIndex;
 @synthesize searchWasActive;
 @synthesize nodeList;
+@synthesize contextService;
 
 //- (void) viewWillAppear:(BOOL)animated
 //{
@@ -52,7 +56,12 @@
 - (void) viewDidLoad
 {
 	self.title = @"Nodes";
-	self.nodeList = [NSMutableArray array];
+	if (!self.nodeList) {
+		self.nodeList = [NSMutableArray array];
+	}
+	if (!self.contextService) {
+		self.contextService = [[ContextService alloc] init];
+	}
 	
 	if (self.savedSearchTerm)
 	{
@@ -73,11 +82,12 @@
 	self.savedSearchTerm = [self.searchDisplayController.searchBar text];
 	self.savedScopeButtonIndex = [self.searchDisplayController.searchBar selectedScopeButtonIndex];
 	self.nodeList = nil;
+	[self.contextService release];
+	self.contextService = nil;
 }
 
 -(void) dealloc
 {
-	[nodeList release];
     [super dealloc];
 }
 
@@ -113,28 +123,23 @@
 	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
 	
-	/*
-	 If the requesting table view is the search display controller's table view, configure the cell using the filtered content, otherwise use the main list.
-	 */
-	OnmsNode *node = nil;
 	if (tableView == self.searchDisplayController.searchResultsTableView)
 	{
-        node = [self.nodeList objectAtIndex:indexPath.row];
-#if DEBUG
-    } else {
-		NSLog(@"tableview is not in search display controller");
-#endif
+		NSManagedObjectContext* context = [contextService managedObjectContext];
+		Node* node = (Node*)[context objectWithID:[self.nodeList objectAtIndex:indexPath.row]];
+		cell.textLabel.text = node.label;
+		cell.textLabel.adjustsFontSizeToFitWidth = YES;
+		cell.textLabel.minimumFontSize = 9.0;
 	}
-	
-	cell.textLabel.text = node.label;
 	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	OnmsNode* node = [self.nodeList objectAtIndex:indexPath.row];
+	NSManagedObjectID* objId = [self.nodeList objectAtIndex:indexPath.row];
+	Node* node = (Node*) [[contextService managedObjectContext] objectWithID:objId];
 	NodeDetailController* ndc = [[NodeDetailController alloc] init];
-	ndc.nodeId = [NSNumber numberWithInt:node.nodeId];
+	ndc.nodeId = node.nodeId;
 	[self.navigationController pushViewController:ndc animated:YES];
 	[ndc release];
 }
@@ -144,18 +149,32 @@
 	/*
 	 Search the main list for products whose type matches the scope (if selected) and whose name matches searchText; add items that match to the filtered array.
 	 */
-	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
-	self.nodeList = [agent getNodesForSearch:searchText];
-	[agent release];
+}
+
+-(void) refreshData
+{
+#if DEBUG
+	NSLog(@"%@: refreshData called", self);
+#endif
+	self.nodeList = [[NodeFactory getInstance] getCoreDataNodeObjectIDs:[self.searchDisplayController.searchBar text]];
+	[self.searchDisplayController.searchResultsTableView reloadData];
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
+	/*
     [self filterContentForSearchText:searchString scope:
 	 [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
-    
-    // Return YES to cause the search result table view to be reloaded.
-    return YES;
+	 */
+
+	NodeSearchUpdater* updater = [[[NodeSearchUpdater alloc] initWithSearchString:searchString] autorelease];
+	NodeUpdateHandler* handler = [[NodeUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self];
+	// FIXME: spinner!
+//	handler.spinner = spinner;
+	updater.handler = handler;
+	[updater update];
+	
+	return NO;
 }
 
 

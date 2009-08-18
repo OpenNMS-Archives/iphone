@@ -31,9 +31,10 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "NodeUpdateHandler.h"
 #import "Node.h"
-#import "ContextService.h"
 
 @implementation NodeUpdateHandler
 
@@ -75,6 +76,8 @@
 				nodeId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
 			} else if ([[attr name] isEqual:@"label"]) {
 				label = [self cleanUpString:[attr stringValue]];
+			} else if ([[attr name] isEqual:@"type"]) {
+				// ignore
 #if DEBUG
 			} else {
 				NSLog(@"unknown node attribute: %@", [attr name]);

@@ -31,18 +31,21 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+#import "ContextService.h"
+
 #import "NodeFactory.h"
+#import "OutageFactory.h"
 
 #import "NodeUpdater.h"
 #import "NodeUpdateHandler.h"
 
-#import "OutageFactory.h"
-
-#import "ContextService.h"
+#import "IpInterface.h"
 
 @implementation NodeFactory
 
 @synthesize isFinished;
+@synthesize factoryLock;
 
 static NodeFactory* nodeFactorySingleton = nil;
 static ContextService* contextService = nil;
@@ -73,6 +76,7 @@ static ContextService* contextService = nil;
 {
 	if (self = [super init]) {
 		isFinished = NO;
+		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
 }
@@ -80,6 +84,63 @@ static ContextService* contextService = nil;
 -(void) finish
 {
 	isFinished = YES;
+}
+
+NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
+{
+	NSManagedObjectContext* context = [contextService managedObjectContext];
+	Node* node1 = (Node*)[context objectWithID:obj1];
+	Node* node2 = (Node*)[context objectWithID:obj2];
+	
+	return [node1.label localizedCaseInsensitiveCompare:node2.label];
+}
+
+-(NSArray*) getCoreDataNodeObjectIDs:(NSString*) searchTerm
+{
+	NSMutableSet* nodes = [NSMutableSet set];
+	
+	NSManagedObjectContext* context = [contextService managedObjectContext];
+	NSFetchRequest* request = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
+	[request setEntity:entity];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS[cd] %@", searchTerm];
+	[request setPredicate:predicate];
+	NSError* error = nil;
+	NSArray* results = [context executeFetchRequest:request error:&error];
+	[request release];
+	if (!results || [results count] == 0) {
+		if (error) {
+			NSLog(@"error fetching node for search term  %@: %@", searchTerm, [error localizedDescription]);
+			[error release];
+		}
+	} else {
+		for (id node in results) {
+			[nodes addObject:[node objectID]];
+		}
+	}
+
+	NSFetchRequest* interfaceRequest = [[NSFetchRequest alloc] init];
+	entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
+	[interfaceRequest setEntity:entity];
+	predicate = [NSPredicate predicateWithFormat:@"(ipAddress CONTAINS[cd] %@) OR (hostName CONTAINS[cd] %@)", searchTerm, searchTerm];
+	[interfaceRequest setPredicate:predicate];
+	error = nil;
+	NSArray* interfaceResults = [context executeFetchRequest:interfaceRequest error:&error];
+	[interfaceRequest release];
+	if (!interfaceResults || [interfaceResults count] == 0) {
+		if (error) {
+			NSLog(@"error fetching IP interfaces for search term %@: %@", searchTerm, [error localizedDescription]);
+			[error release];
+		}
+	} else {
+		for (id interface in interfaceResults) {
+			IpInterface* iface = interface;
+			Node* n = [self getNode:iface.nodeId];
+			[nodes addObject:[n objectID]];
+		}
+	}
+	
+	return [[nodes allObjects] sortedArrayUsingFunction:sortNodeObjectId context:nil];
 }
 
 -(Node*) getCoreDataNode:(NSNumber*) nodeId
@@ -114,24 +175,29 @@ static ContextService* contextService = nil;
 {
 	Node* node = nil;
 	
-	NodeUpdater* nodeUpdater = [[NodeUpdater alloc] initWithNode:nodeId];
-	NodeUpdateHandler* nodeHandler = [[NodeUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
-	nodeUpdater.handler = nodeHandler;
-	[nodeUpdater update];
-	[nodeUpdater release];
-	
-	NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
-	while (!isFinished) {
+	if (nodeId) {
+		[factoryLock lock];
+		NodeUpdater* nodeUpdater = [[NodeUpdater alloc] initWithNode:nodeId];
+		NodeUpdateHandler* nodeHandler = [[NodeUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
+		nodeUpdater.handler = nodeHandler;
+		[nodeUpdater update];
+		[nodeUpdater release];
+		
+		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
+		while (!isFinished) {
 #if DEBUG
-		NSLog(@"waiting for getRemoteNode");
+			NSLog(@"waiting for getRemoteNode");
 #endif
-		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+		}
+		node = [self getCoreDataNode:nodeId];
+		[factoryLock unlock];
+	} else {
+		NSLog(@"WARNING: getRemoteNode called with no node ID");
 	}
-	node = [self getCoreDataNode:nodeId];
 
 	return node;
 }
-
 
 -(Node*) getNode:(NSNumber*) nodeId
 {
@@ -145,7 +211,7 @@ static ContextService* contextService = nil;
 	}
 
 #if DEBUG
-	NSLog(@"returning node: %@", node);
+//	NSLog(@"returning node: %@", node);
 #endif
 	return node;
 }

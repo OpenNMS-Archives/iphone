@@ -31,6 +31,9 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+#import "ContextService.h"
+
 #import "OutageFactory.h"
 #import "Outage.h"
 
@@ -40,6 +43,7 @@
 @implementation OutageFactory
 
 @synthesize isFinished;
+@synthesize factoryLock;
 
 static OutageFactory* outageFactorySingleton = nil;
 static ContextService* contextService = nil;
@@ -70,6 +74,7 @@ static ContextService* contextService = nil;
 {
 	if (self = [super init]) {
 		isFinished = NO;
+		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
 }
@@ -149,6 +154,7 @@ static ContextService* contextService = nil;
 #if DEBUG
 		NSLog(@"outage(s) not found, or last modified(s) out of date");
 #endif
+		[factoryLock lock];
 		OutageListUpdater* outageUpdater = [[OutageListUpdater alloc] initWithNode:nodeId];
 		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		outageUpdater.handler = outageHandler;
@@ -164,6 +170,7 @@ static ContextService* contextService = nil;
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		outages = [self getCoreDataOutagesForNode:nodeId];
+		[factoryLock unlock];
 	}
 	
 	isFinished = NO;
@@ -178,6 +185,7 @@ static ContextService* contextService = nil;
 #if DEBUG
 		NSLog(@"outage not found, or last modified out of date");
 #endif
+		[factoryLock lock];
 		OutageListUpdater* outageUpdater = [[OutageListUpdater alloc] initWithOutage:outageId];
 		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] init];
 		outageUpdater.handler = outageHandler;
@@ -192,6 +200,9 @@ static ContextService* contextService = nil;
 #endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
+		
+		outage = [self getCoreDataOutage:outageId];
+		[factoryLock unlock];
 	}
 
 	isFinished = NO;

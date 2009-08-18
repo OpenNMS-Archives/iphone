@@ -33,7 +33,6 @@
 
 #import "UpdateHandler.h"
 #import "RegexKitLite.h"
-#import "config.h"
 
 @implementation UpdateHandler
 

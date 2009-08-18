@@ -31,6 +31,9 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+#import "ContextService.h"
+
 #import "SnmpInterfaceFactory.h"
 #import "SnmpInterface.h"
 
@@ -40,6 +43,7 @@
 @implementation SnmpInterfaceFactory
 
 @synthesize isFinished;
+@synthesize factoryLock;
 
 static SnmpInterfaceFactory* snmpInterfaceFactorySingleton = nil;
 static ContextService* contextService = nil;
@@ -70,6 +74,7 @@ static ContextService* contextService = nil;
 {
 	if (self = [super init]) {
 		isFinished = NO;
+		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
 }
@@ -155,6 +160,7 @@ static ContextService* contextService = nil;
 #if DEBUG
 		NSLog(@"snmpInterface(s) not found, or last modified(s) out of date");
 #endif
+		[factoryLock lock];
 		SnmpInterfaceUpdater* snmpInterfaceUpdater = [[SnmpInterfaceUpdater alloc] initWithNodeId:nodeId];
 		SnmpInterfaceUpdateHandler* snmpInterfaceHandler = [[SnmpInterfaceUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		snmpInterfaceHandler.nodeId = nodeId;
@@ -172,6 +178,7 @@ static ContextService* contextService = nil;
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		snmpInterfaces = [self getCoreDataSnmpInterfacesForNode:nodeId];
+		[factoryLock unlock];
 	}
 	
 	isFinished = NO;

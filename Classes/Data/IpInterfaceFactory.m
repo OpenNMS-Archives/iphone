@@ -31,6 +31,8 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "IpInterfaceFactory.h"
 #import "IpInterface.h"
 
@@ -40,6 +42,7 @@
 @implementation IpInterfaceFactory
 
 @synthesize isFinished;
+@synthesize factoryLock;
 
 static IpInterfaceFactory* ipInterfaceFactorySingleton = nil;
 static ContextService* contextService = nil;
@@ -70,6 +73,7 @@ static ContextService* contextService = nil;
 {
 	if (self = [super init]) {
 		isFinished = NO;
+		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
 }
@@ -154,6 +158,7 @@ static ContextService* contextService = nil;
 #if DEBUG
 		NSLog(@"ipInterface(s) not found, or last modified(s) out of date");
 #endif
+		[factoryLock lock];
 		IpInterfaceUpdater* ipInterfaceUpdater = [[IpInterfaceUpdater alloc] initWithNodeId:nodeId];
 		IpInterfaceUpdateHandler* ipInterfaceHandler = [[IpInterfaceUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		ipInterfaceHandler.nodeId = nodeId;
@@ -171,6 +176,7 @@ static ContextService* contextService = nil;
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		ipInterfaces = [self getCoreDataIpInterfacesForNode:nodeId];
+		[factoryLock unlock];
 	}
 
 	isFinished = NO;

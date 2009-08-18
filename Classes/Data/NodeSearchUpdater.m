@@ -31,32 +31,17 @@
  *
  *******************************************************************************/
 
-#import "NodeParser.h"
+#import "NodeSearchUpdater.h"
 
-@implementation NodeParser
+@implementation NodeSearchUpdater
 
-- (NSArray*)parse:(CXMLElement*)n
+-(id) initWithSearchString:(NSString*) searchString
 {
-	NSMutableArray* nodes = [NSMutableArray array];
-	
-	NSArray* xmlNodes = [n elementsForName:@"node"];
-	if ([xmlNodes count] == 0 && ![[n name] isEqual:@"nodes"]) {
-		xmlNodes = [NSArray arrayWithObjects:&n count:1];
-	}
-	for (id xmlNode in xmlNodes) {
-		OnmsNode* node = [[[OnmsNode alloc] init] autorelease];
-
-		for (id attr in [xmlNode attributes]) {
-			if ([[attr name] isEqual:@"id"]) {
-				node.nodeId = [[attr stringValue] intValue];
-			} else if ([[attr name] isEqual:@"label"]) {
-				node.label = [attr stringValue];
-			}
-		}
-		
-		[nodes addObject: node];
-	}
-	return nodes;
+	NSString* escaped = [searchString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	NSString* path = [NSString stringWithFormat:@"/nodes?comparator=contains&match=any&label=%@&ipInterface.ipAddress=%@&ipInterface.ipHostName=%@", escaped, escaped, escaped];
+	NSLog(@"path = %@", path);
+	self = [super initWithPath:path];
+	return self;
 }
 
 @end

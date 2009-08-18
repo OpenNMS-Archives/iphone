@@ -33,7 +33,6 @@
 
 #import "NodeDetailController.h"
 #import "ColumnarTableViewCell.h"
-#import "ViewOutage.h"
 #import "OnmsSeverity.h"
 #import "NodeFactory.h"
 #import "OutageFactory.h"
@@ -82,7 +81,6 @@
 
 	IpInterfaceFactory* ipInterfaceFactory = [IpInterfaceFactory getInstance];
 	self.interfaces = [ipInterfaceFactory getIpInterfacesForNode:nodeId];
-	NSLog(@"interfaces = %@", self.interfaces);
 	if ([self.interfaces count] > 0) {
 		[self.sections addObject:@"IP Interfaces"];
 	}
@@ -175,10 +173,8 @@
 /*
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
-	[nodeDetailController setNodeId:outage.nodeId];
 	UINavigationController* cont = [self navigationController];
-	[cont pushViewController:nodeDetailController animated:YES];
+	[cont pushViewController:someController animated:YES];
 }
 */
 

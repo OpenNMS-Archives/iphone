@@ -31,6 +31,8 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "AlarmUpdateHandler.h"
 #import "Alarm.h"
 
@@ -172,7 +174,9 @@
 			}
 		} else {
 			for (id alarm in alarmsToDelete) {
+#ifdef DEBUG
 				NSLog(@"deleting %@", alarm);
+#endif
 				[moc deleteObject:alarm];
 			}
 		}

@@ -31,6 +31,7 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "BaseUpdater.h"
 #import "UpdateHandler.h"
 #import "RegexKitLite.h"

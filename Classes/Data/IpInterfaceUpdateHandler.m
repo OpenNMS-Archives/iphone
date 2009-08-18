@@ -31,6 +31,7 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "IpInterfaceUpdateHandler.h"
 #import "IpInterface.h"
 
@@ -176,7 +177,9 @@
 			}
 		} else {
 			for (id ipInterface in ipInterfacesToDelete) {
+#ifdef DEBUG
 				NSLog(@"deleting %@", ipInterface);
+#endif
 				[moc deleteObject:ipInterface];
 			}
 		}

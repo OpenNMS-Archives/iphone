@@ -31,11 +31,12 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+#import "ContextService.h"
+
 #import <Foundation/Foundation.h>
 #import "ASIHTTPRequest.h"
 #import "CXMLDocument.h"
-#import "ContextService.h"
-#import "config.h"
 
 @interface UpdateHandler : NSObject {
 	UIActivityIndicatorView* spinner;

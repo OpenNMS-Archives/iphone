@@ -36,9 +36,11 @@
 
 @interface EventFactory : NSObject {
 	BOOL isFinished;
+	NSRecursiveLock* factoryLock;
 }
 
 @property (assign) BOOL isFinished;
+@property (retain) NSRecursiveLock* factoryLock;
 
 +(void) initialize;
 +(EventFactory*) getInstance;
