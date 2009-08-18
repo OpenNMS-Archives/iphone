@@ -72,16 +72,15 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
 	NSDictionary *options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
     persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeUrl options:options error:&error]) {
-		/*
-		 Replace this implementation with code to handle the error appropriately.
-		 
-		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-		 
-		 Typical reasons for an error here include:
-		 * The persistent store is not accessible
-		 * The schema for the persistent store is incompatible with current managed object model
-		 Check the error message to determine what the actual problem was.
-		 */
+		UIAlertView *errorAlert = [[UIAlertView alloc]
+								   initWithTitle: [error localizedDescription]
+								   message: [error localizedFailureReason]
+								   delegate:self
+								   cancelButtonTitle:@"OK"
+								   otherButtonTitles:nil];
+        [errorAlert show];
+        [errorAlert autorelease];
+		
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
     }    

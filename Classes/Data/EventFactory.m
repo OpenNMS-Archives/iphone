@@ -121,7 +121,7 @@ static ContextService* contextService = nil;
 	}
 
 	NSMutableArray* sortDescriptors = [NSMutableArray array];
-	[sortDescriptors addObject:[[[NSSortDescriptor alloc] initWithKey:@"eventId" ascending:YES] autorelease]];
+	[sortDescriptors addObject:[[[NSSortDescriptor alloc] initWithKey:@"eventId" ascending:NO] autorelease]];
 	[nodeEventRequest setSortDescriptors:sortDescriptors];
 
 	NSError* error = nil;

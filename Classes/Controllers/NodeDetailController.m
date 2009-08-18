@@ -43,6 +43,7 @@
 @implementation NodeDetailController
 
 @synthesize nodeTable;
+@synthesize spinner;
 @synthesize fuzzyDate;
 
 @synthesize nodeId;
@@ -60,10 +61,15 @@
 	nodeTable.delegate = self;
 	nodeTable.dataSource = self;
 	self.view = nodeTable;
+	self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	self.spinner.hidesWhenStopped = YES;
+	self.spinner.center = self.view.center;
+	[self.navigationController.view addSubview:self.spinner];
 }
 
 - (void) initializeData
 {
+	[self.spinner startAnimating];
 	self.sections = [NSMutableArray array];
 
 	NodeFactory* nodeFactory = [NodeFactory getInstance];
@@ -98,6 +104,7 @@
 	}
 
 	[self.nodeTable reloadData];
+	[self.spinner stopAnimating];
 }
 
 #pragma mark -
@@ -115,12 +122,6 @@
 	[self.events release];
 
 	[super dealloc];
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-	[self initializeData];
-	[super viewWillAppear:animated];
 }
 
 - (void) viewDidLoad
