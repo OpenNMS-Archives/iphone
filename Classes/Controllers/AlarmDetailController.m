@@ -31,17 +31,19 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "AlarmDetailController.h"
 #import "ColumnarTableViewCell.h"
-#import "OpenNMSRestAgent.h"
 #import "OnmsSeverity.h"
-#import "OpenNMSAppDelegate.h"
-#import "AlarmUpdater.h"
-#import "AlarmUpdateHandler.h"
+#import "AckUpdater.h"
+#import "UpdateHandler.h"
+#import "AlarmFactory.h"
 
 @implementation AlarmDetailController
 
 @synthesize alarmTable;
+@synthesize spinner;
+@synthesize contextService;
 
 @synthesize fuzzyDate;
 @synthesize defaultFont;
@@ -49,50 +51,39 @@
 @synthesize white;
 
 @synthesize alarmObjectId;
-@synthesize alarm;
 @synthesize severity;
-@synthesize managedObjectContext;
 
-- (void) loadView
+-(void) loadView
 {
 	[super loadView];
-	alarmTable = [[AlarmTableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
-	alarmTable.alarmDetailController = self;
-	alarmTable.delegate = self;
-	alarmTable.dataSource = self;
-	alarmTable.rowHeight = 34.0;
-	self.view = alarmTable;
+	self.alarmTable = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
+	self.alarmTable.delegate = self;
+	self.alarmTable.dataSource = self;
+	self.alarmTable.rowHeight = 34.0;
+	self.view = self.alarmTable;
+	self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	self.spinner.hidesWhenStopped = YES;
+	self.spinner.center = self.view.center;
+//	self.spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[self.navigationController.view addSubview:self.spinner];
+//	[self.view addSubview:self.spinner];
 }
 
-- (void) initializeData
+-(void) initializeData
 {
+#if DEBUG
+	NSLog(@"initializeData called");
+#endif
 	[fuzzyDate touch];
-	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:managedObjectContext];
-	[request setEntity:entity];
-	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self == %@", alarmObjectId];
-	[request setPredicate:predicate];
-	
-	NSError *error;
-	NSArray *array = [managedObjectContext executeFetchRequest:request error:&error];
-	if (array && [array count] > 0) {
-		self.alarm = (Alarm*)[array objectAtIndex:0];
-		
-		self.title = [NSString stringWithFormat:@"Alarm #%@", self.alarm.alarmId];
-
-		if (self.severity) {
-			[self.severity release];
-		}
-		self.severity = [[OnmsSeverity alloc] initWithSeverity:self.alarm.severity];
-	} else {
-		if (error) {
-			NSLog(@"error retrieving object %@: %@", alarmObjectId, [error localizedDescription]);
-		} else {
-			NSLog(@"error retrieving object %@", alarmObjectId);
-		}
-	}
-	
+	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
+	Alarm* a = (Alarm*)[managedObjectContext objectWithID:self.alarmObjectId];
+	[managedObjectContext refreshObject:a mergeChanges:NO];
+	self.severity = [[[OnmsSeverity alloc] initWithSeverity:a.severity] autorelease];
+	self.alarmTable.backgroundColor = [self.severity getDisplayColor];
+#if DEBUG
+	NSLog(@"setting color for severity %@", self.severity);
+#endif
+	self.title = [NSString stringWithFormat:@"Alarm #%@", a.alarmId];
 }
 
 #pragma mark -
@@ -101,6 +92,7 @@
 -(void) dealloc
 {
 	[self.alarmTable release];
+	[self.contextService release];
 
 	[self.fuzzyDate release];
 	[self.defaultFont release];
@@ -108,39 +100,33 @@
 	[self.white release];
 	
 	[self.alarmObjectId release];
-	[self.alarm release];
 	[self.severity release];
 	
 	[super dealloc];
 }
 
-- (void) viewWillAppear:(BOOL)animated
+-(void) viewWillAppear:(BOOL)animated
 {
 	[self initializeData];
 	[super viewWillAppear:animated];
-	
-	self.alarmTable.backgroundColor = [self.severity getDisplayColor];
 }
 
-- (void) viewDidLoad
+-(void) viewDidLoad
 {
+	self.contextService = [[ContextService alloc] init];
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	self.fuzzyDate.mini = YES;
 	self.defaultFont = [UIFont boldSystemFontOfSize:11];
 	self.clear = [UIColor colorWithWhite:1.0 alpha:0.0];
 	self.white = [UIColor colorWithWhite:1.0 alpha:1.0];
 
-	if (!managedObjectContext) {
-		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
-	}
-	
 	[self initializeData];
 	[super viewDidLoad];
 }
 
-- (void) viewDidUnload
+-(void) viewDidUnload
 {
-	managedObjectContext = nil;
+	[self.contextService release];
 	
 	[self.fuzzyDate release];
 	[self.defaultFont release];
@@ -148,14 +134,13 @@
 	[self.white release];
 
 	[self.alarmObjectId release];
-	[self.alarm release];
 
 	[super viewDidUnload];
 }
 
 #pragma mark UITableView delegates
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return 7;
 }
@@ -164,28 +149,19 @@
 	return 1;
 }
 
-/*
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
-{
-	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
-	[alarmDetailController setAlarmId:outage.alarmId];
-	UINavigationController* cont = [self navigationController];
-	[cont pushViewController:alarmDetailController animated:YES];
-}
-*/
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = tableView.rowHeight;
 	CGSize size;
+	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
 	switch(indexPath.row) {
 		case 0:
-			size = [alarm.uei sizeWithFont:defaultFont
+			size = [a.uei sizeWithFont:defaultFont
 					constrainedToSize:CGSizeMake(280.0, 1000.0)
 					lineBreakMode:UILineBreakModeCharacterWrap];
 			height = (size.height + 10.0);
 			break;
 		case 3:
-			size = [alarm.logMessage sizeWithFont:defaultFont
+			size = [a.logMessage sizeWithFont:defaultFont
 					constrainedToSize:CGSizeMake(280.0, 1000.0)
 					lineBreakMode:UILineBreakModeWordWrap];
 			height = (size.height + 10.0);
@@ -194,7 +170,7 @@
 	return MAX(height, tableView.rowHeight);
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 	cell.backgroundColor = white;
 	cell.textLabel.font = defaultFont;
@@ -215,35 +191,36 @@
 	rightLabel.numberOfLines = 0;
 	rightLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
+	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
 	switch(indexPath.row) {
 		case 0:
 			leftLabel.text = @"UEI";
-			rightLabel.text = alarm.uei;
+			rightLabel.text = a.uei;
 			break;
 		case 1:
 			leftLabel.text = @"Severity";
-			rightLabel.text = alarm.severity;
+			rightLabel.text = a.severity;
 			break;
 		case 2:
 			leftLabel.text = @"# Events";
-			rightLabel.text = [alarm.count stringValue];
+			rightLabel.text = [a.count stringValue];
 			break;
 		case 3:
 			leftLabel.text = @"Message";
-			rightLabel.text = alarm.logMessage;
+			rightLabel.text = a.logMessage;
 			rightLabel.lineBreakMode = UILineBreakModeCharacterWrap | UILineBreakModeTailTruncation;
 			break;
 		case 4:
 			leftLabel.text = @"First Event";
-			rightLabel.text = [fuzzyDate format:alarm.firstEventTime];
+			rightLabel.text = [fuzzyDate format:a.firstEventTime];
 			break;
 		case 5:
 			leftLabel.text = @"Last Event";
-			rightLabel.text = [fuzzyDate format:alarm.lastEventTime];
+			rightLabel.text = [fuzzyDate format:a.lastEventTime];
 			break;
 		case 6:
-			leftLabel.text = @"Acknowledged";
-			rightLabel.text = [fuzzyDate format:alarm.ackTime];
+			leftLabel.text = @"Ack'd";
+			rightLabel.text = [fuzzyDate format:a.ackTime];
 			break;
 	}
 
@@ -260,7 +237,7 @@
 	return cell;
 }
 
-- (UIView *) tableView: (UITableView *) tableView viewForFooterInSection: (NSInteger) section
+-(UIView *) tableView: (UITableView *) tableView viewForFooterInSection: (NSInteger) section
 {
     UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, alarmTable.bounds.size.width, 44.0)] autorelease];
 	footerView.autoresizesSubviews = YES;
@@ -275,7 +252,8 @@
 	UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:10];
 	[button setFrame:CGRectMake(10, 5, 90, 40)];
-	if (alarm.ackTime == nil) {
+	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
+	if (a.ackTime == nil) {
 		[button addTarget:self action:@selector(acknowledgeAlarm) forControlEvents:UIControlEventTouchUpInside];
 		[button setTitle:@"Acknowledge" forState:UIControlStateNormal];
 		[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -305,39 +283,54 @@
 	return footerView;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	return 45.0f;
 }
 
-- (void) doAck:(NSString*)action
+-(void) refreshData
 {
-	NSLog(@"performing action %@ on alarm %@", action, alarm.alarmId);
-	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
-	[agent acknowledgeAlarm:alarm.alarmId action:action];
-	[agent release];
-	
-	AlarmUpdater* updater = [[[AlarmUpdater alloc] initWithAlarmId:alarm.alarmId] autorelease];
-	updater.handler = [[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:nil];
+#if DEBUG
+	NSLog(@"%@: refreshData called", self);
+#endif
+	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
+	// FIXME: need to know when the ack has gone through
+	usleep(4000000);
+	a = [[AlarmFactory getInstance] getRemoteAlarm:a.alarmId];
+	self.alarmObjectId = [a objectID];
+	[self initializeData];
+	[self.alarmTable reloadData];
+	[self.spinner stopAnimating];
+}
+
+-(void) doAck:(NSString*)action
+{
+	[self.spinner startAnimating];
+	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
+#if DEBUG
+	NSLog(@"performing action %@ on alarm %@", action, a.alarmId);
+#endif
+	AckUpdater* updater = [[[AckUpdater alloc] initWithAlarmId:a.alarmId action:action] autorelease];
+	updater.handler = [[[UpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
 	[updater update];
 }
 
-- (void) acknowledgeAlarm
+-(void) acknowledgeAlarm
 {
 	[self doAck:@"ack"];
 }
 
-- (void) unacknowledgeAlarm
+-(void) unacknowledgeAlarm
 {
 	[self doAck:@"unack"];
 }
 
-- (void) escalateAlarm
+-(void) escalateAlarm
 {
 	[self doAck:@"esc"];
 }
 
-- (void) clearAlarm
+-(void) clearAlarm
 {
 	[self doAck:@"clear"];
 }

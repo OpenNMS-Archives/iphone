@@ -108,4 +108,10 @@
 	}
 }
 
+-(NSString*) description
+{
+	return self.severity;
+}
+
+
 @end

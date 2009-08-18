@@ -36,32 +36,35 @@
 #import "Alarm.h"
 #import "OnmsSeverity.h"
 #import "AlarmTableView.h"
+#import "ContextService.h"
 
 @interface AlarmDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private AlarmTableView* alarmTable;
-
+	@private UITableView* alarmTable;
+	@private UIActivityIndicatorView* spinner;
+	@private ContextService* contextService;
+	
 	@private FuzzyDate* fuzzyDate;
 	@private UIFont* defaultFont;
 	@private UIColor* clear;
 	@private UIColor* white;
 
 	@private NSManagedObjectID* alarmObjectId;
-	@private Alarm* alarm;
 	@private OnmsSeverity* severity;
-	@private NSManagedObjectContext* managedObjectContext;
 }
 
-@property (nonatomic, retain) AlarmTableView* alarmTable;
+@property (retain) UITableView* alarmTable;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
 
+@property (nonatomic, retain) ContextService* contextService;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 @property (nonatomic, retain) UIFont* defaultFont;
 @property (nonatomic, retain) UIColor* clear;
 @property (nonatomic, retain) UIColor* white;
 
-@property (nonatomic, retain) NSManagedObjectID* alarmObjectId;
-@property (nonatomic, retain) Alarm* alarm;
+@property (retain) NSManagedObjectID* alarmObjectId;
 @property (nonatomic, retain) OnmsSeverity* severity;
-@property (nonatomic, retain) NSManagedObjectContext* managedObjectContext;
+
+-(void) refreshData;
 
 -(void) initializeData;
 -(void) acknowledgeAlarm;

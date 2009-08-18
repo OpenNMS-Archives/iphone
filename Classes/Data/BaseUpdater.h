@@ -36,20 +36,25 @@
 #import "UpdateHandler.h"
 #import "config.h"
 
-#define GET_LIMIT 20
+#define GET_LIMIT 100
 
 @interface BaseUpdater : NSObject {
 	NSURL* url;
-	ASINetworkQueue* queue;
+	NSOperationQueue* queue;
 	UpdateHandler* handler;
+	NSData* requestData;
+	NSString* requestMethod;
 }
 
 @property (readonly, retain) NSURL* url;
-@property (readonly, retain) ASINetworkQueue* queue;
+@property (readonly, retain) NSOperationQueue* queue;
 @property (retain) UpdateHandler* handler;
+@property (retain) NSData* requestData;
+@property (retain) NSString* requestMethod;
 
 -(id) initWithPath:(NSString*)p;
 
+-(NSString*) filterDate:(NSString*)date;
 -(NSString*) getBaseUrl;
 -(void) update;
 

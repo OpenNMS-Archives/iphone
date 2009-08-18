@@ -2,7 +2,7 @@
 //  Alarm.m
 //  OpenNMS
 //
-//  Created by Benjamin Reed on 8/6/09.
+//  Created by Benjamin Reed on 8/15/09.
 //  Copyright 2009 The OpenNMS Group. All rights reserved.
 //
 
@@ -11,14 +11,16 @@
 
 @implementation Alarm 
 
-@dynamic alarmId;
-@dynamic uei;
-@dynamic count;
-@dynamic firstEventTime;
-@dynamic lastEventTime;
-@dynamic ackTime;
-@dynamic ifIndex;
 @dynamic severity;
+@dynamic lastEventTime;
+@dynamic alarmId;
+@dynamic firstEventTime;
+@dynamic ackTime;
+@dynamic count;
+@dynamic lastEventId;
 @dynamic logMessage;
+@dynamic ifIndex;
+@dynamic uei;
+@dynamic lastModified;
 
 @end

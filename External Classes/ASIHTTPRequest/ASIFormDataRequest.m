@@ -9,17 +9,15 @@
 #import "ASIFormDataRequest.h"
 
 
+// Private stuff
+@interface ASIFormDataRequest ()
+@property (retain) NSMutableDictionary *postData;
+@property (retain) NSMutableDictionary *fileData;
+@end
+
 @implementation ASIFormDataRequest
 
 #pragma mark init / dealloc
-
-- (id)initWithURL:(NSURL *)newURL
-{
-	self = [super initWithURL:newURL];
-	postData = nil;
-	fileData = nil;	
-	return self;
-}
 
 + (id)requestWithURL:(NSURL *)newURL
 {
@@ -37,38 +35,75 @@
 
 - (void)setPostValue:(id <NSObject>)value forKey:(NSString *)key
 {
-	if (!postData) {
-		postData = [[NSMutableDictionary alloc] init];
+	if (![self postData]) {
+		[self setPostData:[NSMutableDictionary dictionary]];
 	}
-	[postData setValue:[value description] forKey:key];
+	[[self postData] setValue:[value description] forKey:key];
 	[self setRequestMethod:@"POST"];
 }
 
 - (void)setFile:(NSString *)filePath forKey:(NSString *)key
 {
-	if (!fileData) {
-		fileData = [[NSMutableDictionary alloc] init];
+	[self setFile:filePath withFileName:nil andContentType:nil forKey:key];
+}
+
+- (void)setFile:(id)data withFileName:(NSString *)fileName andContentType:(NSString *)contentType forKey:(NSString *)key
+{
+	if (![self fileData]) {
+		[self setFileData:[NSMutableDictionary dictionary]];
 	}
-	[fileData setValue:filePath forKey:key];
-	[self setRequestMethod:@"POST"];
+	
+	// If data is a path to a local file
+	if ([data isKindOfClass:[NSString class]]) {
+		BOOL isDirectory = NO;
+		BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:(NSString *)data isDirectory:&isDirectory];
+		if (!fileExists || isDirectory) {
+			[self failWithError:[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIInternalErrorWhileBuildingRequestType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"No file exists at %@",data],NSLocalizedDescriptionKey,nil]]];
+		}
+
+		// If the caller didn't specify a custom file name, we'll use the file name of the file we were passed
+		if (!fileName) {
+			fileName = [(NSString *)data lastPathComponent];
+		}
+	
+		// If we were given the path to a file, and the user didn't specify a mime type, we can detect it (currently only on Mac OS)
+		// Will return 'application/octet-stream' on iPhone, or if the mime type cannot be determined
+		if (!contentType) {
+			contentType = [ASIHTTPRequest mimeTypeForFileAtPath:data];
+		}
+	}
+	
+	NSDictionary *fileInfo = [NSDictionary dictionaryWithObjectsAndKeys:data, @"data", contentType, @"contentType", fileName, @"fileName", nil];
+	[[self fileData] setObject:fileInfo forKey:key];
+	[self setRequestMethod: @"POST"];
 }
 
 - (void)setData:(NSData *)data forKey:(NSString *)key
 {
-	if (!fileData) {
-		fileData = [[NSMutableDictionary alloc] init];
+	[self setData:data withFileName:@"file" andContentType:nil forKey:key];
+}
+
+- (void)setData:(id)data withFileName:(NSString *)fileName andContentType:(NSString *)contentType forKey:(NSString *)key
+{
+	if (![self fileData]) {
+		[self setFileData:[NSMutableDictionary dictionary]];
 	}
-	[fileData setObject:data forKey:key];
-	[self setRequestMethod:@"POST"];	
+	if (!contentType) {
+		contentType = @"application/octet-stream";
+	}
+	
+	NSDictionary *fileInfo = [NSDictionary dictionaryWithObjectsAndKeys:data, @"data", contentType, @"contentType", fileName, @"fileName", nil];
+	[[self fileData] setObject:fileInfo forKey:key];
+	[self setRequestMethod: @"POST"];
 }
 
 - (void)buildPostBody
 {
-	if (!postData && ! fileData) {
+	if (![self postData] && ![self fileData]) {
 		[super buildPostBody];
 		return;
 	}	
-	if ([fileData count] > 0) {
+	if ([[self fileData] count] > 0) {
 		[self setShouldStreamPostDataFromDisk:YES];
 	}
 	 
@@ -82,38 +117,38 @@
 	
 	// Adds post data
 	NSData *endItemBoundary = [[NSString stringWithFormat:@"\r\n--%@\r\n",stringBoundary] dataUsingEncoding:NSUTF8StringEncoding];
-	NSEnumerator *e = [postData keyEnumerator];
+	NSEnumerator *e = [[self postData] keyEnumerator];
 	NSString *key;
 	int i=0;
 	while (key = [e nextObject]) {
 		[self appendPostData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n",key] dataUsingEncoding:NSUTF8StringEncoding]];
-		[self appendPostData:[[postData objectForKey:key] dataUsingEncoding:NSUTF8StringEncoding]];
+		[self appendPostData:[[[self postData] objectForKey:key] dataUsingEncoding:NSUTF8StringEncoding]];
 		i++;
-		if (i != [postData count] || [fileData count] > 0) { //Only add the boundary if this is not the last item in the post body
+		if (i != [[self postData] count] || [[self fileData] count] > 0) { //Only add the boundary if this is not the last item in the post body
 			[self appendPostData:endItemBoundary];
 		}
 	}
 	
 	// Adds files to upload
-	NSData *contentTypeHeader = [[NSString stringWithString:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding];
 	e = [fileData keyEnumerator];
 	i=0;
 	while (key = [e nextObject]) {
-		NSString *fileName = @"file";
-		id file =  [fileData objectForKey:key];
+		NSDictionary *fileInfo = [[self fileData] objectForKey:key];
+		id file = [fileInfo objectForKey:@"data"];
+		NSString *contentType = [fileInfo objectForKey:@"contentType"];
+		NSString *fileName = [fileInfo objectForKey:@"fileName"];
+
+		[self appendPostData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", key, fileName] dataUsingEncoding:NSUTF8StringEncoding]];
+		[self appendPostData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", contentType] dataUsingEncoding:NSUTF8StringEncoding]];
+
 		if ([file isKindOfClass:[NSString class]]) {
-			fileName = (NSString *)file;
-		}
-		[self appendPostData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n",key,fileName] dataUsingEncoding:NSUTF8StringEncoding]];
-		[self appendPostData:contentTypeHeader];
-		if ([file isKindOfClass:[NSString class]]) {
-			[self appendPostDataFromFile:fileName];
+			[self appendPostDataFromFile:file];
 		} else {
 			[self appendPostData:file];
 		}
 		i++;
 		// Only add the boundary if this is not the last item in the post body
-		if (i != [fileData count]) { 
+		if (i != [[self fileData] count]) { 
 			[self appendPostData:endItemBoundary];
 		}
 	}
@@ -124,6 +159,7 @@
 }
 
 
-
+@synthesize fileData;
+@synthesize postData;
 
 @end

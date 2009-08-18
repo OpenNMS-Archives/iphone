@@ -31,25 +31,39 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "BaseUpdater.h"
 #import "UpdateHandler.h"
+#import "RegexKitLite.h"
 
 @implementation BaseUpdater
 
 @synthesize url;
 @synthesize queue;
 @synthesize handler;
+@synthesize requestData;
+@synthesize requestMethod;
+
+static ASINetworkQueue* threadQueue;
 
 -(id) initWithPath:(NSString*)p
 {
 	if (self = [super init]) {
-		queue = [[ASINetworkQueue alloc] init];
+		queue = [[NSOperationQueue alloc] init];
+		[queue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
 		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self getBaseUrl], p]];
 	}
 #if DEBUG
 	NSLog(@"%@: Initialized using URL: %@", self, url);
 #endif
 	return self;
+}
+
++(void) initialize
+{
+	if (!threadQueue) {
+		threadQueue = [[ASINetworkQueue alloc] init];
+	}
 }
 
 -(void) dealloc
@@ -60,16 +74,39 @@
 	[super dealloc];
 }
 
+-(NSString*) filterDate:(NSString*)date
+{
+	NSMutableString* string = [NSMutableString stringWithString:date];
+	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
+	return string;
+}
+
 -(NSString*) getBaseUrl
 {
-	return [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@",
-			[[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http",
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"],
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"],
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"],
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"],
-			[[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"]
-			];
+	NSString* https = [[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http";
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"];
+	NSString* password = [[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"];
+	NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"];
+	NSString* port = [[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"];
+	NSString* path = [[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"];
+	
+	if (username == nil) {
+		username = @"admin";
+	}
+	if (password == nil) {
+		password = @"admin";
+	}
+	if (host == nil) {
+		host = @"localhost";
+	}
+	if (port == nil) {
+		port = @"8980";
+	}
+	if (path == nil) {
+		path = @"/opennms/rest";
+	}
+
+	return [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@", https, username, password, host, port, path ];
 }
 
 -(void) update
@@ -79,20 +116,34 @@
 #endif
 	NSURL* requestUrl = [url copy];
 	ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:requestUrl] autorelease];
-	if (!handler) {
-		handler = [[[UpdateHandler alloc] init] autorelease];
+	if (self.requestData) {
+		[request appendPostData:self.requestData];
+	}
+	if (self.requestMethod) {
+		[request setRequestMethod:self.requestMethod];
+	}
+	if (!self.handler) {
+		NSLog(@"WARNING: creating a default handler");
+		self.handler = [[[UpdateHandler alloc] init] autorelease];
 	}
 
-	request.timeOutSeconds = 10;
+#if DEBUG
+	NSLog(@"handler = %@", self.handler);
+#endif
+
+	request.timeOutSeconds = 5;
 	if ([[requestUrl scheme] isEqual:@"https"]) {
 		request.validatesSecureCertificate = NO;
 	}
-	request.delegate = handler;
+	request.delegate = self.handler;
 	request.didFinishSelector = @selector(requestDidFinish:);
 	request.didFailSelector = @selector(requestFailed:);
 
-	[[self queue] addOperation:request];
-	[[self queue] setSuspended:NO];
+#if DEBUG
+	NSLog(@"queue = %@", queue);
+#endif
+	[queue addOperation:request];
+	[queue setSuspended:NO];
 }
 
 @end

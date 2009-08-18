@@ -34,7 +34,6 @@
 #import "AlarmListController.h"
 #import "ColumnarTableViewCell.h"
 #import "AlarmDetailController.h"
-#import "OpenNMSRestAgent.h"
 #import "Alarm.h"
 #import "OnmsSeverity.h"
 #import "AlarmListUpdater.h"
@@ -45,7 +44,7 @@
 
 @synthesize alarmTable;
 @synthesize fuzzyDate;
-@synthesize managedObjectContext;
+@synthesize contextService;
 @synthesize spinner;
 
 @synthesize alarmList;
@@ -54,7 +53,7 @@
 {
 	[self.fuzzyDate release];
 	[self.alarmTable release];
-	[self.managedObjectContext release];
+	[self.contextService release];
 	[self.spinner release];
 
 	[self.alarmList release];
@@ -62,15 +61,45 @@
     [super dealloc];
 }
 
--(void) initializeData
+-(void) refreshData
 {
 	if (!self.alarmList) {
 		[spinner startAnimating];
 		self.alarmList = [NSMutableArray array];
 	}
+	
+	NSManagedObjectContext *context = [contextService managedObjectContext];
+	
+	NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
+	[req setResultType:NSManagedObjectIDResultType];
+	
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
+	[req setEntity:entity];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
+	[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	[sortDescriptor release];
+	
+	NSError* error = nil;
+	NSArray *array = [context executeFetchRequest:req error:&error];
+	if (array == nil) {
+		if (error) {
+			NSLog(@"error fetching alarms: %@", [error localizedDescription]);
+		} else {
+			NSLog(@"error fetching alarms");
+		}
+	} else {
+		[self.alarmList removeAllObjects];
+		[self.alarmList addObjectsFromArray:array];
+	}
 	[self.alarmTable reloadData];
+}
+
+-(void) initializeData
+{
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
-	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithTableView:self.alarmTable objectList:self.alarmList] autorelease];
+	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
+	handler.clearOldObjects = YES;
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
@@ -86,8 +115,8 @@
 
 - (void) viewDidLoad
 {
-	if (!managedObjectContext) {
-		managedObjectContext = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	if (!contextService) {
+		contextService = [[ContextService alloc] init];
 	}
 
 	self.fuzzyDate = [[FuzzyDate alloc] init];
@@ -97,7 +126,8 @@
 
 - (void) viewDidUnload
 {
-	managedObjectContext = nil;
+	[contextService release];
+	contextService = nil;
 	
 	[self.alarmTable release];
 	[self.fuzzyDate release];
@@ -143,7 +173,8 @@
 	UIView* backgroundView = [[[UIView alloc] init] autorelease];
 	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
-	
+	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
+
 	if ([self.alarmList count] > 0) {
 		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
 		
@@ -192,6 +223,7 @@
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 	} else {
+		NSLog(@"no alarms to list");
 		cell.textLabel.text = @"";
 	}
 	
@@ -202,4 +234,3 @@
 }
 
 @end
-

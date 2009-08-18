@@ -33,29 +33,101 @@
 
 #import "UpdateHandler.h"
 #import "RegexKitLite.h"
-#import "config.h"
 
 @implementation UpdateHandler
 
 @synthesize spinner;
+@synthesize contextService;
+@synthesize method;
+@synthesize methodTarget;
+@synthesize clearOldObjects;
 
 -(id) init
 {
 	if (self = [super init]) {
-		spinner = nil;
+		self.spinner = nil;
+		self.contextService = [[ContextService alloc] init];
+		self.clearOldObjects = NO;
 	}
 	return self;
 }
 
+-(id) initWithMethod:(SEL)selector target:(NSObject*)target
+{
+	if (self = [super init]) {
+		self.spinner = nil;
+		self.contextService = [[ContextService alloc] init];
+		self.method = selector;
+		self.methodTarget = target;
+		self.clearOldObjects = NO;
+	}
+	return self;
+}
+
+-(void) dealloc
+{
+	[self.spinner release];
+	[self.contextService release];
+	[self.methodTarget release];
+
+	[super dealloc];
+}
+
+
 -(NSString *) cleanUpString:(NSString *)html
 {
-	
 	NSMutableString* string = [NSMutableString stringWithString:html];
 	
 	[string replaceOccurrencesOfRegex:@"^\\s*(.*?)\\s*$" withString:@"$1"];
 	[string replaceOccurrencesOfRegex:@"<[^>]*>" withString:@""];
 	
+	return [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+-(NSString*) stringForDate:(NSString*)date
+{
+	NSMutableString* string = [NSMutableString stringWithString:date];
+	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
 	return string;
+}
+
+
+-(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request
+{
+	NSString* response = [request responseString];
+#if DEBUG
+	// NSLog(@"response = %@", response);
+#endif
+	if (!response || [response isEqual:@""]) {
+		return nil;
+	}
+
+	NSError* error = nil;
+	CXMLDocument* document = [[[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error] autorelease];
+	if (!document) {
+		NSString* title;
+		NSString* message;
+		if (error) {
+			title = [error localizedDescription];
+			message = [error localizedFailureReason];
+		} else {
+			title = @"XML Parse Error";
+			message = @"An error occurred parsing the document.";
+		}
+		
+		UIAlertView *errorAlert = [[UIAlertView alloc]
+								   initWithTitle: title
+								   message: message
+								   delegate:self
+								   cancelButtonTitle:@"OK"
+								   otherButtonTitles:nil];
+		[errorAlert show];
+		[errorAlert autorelease];
+		
+		[self autorelease];
+		return nil;
+	}
+	return document;
 }
 
 -(void) requestDidFinish:(ASIHTTPRequest*) request
@@ -63,14 +135,20 @@
 #if DEBUG
 	NSLog(@"%@: Request finished.", self);
 #endif
-	[spinner stopAnimating];
+	if (self.methodTarget && self.method) {
+		[self.methodTarget performSelector:self.method];
+	}
+	[self.spinner stopAnimating];
 }
 
 -(void) requestFailed:(ASIHTTPRequest*) request
 {
 	NSError* error = [request error];
 	NSLog(@"%@: Request failed: %@", self, [error localizedDescription]);
-	[spinner stopAnimating];
+	if (methodTarget && method) {
+		[methodTarget performSelector:method];
+	}
+	[self.spinner stopAnimating];
 
 	UIAlertView *errorAlert = [[UIAlertView alloc]
 		initWithTitle: [error localizedDescription]

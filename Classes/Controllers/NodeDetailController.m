@@ -33,12 +33,12 @@
 
 #import "NodeDetailController.h"
 #import "ColumnarTableViewCell.h"
-#import "ViewOutage.h"
-#import "OnmsIpInterface.h"
-#import "OnmsSnmpInterface.h"
-#import "OpenNMSRestAgent.h"
-#import "OnmsEvent.h"
 #import "OnmsSeverity.h"
+#import "NodeFactory.h"
+#import "OutageFactory.h"
+#import "IpInterfaceFactory.h"
+#import "SnmpInterfaceFactory.h"
+#import "EventFactory.h"
 
 @implementation NodeDetailController
 
@@ -64,36 +64,39 @@
 
 - (void) initializeData
 {
-	OpenNMSRestAgent* agent = [[OpenNMSRestAgent alloc] init];
+	self.sections = [NSMutableArray array];
+
+	NodeFactory* nodeFactory = [NodeFactory getInstance];
+	self.node = [nodeFactory getNode:nodeId];
 
 	self.title = self.node.label;
 	self.nodeTable.backgroundColor = [UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0];
 	self.nodeTable.rowHeight = 34.0;
-	
-	self.sections = [NSMutableArray array];
-	self.node = [agent getNode:nodeId];
-	
-	self.outages = [agent getViewOutages:nodeId distinct:NO mini:YES];
+
+	OutageFactory* outageFactory = [OutageFactory getInstance];
+	self.outages = [outageFactory getOutagesForNode:nodeId];
 	if ([self.outages count] > 0) {
 		[self.sections addObject:@"Recent Outages"];
 	}
-	
-	self.interfaces = [agent getIpInterfaces:nodeId];
+
+	IpInterfaceFactory* ipInterfaceFactory = [IpInterfaceFactory getInstance];
+	self.interfaces = [ipInterfaceFactory getIpInterfacesForNode:nodeId];
 	if ([self.interfaces count] > 0) {
 		[self.sections addObject:@"IP Interfaces"];
 	}
 	
-	self.snmpInterfaces = [agent getSnmpInterfaces:nodeId];
+	SnmpInterfaceFactory* snmpInterfaceFactory = [SnmpInterfaceFactory getInstance];
+	self.snmpInterfaces = [snmpInterfaceFactory getSnmpInterfacesForNode:nodeId];
 	if ([self.snmpInterfaces count] > 0) {
 		[self.sections addObject:@"SNMP Interfaces"];
 	}
-
-	self.events = [agent getEvents:nodeId limit:[NSNumber numberWithInt:5]];
+	
+	EventFactory* eventFactory = [EventFactory getInstance];
+	self.events = [eventFactory getEventsForNode:nodeId];
 	if ([self.events count] > 0) {
 		[self.sections addObject:@"Recent Events"];
 	}
 
-	[agent release];
 	[self.nodeTable reloadData];
 }
 
@@ -103,7 +106,7 @@
 -(void) dealloc
 {
 	[self.nodeTable release];
-	
+
 	[self.nodeId release];
 	[self.node release];
 	[self.outages release];
@@ -124,7 +127,6 @@
 {
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	self.fuzzyDate.mini = YES;
-//	[self.navigationController setNavigationBarHidden:NO];
 
 	[self initializeData];
 
@@ -171,10 +173,8 @@
 /*
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	ViewOutage* outage = [outages objectAtIndex:indexPath.row];
-	[nodeDetailController setNodeId:outage.nodeId];
 	UINavigationController* cont = [self navigationController];
-	[cont pushViewController:nodeDetailController animated:YES];
+	[cont pushViewController:someController animated:YES];
 }
 */
 
@@ -185,8 +185,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([self.sections objectAtIndex:indexPath.section] == @"Recent Events") {
-		OnmsEvent* event = [self.events objectAtIndex:indexPath.row];
-		CGSize size = [event.eventLogMessage sizeWithFont:[UIFont boldSystemFontOfSize:11]
+		Event* event = [self.events objectAtIndex:indexPath.row];
+		CGSize size = [event.logMessage sizeWithFont:[UIFont boldSystemFontOfSize:11]
 					   constrainedToSize:CGSizeMake(220.0, 1000.0)
 					   lineBreakMode:UILineBreakModeWordWrap];
 		if ((size.height + 10) >= tableView.rowHeight) {
@@ -211,7 +211,7 @@
 	
 	if (sectionName == @"Recent Outages") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		ViewOutage* outage = [self.outages objectAtIndex:indexPath.row];
+		Outage* outage = [self.outages objectAtIndex:indexPath.row];
 
 		// IP Address
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 115.0, tableView.rowHeight)] autorelease];
@@ -229,11 +229,14 @@
 		[cell addColumn:outage.serviceName];
 		[cell.contentView addSubview:label];
 
+		NSString* regained = [fuzzyDate format:outage.ifRegainedService];
+		NSString* lost = [fuzzyDate format:outage.ifLostService];
+
 		// Up/Down
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(202.0, 0, 45.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
-		if (outage.serviceRegainedDate != nil) {
+		if (regained != nil) {
 			label.text = @"Regained";
 			[cell addColumn:@"Regained"];
 		} else {
@@ -246,18 +249,18 @@
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(247.0, 0, 50.0, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
-		if (outage.serviceRegainedDate != nil) {
-			label.text = outage.serviceRegainedDate;
-			[cell addColumn:outage.serviceRegainedDate];
+		if (regained != nil) {
+			label.text = regained;
+			[cell addColumn:regained];
 		} else {
-			label.text = outage.serviceLostDate;
-			[cell addColumn:outage.serviceLostDate];
+			label.text = lost;
+			[cell addColumn:lost];
 		}
 		[cell.contentView addSubview:label];
 		
 	} else if (sectionName == @"IP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		OnmsIpInterface* iface = [self.interfaces objectAtIndex:indexPath.row];
+		IpInterface* iface = [self.interfaces objectAtIndex:indexPath.row];
 		
 		// IP Address
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 80.0, tableView.rowHeight)] autorelease];
@@ -279,13 +282,13 @@
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(228.0, 0, 72, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
-		label.text = [iface.isManaged isEqual:@"M"]? @"Managed" : @"Unmanaged";
-		[cell addColumn:([iface.isManaged isEqual:@"M"]? @"Managed" : @"Unmanaged")];
+		label.text = [iface.managedFlag isEqual:@"M"]? @"Managed" : @"Unmanaged";
+		[cell addColumn:([iface.managedFlag isEqual:@"M"]? @"Managed" : @"Unmanaged")];
 		[cell.contentView addSubview:label];
 		
 	} else if (sectionName == @"SNMP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		OnmsSnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
+		SnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
 
 		// IfIndex
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 30.0, tableView.rowHeight)] autorelease];
@@ -323,7 +326,7 @@
 		backgroundView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.0];
 		cell.selectedBackgroundView = backgroundView;
 
-		OnmsEvent* event = [self.events objectAtIndex:indexPath.row];
+		Event* event = [self.events objectAtIndex:indexPath.row];
 		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:event.severity] autorelease];
 
 		UIColor* color = [sev getDisplayColor];
@@ -331,10 +334,10 @@
 		cell.backgroundColor = color;
 			
 		label = [[[UILabel	alloc] initWithFrame:CGRectMake(5.0, 0, 240.0, tableView.rowHeight)] autorelease];
-		[cell addColumn:event.eventLogMessage];
+		[cell addColumn:event.logMessage];
 		
 		label.font = font;
-		label.text = event.eventLogMessage;
+		label.text = event.logMessage;
 		label.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
 		label.numberOfLines = 2;
 		label.backgroundColor = clear;

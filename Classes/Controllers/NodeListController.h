@@ -33,17 +33,22 @@
 
 #import <UIKit/UIKit.h>
 #import "NodeDetailController.h"
+#import "ContextService.h"
 
 @interface NodeListController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
 	@private NSString* savedSearchTerm;
 	@private NSInteger savedScopeButtonIndex;
 	@private BOOL searchWasActive;
 	@private NSArray* nodeList;
+	@private ContextService* contextService;
 }
 
 @property (nonatomic, copy) NSString* savedSearchTerm;
 @property (nonatomic) NSInteger savedScopeButtonIndex;
 @property (nonatomic) BOOL searchWasActive;
-@property (nonatomic, retain) NSArray* nodeList;
+@property (retain) NSArray* nodeList;
+@property (retain) ContextService* contextService;
+
+-(void) refreshData;
 
 @end

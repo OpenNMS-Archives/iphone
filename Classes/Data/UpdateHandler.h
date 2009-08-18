@@ -31,16 +31,33 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+#import "ContextService.h"
+
 #import <Foundation/Foundation.h>
+#import "ASIHTTPRequest.h"
+#import "CXMLDocument.h"
 
 @interface UpdateHandler : NSObject {
 	UIActivityIndicatorView* spinner;
+	ContextService* contextService;
+	SEL method;
+	NSObject* methodTarget;
+	BOOL clearOldObjects;
 }
 
 @property (retain) UIActivityIndicatorView* spinner;
+@property (retain) ContextService* contextService;
+@property (assign) SEL method;
+@property (retain) NSObject* methodTarget;
+@property (assign) BOOL clearOldObjects;
 
-- (NSString *)cleanUpString:(NSString *)html;
--(void) requestDidFinish:(ASIHTTPRequest*) request;
--(void) requestFailed:(ASIHTTPRequest*) request;
+-(id) initWithMethod:(SEL)selector target:(NSObject*)target;
+
+-(NSString*)     cleanUpString:(NSString *)html;
+-(NSString*)     stringForDate:(NSString*)date;
+-(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
+-(void)          requestDidFinish:(ASIHTTPRequest*) request;
+-(void)          requestFailed:(ASIHTTPRequest*) request;
 
 @end

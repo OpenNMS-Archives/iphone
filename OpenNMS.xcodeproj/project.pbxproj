@@ -13,25 +13,36 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765080DF74369002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765070DF74369002DB57D /* CoreGraphics.framework */; };
 		28AD73880D9D96C1002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD73870D9D96C1002E5188 /* MainWindow.xib */; };
+		440AD04B102F91EF00CC63C9 /* NodeUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 440AD04A102F91EF00CC63C9 /* NodeUpdater.m */; };
+		440AD066102F924E00CC63C9 /* NodeUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 440AD065102F924E00CC63C9 /* NodeUpdateHandler.m */; };
 		440B00861008C941005DB69C /* FuzzyDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 440B00851008C941005DB69C /* FuzzyDate.m */; };
-		44227C3E102B63F900D00033 /* TableUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44227C3D102B63F900D00033 /* TableUpdateHandler.m */; };
 		44227C4F102B6CD200D00033 /* AlarmUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44227C4E102B6CD200D00033 /* AlarmUpdateHandler.m */; };
 		44237785102CC73300D49DFA /* AlarmTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44237784102CC73300D49DFA /* AlarmTableView.m */; };
 		442434611024E7C200658DB1 /* AlarmDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442434601024E7C100658DB1 /* AlarmDetailController.m */; };
-		4425F1641018E572000DDDAE /* OnmsSnmpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */; };
 		44263CFC10112F4100717409 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF510112F4100717409 /* AboutViewController.m */; };
 		44263CFE10112F4100717409 /* NodeDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF910112F4100717409 /* NodeDetailController.m */; };
-		44263D0C10112F6800717409 /* OnmsEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D0410112F6800717409 /* OnmsEvent.m */; };
-		44263D0D10112F6800717409 /* OnmsIpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D0610112F6800717409 /* OnmsIpInterface.m */; };
-		44263D0E10112F6800717409 /* OnmsNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D0810112F6800717409 /* OnmsNode.m */; };
-		44263D0F10112F6800717409 /* OnmsOutage.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D0A10112F6800717409 /* OnmsOutage.m */; };
-		44263D1210112F7E00717409 /* ViewOutage.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D1110112F7E00717409 /* ViewOutage.m */; };
-		44263D1F10112FA900717409 /* EventParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D1710112FA900717409 /* EventParser.m */; };
-		44263D2010112FA900717409 /* IpInterfaceParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D1910112FA900717409 /* IpInterfaceParser.m */; };
-		44263D2110112FA900717409 /* NodeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D1B10112FA900717409 /* NodeParser.m */; };
-		44263D2210112FA900717409 /* OutageParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D1D10112FA900717409 /* OutageParser.m */; };
 		44263D261011301500717409 /* OutageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D251011301500717409 /* OutageListController.m */; };
 		44263D2D1011309700717409 /* AlarmListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D2C1011309700717409 /* AlarmListController.m */; };
+		443665361032597400F0B7B6 /* ContextService.m in Sources */ = {isa = PBXBuildFile; fileRef = 443665351032597400F0B7B6 /* ContextService.m */; };
+		44367A1810385E6C008E6799 /* AckUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367A1710385E6C008E6799 /* AckUpdater.m */; };
+		44367A251038608D008E6799 /* AlarmFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367A241038608D008E6799 /* AlarmFactory.m */; };
+		44367B4C1038E273008E6799 /* SnmpInterfaceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367B471038E273008E6799 /* SnmpInterfaceFactory.m */; };
+		44367B4D1038E273008E6799 /* SnmpInterfaceUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367B491038E273008E6799 /* SnmpInterfaceUpdateHandler.m */; };
+		44367B4E1038E273008E6799 /* SnmpInterfaceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367B4B1038E273008E6799 /* SnmpInterfaceUpdater.m */; };
+		44367BE510397226008E6799 /* IpInterfaceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367BE010397225008E6799 /* IpInterfaceFactory.m */; };
+		44367BE610397226008E6799 /* IpInterfaceUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367BE210397225008E6799 /* IpInterfaceUpdateHandler.m */; };
+		44367BE710397226008E6799 /* IpInterfaceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367BE410397225008E6799 /* IpInterfaceUpdater.m */; };
+		44367C4C10397B30008E6799 /* EventFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4710397B30008E6799 /* EventFactory.m */; };
+		44367C4D10397B30008E6799 /* EventUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4910397B30008E6799 /* EventUpdateHandler.m */; };
+		44367C4E10397B30008E6799 /* EventUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4B10397B30008E6799 /* EventUpdater.m */; };
+		445221F71030848500F77B2C /* Alarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EC1030848500F77B2C /* Alarm.m */; };
+		445221F81030848500F77B2C /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EE1030848500F77B2C /* Event.m */; };
+		445221F91030848500F77B2C /* IpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F01030848500F77B2C /* IpInterface.m */; };
+		445221FA1030848500F77B2C /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F21030848500F77B2C /* Node.m */; };
+		445221FB1030848500F77B2C /* Outage.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F41030848500F77B2C /* Outage.m */; };
+		445221FC1030848500F77B2C /* SnmpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F61030848500F77B2C /* SnmpInterface.m */; };
+		4452229B1030CD3D00F77B2C /* OutageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452229A1030CD3D00F77B2C /* OutageFactory.m */; };
+		44644888102DE463005697EF /* NodeFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44644887102DE463005697EF /* NodeFactory.m */; };
 		44700FC31007D5D8006CE665 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */; };
 		44700FC41007D5D8006CE665 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAF1007D5D8006CE665 /* ASIHTTPRequest.m */; };
 		44700FC51007D5D8006CE665 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FB11007D5D8006CE665 /* ASINetworkQueue.m */; };
@@ -39,34 +50,37 @@
 		44700FCE1007D60B006CE665 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44700FCD1007D60B006CE665 /* CFNetwork.framework */; };
 		44700FD31007D61A006CE665 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44700FCF1007D60B006CE665 /* libz.1.dylib */; };
 		44700FD61007D688006CE665 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44700FD51007D688006CE665 /* libxml2.dylib */; };
-		44700FF31007D746006CE665 /* OpenNMSRestAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FED1007D746006CE665 /* OpenNMSRestAgent.m */; };
 		44700FF81007D781006CE665 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FF61007D781006CE665 /* Icon-Small.png */; };
 		44700FF91007D781006CE665 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FF71007D781006CE665 /* Icon.png */; };
 		447010001007DA78006CE665 /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FFE1007DA78006CE665 /* clock.png */; };
 		447010011007DA78006CE665 /* ekg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FFF1007DA78006CE665 /* ekg.png */; };
 		447010201007F0D7006CE665 /* AlarmView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4470101E1007F0D7006CE665 /* AlarmView.xib */; };
 		447010211007F0D7006CE665 /* OutageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4470101F1007F0D7006CE665 /* OutageView.xib */; };
-		4481480A1029C1F300083FF9 /* OpenNMS.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 448148091029C1F300083FF9 /* OpenNMS.xcdatamodel */; };
 		448148561029CBDF00083FF9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448148551029CBDF00083FF9 /* CoreData.framework */; };
 		4481486B1029D25A00083FF9 /* BaseUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4481486A1029D25A00083FF9 /* BaseUpdater.m */; };
 		4481488E1029D41400083FF9 /* AlarmListUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4481488D1029D41400083FF9 /* AlarmListUpdater.m */; };
 		448AC2C510097B6700C2621C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 448AC2C410097B6700C2621C /* Settings.bundle */; };
-		448D5A32102B859B008416E3 /* Alarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 448D5A31102B859B008416E3 /* Alarm.m */; };
 		448D5AF8102BC9F5008416E3 /* AlarmUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 448D5AF7102BC9F5008416E3 /* AlarmUpdater.m */; };
 		448EE92C101E0CF800063B32 /* OnmsSeverity.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EE92B101E0CF800063B32 /* OnmsSeverity.m */; };
-		448EEA24101E30B800063B32 /* BaseParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EEA23101E30B800063B32 /* BaseParser.m */; };
 		448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EEA98101E3A2600063B32 /* RegexKitLite.m */; };
 		448EEAA4101E3B7400063B32 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 448EEAA3101E3B7400063B32 /* libicucore.dylib */; };
 		44981CCB100EA9C3006BB193 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 44981CCA100EA9C3006BB193 /* Default.png */; };
+		44B8E1A3102DB0A9003DBB9B /* OutageListUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E1A2102DB0A9003DBB9B /* OutageListUpdater.m */; };
+		44B8E1E2102DB4E6003DBB9B /* OutageUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E1E1102DB4E6003DBB9B /* OutageUpdateHandler.m */; };
+		44B8E28D102DC168003DBB9B /* OpenNMS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E28A102DC168003DBB9B /* OpenNMS.xcdatamodeld */; };
 		44BBA448100CE84F001257CB /* question-mark-helvetica.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA447100CE84F001257CB /* question-mark-helvetica.png */; };
 		44BBA44A100CE90B001257CB /* o.png in Resources */ = {isa = PBXBuildFile; fileRef = 44BBA449100CE90B001257CB /* o.png */; };
+		44C1F7FC10359C870087291F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C1F7FB10359C870087291F /* Reachability.m */; };
+		44C1F82010359D140087291F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C1F81F10359D140087291F /* SystemConfiguration.framework */; };
+		44C1F82810359D350087291F /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 44C1F82710359D350087291F /* ASIInputStream.m */; };
 		44C8E295100CD66400A29DA0 /* display.png in Resources */ = {isa = PBXBuildFile; fileRef = 44C8E294100CD66400A29DA0 /* display.png */; };
 		44D023E6100F9CB0000C5EAA /* CXMLNode_XPathExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E653100F9901000B8A22 /* CXMLNode_XPathExtensions.m */; };
 		44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */; };
+		44DD4ABF102DDC50005B4F34 /* OpenNMS.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */; };
 		44DEAF3C102A32E700634C2F /* UpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DEAF3B102A32E700634C2F /* UpdateHandler.m */; };
 		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
 		44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */; };
-		44EEAF2C101A58D30023D5BD /* SnmpInterfaceParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */; };
+		44E63D52103A3B4D005FC19F /* NodeSearchUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E63D51103A3B4D005FC19F /* NodeSearchUpdater.m */; };
 		44EEAFB0101BA7340023D5BD /* NodeListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44EEAFAF101BA7340023D5BD /* NodeListView.xib */; };
 		44EEAFB4101BA7A70023D5BD /* NodeListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EEAFB3101BA7A70023D5BD /* NodeListController.m */; };
 		44F0E655100F9901000B8A22 /* CXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E645100F9901000B8A22 /* CXMLDocument.m */; };
@@ -90,44 +104,66 @@
 		28A0AB4B0D9B1048005BE974 /* OpenNMS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNMS_Prefix.pch; sourceTree = "<group>"; };
 		28AD73870D9D96C1002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = Resources/Interfaces/MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		440AD049102F91EF00CC63C9 /* NodeUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeUpdater.h; path = Data/NodeUpdater.h; sourceTree = "<group>"; };
+		440AD04A102F91EF00CC63C9 /* NodeUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeUpdater.m; path = Data/NodeUpdater.m; sourceTree = "<group>"; };
+		440AD064102F924E00CC63C9 /* NodeUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeUpdateHandler.h; path = Data/NodeUpdateHandler.h; sourceTree = "<group>"; };
+		440AD065102F924E00CC63C9 /* NodeUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeUpdateHandler.m; path = Data/NodeUpdateHandler.m; sourceTree = "<group>"; };
 		440B00841008C941005DB69C /* FuzzyDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuzzyDate.h; sourceTree = "<group>"; };
 		440B00851008C941005DB69C /* FuzzyDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FuzzyDate.m; sourceTree = "<group>"; };
-		44227C3C102B63F900D00033 /* TableUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TableUpdateHandler.h; path = Data/TableUpdateHandler.h; sourceTree = "<group>"; };
-		44227C3D102B63F900D00033 /* TableUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TableUpdateHandler.m; path = Data/TableUpdateHandler.m; sourceTree = "<group>"; };
 		44227C4D102B6CD200D00033 /* AlarmUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmUpdateHandler.h; path = Data/AlarmUpdateHandler.h; sourceTree = "<group>"; };
 		44227C4E102B6CD200D00033 /* AlarmUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmUpdateHandler.m; path = Data/AlarmUpdateHandler.m; sourceTree = "<group>"; };
 		44237783102CC73300D49DFA /* AlarmTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmTableView.h; path = Views/AlarmTableView.h; sourceTree = "<group>"; };
 		44237784102CC73300D49DFA /* AlarmTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmTableView.m; path = Views/AlarmTableView.m; sourceTree = "<group>"; };
 		4424345F1024E7C100658DB1 /* AlarmDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmDetailController.h; path = Controllers/AlarmDetailController.h; sourceTree = "<group>"; };
 		442434601024E7C100658DB1 /* AlarmDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmDetailController.m; path = Controllers/AlarmDetailController.m; sourceTree = "<group>"; };
-		4425F1621018E572000DDDAE /* OnmsSnmpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsSnmpInterface.h; path = Objects/OnmsSnmpInterface.h; sourceTree = "<group>"; };
-		4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsSnmpInterface.m; path = Objects/OnmsSnmpInterface.m; sourceTree = "<group>"; };
 		44263CF410112F4100717409 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = Controllers/AboutViewController.h; sourceTree = "<group>"; };
 		44263CF510112F4100717409 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = Controllers/AboutViewController.m; sourceTree = "<group>"; };
 		44263CF810112F4100717409 /* NodeDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeDetailController.h; path = Controllers/NodeDetailController.h; sourceTree = "<group>"; };
 		44263CF910112F4100717409 /* NodeDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeDetailController.m; path = Controllers/NodeDetailController.m; sourceTree = "<group>"; };
-		44263D0310112F6800717409 /* OnmsEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsEvent.h; path = Objects/OnmsEvent.h; sourceTree = "<group>"; };
-		44263D0410112F6800717409 /* OnmsEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsEvent.m; path = Objects/OnmsEvent.m; sourceTree = "<group>"; };
-		44263D0510112F6800717409 /* OnmsIpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsIpInterface.h; path = Objects/OnmsIpInterface.h; sourceTree = "<group>"; };
-		44263D0610112F6800717409 /* OnmsIpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsIpInterface.m; path = Objects/OnmsIpInterface.m; sourceTree = "<group>"; };
-		44263D0710112F6800717409 /* OnmsNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsNode.h; path = Objects/OnmsNode.h; sourceTree = "<group>"; };
-		44263D0810112F6800717409 /* OnmsNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsNode.m; path = Objects/OnmsNode.m; sourceTree = "<group>"; };
-		44263D0910112F6800717409 /* OnmsOutage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsOutage.h; path = Objects/OnmsOutage.h; sourceTree = "<group>"; };
-		44263D0A10112F6800717409 /* OnmsOutage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsOutage.m; path = Objects/OnmsOutage.m; sourceTree = "<group>"; };
-		44263D1010112F7E00717409 /* ViewOutage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewOutage.h; path = Objects/ViewOutage.h; sourceTree = "<group>"; };
-		44263D1110112F7E00717409 /* ViewOutage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewOutage.m; path = Objects/ViewOutage.m; sourceTree = "<group>"; };
-		44263D1610112FA900717409 /* EventParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventParser.h; path = Parsers/EventParser.h; sourceTree = "<group>"; };
-		44263D1710112FA900717409 /* EventParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventParser.m; path = Parsers/EventParser.m; sourceTree = "<group>"; };
-		44263D1810112FA900717409 /* IpInterfaceParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterfaceParser.h; path = Parsers/IpInterfaceParser.h; sourceTree = "<group>"; };
-		44263D1910112FA900717409 /* IpInterfaceParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterfaceParser.m; path = Parsers/IpInterfaceParser.m; sourceTree = "<group>"; };
-		44263D1A10112FA900717409 /* NodeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeParser.h; path = Parsers/NodeParser.h; sourceTree = "<group>"; };
-		44263D1B10112FA900717409 /* NodeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeParser.m; path = Parsers/NodeParser.m; sourceTree = "<group>"; };
-		44263D1C10112FA900717409 /* OutageParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutageParser.h; path = Parsers/OutageParser.h; sourceTree = "<group>"; };
-		44263D1D10112FA900717409 /* OutageParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageParser.m; path = Parsers/OutageParser.m; sourceTree = "<group>"; };
 		44263D241011301500717409 /* OutageListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutageListController.h; path = Controllers/OutageListController.h; sourceTree = "<group>"; };
 		44263D251011301500717409 /* OutageListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageListController.m; path = Controllers/OutageListController.m; sourceTree = "<group>"; };
 		44263D2B1011309700717409 /* AlarmListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmListController.h; path = Controllers/AlarmListController.h; sourceTree = "<group>"; };
 		44263D2C1011309700717409 /* AlarmListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmListController.m; path = Controllers/AlarmListController.m; sourceTree = "<group>"; };
+		443665341032597400F0B7B6 /* ContextService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextService.h; sourceTree = "<group>"; };
+		443665351032597400F0B7B6 /* ContextService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextService.m; sourceTree = "<group>"; };
+		44367A1610385E6C008E6799 /* AckUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AckUpdater.h; path = Data/AckUpdater.h; sourceTree = "<group>"; };
+		44367A1710385E6C008E6799 /* AckUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AckUpdater.m; path = Data/AckUpdater.m; sourceTree = "<group>"; };
+		44367A231038608D008E6799 /* AlarmFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmFactory.h; path = Data/AlarmFactory.h; sourceTree = "<group>"; };
+		44367A241038608D008E6799 /* AlarmFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmFactory.m; path = Data/AlarmFactory.m; sourceTree = "<group>"; };
+		44367B461038E273008E6799 /* SnmpInterfaceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterfaceFactory.h; path = Data/SnmpInterfaceFactory.h; sourceTree = "<group>"; };
+		44367B471038E273008E6799 /* SnmpInterfaceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceFactory.m; path = Data/SnmpInterfaceFactory.m; sourceTree = "<group>"; };
+		44367B481038E273008E6799 /* SnmpInterfaceUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterfaceUpdateHandler.h; path = Data/SnmpInterfaceUpdateHandler.h; sourceTree = "<group>"; };
+		44367B491038E273008E6799 /* SnmpInterfaceUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceUpdateHandler.m; path = Data/SnmpInterfaceUpdateHandler.m; sourceTree = "<group>"; };
+		44367B4A1038E273008E6799 /* SnmpInterfaceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterfaceUpdater.h; path = Data/SnmpInterfaceUpdater.h; sourceTree = "<group>"; };
+		44367B4B1038E273008E6799 /* SnmpInterfaceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceUpdater.m; path = Data/SnmpInterfaceUpdater.m; sourceTree = "<group>"; };
+		44367BDF10397225008E6799 /* IpInterfaceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterfaceFactory.h; path = Data/IpInterfaceFactory.h; sourceTree = "<group>"; };
+		44367BE010397225008E6799 /* IpInterfaceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterfaceFactory.m; path = Data/IpInterfaceFactory.m; sourceTree = "<group>"; };
+		44367BE110397225008E6799 /* IpInterfaceUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterfaceUpdateHandler.h; path = Data/IpInterfaceUpdateHandler.h; sourceTree = "<group>"; };
+		44367BE210397225008E6799 /* IpInterfaceUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterfaceUpdateHandler.m; path = Data/IpInterfaceUpdateHandler.m; sourceTree = "<group>"; };
+		44367BE310397225008E6799 /* IpInterfaceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterfaceUpdater.h; path = Data/IpInterfaceUpdater.h; sourceTree = "<group>"; };
+		44367BE410397225008E6799 /* IpInterfaceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterfaceUpdater.m; path = Data/IpInterfaceUpdater.m; sourceTree = "<group>"; };
+		44367C4610397B30008E6799 /* EventFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventFactory.h; path = Data/EventFactory.h; sourceTree = "<group>"; };
+		44367C4710397B30008E6799 /* EventFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventFactory.m; path = Data/EventFactory.m; sourceTree = "<group>"; };
+		44367C4810397B30008E6799 /* EventUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventUpdateHandler.h; path = Data/EventUpdateHandler.h; sourceTree = "<group>"; };
+		44367C4910397B30008E6799 /* EventUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventUpdateHandler.m; path = Data/EventUpdateHandler.m; sourceTree = "<group>"; };
+		44367C4A10397B30008E6799 /* EventUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventUpdater.h; path = Data/EventUpdater.h; sourceTree = "<group>"; };
+		44367C4B10397B30008E6799 /* EventUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventUpdater.m; path = Data/EventUpdater.m; sourceTree = "<group>"; };
+		445221EB1030848500F77B2C /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
+		445221EC1030848500F77B2C /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
+		445221ED1030848500F77B2C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
+		445221EE1030848500F77B2C /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = Objects/Event.m; sourceTree = "<group>"; };
+		445221EF1030848500F77B2C /* IpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IpInterface.h; path = Objects/IpInterface.h; sourceTree = "<group>"; };
+		445221F01030848500F77B2C /* IpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IpInterface.m; path = Objects/IpInterface.m; sourceTree = "<group>"; };
+		445221F11030848500F77B2C /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Node.h; path = Objects/Node.h; sourceTree = "<group>"; };
+		445221F21030848500F77B2C /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Node.m; path = Objects/Node.m; sourceTree = "<group>"; };
+		445221F31030848500F77B2C /* Outage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Outage.h; path = Objects/Outage.h; sourceTree = "<group>"; };
+		445221F41030848500F77B2C /* Outage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Outage.m; path = Objects/Outage.m; sourceTree = "<group>"; };
+		445221F51030848500F77B2C /* SnmpInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterface.h; path = Objects/SnmpInterface.h; sourceTree = "<group>"; };
+		445221F61030848500F77B2C /* SnmpInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterface.m; path = Objects/SnmpInterface.m; sourceTree = "<group>"; };
+		445222991030CD3D00F77B2C /* OutageFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutageFactory.h; path = Data/OutageFactory.h; sourceTree = "<group>"; };
+		4452229A1030CD3D00F77B2C /* OutageFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageFactory.m; path = Data/OutageFactory.m; sourceTree = "<group>"; };
+		44644886102DE463005697EF /* NodeFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeFactory.h; path = Data/NodeFactory.h; sourceTree = "<group>"; };
+		44644887102DE463005697EF /* NodeFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeFactory.m; path = Data/NodeFactory.m; sourceTree = "<group>"; };
 		44700FAC1007D5D8006CE665 /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIFormDataRequest.h; sourceTree = "<group>"; };
 		44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIFormDataRequest.m; sourceTree = "<group>"; };
 		44700FAE1007D5D8006CE665 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequest.h; sourceTree = "<group>"; };
@@ -139,46 +175,49 @@
 		44700FCD1007D60B006CE665 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		44700FCF1007D60B006CE665 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
 		44700FD51007D688006CE665 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		44700FEC1007D746006CE665 /* OpenNMSRestAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNMSRestAgent.h; sourceTree = "<group>"; };
-		44700FED1007D746006CE665 /* OpenNMSRestAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenNMSRestAgent.m; sourceTree = "<group>"; };
 		44700FF61007D781006CE665 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "Resources/Images/Icon-Small.png"; sourceTree = "<group>"; };
 		44700FF71007D781006CE665 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Images/Icon.png; sourceTree = "<group>"; };
 		44700FFE1007DA78006CE665 /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = clock.png; path = Resources/Images/clock.png; sourceTree = "<group>"; };
 		44700FFF1007DA78006CE665 /* ekg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ekg.png; path = Resources/Images/ekg.png; sourceTree = "<group>"; };
 		4470101E1007F0D7006CE665 /* AlarmView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlarmView.xib; path = Resources/Interfaces/AlarmView.xib; sourceTree = "<group>"; };
 		4470101F1007F0D7006CE665 /* OutageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OutageView.xib; path = Resources/Interfaces/OutageView.xib; sourceTree = "<group>"; };
-		448148091029C1F300083FF9 /* OpenNMS.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; name = OpenNMS.xcdatamodel; path = Resources/OpenNMS.xcdatamodel; sourceTree = "<group>"; };
 		448148551029CBDF00083FF9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		448148691029D25A00083FF9 /* BaseUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseUpdater.h; path = Data/BaseUpdater.h; sourceTree = "<group>"; };
 		4481486A1029D25A00083FF9 /* BaseUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseUpdater.m; path = Data/BaseUpdater.m; sourceTree = "<group>"; };
 		4481488C1029D41400083FF9 /* AlarmListUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmListUpdater.h; path = Data/AlarmListUpdater.h; sourceTree = "<group>"; };
 		4481488D1029D41400083FF9 /* AlarmListUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmListUpdater.m; path = Data/AlarmListUpdater.m; sourceTree = "<group>"; };
 		448AC2C410097B6700C2621C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = Resources/Settings.bundle; sourceTree = "<group>"; };
-		448D5A30102B859B008416E3 /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
-		448D5A31102B859B008416E3 /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
 		448D5AF6102BC9F5008416E3 /* AlarmUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmUpdater.h; path = Data/AlarmUpdater.h; sourceTree = "<group>"; };
 		448D5AF7102BC9F5008416E3 /* AlarmUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmUpdater.m; path = Data/AlarmUpdater.m; sourceTree = "<group>"; };
 		448EE92A101E0CF800063B32 /* OnmsSeverity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsSeverity.h; path = Objects/OnmsSeverity.h; sourceTree = "<group>"; };
 		448EE92B101E0CF800063B32 /* OnmsSeverity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsSeverity.m; path = Objects/OnmsSeverity.m; sourceTree = "<group>"; };
-		448EEA22101E30B800063B32 /* BaseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseParser.h; path = Parsers/BaseParser.h; sourceTree = "<group>"; };
-		448EEA23101E30B800063B32 /* BaseParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseParser.m; path = Parsers/BaseParser.m; sourceTree = "<group>"; };
 		448EEA97101E3A2600063B32 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegexKitLite.h; path = "External Classes/RegexKitLite/RegexKitLite.h"; sourceTree = "<group>"; };
 		448EEA98101E3A2600063B32 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = "External Classes/RegexKitLite/RegexKitLite.m"; sourceTree = "<group>"; };
 		448EEAA3101E3B7400063B32 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		44981CCA100EA9C3006BB193 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Images/Default.png; sourceTree = "<group>"; };
+		44B8E1A1102DB0A9003DBB9B /* OutageListUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutageListUpdater.h; path = Data/OutageListUpdater.h; sourceTree = "<group>"; };
+		44B8E1A2102DB0A9003DBB9B /* OutageListUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageListUpdater.m; path = Data/OutageListUpdater.m; sourceTree = "<group>"; };
+		44B8E1E0102DB4E6003DBB9B /* OutageUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutageUpdateHandler.h; path = Data/OutageUpdateHandler.h; sourceTree = "<group>"; };
+		44B8E1E1102DB4E6003DBB9B /* OutageUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageUpdateHandler.m; path = Data/OutageUpdateHandler.m; sourceTree = "<group>"; };
 		44BBA447100CE84F001257CB /* question-mark-helvetica.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "question-mark-helvetica.png"; path = "Resources/Images/question-mark-helvetica.png"; sourceTree = "<group>"; };
 		44BBA449100CE90B001257CB /* o.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = o.png; path = Resources/Images/o.png; sourceTree = "<group>"; };
+		44C1F7FA10359C870087291F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		44C1F7FB10359C870087291F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		44C1F81F10359D140087291F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		44C1F82610359D350087291F /* ASIInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIInputStream.h; sourceTree = "<group>"; };
+		44C1F82710359D350087291F /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIInputStream.m; sourceTree = "<group>"; };
 		44C8E294100CD66400A29DA0 /* display.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = display.png; path = Resources/Images/display.png; sourceTree = "<group>"; };
 		44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsXMLElementAdditions.h; sourceTree = "<group>"; };
 		44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsXMLElementAdditions.m; sourceTree = "<group>"; };
+		44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenNMS.xcdatamodel; sourceTree = "<group>"; };
 		44DEAE411029E02300634C2F /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		44DEAF3A102A32E700634C2F /* UpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpdateHandler.h; path = Data/UpdateHandler.h; sourceTree = "<group>"; };
 		44DEAF3B102A32E700634C2F /* UpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpdateHandler.m; path = Data/UpdateHandler.m; sourceTree = "<group>"; };
 		44E2A161100E195100DD5A1D /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Resources/Images/opennms-headingbg.png"; sourceTree = "<group>"; };
 		44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColumnarTableViewCell.h; path = Views/ColumnarTableViewCell.h; sourceTree = "<group>"; };
 		44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColumnarTableViewCell.m; path = Views/ColumnarTableViewCell.m; sourceTree = "<group>"; };
-		44EEAF2A101A58D30023D5BD /* SnmpInterfaceParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnmpInterfaceParser.h; path = Parsers/SnmpInterfaceParser.h; sourceTree = "<group>"; };
-		44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SnmpInterfaceParser.m; path = Parsers/SnmpInterfaceParser.m; sourceTree = "<group>"; };
+		44E63D50103A3B4D005FC19F /* NodeSearchUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeSearchUpdater.h; path = Data/NodeSearchUpdater.h; sourceTree = "<group>"; };
+		44E63D51103A3B4D005FC19F /* NodeSearchUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeSearchUpdater.m; path = Data/NodeSearchUpdater.m; sourceTree = "<group>"; };
 		44EEAFAF101BA7340023D5BD /* NodeListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NodeListView.xib; path = Resources/Interfaces/NodeListView.xib; sourceTree = "<group>"; };
 		44EEAFB2101BA7A70023D5BD /* NodeListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeListController.h; path = Controllers/NodeListController.h; sourceTree = "<group>"; };
 		44EEAFB3101BA7A70023D5BD /* NodeListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NodeListController.m; path = Controllers/NodeListController.m; sourceTree = "<group>"; };
@@ -219,6 +258,7 @@
 				44700FD61007D688006CE665 /* libxml2.dylib in Frameworks */,
 				448EEAA4101E3B7400063B32 /* libicucore.dylib in Frameworks */,
 				448148561029CBDF00083FF9 /* CoreData.framework in Frameworks */,
+				44C1F82010359D140087291F /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,14 +271,11 @@
 				44263CF310112F3300717409 /* Controllers */,
 				4423777A102CC70C00D49DFA /* Views */,
 				448148651029D00000083FF9 /* Data */,
-				44263D1310112F9700717409 /* Parsers */,
 				44263D0010112F5800717409 /* Objects */,
 				440B00841008C941005DB69C /* FuzzyDate.h */,
 				440B00851008C941005DB69C /* FuzzyDate.m */,
 				1D3623240D0F684500981E51 /* OpenNMSAppDelegate.h */,
 				1D3623250D0F684500981E51 /* OpenNMSAppDelegate.m */,
-				44700FEC1007D746006CE665 /* OpenNMSRestAgent.h */,
-				44700FED1007D746006CE665 /* OpenNMSRestAgent.m */,
 				44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */,
 				44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */,
 			);
@@ -267,6 +304,7 @@
 				44700FD51007D688006CE665 /* libxml2.dylib */,
 				448EEAA3101E3B7400063B32 /* libicucore.dylib */,
 				448148551029CBDF00083FF9 /* CoreData.framework */,
+				44C1F81F10359D140087291F /* SystemConfiguration.framework */,
 			);
 			name = OpenNMS;
 			sourceTree = "<group>";
@@ -284,11 +322,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				44B8E28A102DC168003DBB9B /* OpenNMS.xcdatamodeld */,
 				8D1107310486CEB800E47090 /* OpenNMS_Client-Info.plist */,
 				443DB6E01028F4B300785DE6 /* Images */,
 				443DB6DF1028F4A900785DE6 /* Interfaces */,
 				448AC2C410097B6700C2621C /* Settings.bundle */,
-				448148091029C1F300083FF9 /* OpenNMS.xcdatamodel */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -336,43 +374,22 @@
 		44263D0010112F5800717409 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
-				448D5A30102B859B008416E3 /* Alarm.h */,
-				448D5A31102B859B008416E3 /* Alarm.m */,
-				44263D1010112F7E00717409 /* ViewOutage.h */,
-				44263D1110112F7E00717409 /* ViewOutage.m */,
-				44263D0310112F6800717409 /* OnmsEvent.h */,
-				44263D0410112F6800717409 /* OnmsEvent.m */,
-				44263D0510112F6800717409 /* OnmsIpInterface.h */,
-				44263D0610112F6800717409 /* OnmsIpInterface.m */,
-				44263D0710112F6800717409 /* OnmsNode.h */,
-				44263D0810112F6800717409 /* OnmsNode.m */,
-				44263D0910112F6800717409 /* OnmsOutage.h */,
-				44263D0A10112F6800717409 /* OnmsOutage.m */,
+				445221EB1030848500F77B2C /* Alarm.h */,
+				445221EC1030848500F77B2C /* Alarm.m */,
+				445221ED1030848500F77B2C /* Event.h */,
+				445221EE1030848500F77B2C /* Event.m */,
+				445221EF1030848500F77B2C /* IpInterface.h */,
+				445221F01030848500F77B2C /* IpInterface.m */,
+				445221F11030848500F77B2C /* Node.h */,
+				445221F21030848500F77B2C /* Node.m */,
+				445221F31030848500F77B2C /* Outage.h */,
+				445221F41030848500F77B2C /* Outage.m */,
+				445221F51030848500F77B2C /* SnmpInterface.h */,
+				445221F61030848500F77B2C /* SnmpInterface.m */,
 				448EE92A101E0CF800063B32 /* OnmsSeverity.h */,
 				448EE92B101E0CF800063B32 /* OnmsSeverity.m */,
-				4425F1621018E572000DDDAE /* OnmsSnmpInterface.h */,
-				4425F1631018E572000DDDAE /* OnmsSnmpInterface.m */,
 			);
 			name = Objects;
-			sourceTree = "<group>";
-		};
-		44263D1310112F9700717409 /* Parsers */ = {
-			isa = PBXGroup;
-			children = (
-				44263D1610112FA900717409 /* EventParser.h */,
-				44263D1710112FA900717409 /* EventParser.m */,
-				44263D1810112FA900717409 /* IpInterfaceParser.h */,
-				44263D1910112FA900717409 /* IpInterfaceParser.m */,
-				44263D1A10112FA900717409 /* NodeParser.h */,
-				44263D1B10112FA900717409 /* NodeParser.m */,
-				44263D1C10112FA900717409 /* OutageParser.h */,
-				44263D1D10112FA900717409 /* OutageParser.m */,
-				44EEAF2A101A58D30023D5BD /* SnmpInterfaceParser.h */,
-				44EEAF2B101A58D30023D5BD /* SnmpInterfaceParser.m */,
-				448EEA22101E30B800063B32 /* BaseParser.h */,
-				448EEA23101E30B800063B32 /* BaseParser.m */,
-			);
-			name = Parsers;
 			sourceTree = "<group>";
 		};
 		443DB6DF1028F4A900785DE6 /* Interfaces */ = {
@@ -415,6 +432,10 @@
 		44700FAB1007D5D8006CE665 /* ASIHTTPRequest */ = {
 			isa = PBXGroup;
 			children = (
+				44C1F82610359D350087291F /* ASIInputStream.h */,
+				44C1F82710359D350087291F /* ASIInputStream.m */,
+				44C1F7FA10359C870087291F /* Reachability.h */,
+				44C1F7FB10359C870087291F /* Reachability.m */,
 				44700FAC1007D5D8006CE665 /* ASIFormDataRequest.h */,
 				44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */,
 				44700FAE1007D5D8006CE665 /* ASIHTTPRequest.h */,
@@ -431,18 +452,54 @@
 		448148651029D00000083FF9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				443665341032597400F0B7B6 /* ContextService.h */,
+				443665351032597400F0B7B6 /* ContextService.m */,
 				448148691029D25A00083FF9 /* BaseUpdater.h */,
 				4481486A1029D25A00083FF9 /* BaseUpdater.m */,
 				44DEAF3A102A32E700634C2F /* UpdateHandler.h */,
 				44DEAF3B102A32E700634C2F /* UpdateHandler.m */,
-				44227C3C102B63F900D00033 /* TableUpdateHandler.h */,
-				44227C3D102B63F900D00033 /* TableUpdateHandler.m */,
+				44367A1610385E6C008E6799 /* AckUpdater.h */,
+				44367A1710385E6C008E6799 /* AckUpdater.m */,
+				44367A231038608D008E6799 /* AlarmFactory.h */,
+				44367A241038608D008E6799 /* AlarmFactory.m */,
 				448D5AF6102BC9F5008416E3 /* AlarmUpdater.h */,
 				448D5AF7102BC9F5008416E3 /* AlarmUpdater.m */,
 				4481488C1029D41400083FF9 /* AlarmListUpdater.h */,
 				4481488D1029D41400083FF9 /* AlarmListUpdater.m */,
 				44227C4D102B6CD200D00033 /* AlarmUpdateHandler.h */,
 				44227C4E102B6CD200D00033 /* AlarmUpdateHandler.m */,
+				44644886102DE463005697EF /* NodeFactory.h */,
+				44644887102DE463005697EF /* NodeFactory.m */,
+				440AD049102F91EF00CC63C9 /* NodeUpdater.h */,
+				440AD04A102F91EF00CC63C9 /* NodeUpdater.m */,
+				44E63D50103A3B4D005FC19F /* NodeSearchUpdater.h */,
+				44E63D51103A3B4D005FC19F /* NodeSearchUpdater.m */,
+				440AD064102F924E00CC63C9 /* NodeUpdateHandler.h */,
+				440AD065102F924E00CC63C9 /* NodeUpdateHandler.m */,
+				44367C4610397B30008E6799 /* EventFactory.h */,
+				44367C4710397B30008E6799 /* EventFactory.m */,
+				44367C4A10397B30008E6799 /* EventUpdater.h */,
+				44367C4B10397B30008E6799 /* EventUpdater.m */,
+				44367C4810397B30008E6799 /* EventUpdateHandler.h */,
+				44367C4910397B30008E6799 /* EventUpdateHandler.m */,
+				445222991030CD3D00F77B2C /* OutageFactory.h */,
+				4452229A1030CD3D00F77B2C /* OutageFactory.m */,
+				44B8E1A1102DB0A9003DBB9B /* OutageListUpdater.h */,
+				44B8E1A2102DB0A9003DBB9B /* OutageListUpdater.m */,
+				44B8E1E0102DB4E6003DBB9B /* OutageUpdateHandler.h */,
+				44B8E1E1102DB4E6003DBB9B /* OutageUpdateHandler.m */,
+				44367BDF10397225008E6799 /* IpInterfaceFactory.h */,
+				44367BE010397225008E6799 /* IpInterfaceFactory.m */,
+				44367BE310397225008E6799 /* IpInterfaceUpdater.h */,
+				44367BE410397225008E6799 /* IpInterfaceUpdater.m */,
+				44367BE110397225008E6799 /* IpInterfaceUpdateHandler.h */,
+				44367BE210397225008E6799 /* IpInterfaceUpdateHandler.m */,
+				44367B461038E273008E6799 /* SnmpInterfaceFactory.h */,
+				44367B471038E273008E6799 /* SnmpInterfaceFactory.m */,
+				44367B4A1038E273008E6799 /* SnmpInterfaceUpdater.h */,
+				44367B4B1038E273008E6799 /* SnmpInterfaceUpdater.m */,
+				44367B481038E273008E6799 /* SnmpInterfaceUpdateHandler.h */,
+				44367B491038E273008E6799 /* SnmpInterfaceUpdateHandler.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -556,7 +613,6 @@
 				44700FC41007D5D8006CE665 /* ASIHTTPRequest.m in Sources */,
 				44700FC51007D5D8006CE665 /* ASINetworkQueue.m in Sources */,
 				44700FC61007D5D8006CE665 /* ASINSStringAdditions.m in Sources */,
-				44700FF31007D746006CE665 /* OpenNMSRestAgent.m in Sources */,
 				440B00861008C941005DB69C /* FuzzyDate.m in Sources */,
 				44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */,
 				44F0E655100F9901000B8A22 /* CXMLDocument.m in Sources */,
@@ -572,33 +628,47 @@
 				44D02409100FA1D6000C5EAA /* OnmsXMLElementAdditions.m in Sources */,
 				44263CFC10112F4100717409 /* AboutViewController.m in Sources */,
 				44263CFE10112F4100717409 /* NodeDetailController.m in Sources */,
-				44263D0C10112F6800717409 /* OnmsEvent.m in Sources */,
-				44263D0D10112F6800717409 /* OnmsIpInterface.m in Sources */,
-				44263D0E10112F6800717409 /* OnmsNode.m in Sources */,
-				44263D0F10112F6800717409 /* OnmsOutage.m in Sources */,
-				44263D1210112F7E00717409 /* ViewOutage.m in Sources */,
-				44263D1F10112FA900717409 /* EventParser.m in Sources */,
-				44263D2010112FA900717409 /* IpInterfaceParser.m in Sources */,
-				44263D2110112FA900717409 /* NodeParser.m in Sources */,
-				44263D2210112FA900717409 /* OutageParser.m in Sources */,
 				44263D261011301500717409 /* OutageListController.m in Sources */,
 				44263D2D1011309700717409 /* AlarmListController.m in Sources */,
-				4425F1641018E572000DDDAE /* OnmsSnmpInterface.m in Sources */,
-				44EEAF2C101A58D30023D5BD /* SnmpInterfaceParser.m in Sources */,
 				44EEAFB4101BA7A70023D5BD /* NodeListController.m in Sources */,
 				448EE92C101E0CF800063B32 /* OnmsSeverity.m in Sources */,
-				448EEA24101E30B800063B32 /* BaseParser.m in Sources */,
 				448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */,
 				442434611024E7C200658DB1 /* AlarmDetailController.m in Sources */,
-				4481480A1029C1F300083FF9 /* OpenNMS.xcdatamodel in Sources */,
 				4481486B1029D25A00083FF9 /* BaseUpdater.m in Sources */,
 				4481488E1029D41400083FF9 /* AlarmListUpdater.m in Sources */,
 				44DEAF3C102A32E700634C2F /* UpdateHandler.m in Sources */,
-				44227C3E102B63F900D00033 /* TableUpdateHandler.m in Sources */,
 				44227C4F102B6CD200D00033 /* AlarmUpdateHandler.m in Sources */,
-				448D5A32102B859B008416E3 /* Alarm.m in Sources */,
 				448D5AF8102BC9F5008416E3 /* AlarmUpdater.m in Sources */,
 				44237785102CC73300D49DFA /* AlarmTableView.m in Sources */,
+				44B8E1A3102DB0A9003DBB9B /* OutageListUpdater.m in Sources */,
+				44B8E1E2102DB4E6003DBB9B /* OutageUpdateHandler.m in Sources */,
+				44B8E28D102DC168003DBB9B /* OpenNMS.xcdatamodeld in Sources */,
+				44DD4ABF102DDC50005B4F34 /* OpenNMS.xcdatamodel in Sources */,
+				44644888102DE463005697EF /* NodeFactory.m in Sources */,
+				440AD04B102F91EF00CC63C9 /* NodeUpdater.m in Sources */,
+				440AD066102F924E00CC63C9 /* NodeUpdateHandler.m in Sources */,
+				445221F71030848500F77B2C /* Alarm.m in Sources */,
+				445221F81030848500F77B2C /* Event.m in Sources */,
+				445221F91030848500F77B2C /* IpInterface.m in Sources */,
+				445221FA1030848500F77B2C /* Node.m in Sources */,
+				445221FB1030848500F77B2C /* Outage.m in Sources */,
+				445221FC1030848500F77B2C /* SnmpInterface.m in Sources */,
+				4452229B1030CD3D00F77B2C /* OutageFactory.m in Sources */,
+				443665361032597400F0B7B6 /* ContextService.m in Sources */,
+				44C1F7FC10359C870087291F /* Reachability.m in Sources */,
+				44C1F82810359D350087291F /* ASIInputStream.m in Sources */,
+				44367A1810385E6C008E6799 /* AckUpdater.m in Sources */,
+				44367A251038608D008E6799 /* AlarmFactory.m in Sources */,
+				44367B4C1038E273008E6799 /* SnmpInterfaceFactory.m in Sources */,
+				44367B4D1038E273008E6799 /* SnmpInterfaceUpdateHandler.m in Sources */,
+				44367B4E1038E273008E6799 /* SnmpInterfaceUpdater.m in Sources */,
+				44367BE510397226008E6799 /* IpInterfaceFactory.m in Sources */,
+				44367BE610397226008E6799 /* IpInterfaceUpdateHandler.m in Sources */,
+				44367BE710397226008E6799 /* IpInterfaceUpdater.m in Sources */,
+				44367C4C10397B30008E6799 /* EventFactory.m in Sources */,
+				44367C4D10397B30008E6799 /* EventUpdateHandler.m in Sources */,
+				44367C4E10397B30008E6799 /* EventUpdater.m in Sources */,
+				44E63D52103A3B4D005FC19F /* NodeSearchUpdater.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,6 +764,20 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		44B8E28A102DC168003DBB9B /* OpenNMS.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */,
+			);
+			currentVersion = 44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */;
+			name = OpenNMS.xcdatamodeld;
+			path = Resources/OpenNMS.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
 }

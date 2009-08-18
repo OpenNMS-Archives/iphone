@@ -31,56 +31,31 @@
  *
  *******************************************************************************/
 
+#import "config.h"
+
 #import "AlarmUpdateHandler.h"
-#import "OpenNMSAppDelegate.h"
 #import "Alarm.h"
-#import "RegexKitLite.h"
 
 @implementation AlarmUpdateHandler
 
--(NSString*) filterDate:(NSString*)date
-{
-	NSMutableString* string = [NSMutableString stringWithString:date];
-	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
-//	NSLog(@"filterDate: before = %@, after = %@", date, string);
-	return string;
-}
-
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
-	NSManagedObjectContext *moc = [(OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
-	
+	NSManagedObjectContext *moc = [contextService managedObjectContext];
+
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
-	NSString* response = [request responseString];
-	NSError* error = nil;
-	CXMLDocument* document = [[[CXMLDocument alloc] initWithXMLString: response options: 0 error: &error] autorelease];
+	CXMLDocument* document = [self getDocumentForRequest:request];
+
 	if (!document) {
-		NSLog(@"response = %@", response);
-		NSString* title;
-		NSString* message;
-		if (error) {
-			title = [error localizedDescription];
-			message = [error localizedFailureReason];
-		} else {
-			title = @"XML Parse Error";
-			message = @"An error occurred parsing the document.";
-		}
-		
-		UIAlertView *errorAlert = [[UIAlertView alloc]
-			initWithTitle: title
-			message: message
-			delegate:self
-			cancelButtonTitle:@"OK"
-			otherButtonTitles:nil];
-		[errorAlert show];
-		[errorAlert autorelease];
-		
+		[dateFormatter release];
+		[super requestDidFinish:request];
 		[self autorelease];
 		return;
 	}
+
+	NSDate* lastModified = [NSDate date];
 
 	NSArray* xmlAlarms;
 	if ([[[document rootElement] name] isEqual:@"alarm"]) {
@@ -106,20 +81,22 @@
 				// ignore
 			} else if ([[attr name] isEqual:@"type"]) {
 				// ignore
+#if DEBUG
 			} else {
 				NSLog(@"unknown alarm attribute: %@", [attr name]);
+#endif
 			}
 		}
 
 		NSFetchRequest *alarmRequest = [[[NSFetchRequest alloc] init] autorelease];
-
+		
 		NSEntityDescription *alarmEntity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:moc];
 		[alarmRequest setEntity:alarmEntity];
 		
 		NSPredicate *alarmPredicate = [NSPredicate predicateWithFormat:@"alarmId == %@", alarmId];
 		[alarmRequest setPredicate:alarmPredicate];
 		
-		error = nil;
+		NSError* error = nil;
 		NSArray *alarmArray = [moc executeFetchRequest:alarmRequest error:&error];
 		if (!alarmArray || [alarmArray count] == 0) {
 			if (error) {
@@ -134,7 +111,8 @@
 		alarm.alarmId = alarmId;
 		alarm.severity = severity;
 		alarm.count = count;
-		
+		alarm.lastModified = lastModified;
+
 		// UEI
 		CXMLElement *ueiElement = [xmlAlarm elementForName:@"uei"];
 		if (ueiElement) {
@@ -154,7 +132,7 @@
 		// First Event Time
 		CXMLElement *ftElement = [xmlAlarm elementForName:@"firstEventTime"];
 		if (ftElement) {
-			alarm.firstEventTime = [dateFormatter dateFromString:[self filterDate:[[ftElement childAtIndex:0] stringValue]]];
+			alarm.firstEventTime = [dateFormatter dateFromString:[self stringForDate:[[ftElement childAtIndex:0] stringValue]]];
 		} else {
 			alarm.firstEventTime = nil;
 		}
@@ -162,7 +140,7 @@
 		// Last Event Time
 		CXMLElement *ltElement = [xmlAlarm elementForName:@"lastEventTime"];
 		if (ltElement) {
-			alarm.lastEventTime = [dateFormatter dateFromString:[self filterDate:[[ltElement childAtIndex:0] stringValue]]];
+			alarm.lastEventTime = [dateFormatter dateFromString:[self stringForDate:[[ltElement childAtIndex:0] stringValue]]];
 		} else {
 			alarm.lastEventTime = nil;
 		}
@@ -170,41 +148,44 @@
 		// Ack Time
 		CXMLElement *ackElement = [xmlAlarm elementForName:@"ackTime"];
 		if (ackElement) {
-			alarm.ackTime = [dateFormatter dateFromString:[self filterDate:[[ackElement childAtIndex:0] stringValue]]];
+			alarm.ackTime = [dateFormatter dateFromString:[self stringForDate:[[ackElement childAtIndex:0] stringValue]]];
 		} else {
 			alarm.ackTime = nil;
 		}
 	}
 
-	error = nil;
+	if (self.clearOldObjects) {
+		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+		
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:moc];
+		[request setEntity:entity];
+		
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lastModified < %@", lastModified];
+		[request setPredicate:predicate];
+		
+		NSError* error = nil;
+		NSArray *alarmsToDelete = [moc executeFetchRequest:request error:&error];
+		if (!alarmsToDelete) {
+			if (error) {
+				NSLog(@"error fetching alarms to delete (older than %@): %@", lastModified, [error localizedDescription]);
+				[error release];
+			} else {
+				NSLog(@"error fetching alarms to delete (older than %@)", lastModified);
+			}
+		} else {
+			for (id alarm in alarmsToDelete) {
+#ifdef DEBUG
+				NSLog(@"deleting %@", alarm);
+#endif
+				[moc deleteObject:alarm];
+			}
+		}
+	}
+
+	NSError* error = nil;
 	if (![moc save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
-	}
-
-	if (self.objectList) {
-		NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
-		[req setResultType:NSManagedObjectIDResultType];
-
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:moc];
-		[req setEntity:entity];
-
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
-		[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-		[sortDescriptor release];
-
-		error = nil;
-		NSArray *array = [moc executeFetchRequest:req error:&error];
-		if (array == nil) {
-			if (error) {
-				NSLog(@"error fetching alarms: %@", [error localizedDescription]);
-			} else {
-				NSLog(@"error fetching alarms");
-			}
-		} else {
-			[self.objectList removeAllObjects];
-			[self.objectList addObjectsFromArray:array];
-		}
 	}
 
 	[dateFormatter release];

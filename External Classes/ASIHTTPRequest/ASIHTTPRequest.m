@@ -12,10 +12,12 @@
 
 #import "ASIHTTPRequest.h"
 #import <zlib.h>
-#ifndef TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE
+#import "Reachability.h"
+#else
 #import <SystemConfiguration/SystemConfiguration.h>
-#import <Security/Security.h>
 #endif
+#import "ASIInputStream.h"
 
 // We use our own custom run loop mode as CoreAnimation seems to want to hijack our threads otherwise
 static CFStringRef ASIHTTPRequestRunMode = CFSTR("ASIHTTPRequest");
@@ -48,12 +50,40 @@ static NSError *ASIAuthenticationError;
 static NSError *ASIUnableToCreateRequestError;
 static NSError *ASITooMuchRedirectionError;
 
+static NSMutableArray *bandwidthUsageTracker = nil;
+static unsigned long averageBandwidthUsedPerSecond = 0;
+
+// Records how much bandwidth all requests combined have used in the last second
+static unsigned long bandwidthUsedInLastSecond = 0; 
+
+// A date one second in the future from the time it was created
+static NSDate *bandwidthMeasurementDate = nil;
+
+// Since throttling variables are shared among all requests, we'll use a lock to mediate access
+static NSLock *bandwidthThrottlingLock = nil;
+
+// the maximum number of bytes that can be transmitted in one second
+static unsigned long maxBandwidthPerSecond = 0;
+
+// A default figure for throttling bandwidth on mobile devices
+unsigned long const ASIWWANBandwidthThrottleAmount = 14800;
+
+// YES when bandwidth throttling is active
+// This flag does not denote whether throttling is turned on - rather whether it is currently in use
+// It will be set to NO when throttling was turned on with setShouldThrottleBandwidthForWWAN, but a WI-FI connection is active
+BOOL isBandwidthThrottled = NO;
+
+BOOL shouldThrottleBandwithForWWANOnly = NO;
+
+static NSLock *sessionCookiesLock = nil;
 
 // Private stuff
 @interface ASIHTTPRequest ()
 
 - (BOOL)askDelegateForCredentials;
 - (BOOL)askDelegateForProxyCredentials;
++ (void)measureBandwidthUsage;
++ (void)recordBandwidthUsage;
 
 @property (assign) BOOL complete;
 @property (retain) NSDictionary *responseHeaders;
@@ -87,6 +117,7 @@ static NSError *ASITooMuchRedirectionError;
 
 @end
 
+
 @implementation ASIHTTPRequest
 
 
@@ -97,6 +128,9 @@ static NSError *ASITooMuchRedirectionError;
 {
 	if (self == [ASIHTTPRequest class]) {
 		progressLock = [[NSRecursiveLock alloc] init];
+		bandwidthThrottlingLock = [[NSLock alloc] init];
+		sessionCookiesLock = [[NSLock alloc] init];
+		bandwidthUsageTracker = [[NSMutableArray alloc] initWithCapacity:5];
 		ASIRequestTimedOutError = [[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIRequestTimedOutErrorType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"The request timed out",NSLocalizedDescriptionKey,nil]] retain];	
 		ASIAuthenticationError = [[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIAuthenticationErrorType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Authentication needed",NSLocalizedDescriptionKey,nil]] retain];
 		ASIRequestCancelledError = [[NSError errorWithDomain:NetworkRequestErrorDomain code:ASIRequestCancelledErrorType userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"The request was cancelled",NSLocalizedDescriptionKey,nil]] retain];
@@ -183,6 +217,7 @@ static NSError *ASITooMuchRedirectionError;
 	[compressedPostBodyFilePath release];
 	[postBodyWriteStream release];
 	[postBodyReadStream release];
+	[PACurl release];
 	[super dealloc];
 }
 
@@ -451,13 +486,6 @@ static NSError *ASITooMuchRedirectionError;
 	for (header in headers) {
 		CFHTTPMessageSetHeaderFieldValue(request, (CFStringRef)header, (CFStringRef)[[self requestHeaders] objectForKey:header]);
 	}
-
-	// If this is a post/put request and we store the request body in memory, add it to the request
-	if ([self shouldCompressRequestBody] && [self compressedPostBody]) {
-		CFHTTPMessageSetBody(request, (CFDataRef)[self compressedPostBody]);
-	} else if ([self postBody]) {
-		CFHTTPMessageSetBody(request, (CFDataRef)[self postBody]);
-	}
 	
 	[self loadRequest];
 	
@@ -492,18 +520,32 @@ static NSError *ASITooMuchRedirectionError;
 	if (![self downloadDestinationPath]) {
 		[self setRawResponseData:[[[NSMutableData alloc] init] autorelease]];
     }
-    // Create the stream for the request.
+    // Create the stream for the request
+	
+	// Do we need to stream the request body from disk
 	if ([self shouldStreamPostDataFromDisk] && [self postBodyFilePath] && [[NSFileManager defaultManager] fileExistsAtPath:[self postBodyFilePath]]) {
 		
 		// Are we gzipping the request body?
 		if ([self compressedPostBodyFilePath] && [[NSFileManager defaultManager] fileExistsAtPath:[self compressedPostBodyFilePath]]) {
-			[self setPostBodyReadStream:[[[NSInputStream alloc] initWithFileAtPath:[self compressedPostBodyFilePath]] autorelease]];
+			[self setPostBodyReadStream:[ASIInputStream inputStreamWithFileAtPath:[self compressedPostBodyFilePath]]];
 		} else {
-			[self setPostBodyReadStream:[[[NSInputStream alloc] initWithFileAtPath:[self postBodyFilePath]] autorelease]];	
+			[self setPostBodyReadStream:[ASIInputStream inputStreamWithFileAtPath:[self postBodyFilePath]]];
 		}
 		readStream = CFReadStreamCreateForStreamedHTTPRequest(kCFAllocatorDefault, request,(CFReadStreamRef)[self postBodyReadStream]);
     } else {
-		readStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, request);
+		
+		// If we have a request body, we'll stream it from memory using our custom stream, so that we can measure bandwidth use and it can be bandwidth-throttled if nescessary
+		if ([self postBody]) {
+			if ([self shouldCompressRequestBody] && [self compressedPostBody]) {
+				[self setPostBodyReadStream:[ASIInputStream inputStreamWithData:[self compressedPostBody]]];
+			} else if ([self postBody]) {
+				[self setPostBodyReadStream:[ASIInputStream inputStreamWithData:[self postBody]]];
+			}
+			readStream = CFReadStreamCreateForStreamedHTTPRequest(kCFAllocatorDefault, request,(CFReadStreamRef)[self postBodyReadStream]);
+		
+		} else {
+			readStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, request);
+		}
 	}
 	if (!readStream) {
 		[[self cancelledLock] unlock];
@@ -617,7 +659,6 @@ static NSError *ASITooMuchRedirectionError;
 	[self startRequest];
 	
 
-	
 	// Wait for the request to finish
 	while (!complete) {
 		
@@ -675,10 +716,11 @@ static NSError *ASITooMuchRedirectionError;
 		
 		[self updateProgressIndicators];
 		
-		
+		// Measure bandwidth used, and throttle if nescessary
+		[ASIHTTPRequest measureBandwidthUsage];
 		
 		// This thread should wait for 1/4 second for the stream to do something. We'll stop early if it does.
-		CFRunLoopRunInMode(ASIHTTPRequestRunMode,0.25,YES);
+		CFRunLoopRunInMode(ASIHTTPRequestRunMode,0,YES);
 	}
 	
 	[pool release];
@@ -1017,7 +1059,6 @@ static NSError *ASITooMuchRedirectionError;
 	if ([self error] || [self mainRequest]) {
 		return;
 	}
-	
 	// Let the queue know we are done
 	if ([queue respondsToSelector:@selector(requestDidFinish:)]) {
 		[queue performSelectorOnMainThread:@selector(requestDidFinish:) withObject:self waitUntilDone:[NSThread isMainThread]];		
@@ -1616,6 +1657,28 @@ static NSError *ASITooMuchRedirectionError;
 		bufferSize = 16384;
 	}
 	
+	// Reduce the buffer size if we're receiving data too quickly when bandwidth throttling is active
+	// This just augments the throttling done in measureBandwidthUsage to reduce the amount we go over the limit
+	
+	if ([[self class] isBandwidthThrottled]) {
+		[bandwidthThrottlingLock lock];
+		if (maxBandwidthPerSecond > 0) {
+			long long maxSize  = (long long)maxBandwidthPerSecond-(long long)bandwidthUsedInLastSecond;
+			if (maxSize < 0) {
+				// We aren't supposed to read any more data right now, but we'll read a single byte anyway so the CFNetwork's buffer isn't full
+				bufferSize = 1;
+			} else if (maxSize/4 < bufferSize) {
+				// We were going to fetch more data that we should be allowed, so we'll reduce the size of our read
+				bufferSize = maxSize/4;
+			}
+		}
+		if (bufferSize < 1) {
+			bufferSize = 1;
+		}
+		[bandwidthThrottlingLock unlock];
+	}
+
+	
     UInt8 buffer[bufferSize];
     CFIndex bytesRead = CFReadStreamRead(readStream, buffer, sizeof(buffer));
 	
@@ -1629,6 +1692,9 @@ static NSError *ASITooMuchRedirectionError;
 		
 		[self setTotalBytesRead:[self totalBytesRead]+bytesRead];
 		[self setLastActivityTime:[NSDate date]];
+		
+		// For bandwidth measurement / throttling
+		[ASIHTTPRequest incrementBandwidthUsedInLastSecond:bytesRead];
 		
 		// Are we downloading to a file?
 		if ([self downloadDestinationPath]) {
@@ -1846,16 +1912,22 @@ static NSError *ASITooMuchRedirectionError;
 
 + (void)setSessionCookies:(NSMutableArray *)newSessionCookies
 {
+	[sessionCookiesLock lock];
 	// Remove existing cookies from the persistent store
 	for (NSHTTPCookie *cookie in sessionCookies) {
 		[[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
 	}
 	[sessionCookies release];
 	sessionCookies = [newSessionCookies retain];
+	[sessionCookiesLock unlock];
 }
 
 + (void)addSessionCookie:(NSHTTPCookie *)newCookie
 {
+	// Called to ensure sessionCookies exists first, as we won't be able to create it when we have the lock
+	[[ASIHTTPRequest sessionCookies] count];
+	
+	[sessionCookiesLock lock];
 	NSHTTPCookie *cookie;
 	int i;
 	int max = [[ASIHTTPRequest sessionCookies] count];
@@ -1867,6 +1939,7 @@ static NSError *ASITooMuchRedirectionError;
 		}
 	}
 	[[ASIHTTPRequest sessionCookies] addObject:newCookie];
+	[sessionCookiesLock unlock];
 }
 
 // Dump all session data (authentication and cookies)
@@ -2210,15 +2283,213 @@ static NSError *ASITooMuchRedirectionError;
 	if (err) {
 		return nil;
 	}
-	CFErrorRef err2 = NULL;
 	// Obtain the list of proxies by running the autoconfiguration script
+#if !TARGET_OS_IPHONE ||  __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_2_2
+	CFErrorRef err2 = NULL;
 	NSArray *proxies = [(NSArray *)CFNetworkCopyProxiesForAutoConfigurationScript((CFStringRef)script,(CFURLRef)theURL, &err2) autorelease];
 	if (err2) {
 		return nil;
 	}
+#else
+	NSArray *proxies = [(NSArray *)CFNetworkCopyProxiesForAutoConfigurationScript((CFStringRef)script,(CFURLRef)theURL) autorelease];
+#endif
 	return proxies;
 }
 
+#pragma mark mime-type detection
+
++ (NSString *)mimeTypeForFileAtPath:(NSString *)path
+{
+	// NSTask does seem to exist in the 2.2.1 SDK, though it's not in the 3.0 SDK. It's probably best if we just use a generic mime type on iPhone all the time.
+#if TARGET_OS_IPHONE
+	return @"application/octet-stream";
+	
+	// Grab the mime type using an NSTask to run the 'file' program, with the Mac OS-specific parameters to grab the mime type
+	// Perhaps there is a better way to do this?
+#else
+	NSTask *task = [[[NSTask alloc] init] autorelease];
+	[task setLaunchPath: @"/usr/bin/file"];
+	[task setArguments:[NSMutableArray arrayWithObjects:@"-Ib",path,nil]];
+	
+    NSPipe *outputPipe = [NSPipe pipe];
+    [task setStandardOutput:outputPipe];
+	
+    NSFileHandle *file = [outputPipe fileHandleForReading];
+	
+	[task launch];
+	[task waitUntilExit];
+	
+	if ([task terminationStatus] != 0) {
+		return @"application/octet-stream";	
+	}
+	
+	NSString *mimeTypeString = [[[[NSString alloc] initWithData:[file readDataToEndOfFile] encoding: NSUTF8StringEncoding] autorelease] stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+	return [[mimeTypeString componentsSeparatedByString:@";"] objectAtIndex:0];
+#endif
+}
+
+#pragma mark bandwidth measurement / throttling
+
++ (BOOL)isBandwidthThrottled
+{
+#if TARGET_OS_IPHONE
+	[bandwidthThrottlingLock lock];
+
+	BOOL throttle = isBandwidthThrottled || (!shouldThrottleBandwithForWWANOnly && (maxBandwidthPerSecond));
+	[bandwidthThrottlingLock unlock];
+	return throttle;
+#else
+	[bandwidthThrottlingLock lock];
+	BOOL throttle = (maxBandwidthPerSecond);
+	[bandwidthThrottlingLock unlock];
+	return throttle;
+#endif
+}
+
++ (unsigned long)maxBandwidthPerSecond
+{
+	[bandwidthThrottlingLock lock];
+	unsigned long amount = maxBandwidthPerSecond;
+	[bandwidthThrottlingLock unlock];
+	return amount;
+}
+
++ (void)setMaxBandwidthPerSecond:(unsigned long)bytes
+{
+	[bandwidthThrottlingLock lock];
+	maxBandwidthPerSecond = bytes;
+	[bandwidthThrottlingLock unlock];
+}
+
++ (void)incrementBandwidthUsedInLastSecond:(unsigned long)bytes
+{
+	[bandwidthThrottlingLock lock];
+	bandwidthUsedInLastSecond += bytes;
+	//NSLog(@"used in last second: %lu",bandwidthUsedInLastSecond);
+	[bandwidthThrottlingLock unlock];
+}
+
++ (void)recordBandwidthUsage
+{
+	if (bandwidthUsedInLastSecond == 0) {
+		[bandwidthUsageTracker removeAllObjects];
+	} else {
+		NSTimeInterval interval = [bandwidthMeasurementDate timeIntervalSinceNow];
+		while ((interval < 0 || [bandwidthUsageTracker count] > 5) && [bandwidthUsageTracker count] > 0) {
+			[bandwidthUsageTracker removeObjectAtIndex:0];
+			interval++;
+		}
+	}
+	//NSLog(@"Used: %qi",bandwidthUsedInLastSecond);
+	[bandwidthUsageTracker addObject:[NSNumber numberWithUnsignedLong:bandwidthUsedInLastSecond]];
+	[bandwidthMeasurementDate release];
+	bandwidthMeasurementDate = [[NSDate dateWithTimeIntervalSinceNow:1] retain];
+	bandwidthUsedInLastSecond = 0;
+	
+	int measurements = [bandwidthUsageTracker count];
+	unsigned long long totalBytes = 0;
+	for (NSNumber *bytes in bandwidthUsageTracker) {
+		totalBytes += [bytes unsignedLongValue];
+	}
+	averageBandwidthUsedPerSecond = totalBytes/measurements;		
+}
+
++ (unsigned long)averageBandwidthUsedPerSecond
+{
+	[bandwidthThrottlingLock lock];
+	
+	if (!bandwidthMeasurementDate || [bandwidthMeasurementDate timeIntervalSinceNow] < 0) {
+		[self recordBandwidthUsage];
+	}
+	unsigned long amount = 	averageBandwidthUsedPerSecond;
+	[bandwidthThrottlingLock unlock];
+	return amount;
+}
+
++ (void)measureBandwidthUsage
+{
+	// Other requests may have to wait for this lock if we're sleeping, but this is fine, since in that case we already know they shouldn't be sending or receiving data
+	[bandwidthThrottlingLock lock];
+
+	if (!bandwidthMeasurementDate || [bandwidthMeasurementDate timeIntervalSinceNow] < -0) {
+		[self recordBandwidthUsage];
+	}
+	
+	// Are we performing bandwidth throttling?
+	if (maxBandwidthPerSecond > 0) {	
+		// How much data can we still send or receive this second?
+		long long bytesRemaining = (long long)maxBandwidthPerSecond - (long long)bandwidthUsedInLastSecond;
+				
+		// Have we used up our allowance?
+		if (bytesRemaining < 8) {
+			
+			// Yes, put this request to sleep until a second is up
+			[NSThread sleepUntilDate:bandwidthMeasurementDate];
+			[self recordBandwidthUsage];
+		}
+	}
+	[bandwidthThrottlingLock unlock];
+}
+
+#if TARGET_OS_IPHONE
++ (void)setShouldThrottleBandwidthForWWAN:(BOOL)throttle
+{
+	if (throttle) {
+		[ASIHTTPRequest throttleBandwidthForWWANUsingLimit:ASIWWANBandwidthThrottleAmount];
+	} else {
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:@"kNetworkReachabilityChangedNotification" object:nil];
+		[ASIHTTPRequest setMaxBandwidthPerSecond:0];
+		[bandwidthThrottlingLock lock];
+		shouldThrottleBandwithForWWANOnly = NO;
+		[bandwidthThrottlingLock unlock];
+	}
+}
+
++ (void)throttleBandwidthForWWANUsingLimit:(unsigned long)limit
+{	
+	[bandwidthThrottlingLock lock];
+	shouldThrottleBandwithForWWANOnly = YES;
+	maxBandwidthPerSecond = limit;
+	[[Reachability sharedReachability] setNetworkStatusNotificationsEnabled:YES];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:@"kNetworkReachabilityChangedNotification" object:nil];
+	[bandwidthThrottlingLock unlock];
+	[ASIHTTPRequest reachabilityChanged:nil];
+}
+
++ (void)reachabilityChanged:(NSNotification *)note
+{
+	[bandwidthThrottlingLock lock];	
+	if ([[Reachability sharedReachability] internetConnectionStatus] == ReachableViaCarrierDataNetwork) {
+		isBandwidthThrottled = YES;
+	} else {
+		isBandwidthThrottled = NO;
+	}
+	[bandwidthThrottlingLock unlock];
+}
+#endif
+
++ (unsigned long)maxUploadReadLength
+{
+
+	[bandwidthThrottlingLock lock];
+	
+	// We'll split our bandwidth allowance into 4 (which is the default for an ASINetworkQueue's max concurrent operations count) to give all running requests a fighting chance of reading data this cycle
+	long long toRead = maxBandwidthPerSecond/4;
+	if (maxBandwidthPerSecond > 0 && (bandwidthUsedInLastSecond + toRead > maxBandwidthPerSecond)) {
+		toRead = maxBandwidthPerSecond-bandwidthUsedInLastSecond;
+		if (toRead < 0) {
+			toRead = 0;
+		}
+	}
+
+	if (toRead == 0 || !bandwidthMeasurementDate || [bandwidthMeasurementDate timeIntervalSinceNow] < -0) {
+		//NSLog(@"sleep");
+		[NSThread sleepUntilDate:bandwidthMeasurementDate];
+		[self recordBandwidthUsage];
+	}
+	[bandwidthThrottlingLock unlock];	
+	return toRead;
+}
 
 @synthesize username;
 @synthesize password;
@@ -2291,8 +2562,9 @@ static NSError *ASITooMuchRedirectionError;
 @synthesize authenticationLock;
 @synthesize needsProxyAuthentication;
 @synthesize proxyCredentials;
-
 @synthesize proxyHost;
 @synthesize proxyPort;
 @synthesize PACurl;
 @end
+
+
