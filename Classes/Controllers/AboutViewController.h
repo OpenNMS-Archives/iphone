@@ -38,4 +38,6 @@
 	IBOutlet UITextView* textView;
 }
 
+- (IBAction) openSettings:(id) sender;
+
 @end

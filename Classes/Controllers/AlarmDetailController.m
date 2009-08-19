@@ -38,6 +38,7 @@
 #import "AckUpdater.h"
 #import "UpdateHandler.h"
 #import "AlarmFactory.h"
+#import "CalculateSize.h"
 
 @implementation AlarmDetailController
 
@@ -150,21 +151,19 @@
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	CGFloat height = tableView.rowHeight;
+	CGFloat height = 0;
 	CGSize size;
 	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
 	switch(indexPath.row) {
 		case 0:
-			size = [a.uei sizeWithFont:defaultFont
-					constrainedToSize:CGSizeMake(280.0, 1000.0)
-					lineBreakMode:UILineBreakModeCharacterWrap];
-			height = (size.height + 10.0);
+			size = [CalculateSize calcLabelSize:a.uei font:defaultFont lines:10 width:225.0
+										   mode:(UILineBreakModeCharacterWrap|UILineBreakModeTailTruncation)];
+			height = size.height;
 			break;
 		case 3:
-			size = [a.logMessage sizeWithFont:defaultFont
-					constrainedToSize:CGSizeMake(280.0, 1000.0)
-					lineBreakMode:UILineBreakModeWordWrap];
-			height = (size.height + 10.0);
+			size = [CalculateSize calcLabelSize:a.logMessage font:defaultFont lines:10 width:225.0
+										   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
+			height = size.height;
 			break;
 	}
 	return MAX(height, tableView.rowHeight);
@@ -176,19 +175,20 @@
 	cell.textLabel.font = defaultFont;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 60.0, tableView.rowHeight)] autorelease];
+	CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 60.0, height)] autorelease];
 	leftLabel.backgroundColor = clear;
 	leftLabel.font = defaultFont;
 	leftLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
-	leftLabel.numberOfLines = 0;
+	leftLabel.numberOfLines = 10;
 	leftLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 	// leftLabel.textAlignment = UITextAlignmentRight;
 
-	UILabel* rightLabel = [[[UILabel alloc] initWithFrame:CGRectMake(75.0, 0, 225.0, tableView.rowHeight)] autorelease];
+	UILabel* rightLabel = [[[UILabel alloc] initWithFrame:CGRectMake(75.0, 0, 225.0, height)] autorelease];
 	rightLabel.backgroundColor = clear;
 	rightLabel.font = defaultFont;
 	rightLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
-	rightLabel.numberOfLines = 0;
+	rightLabel.numberOfLines = 10;
 	rightLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
 	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
@@ -196,6 +196,7 @@
 		case 0:
 			leftLabel.text = @"UEI";
 			rightLabel.text = a.uei;
+			rightLabel.lineBreakMode = (UILineBreakModeCharacterWrap | UILineBreakModeTailTruncation);
 			break;
 		case 1:
 			leftLabel.text = @"Severity";
@@ -208,7 +209,6 @@
 		case 3:
 			leftLabel.text = @"Message";
 			rightLabel.text = a.logMessage;
-			rightLabel.lineBreakMode = UILineBreakModeCharacterWrap | UILineBreakModeTailTruncation;
 			break;
 		case 4:
 			leftLabel.text = @"First Event";

@@ -39,6 +39,7 @@
 #import "IpInterfaceFactory.h"
 #import "SnmpInterfaceFactory.h"
 #import "EventFactory.h"
+#import "CalculateSize.h"
 
 @implementation NodeDetailController
 
@@ -185,16 +186,14 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	CGFloat height = 0;
 	if ([self.sections objectAtIndex:indexPath.section] == @"Recent Events") {
 		Event* event = [self.events objectAtIndex:indexPath.row];
-		CGSize size = [event.logMessage sizeWithFont:[UIFont boldSystemFontOfSize:11]
-					   constrainedToSize:CGSizeMake(220.0, 1000.0)
-					   lineBreakMode:UILineBreakModeWordWrap];
-		if ((size.height + 10) >= tableView.rowHeight) {
-			return (size.height + 10);
-		}
+		CGSize size = [CalculateSize calcLabelSize:event.logMessage font:[UIFont boldSystemFontOfSize:11]
+					lines:10 width:240.0 mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
+		height = size.height;
 	}
-	return tableView.rowHeight;
+	return MAX(height, tableView.rowHeight);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -209,7 +208,9 @@
 	cell.textLabel.font = font;
 
 	UILabel* label = nil;
-	
+
+	CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+
 	if (sectionName == @"Recent Outages") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		Outage* outage = [self.outages objectAtIndex:indexPath.row];
@@ -334,17 +335,17 @@
 		// cell.contentView.backgroundColor = color;
 		cell.backgroundColor = color;
 			
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(5.0, 0, 240.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(5.0, 0, 240.0, height)] autorelease];
 		[cell addColumn:event.logMessage];
 		
 		label.font = font;
 		label.text = event.logMessage;
-		label.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
-		label.numberOfLines = 2;
+		label.lineBreakMode = UILineBreakModeWordWrap|UILineBreakModeTailTruncation;
+		label.numberOfLines = 10;
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 		
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(255.0, 0, 50.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(255.0, 0, 50.0, height)] autorelease];
 		NSString* eventString = [fuzzyDate format:event.time];
 		[cell addColumn:eventString];
 		label.backgroundColor = clear;
@@ -352,7 +353,7 @@
 		label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 		label.text = eventString;
 		label.lineBreakMode = UILineBreakModeWordWrap;
-		label.numberOfLines = 0;
+		label.numberOfLines = 10;
 		[cell.contentView addSubview:label];
 		
 	}

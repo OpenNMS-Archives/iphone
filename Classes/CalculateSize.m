@@ -31,4 +31,30 @@
  *
  *******************************************************************************/
 
-// #define DEBUG 1
+#include "CalculateSize.h"
+
+@implementation CalculateSize
+
++(CGSize) calcLabelSize:(NSString*)string font:(UIFont*)font lines:(int)lines width:(float)lineWidth
+{
+	return [CalculateSize calcLabelSize:string font:font lines:lines width:lineWidth mode:(UILineBreakModeTailTruncation|UILineBreakModeWordWrap)];
+}
+
++(CGSize) calcLabelSize:(NSString*)string font:(UIFont*)font lines:(int)lines width:(float)lineWidth mode:(UILineBreakMode)mode
+{
+    [string retain];
+    [font retain];
+    float lineHeight = [ @"Fake line" sizeWithFont: font ].height; // Calculate the height of one line.
+
+	// Get the total height, divide by the height of one line to get the # of lines.
+    int numLines = [ string sizeWithFont: font constrainedToSize: CGSizeMake(lineWidth, lineHeight*1000.0f) lineBreakMode: mode ].height / lineHeight;
+    if (numLines > lines) {
+        numLines = lines; // Set the number of lines to the maximum allowed if it goes over.
+	}
+	[string release];
+    [font release];
+	
+    return CGSizeMake(lineWidth, ((lineHeight*(float)numLines) + 10));
+}
+
+@end

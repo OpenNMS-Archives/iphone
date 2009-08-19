@@ -32,11 +32,12 @@
  *******************************************************************************/
 
 #import "AboutViewController.h"
+#import "OpenNMSAppDelegate.h"
 
 @implementation AboutViewController
 
 - (void)viewDidLoad {
-	[textView setFont:[UIFont systemFontOfSize:14]];
+	[textView setFont:[UIFont systemFontOfSize:13]];
     [super viewDidLoad];
 }
 
@@ -45,5 +46,12 @@
     [super dealloc];
 }
 
+- (IBAction) openSettings:(id) sender
+{
+#if DEBUG
+	NSLog(@"opening settings");
+#endif
+	[((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) openSettings];
+}
 
 @end

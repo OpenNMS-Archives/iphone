@@ -38,7 +38,7 @@
 #import "OnmsSeverity.h"
 #import "AlarmListUpdater.h"
 #import "AlarmUpdateHandler.h"
-#import "OpenNMSAppDelegate.h"
+#import "CalculateSize.h"
 
 @implementation AlarmListController
 
@@ -167,13 +167,23 @@
 	}
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	CGFloat height = 0;
+	CGSize size;
+	NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
+	Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
+	size = [CalculateSize calcLabelSize:alarm.logMessage font:[UIFont boldSystemFontOfSize:12] lines:10 width:220.0
+								   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
+	height = size.height;
+	return MAX(height, tableView.rowHeight);
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 
 	UIView* backgroundView = [[[UIView alloc] init] autorelease];
 	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
-	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
 
 	if ([self.alarmList count] > 0) {
 		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
@@ -181,41 +191,25 @@
 		// set the border based on the severity (can only set entire table background color :( )
 		// tableView.separatorColor = [self getSeparatorColorForSeverity:alarm.severity];
 
+		CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+
 		NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
+		Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
 
-		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:managedObjectContext];
-		[request setEntity:entity];
-		
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self == %@", alarmObjId];
-		[request setPredicate:predicate];
-		
-		NSError *error;
-		NSArray *array = [managedObjectContext executeFetchRequest:request error:&error];
-		if (!array || [array count] == 0) {
-			if (error) {
-				NSLog(@"error retrieving object %@: %@", alarmObjId, [error localizedDescription]);
-			} else {
-				NSLog(@"error retrieving object %@", alarmObjId);
-			}
-			return cell;
-		}
-
-		Alarm* alarm = (Alarm*)[array objectAtIndex:0];
 		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:alarm.severity] autorelease];
 		UIColor* color = [sev getDisplayColor];
 		cell.contentView.backgroundColor = color;
 		
-		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
+		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, height)] autorelease];
 		[cell addColumn:alarm.logMessage];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = alarm.logMessage;
 		label.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
-		label.numberOfLines = 2;
+		label.numberOfLines = 10;
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, height)] autorelease];
 		NSString* eventString = [fuzzyDate format:alarm.lastEventTime];
 		[cell addColumn:eventString];
 		label.font = [UIFont boldSystemFontOfSize:12];

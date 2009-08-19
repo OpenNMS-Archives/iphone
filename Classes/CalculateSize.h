@@ -31,4 +31,12 @@
  *
  *******************************************************************************/
 
-// #define DEBUG 1
+#import <Foundation/Foundation.h>
+
+@interface CalculateSize : NSObject {
+}
+
++(CGSize) calcLabelSize:(NSString*)string font:(UIFont*)font lines:(int)lines width:(float)lineWidth;
++(CGSize) calcLabelSize:(NSString*)string font:(UIFont*)font lines:(int)lines width:(float)lineWidth mode:(UILineBreakMode)mode;
+
+@end

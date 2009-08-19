@@ -33,6 +33,7 @@
 
 #import "UpdateHandler.h"
 #import "RegexKitLite.h"
+#import "OpenNMSAppDelegate.h"
 
 @implementation UpdateHandler
 
@@ -150,14 +151,17 @@
 	}
 	[self.spinner stopAnimating];
 
-	UIAlertView *errorAlert = [[UIAlertView alloc]
-		initWithTitle: [error localizedDescription]
-		message: [error localizedFailureReason]
-		delegate:self
-		cancelButtonTitle:@"OK"
-		otherButtonTitles:nil];
-	[errorAlert show];
-	[errorAlert autorelease];
+	BOOL settingsActive = ((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate).settingsActive;
+	if (!settingsActive) {
+		UIAlertView *errorAlert = [[UIAlertView alloc]
+			initWithTitle: [error localizedDescription]
+			message: [error localizedFailureReason]
+			delegate:self
+			cancelButtonTitle:@"OK"
+			otherButtonTitles:nil];
+		[errorAlert show];
+		[errorAlert autorelease];
+	}
 }
 
 @end

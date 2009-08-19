@@ -31,19 +31,22 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "OpenNMSAppDelegate.h"
-
+#import "SettingsViewController.h"
 
 @implementation OpenNMSAppDelegate
 
 @synthesize window;
 @synthesize tabBarController;
 @synthesize contextService;
+@synthesize settingsActive;
 
 -(id) init
 {
 	if (self = [super init]) {
 		contextService = [[ContextService alloc] init];
+		settingsActive = NO;
 	}
 	return self;
 }
@@ -60,6 +63,35 @@
 {
     // Add the tab bar controller's current view as a subview of the window
     [window addSubview:tabBarController.view];
+	
+	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"];
+	if (username == nil) {
+		[self openSettings];
+	}
+}
+
+- (void) openSettings
+{
+	settingsActive = YES;
+	NSString* plist = [[NSBundle mainBundle] pathForResource:@"Root" ofType:@"plist" inDirectory:@"Settings.bundle"];
+#if DEBUG
+	NSLog(@"root bundle path = %@", plist);
+#endif
+	SettingsViewController *settingsviewcontroller = [[SettingsViewController alloc] initWithConfigFile:plist];
+	UINavigationController* unc = [[UINavigationController alloc] initWithRootViewController:settingsviewcontroller];
+	settingsviewcontroller.title = @"Settings";
+	unc.navigationBar.tintColor = [UIColor colorWithRed:0.2117647 green:0.4117647 blue:0.0117647 alpha:1.0];
+	UIBarButtonItem* button = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeSettings)] autorelease];
+	[button setEnabled:YES];
+	settingsviewcontroller.navigationItem.rightBarButtonItem = button;
+	[tabBarController presentModalViewController:unc animated:YES];
+	[settingsviewcontroller release];
+}
+
+- (void) closeSettings
+{
+	[tabBarController dismissModalViewControllerAnimated:YES];
+	settingsActive = NO;
 }
 
 - (ContextService*) contextService

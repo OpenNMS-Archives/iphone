@@ -37,16 +37,21 @@
 @interface OpenNMSAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
     UIWindow* window;
     UITabBarController* tabBarController;
+	BOOL settingsActive;
 
 	ContextService* contextService;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow* window;
 @property (nonatomic, retain) IBOutlet UITabBarController* tabBarController;
+@property (assign) BOOL settingsActive;
 
 @property (retain, readonly) ContextService* contextService;
 
 - (ContextService *) contextService;
 - (NSManagedObjectContext *) managedObjectContext;
+
+- (void) openSettings;
+- (void) closeSettings;
 
 @end
