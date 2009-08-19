@@ -307,9 +307,7 @@
 {
 	[self.spinner startAnimating];
 	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
-#if DEBUG
 	NSLog(@"performing action %@ on alarm %@", action, a.alarmId);
-#endif
 	AckUpdater* updater = [[[AckUpdater alloc] initWithAlarmId:a.alarmId action:action] autorelease];
 	updater.handler = [[[UpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
 	[updater update];
