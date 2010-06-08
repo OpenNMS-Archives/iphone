@@ -66,7 +66,16 @@ if ((self = [super init]) != NULL)
 		}
 	else
 		{
-		theError = [NSError errorWithDomain:@"CXMLErrorDomain" code:1 userInfo:NULL];
+		xmlErrorPtr	theLastErrorPtr = xmlGetLastError();
+		
+		NSDictionary *theUserInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+			[NSString stringWithUTF8String:theLastErrorPtr->message], NSLocalizedDescriptionKey,
+			NULL];
+		
+		
+		theError = [NSError errorWithDomain:@"CXMLErrorDomain" code:1 userInfo:theUserInfo];
+		
+		xmlResetLastError();
 		}
 
 	if (outError)
@@ -139,13 +148,18 @@ return(self);
 
 - (id)initWithContentsOfURL:(NSURL *)inURL options:(NSUInteger)inOptions error:(NSError **)outError
 {
+	return [self initWithContentsOfURL:inURL encoding:NSUTF8StringEncoding options:inOptions error:outError];
+}
+
+- (id)initWithContentsOfURL:(NSURL *)inURL encoding:(NSStringEncoding)encoding options:(NSUInteger)inOptions error:(NSError **)outError
+{
 if (outError)
 	*outError = NULL;
 
 NSData *theData = [NSData dataWithContentsOfURL:inURL options:NSUncachedRead error:outError];
 if (theData)
 	{
-	self = [self initWithData:theData options:inOptions error:outError];
+	self = [self initWithData:theData encoding:encoding options:inOptions error:outError];
 	}
 else
 	{
@@ -184,7 +198,7 @@ _node = NULL;
 {
 xmlNodePtr theLibXMLNode = xmlDocGetRootElement((xmlDocPtr)_node);
 	
-return([CXMLNode nodeWithLibXMLNode:theLibXMLNode]);
+return([CXMLNode nodeWithLibXMLNode:theLibXMLNode freeOnDealloc:NO]);
 }
 
 - (NSData *)XMLData
@@ -212,7 +226,7 @@ return(theData);
 {
 id root = [self rootElement];
 NSMutableString* xmlString = [NSMutableString string];
-[root _XMLStringWithOptions:options appendingToString:xmlString];
+//[root _XMLStringWithOptions:options appendingToString:xmlString];
 return xmlString;
 }
 

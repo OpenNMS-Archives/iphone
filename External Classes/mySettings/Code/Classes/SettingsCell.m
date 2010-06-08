@@ -15,7 +15,7 @@
 #import "TimeIntervalCell.h"
 #import "ToggleSwitchCell.h"
 #import "MultiValueCell.h"
-#import "ChildPaneCell.h"
+#import "SliderCell.h"
 
 @implementation SettingsCell
 
@@ -36,6 +36,9 @@
 	if ([settingstype isEqualToString:@"Integer"])
 		return [[[NumberCell alloc] initWithReuseIdentifier:settingstype] autorelease];
 	
+	if ([settingstype isEqualToString:@"Slider"])
+		return [[[SliderCell alloc] initWithReuseIdentifier:settingstype] autorelease];
+	
 	if ([settingstype isEqualToString:@"TimeInterval"])
 		return [[[TimeIntervalCell alloc] initWithReuseIdentifier:settingstype] autorelease];
 	
@@ -45,8 +48,14 @@
    if ([settingstype isEqualToString:@"PSMultiValueSpecifier"])
 		return [[[MultiValueCell alloc] initWithReuseIdentifier:settingstype] autorelease];
 	
-	if ([settingstype isEqualToString:@"PSChildPaneSpecifier"])
-		return [[[ChildPaneCell alloc] initWithReuseIdentifier:settingstype] autorelease];
+	if ([settingstype isEqualToString:@"PSTitleValueSpecifier"]) 
+		return [[[SettingsCell alloc] initWithValuelabelAndReuseIdentifier:settingstype] autorelease];
+	
+	if ([settingstype isEqualToString:@"PSChildPaneSpecifier"]) {
+		SettingsCell *cell = [[[SettingsCell alloc] initWithValuelabelAndReuseIdentifier:settingstype] autorelease];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		return cell;
+	}
 	
 	NSAssert1(FALSE, @"unknown settings type: %@", settingstype);
 	return nil;
@@ -58,7 +67,7 @@
 }
 
 - (id)initWithTitlelabel:(BOOL)hastitlelabel reuseIdentifier:(NSString *)reuseIdentifier {
-	if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
+	if (self = [super initWithFrame:CGRectZero reuseIdentifier:reuseIdentifier]) {
 		if(hastitlelabel) {
 			// set up label for titles
 			titlelabel = [[UILabel alloc] initWithFrame:CGRectZero];

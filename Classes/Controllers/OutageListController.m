@@ -118,12 +118,14 @@
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
+	[self.spinner stopAnimating];
 }
 
 -(IBAction) reload:(id) sender
 {
 	[spinner startAnimating];
-	[self initializeData];
+//	[self initializeData];
+	[self.outageTable setNeedsDisplay:YES];
 }
 
 #pragma mark UIViewController delegates

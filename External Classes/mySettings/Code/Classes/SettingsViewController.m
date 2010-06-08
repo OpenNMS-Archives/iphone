@@ -18,6 +18,7 @@
 - (void) setup {
 	self.title = settingsdatasource.title;
 	settingsdatasource.viewcontroller = self;
+	settingsdatasource.delegate = self;
 	
 	/* NB: selectors are fake*/
 	/*	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:settingsdatasource action:@selector(save:)];
@@ -51,6 +52,10 @@
 	return settingsdatasource.settings;
 }
 
+-(void) sliderChanged:(id)sender {
+	NSLog(@"slider value is %f", [(UISlider *)sender value]);
+}
+
 #pragma mark View
 
 - (void) viewDidLoad {
@@ -73,24 +78,17 @@
  [super viewDidAppear:animated];
  }
  */
-/*
- - (void)viewWillDisappear:(BOOL)animated {
- [super viewWillDisappear:animated];
- }
- */
 
-- (void) viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated];
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
 	[settingsdatasource save];
 }
 
 /*
- - (void)didReceiveMemoryWarning {
- [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
- // Release anything that's not essential, such as cached data
+ - (void) viewDidDisappear:(BOOL)animated {
+ [super viewDidDisappear:animated];
  }
  */
-
 
 @end
 

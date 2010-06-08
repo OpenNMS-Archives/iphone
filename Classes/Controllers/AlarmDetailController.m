@@ -85,6 +85,7 @@
 	NSLog(@"setting color for severity %@", self.severity);
 #endif
 	self.title = [NSString stringWithFormat:@"Alarm #%@", a.alarmId];
+	[self.spinner stopAnimating];
 }
 
 #pragma mark -
@@ -299,8 +300,9 @@
 	a = [[AlarmFactory getInstance] getRemoteAlarm:a.alarmId];
 	self.alarmObjectId = [a objectID];
 	[self initializeData];
-	[self.alarmTable reloadData];
-	[self.spinner stopAnimating];
+//	[self.alarmTable reloadData];
+//	[self.spinner stopAnimating];
+	[self.alarmTable setNeedsDisplay:YES];
 }
 
 -(void) doAck:(NSString*)action

@@ -139,16 +139,23 @@
 
 /** Shows the editor for this cell. */
 - (void) showEditorForCell:(SettingsCell *) cell {
+	NSAssert(viewcontroller.navigationController, @"No navigation controller found. Unable to go to next view.");
+	
 	SettingsEditorViewController *vc;
-	if ([[cell.configuration objectForKey:@"Type"] isEqualToString:@"PSMultiValueSpecifier"]) {
+	NSString *type = [cell.configuration objectForKey:@"Type"];
+	if ([type isEqualToString:@"PSMultiValueSpecifier"]) {
 		vc = [[MultiValueEditorViewController alloc] initWithCell:cell andDelegate:delegate];
 	}
-	else if ([[cell.configuration objectForKey:@"Type"] isEqualToString:@"PSChildPaneSpecifier"]) {
-		
+	else if ([type isEqualToString:@"PSChildPaneSpecifier"]) {		
 		NSString *file = [cell.configuration objectForKey:@"File"];
-		NSString *plist = [[NSBundle mainBundle] pathForResource:file ofType:@"plist"];
-		
-		vc = [[SettingsViewController alloc] initWithConfigFile:plist andSettings:settings];
+		if (file) {
+			NSString *plist = [[NSBundle mainBundle] pathForResource:file ofType:@"plist"];
+			vc = [[SettingsViewController alloc] initWithConfigFile:plist andSettings:settings];
+		} else {
+			NSString *customControllerName = [cell.configuration objectForKey:@"ViewControllerClass"];
+			Class customController = [[NSBundle mainBundle] classNamed:customControllerName];
+			vc = [[customController alloc] initWithNibName:nil bundle:nil];
+		}
 	}
 	else {
 		vc = [[SettingsEditorViewController alloc] initWithCell:cell andDelegate:delegate];
@@ -208,11 +215,14 @@
 	cell.configuration = configuration;
 	
 	NSArray *array;
+	NSString *key;
 	
 	if (array = [configuration valueForKey:@"_Array"])
 		cell.value = [array objectAtIndex:indexPath.row];
-	else if ([configuration valueForKey:@"Key"])
-		cell.value = [settings valueForKey:[configuration valueForKey:@"Key"]];
+	else if (key = [configuration valueForKey:@"Key"]) {
+		NSObject *value = [changedsettings valueForKey:key];
+		cell.value = (value) ? value : [settings valueForKey:key];
+	}
 	
 	if ([configuration valueForKey:@"IndentLevel"])
 		cell.indentationLevel = [(NSNumber *)[configuration valueForKey:@"IndentLevel"] intValue];

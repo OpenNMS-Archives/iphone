@@ -64,7 +64,7 @@ else
 	for (N = 0; N < theXPathObject->nodesetval->nodeNr; N++)
 		{
 		xmlNodePtr theNode = theXPathObject->nodesetval->nodeTab[N];
-		[theArray addObject:[CXMLNode nodeWithLibXMLNode:theNode]];
+		[theArray addObject:[CXMLNode nodeWithLibXMLNode:theNode freeOnDealloc:NO]];
 		}
 		
 	theResult = theArray;
@@ -74,6 +74,11 @@ xmlXPathFreeObject(theXPathObject);
 
 xmlXPathFreeContext(theXPathContext);
 return(theResult);
+}
+
+- (CXMLNode *)nodeForXPath:(NSString *)xpath error:(NSError **)outError
+{
+return([[self nodesForXPath:xpath error:outError] lastObject]);
 }
 
 @end

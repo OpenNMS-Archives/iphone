@@ -103,12 +103,14 @@
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
+	[self.spinner stopAnimating];
 }
 
 -(IBAction) reload:(id) sender
 {
 	[spinner startAnimating];
-	[self initializeData];
+	[self.alarmTable setNeedsDisplay:YES];
+//	[self initializeData];
 }
 
 #pragma mark UIViewController delegates

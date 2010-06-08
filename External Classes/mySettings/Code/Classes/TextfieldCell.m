@@ -14,10 +14,10 @@
 
 @implementation TextfieldCell
 
-//@synthesize configuration;
-
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier {
 	if (self = [super initWithValuelabelAndReuseIdentifier:reuseIdentifier]) {
+		
+		self.selectionStyle = UITableViewCellSelectionStyleNone;
 		
 		valuetextfield = [[UITextField alloc] initWithFrame:CGRectMake(0, 11, 0, 25)];
 		
@@ -38,83 +38,71 @@
 }
 
 - (void) dealloc {
-	[super dealloc];
+	
 	[valuetextfield release];
+	[super dealloc];
 }
 
 // Without this, the title label disappears. I have no idea why.
 - (void) setConfiguration:(NSDictionary *)config {
 	[super setConfiguration:config];
 	
+	/* Autocapitalization */
+	
+	UITextAutocapitalizationType autocapitalizationType = UITextAutocapitalizationTypeNone;
+	
+	NSString *capitalizationValue = [configuration objectForKey:@"Autocapitalization"];
+	if ([@"UITextAutocapitalizationTypeWords" isEqualToString:capitalizationValue]) {
+		autocapitalizationType = UITextAutocapitalizationTypeWords;
+	} else if ([@"UITextAutocapitalizationTypeSentences" isEqualToString:capitalizationValue]) {
+		autocapitalizationType = UITextAutocapitalizationTypeSentences;
+	} else if ([@"UITextAutocapitalizationTypeAllCharacters" isEqualToString:capitalizationValue]) {
+		autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
+	}
+	
+	valuetextfield.autocapitalizationType = autocapitalizationType;
+	
+	/* Autocorrection */
+	
+	UITextAutocorrectionType autocorrectionType = UITextAutocorrectionTypeDefault;
+	
+	NSString *correctionValue = [configuration objectForKey:@"AutocorrectionType"];
+	if ([@"UITextAutocorrectionTypeNo" isEqualToString:correctionValue]) {
+		autocorrectionType = UITextAutocorrectionTypeNo;
+	} else if ([@"UITextAutocorrectionTypeYes" isEqualToString:correctionValue]) {
+		autocorrectionType = UITextAutocorrectionTypeYes;
+	}
+	
+	valuetextfield.autocorrectionType = autocorrectionType;
+	
+	/* Keyboard Type */
+	
+	NSString *keyboardValue = [configuration objectForKey:@"KeyboardType"];
+	if (keyboardValue) {
+		UIKeyboardType keyboardType = UIKeyboardTypeDefault;
+		if ([@"UIKeyboardTypeASCIICapable" isEqualToString:keyboardValue] || [@"Alphabet" isEqualToString:keyboardValue]) {
+			keyboardType = UIKeyboardTypeASCIICapable;
+		} else if ([@"UIKeyboardTypeNumbersAndPunctuation" isEqualToString:keyboardValue] || [@"NumbersAndPunctuation" isEqualToString:keyboardValue]) {
+			keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+		} else if ([@"UIKeyboardTypeURL" isEqualToString:keyboardValue] || [@"URL" isEqualToString:keyboardValue]) {
+			keyboardType = UIKeyboardTypeURL;
+		} else if ([@"UIKeyboardTypeNumberPad" isEqualToString:keyboardValue] || [@"NumberPad" isEqualToString:keyboardValue]) {
+			keyboardType = UIKeyboardTypeNumberPad;
+		} else if ([@"UIKeyboardTypePhonePad" isEqualToString:keyboardValue] || [@"PhonePad" isEqualToString:keyboardValue]) {
+			keyboardType = UIKeyboardTypePhonePad;
+		} else if ([@"UIKeyboardTypeNamePhonePad" isEqualToString:keyboardValue] || [@"NamePhonePad" isEqualToString:keyboardValue]) {
+			keyboardType = UIKeyboardTypeNamePhonePad;
+		} else if ([@"UIKeyboardTypeEmailAddress" isEqualToString:keyboardValue] || [@"EmailAddress" isEqualToString:keyboardValue]) {
+			keyboardType = UIKeyboardTypeEmailAddress;
+		}
+		
+		valuetextfield.keyboardType = keyboardType;
+	}
+	
+	/* Other */
+	
 	valuetextfield.placeholder = [configuration objectForKey:@"PlaceHolder"];
 	valuetextfield.enablesReturnKeyAutomatically = [[configuration objectForKey:@"DontAllowEmptyText"] boolValue];
-
-	id type = [configuration objectForKey:@"AutocapitalizationType"];
-	if (type == nil) {
-		valuetextfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
-	} else {
-		if ([type isEqual:@"Sentences"]) {
-			valuetextfield.autocapitalizationType = UITextAutocapitalizationTypeSentences;
-		} else if ([type isEqual:@"Words"]) {
-			valuetextfield.autocapitalizationType = UITextAutocapitalizationTypeWords;
-		} else if ([type isEqual:@"AllCharacters"]) {
-			valuetextfield.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
-		} else {
-			valuetextfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		}
-	}
-
-	type = [configuration objectForKey:@"AutocorrectionType"];
-	if (type == nil) {
-		valuetextfield.autocorrectionType = UITextAutocorrectionTypeDefault;
-	} else {
-		if ([type isEqual:@"No"]) {
-			valuetextfield.autocorrectionType = UITextAutocorrectionTypeNo;
-		} else if ([type isEqual:@"Yes"]) {
-			valuetextfield.autocorrectionType = UITextAutocorrectionTypeYes;
-		} else if ([type isEqual:@"Default"]) {
-			valuetextfield.autocorrectionType = UITextAutocorrectionTypeDefault;
-		}
-	}
-
-	type = [configuration objectForKey:@"KeyboardType"];
-	if (type == nil) {
-		valuetextfield.keyboardType = UIKeyboardTypeDefault;
-	} else {
-		if ([type isEqual:@"Alphabet"]) {
-			valuetextfield.keyboardType = UIKeyboardTypeAlphabet;
-		} else if ([type isEqual:@"ASCIICapable"]) {
-			valuetextfield.keyboardType = UIKeyboardTypeASCIICapable;
-		} else if ([type isEqual:@"EmailAddress"]) {
-			valuetextfield.keyboardType = UIKeyboardTypeEmailAddress;
-		} else if ([type isEqual:@"NamePhonePad"]) {
-			valuetextfield.keyboardType = UIKeyboardTypeNamePhonePad;
-		} else if ([type isEqual:@"NumberPad"]) {
-			valuetextfield.keyboardType = UIKeyboardTypeNumberPad;
-		} else if ([type isEqual:@"NumbersAndPunctuation"]) {
-			valuetextfield.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-		} else if ([type isEqual:@"PhonePad"]) {
-			valuetextfield.keyboardType = UIKeyboardTypePhonePad;
-		} else if ([type isEqual:@"URL"]) {
-			valuetextfield.keyboardType = UIKeyboardTypeURL;
-		} else {
-			valuetextfield.keyboardType = UIKeyboardTypeDefault;
-		}
-	}
-
-	type = [configuration objectForKey:@"TextAlignment"];
-	if (type == nil) {
-		valuetextfield.textAlignment = UITextAlignmentLeft;
-	} else {
-		if ([type isEqual:@"Right"]) {
-			valuetextfield.textAlignment = UITextAlignmentRight;
-		} else if ([type isEqual:@"Center"]) {
-			valuetextfield.textAlignment = UITextAlignmentCenter;
-		} else {
-			valuetextfield.textAlignment = UITextAlignmentLeft;
-		}
-	}
-
 	valuetextfield.secureTextEntry = [[configuration objectForKey:@"IsSecure"] boolValue];
 }
 
