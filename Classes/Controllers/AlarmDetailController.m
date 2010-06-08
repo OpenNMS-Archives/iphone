@@ -300,9 +300,9 @@
 	a = [[AlarmFactory getInstance] getRemoteAlarm:a.alarmId];
 	self.alarmObjectId = [a objectID];
 	[self initializeData];
-//	[self.alarmTable reloadData];
-//	[self.spinner stopAnimating];
-	[self.alarmTable setNeedsDisplay:YES];
+	[self.alarmTable reloadData];
+	[self.spinner stopAnimating];
+//	[self.alarmTable setNeedsDisplay:YES];
 }
 
 -(void) doAck:(NSString*)action

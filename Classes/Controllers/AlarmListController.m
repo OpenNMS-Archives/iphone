@@ -109,8 +109,7 @@
 -(IBAction) reload:(id) sender
 {
 	[spinner startAnimating];
-	[self.alarmTable setNeedsDisplay:YES];
-//	[self initializeData];
+	[self initializeData];
 }
 
 #pragma mark UIViewController delegates

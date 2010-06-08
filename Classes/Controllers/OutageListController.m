@@ -124,8 +124,8 @@
 -(IBAction) reload:(id) sender
 {
 	[spinner startAnimating];
-//	[self initializeData];
-	[self.outageTable setNeedsDisplay:YES];
+	[self initializeData];
+//	[self.outageTable setNeedsDisplay:YES];
 }
 
 #pragma mark UIViewController delegates
