@@ -63,6 +63,11 @@
 @property (nonatomic, retain) NSArray* snmpInterfaces;
 @property (nonatomic, retain) NSArray* events;
 
+@property CGFloat screenWidth;
+@property CGFloat tableWidth;
+@property CGFloat cellBorder;
+@property CGFloat cellSeparator;
+
 -(void)initializeData;
 
 @end

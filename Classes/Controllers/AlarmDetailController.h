@@ -64,6 +64,11 @@
 @property (retain) NSManagedObjectID* alarmObjectId;
 @property (nonatomic, retain) OnmsSeverity* severity;
 
+@property CGFloat screenWidth;
+@property CGFloat tableWidth;
+@property CGFloat cellBorder;
+@property CGFloat cellSeparator;
+
 -(void) refreshData;
 
 -(void) initializeData;

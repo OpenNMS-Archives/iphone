@@ -55,6 +55,11 @@
 @synthesize snmpInterfaces;
 @synthesize events;
 
+@synthesize screenWidth;
+@synthesize tableWidth;
+@synthesize cellBorder;
+@synthesize cellSeparator;
+
 - (void) loadView
 {
 	[super loadView];
@@ -66,6 +71,15 @@
 	self.spinner.hidesWhenStopped = YES;
 	self.spinner.center = self.view.center;
 	[self.navigationController.view addSubview:self.spinner];
+    
+    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
+    screenWidth = screenArea.size.width;
+    tableWidth = round(screenWidth * 0.9375);
+    if (screenWidth == 768) {
+        tableWidth = round(screenWidth * 0.881510416666667);
+    }
+	cellBorder = round(screenWidth * 0.09375);
+	cellSeparator = round(screenWidth * 0.015625);
 }
 
 - (void) initializeData
@@ -190,7 +204,7 @@
 	if ([self.sections objectAtIndex:indexPath.section] == @"Recent Events") {
 		Event* event = [self.events objectAtIndex:indexPath.row];
 		CGSize size = [CalculateSize calcLabelSize:event.logMessage font:[UIFont boldSystemFontOfSize:11]
-					lines:10 width:240.0 mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
+					lines:10 width:(tableWidth - (cellSeparator * 3) - 50.0) mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
 		height = size.height;
 	}
 	return MAX(height, tableView.rowHeight);
@@ -215,18 +229,25 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		Outage* outage = [self.outages objectAtIndex:indexPath.row];
 
+		CGFloat ipWidth      = round(tableWidth * 0.25);    // 80
+        CGFloat serviceWidth = round(tableWidth * 0.225);   // 72
+		CGFloat upDownWidth  = round(tableWidth * 0.21875); // 70
+        CGFloat timeWidth    = tableWidth - (cellSeparator * 5) - ipWidth - serviceWidth - upDownWidth;
+
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(10.0, 0, 115.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
+		label.adjustsFontSizeToFitWidth = YES;
 		label.text = outage.ipAddress;
 		[cell addColumn:outage.ipAddress];
 		[cell.contentView addSubview:label];
 
 		// Service
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(130.0, 0, 67.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator, 0, serviceWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
+		label.adjustsFontSizeToFitWidth = YES;
 		label.text = outage.serviceName;
 		[cell addColumn:outage.serviceName];
 		[cell.contentView addSubview:label];
@@ -235,9 +256,10 @@
 		NSString* lost = [fuzzyDate format:outage.ifLostService];
 
 		// Up/Down
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(202.0, 0, 45.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator + serviceWidth + cellSeparator, 0, upDownWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
+		label.adjustsFontSizeToFitWidth = YES;
 		if (regained != nil) {
 			label.text = @"Regained";
 			[cell addColumn:@"Regained"];
@@ -245,12 +267,14 @@
 			label.text = @"Lost";
 			[cell addColumn:@"Lost"];
 		}
+        label.textAlignment = UITextAlignmentRight;
 		[cell.contentView addSubview:label];
 
 		// time
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(247.0, 0, 50.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator + serviceWidth + cellSeparator + upDownWidth + cellSeparator, 0, timeWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
+		label.adjustsFontSizeToFitWidth = YES;
 		if (regained != nil) {
 			label.text = regained;
 			[cell addColumn:regained];
@@ -258,42 +282,55 @@
 			label.text = lost;
 			[cell addColumn:lost];
 		}
+        label.textAlignment = UITextAlignmentRight;
 		[cell.contentView addSubview:label];
 		
 	} else if (sectionName == @"IP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		IpInterface* iface = [self.interfaces objectAtIndex:indexPath.row];
 		
+		CGFloat ipWidth               = round(tableWidth * 0.25);    // 80
+		CGFloat managedUnmanagedWidth = round(tableWidth * 0.21875); // 70
+		CGFloat hostNameWidth         = tableWidth - (cellSeparator * 4) - ipWidth - managedUnmanagedWidth;
+
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 80.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ipAddress;
+		label.adjustsFontSizeToFitWidth = YES;
 		[cell addColumn:iface.ipAddress];
 		[cell.contentView addSubview:label];
 		
 		// Host Name
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(85.0, 0, 143.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator, 0, hostNameWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.hostName;
+		label.adjustsFontSizeToFitWidth = YES;
 		[cell addColumn:iface.hostName];
 		[cell.contentView addSubview:label];
 		
 		// Managed/Unmanaged
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(228.0, 0, 72, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator + hostNameWidth + cellSeparator, 0, managedUnmanagedWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.managedFlag isEqual:@"M"]? @"Managed" : @"Unmanaged";
-		[cell addColumn:([iface.managedFlag isEqual:@"M"]? @"Managed" : @"Unmanaged")];
+        label.textAlignment = UITextAlignmentRight;
+		[cell addColumn:label.text];
 		[cell.contentView addSubview:label];
 		
 	} else if (sectionName == @"SNMP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		SnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
 
+        CGFloat ifIndexWidth = round(tableWidth * 0.09375);  // 30
+        CGFloat ifSpeedWidth = round(tableWidth * 0.309375); // 99
+        CGFloat ipWidth      = round(tableWidth * 0.25);     // 80
+        CGFloat ifDescrWidth = tableWidth - (cellSeparator * 5) - ifIndexWidth - ifSpeedWidth - ipWidth;
+
 		// IfIndex
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(5.0, 0, 30.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, ifIndexWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifIndex stringValue];
@@ -301,7 +338,7 @@
 		[cell.contentView addSubview:label];
 
 		// IfDescr
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(35.0, 0, 64.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ifIndexWidth + cellSeparator, 0, ifDescrWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ifDescription;
@@ -309,7 +346,7 @@
 		[cell.contentView addSubview:label];
 		
 		// IfSpeed
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(99.0, 0, 99.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ifIndexWidth + cellSeparator + ifDescrWidth + cellSeparator, 0, ifSpeedWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifSpeed stringValue];
@@ -317,28 +354,26 @@
 		[cell.contentView addSubview:label];
 		
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(198.0, 0, 102.0, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ifIndexWidth + cellSeparator + ifDescrWidth + cellSeparator + ifSpeedWidth + cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ipAddress;
+        label.textAlignment = UITextAlignmentRight;
 		[cell addColumn:iface.ipAddress];
 		[cell.contentView addSubview:label];
 	} else if (sectionName == @"Recent Events") {
-        /*
-		UIView* backgroundView = [[[UIView alloc] init] autorelease];
-		backgroundView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.0];
-		cell.selectedBackgroundView = backgroundView;
-         */
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 		Event* event = [self.events objectAtIndex:indexPath.row];
 		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:event.severity] autorelease];
 
 		UIColor* color = [sev getDisplayColor];
-		// cell.contentView.backgroundColor = color;
 		cell.backgroundColor = color;
-			
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(5.0, 0, 240.0, height)] autorelease];
+
+        CGFloat timeWidth = 50;
+        CGFloat logWidth = tableWidth - (cellSeparator * 3) - timeWidth;
+
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, logWidth, height)] autorelease];
 		[cell addColumn:event.logMessage];
 		
 		label.font = font;
@@ -348,7 +383,7 @@
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 		
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(255.0, 0, 50.0, height)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(cellSeparator + logWidth + cellSeparator, 0, timeWidth, height)] autorelease];
 		NSString* eventString = [fuzzyDate format:event.time];
 		[cell addColumn:eventString];
 		label.backgroundColor = clear;
@@ -357,6 +392,7 @@
 		label.text = eventString;
 		label.lineBreakMode = UILineBreakModeWordWrap;
 		label.numberOfLines = 10;
+        label.textAlignment = UITextAlignmentRight;
 		[cell.contentView addSubview:label];
 		
 	}

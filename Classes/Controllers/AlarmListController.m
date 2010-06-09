@@ -186,6 +186,13 @@
 	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
 
+    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
+    CGFloat width = screenArea.size.width * 0.9375;
+    if (screenArea.size.width == 768) {
+        width = screenArea.size.width * 0.881510416666667;
+    }
+	CGFloat border = width * 0.015625;
+
 	if ([self.alarmList count] > 0) {
 		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
 		
@@ -194,6 +201,9 @@
 
 		CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
 
+        CGFloat dateWidth = width * 0.234375;
+        CGFloat logWidth = width - (border * 3) - dateWidth;
+
 		NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
 		Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
 
@@ -201,7 +211,7 @@
 		UIColor* color = [sev getDisplayColor];
 		cell.contentView.backgroundColor = color;
 		
-		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, height)] autorelease];
+		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(border, 0, logWidth, height)] autorelease];
 		[cell addColumn:alarm.logMessage];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = alarm.logMessage;
@@ -210,11 +220,12 @@
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, height)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(border + logWidth + border, 0, dateWidth, height)] autorelease];
 		NSString* eventString = [fuzzyDate format:alarm.lastEventTime];
 		[cell addColumn:eventString];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = eventString;
+        label.textAlignment = UITextAlignmentRight;
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 	} else {

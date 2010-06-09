@@ -39,6 +39,8 @@
 #import "Outage.h"
 #import "OutageFactory.h"
 
+#define IFLOSTSERVICEWIDTH 75.0
+
 @implementation OutageListController
 
 @synthesize outageTable;
@@ -198,8 +200,11 @@
 	cell.selectedBackgroundView = backgroundView;
 
 	if ([self.outageList count] > 0) {
-	
-		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, 220.0, tableView.rowHeight)] autorelease];
+
+		CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
+        CGFloat nodeLabelWidth = screenArea.size.width - IFLOSTSERVICEWIDTH - 15;
+
+		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(10.0, 0, nodeLabelWidth, tableView.rowHeight)] autorelease];
 		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
 		
 		if (objId) {
@@ -214,7 +219,7 @@
 			label.text = nodeLabel;
 			[cell.contentView addSubview:label];
 
-			label = [[[UILabel	alloc] initWithFrame:CGRectMake(235.0, 0, 75.0, tableView.rowHeight)] autorelease];
+			label = [[[UILabel	alloc] initWithFrame:CGRectMake(nodeLabelWidth + 15, 0, IFLOSTSERVICEWIDTH, tableView.rowHeight)] autorelease];
 			NSString* date = [fuzzyDate format:outage.ifLostService];
 			[cell addColumn:date];
 			label.font = [UIFont boldSystemFontOfSize:12];
