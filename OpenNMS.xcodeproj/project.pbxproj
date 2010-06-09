@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -43,9 +43,6 @@
 		445221FC1030848500F77B2C /* SnmpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F61030848500F77B2C /* SnmpInterface.m */; };
 		4452229B1030CD3D00F77B2C /* OutageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452229A1030CD3D00F77B2C /* OutageFactory.m */; };
 		4458311811BD900200CAC95E /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4458310E11BD900200CAC95E /* ASIAuthenticationDialog.m */; };
-		4458311911BD900200CAC95E /* ASIS3BucketObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4458311311BD900200CAC95E /* ASIS3BucketObject.m */; };
-		4458311A11BD900200CAC95E /* ASIS3ListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4458311511BD900200CAC95E /* ASIS3ListRequest.m */; };
-		4458311B11BD900200CAC95E /* ASIS3Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 4458311711BD900200CAC95E /* ASIS3Request.m */; };
 		4458311E11BD978B00CAC95E /* SliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4458311D11BD978B00CAC95E /* SliderCell.m */; };
 		44644888102DE463005697EF /* NodeFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44644887102DE463005697EF /* NodeFactory.m */; };
 		44700FC31007D5D8006CE665 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 44700FAD1007D5D8006CE665 /* ASIFormDataRequest.m */; };
@@ -115,6 +112,16 @@
 		44F0E6AA100F9B8B000B8A22 /* CXMLElement_CreationExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E64B100F9901000B8A22 /* CXMLElement_CreationExtensions.m */; };
 		44F0E6AB100F9B8C000B8A22 /* CXMLElement_ElementTreeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E64D100F9901000B8A22 /* CXMLElement_ElementTreeExtensions.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		44DAA71311BEE686003FEBC8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D6058900D05DD3D006BFB54;
+			remoteInfo = OpenNMS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -189,12 +196,6 @@
 		4458310F11BD900200CAC95E /* ASIHTTPRequestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestConfig.h; sourceTree = "<group>"; };
 		4458311011BD900200CAC95E /* ASIHTTPRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestDelegate.h; sourceTree = "<group>"; };
 		4458311111BD900200CAC95E /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
-		4458311211BD900200CAC95E /* ASIS3BucketObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIS3BucketObject.h; sourceTree = "<group>"; };
-		4458311311BD900200CAC95E /* ASIS3BucketObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIS3BucketObject.m; sourceTree = "<group>"; };
-		4458311411BD900200CAC95E /* ASIS3ListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIS3ListRequest.h; sourceTree = "<group>"; };
-		4458311511BD900200CAC95E /* ASIS3ListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIS3ListRequest.m; sourceTree = "<group>"; };
-		4458311611BD900200CAC95E /* ASIS3Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIS3Request.h; sourceTree = "<group>"; };
-		4458311711BD900200CAC95E /* ASIS3Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIS3Request.m; sourceTree = "<group>"; };
 		4458311C11BD978B00CAC95E /* SliderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SliderCell.h; path = "External Classes/mySettings/Code/Classes/SliderCell.h"; sourceTree = "<group>"; };
 		4458311D11BD978B00CAC95E /* SliderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SliderCell.m; path = "External Classes/mySettings/Code/Classes/SliderCell.m"; sourceTree = "<group>"; };
 		44644886102DE463005697EF /* NodeFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeFactory.h; path = Data/NodeFactory.h; sourceTree = "<group>"; };
@@ -277,6 +278,8 @@
 		44CAE503103B45F8001ADEB1 /* LabeledPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LabeledPickerView.m; path = "External Classes/mySettings/Code/Generic classes/LabeledPickerView.m"; sourceTree = "<group>"; };
 		44D02407100FA1D6000C5EAA /* OnmsXMLElementAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnmsXMLElementAdditions.h; sourceTree = "<group>"; };
 		44D02408100FA1D6000C5EAA /* OnmsXMLElementAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnmsXMLElementAdditions.m; sourceTree = "<group>"; };
+		44DAA70E11BEE678003FEBC8 /* Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		44DAA70F11BEE678003FEBC8 /* Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unit Tests-Info.plist"; sourceTree = "<group>"; };
 		44DC95AA103BA31E0065B944 /* CalculateSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculateSize.h; sourceTree = "<group>"; };
 		44DC95AB103BA31E0065B944 /* CalculateSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculateSize.m; sourceTree = "<group>"; };
 		44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = OpenNMS.xcdatamodel; sourceTree = "<group>"; };
@@ -333,6 +336,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		44DAA70B11BEE678003FEBC8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -357,6 +367,7 @@
 			isa = PBXGroup;
 			children = (
 				1D6058910D05DD3D006BFB54 /* OpenNMS Client.app */,
+				44DAA70E11BEE678003FEBC8 /* Unit Tests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -365,6 +376,7 @@
 			isa = PBXGroup;
 			children = (
 				44700FAA1007D5C8006CE665 /* External Classes */,
+				44784C7B11BEDCEA00E64ACE /* Tests */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -377,6 +389,7 @@
 				448148551029CBDF00083FF9 /* CoreData.framework */,
 				44C1F81F10359D140087291F /* SystemConfiguration.framework */,
 				44BE14FA11BDBA8A0033B0B3 /* MobileCoreServices.framework */,
+				44DAA70F11BEE678003FEBC8 /* Unit Tests-Info.plist */,
 			);
 			name = OpenNMS;
 			sourceTree = "<group>";
@@ -512,12 +525,6 @@
 				4458310F11BD900200CAC95E /* ASIHTTPRequestConfig.h */,
 				4458311011BD900200CAC95E /* ASIHTTPRequestDelegate.h */,
 				4458311111BD900200CAC95E /* ASIProgressDelegate.h */,
-				4458311211BD900200CAC95E /* ASIS3BucketObject.h */,
-				4458311311BD900200CAC95E /* ASIS3BucketObject.m */,
-				4458311411BD900200CAC95E /* ASIS3ListRequest.h */,
-				4458311511BD900200CAC95E /* ASIS3ListRequest.m */,
-				4458311611BD900200CAC95E /* ASIS3Request.h */,
-				4458311711BD900200CAC95E /* ASIS3Request.m */,
 				44C1F82610359D350087291F /* ASIInputStream.h */,
 				44C1F82710359D350087291F /* ASIInputStream.m */,
 				44C1F7FA10359C870087291F /* Reachability.h */,
@@ -533,6 +540,14 @@
 			);
 			name = ASIHTTPRequest;
 			path = "External Classes/ASIHTTPRequest";
+			sourceTree = "<group>";
+		};
+		44784C7B11BEDCEA00E64ACE /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Tests;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		448148651029D00000083FF9 /* Data */ = {
@@ -688,19 +703,39 @@
 			productReference = 1D6058910D05DD3D006BFB54 /* OpenNMS Client.app */;
 			productType = "com.apple.product-type.application";
 		};
+		44DAA70D11BEE678003FEBC8 /* Unit Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44DAA71211BEE678003FEBC8 /* Build configuration list for PBXNativeTarget "Unit Tests" */;
+			buildPhases = (
+				44DAA70911BEE678003FEBC8 /* Resources */,
+				44DAA70A11BEE678003FEBC8 /* Sources */,
+				44DAA70B11BEE678003FEBC8 /* Frameworks */,
+				44DAA70C11BEE678003FEBC8 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				44DAA71411BEE686003FEBC8 /* PBXTargetDependency */,
+			);
+			name = "Unit Tests";
+			productName = "Unit Tests";
+			productReference = 44DAA70E11BEE678003FEBC8 /* Unit Tests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "OpenNMS" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* OpenNMS */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* OpenNMS */,
+				44DAA70D11BEE678003FEBC8 /* Unit Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -727,7 +762,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		44DAA70911BEE678003FEBC8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		44DAA70C11BEE678003FEBC8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1D60588E0D05DD3D006BFB54 /* Sources */ = {
@@ -813,33 +871,50 @@
 				44CAE506103B45F8001ADEB1 /* LabeledPickerView.m in Sources */,
 				44DC95AC103BA31E0065B944 /* CalculateSize.m in Sources */,
 				4458311811BD900200CAC95E /* ASIAuthenticationDialog.m in Sources */,
-				4458311911BD900200CAC95E /* ASIS3BucketObject.m in Sources */,
-				4458311A11BD900200CAC95E /* ASIS3ListRequest.m in Sources */,
-				4458311B11BD900200CAC95E /* ASIS3Request.m in Sources */,
 				4458311E11BD978B00CAC95E /* SliderCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		44DAA70A11BEE678003FEBC8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		44DAA71411BEE686003FEBC8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D6058900D05DD3D006BFB54 /* OpenNMS */;
+			targetProxy = 44DAA71311BEE686003FEBC8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
-				GCC_VERSION = 4.0;
-				"GCC_VERSION[sdk=iphoneos3.0][arch=*]" = 4.2;
-				"GCC_VERSION[sdk=iphoneos3.1][arch=*]" = 4.2;
-				"GCC_VERSION[sdk=iphonesimulator3.0][arch=*]" = 4.2;
-				"GCC_VERSION[sdk=iphonesimulator3.1][arch=*]" = 4.2;
+				GCC_VERSION = "";
+				"GCC_VERSION[sdk=iphoneos3.0][arch=*]" = "";
+				"GCC_VERSION[sdk=iphoneos3.1][arch=*]" = "";
+				"GCC_VERSION[sdk=iphonesimulator3.0][arch=*]" = "";
+				"GCC_VERSION[sdk=iphonesimulator3.1][arch=*]" = "";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "OpenNMS_Client-Info.plist";
+				INSTALL_PATH = "$(HOME)/Local Applications";
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = "OpenNMS Client";
+				SDKROOT = iphoneos3.2;
 			};
 			name = Debug;
 		};
@@ -847,17 +922,86 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
-				GCC_VERSION = 4.0;
-				"GCC_VERSION[sdk=iphoneos3.0][arch=*]" = 4.2;
-				"GCC_VERSION[sdk=iphoneos3.1][arch=*]" = 4.2;
-				"GCC_VERSION[sdk=iphonesimulator3.0][arch=*]" = 4.2;
-				"GCC_VERSION[sdk=iphonesimulator3.1][arch=*]" = 4.2;
+				GCC_VERSION = "";
+				"GCC_VERSION[sdk=iphoneos3.0][arch=*]" = "";
+				"GCC_VERSION[sdk=iphoneos3.1][arch=*]" = "";
+				"GCC_VERSION[sdk=iphonesimulator3.0][arch=*]" = "";
+				"GCC_VERSION[sdk=iphonesimulator3.1][arch=*]" = "";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "OpenNMS_Client-Info.plist";
+				INSTALL_PATH = "$(HOME)/Local Applications";
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = "OpenNMS Client";
+				SDKROOT = iphoneos3.2;
+			};
+			name = Release;
+		};
+		44DAA71011BEE678003FEBC8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = "Unit Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					SenTestingKit,
+					"-framework",
+					UIKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "Unit Tests";
+				SDKROOT = iphonesimulator3.2;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		44DAA71111BEE678003FEBC8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INFOPLIST_FILE = "Unit Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					SenTestingKit,
+					"-framework",
+					UIKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "Unit Tests";
+				SDKROOT = iphonesimulator3.2;
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -865,14 +1009,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Benjamin Reed";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_TEST_FLAGS = "-DDEBUG=1";
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.1;
+				SDKROOT = iphonesimulator3.2;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
 		};
@@ -880,13 +1025,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Benjamin Reed";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.1;
+				SDKROOT = iphonesimulator3.2;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -898,6 +1044,15 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		44DAA71211BEE678003FEBC8 /* Build configuration list for PBXNativeTarget "Unit Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44DAA71011BEE678003FEBC8 /* Debug */,
+				44DAA71111BEE678003FEBC8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
