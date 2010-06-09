@@ -23,6 +23,7 @@
 		44263CFE10112F4100717409 /* NodeDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF910112F4100717409 /* NodeDetailController.m */; };
 		44263D261011301500717409 /* OutageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D251011301500717409 /* OutageListController.m */; };
 		44263D2D1011309700717409 /* AlarmListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D2C1011309700717409 /* AlarmListController.m */; };
+		442D9CBA11BF3F2D0003E7A2 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 442D9CB911BF3F2D0003E7A2 /* MainWindow-iPad.xib */; };
 		443665361032597400F0B7B6 /* ContextService.m in Sources */ = {isa = PBXBuildFile; fileRef = 443665351032597400F0B7B6 /* ContextService.m */; };
 		44367A1810385E6C008E6799 /* AckUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367A1710385E6C008E6799 /* AckUpdater.m */; };
 		44367A251038608D008E6799 /* AlarmFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367A241038608D008E6799 /* AlarmFactory.m */; };
@@ -153,6 +154,7 @@
 		44263D251011301500717409 /* OutageListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutageListController.m; path = Controllers/OutageListController.m; sourceTree = "<group>"; };
 		44263D2B1011309700717409 /* AlarmListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmListController.h; path = Controllers/AlarmListController.h; sourceTree = "<group>"; };
 		44263D2C1011309700717409 /* AlarmListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmListController.m; path = Controllers/AlarmListController.m; sourceTree = "<group>"; };
+		442D9CB911BF3F2D0003E7A2 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/Resources/Interfaces/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		443665341032597400F0B7B6 /* ContextService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextService.h; sourceTree = "<group>"; };
 		443665351032597400F0B7B6 /* ContextService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextService.m; sourceTree = "<group>"; };
 		44367A1610385E6C008E6799 /* AckUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AckUpdater.h; path = Data/AckUpdater.h; sourceTree = "<group>"; };
@@ -380,6 +382,7 @@
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
+				442D9CB811BF3F2D0003E7A2 /* Resources-iPad */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				44700FCD1007D60B006CE665 /* CFNetwork.framework */,
@@ -477,6 +480,14 @@
 				448EE92B101E0CF800063B32 /* OnmsSeverity.m */,
 			);
 			name = Objects;
+			sourceTree = "<group>";
+		};
+		442D9CB811BF3F2D0003E7A2 /* Resources-iPad */ = {
+			isa = PBXGroup;
+			children = (
+				442D9CB911BF3F2D0003E7A2 /* MainWindow-iPad.xib */,
+			);
+			name = "Resources-iPad";
 			sourceTree = "<group>";
 		};
 		443DB6DF1028F4A900785DE6 /* Interfaces */ = {
@@ -759,6 +770,7 @@
 				44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */,
 				44981CCB100EA9C3006BB193 /* Default.png in Resources */,
 				44EEAFB0101BA7340023D5BD /* NodeListView.xib in Resources */,
+				442D9CBA11BF3F2D0003E7A2 /* MainWindow-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -914,7 +926,8 @@
 				INSTALL_PATH = "$(HOME)/Local Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = "OpenNMS Client";
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -937,7 +950,8 @@
 				INSTALL_PATH = "$(HOME)/Local Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = "OpenNMS Client";
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
