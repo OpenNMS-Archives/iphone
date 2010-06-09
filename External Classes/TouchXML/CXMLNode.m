@@ -270,7 +270,7 @@ xmlOutputBufferFlush(theOutputBuffer);
 NSString *theString = [[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease];
 
 xmlOutputBufferClose(theOutputBuffer);
-
+//[theData release];
 return(theString);
 }
 //- (NSString *)canonicalXMLStringPreservingComments:(BOOL)comments;

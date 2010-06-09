@@ -32,6 +32,7 @@
  *******************************************************************************/
 
 #import "config.h"
+#import "RegexKitLite.h"
 
 #import "OutageUpdateHandler.h"
 #import "Outage.h"
@@ -51,6 +52,7 @@
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
+    [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
 	CXMLDocument* document = [self getDocumentForRequest:request];
@@ -128,14 +130,14 @@
 		outage.ifLostService = nil;
 		CXMLElement* slElement = [xmlOutage elementForName:@"ifLostService"];
 		if (slElement) {
-			outage.ifLostService = [dateFormatter dateFromString:[[slElement childAtIndex:0] stringValue]];
+            outage.ifLostService = [dateFormatter dateFromString:[self stringForDate:[[slElement childAtIndex:0] stringValue]]];
 		}
 		
 		// Service Regained Date
 		outage.ifRegainedService = nil;
 		CXMLElement* srElement = [xmlOutage elementForName:@"ifRegainedService"];
 		if (srElement) {
-			outage.ifRegainedService = [dateFormatter dateFromString:[[srElement childAtIndex:0] stringValue]];
+            outage.ifRegainedService = [dateFormatter dateFromString:[self stringForDate:[[srElement childAtIndex:0] stringValue]]];
 		}
 		
 		// Service Lost Event

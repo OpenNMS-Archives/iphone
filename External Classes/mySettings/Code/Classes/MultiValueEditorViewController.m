@@ -47,7 +47,7 @@
 			ocell.accessoryType = UITableViewCellAccessoryNone;
 		}
 	}
-	ocell.text = [[[cell configuration] objectForKey:@"Titles"] objectAtIndex:indexPath.row];
+	ocell.textLabel.text = [[[cell configuration] objectForKey:@"Titles"] objectAtIndex:indexPath.row];
 	return ocell;
 }
 

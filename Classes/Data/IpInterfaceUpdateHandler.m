@@ -52,6 +52,7 @@
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
+    [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
 	CXMLDocument* document = [self getDocumentForRequest:request];
@@ -144,7 +145,7 @@
 		
 		CXMLElement* capsdElement = [xmlIpInterface elementForName:@"lastCapsdPoll"];
 		if (capsdElement) {
-			ipInterface.lastCapsdPoll = [dateFormatter dateFromString:[[capsdElement childAtIndex:0] stringValue]];
+			ipInterface.lastCapsdPoll = [dateFormatter dateFromString:[self stringForDate:[[capsdElement childAtIndex:0] stringValue]]];
 		}
 	}
 

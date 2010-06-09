@@ -80,12 +80,13 @@
 	SettingsViewController *settingsviewcontroller = [[SettingsViewController alloc] initWithConfigFile:plist];
 	UINavigationController* unc = [[UINavigationController alloc] initWithRootViewController:settingsviewcontroller];
 	settingsviewcontroller.title = @"Settings";
-	unc.navigationBar.tintColor = [UIColor colorWithRed:0.2117647 green:0.4117647 blue:0.0117647 alpha:1.0];
+//	unc.navigationBar.tintColor = [UIColor colorWithRed:0.2117647 green:0.4117647 blue:0.0117647 alpha:1.0];
 	UIBarButtonItem* button = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeSettings)] autorelease];
 	[button setEnabled:YES];
 	settingsviewcontroller.navigationItem.rightBarButtonItem = button;
 	[tabBarController presentModalViewController:unc animated:YES];
 	[settingsviewcontroller release];
+	[unc release];
 }
 
 - (void) closeSettings

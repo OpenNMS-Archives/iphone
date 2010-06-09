@@ -67,7 +67,7 @@
 }
 
 - (id)initWithTitlelabel:(BOOL)hastitlelabel reuseIdentifier:(NSString *)reuseIdentifier {
-	if (self = [super initWithFrame:CGRectZero reuseIdentifier:reuseIdentifier]) {
+	if (self = [super initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:reuseIdentifier]) {
 		if(hastitlelabel) {
 			// set up label for titles
 			titlelabel = [[UILabel alloc] initWithFrame:CGRectZero];

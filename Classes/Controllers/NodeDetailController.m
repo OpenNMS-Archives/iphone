@@ -324,9 +324,12 @@
 		[cell addColumn:iface.ipAddress];
 		[cell.contentView addSubview:label];
 	} else if (sectionName == @"Recent Events") {
+        /*
 		UIView* backgroundView = [[[UIView alloc] init] autorelease];
 		backgroundView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.0];
 		cell.selectedBackgroundView = backgroundView;
+         */
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 		Event* event = [self.events objectAtIndex:indexPath.row];
 		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:event.severity] autorelease];

@@ -89,6 +89,7 @@
 {
 	NSMutableString* string = [NSMutableString stringWithString:date];
 	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
+    [string replaceOccurrencesOfRegex:@"-(\\d\\d):(\\d\\d)$" withString:@"-$1$2"];
 	return string;
 }
 

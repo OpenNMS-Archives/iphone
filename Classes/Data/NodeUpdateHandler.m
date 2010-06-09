@@ -45,16 +45,9 @@
 #endif
 	NSManagedObjectContext *moc = [contextService managedObjectContext];
 	
-	/*
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setLenient:true];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
-	 */
-
 	CXMLDocument* document = [self getDocumentForRequest:request];
 
 	if (!document) {
-		// [dateFormatter release];
 		[super requestDidFinish:request];
 		[self autorelease];
 	}
@@ -115,7 +108,6 @@
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
-	// [dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];
 }

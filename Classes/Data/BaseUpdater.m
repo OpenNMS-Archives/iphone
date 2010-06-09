@@ -142,8 +142,12 @@ static ASINetworkQueue* threadQueue;
 #if DEBUG
 	NSLog(@"queue = %@", queue);
 #endif
+//	[requestUrl autorelease];
 	[queue addOperation:request];
 	[queue setSuspended:NO];
+#if DEBUG
+	NSLog(@"%@: finished.", self);
+#endif
 }
 
 @end

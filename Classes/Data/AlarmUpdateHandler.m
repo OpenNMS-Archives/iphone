@@ -44,6 +44,7 @@
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
+    [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
 	CXMLDocument* document = [self getDocumentForRequest:request];

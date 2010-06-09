@@ -53,6 +53,7 @@
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
+    [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
 	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 
 	CXMLDocument* document = [self getDocumentForRequest:request];
@@ -131,13 +132,13 @@
 		// Time
 		CXMLElement *timeElement = [xmlEvent elementForName:@"time"];
 		if (timeElement) {
-			event.time = [dateFormatter dateFromString:[[timeElement childAtIndex:0] stringValue]];
+			event.time = [dateFormatter dateFromString:[self stringForDate:[[timeElement childAtIndex:0] stringValue]]];
 		}
 		
 		// CreateTime
 		CXMLElement *ctElement = [xmlEvent elementForName:@"createTime"];
 		if (ctElement) {
-			event.createTime = [dateFormatter dateFromString:[[ctElement childAtIndex:0] stringValue]];
+			event.createTime = [dateFormatter dateFromString:[self stringForDate:[[ctElement childAtIndex:0] stringValue]]];
 		}
 		
 		// Description
