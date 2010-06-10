@@ -270,7 +270,8 @@ xmlOutputBufferFlush(theOutputBuffer);
 NSString *theString = [[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease];
 
 xmlOutputBufferClose(theOutputBuffer);
-//[theData release];
+// static analyzer says this is leaked, but I'm not so sure
+//[theData autorelease];
 return(theString);
 }
 //- (NSString *)canonicalXMLStringPreservingComments:(BOOL)comments;
