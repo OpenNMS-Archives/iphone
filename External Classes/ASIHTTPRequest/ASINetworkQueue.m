@@ -201,7 +201,7 @@
 	}
 }
 
-- (void)requestReceivedResponseHeaders:(ASIHTTPRequest *)request
+- (void)requestDidReceiveResponseHeaders:(ASIHTTPRequest *)request
 {
 	if ([self requestDidReceiveResponseHeadersSelector]) {
 		[[self delegate] performSelector:[self requestDidReceiveResponseHeadersSelector] withObject:request];
