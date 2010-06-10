@@ -36,6 +36,11 @@
 
 @implementation AboutViewController
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;
+}
+
 - (void)viewDidLoad {
 	[textView setFont:[UIFont systemFontOfSize:13]];
     [super viewDidLoad];

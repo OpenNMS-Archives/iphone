@@ -51,6 +51,12 @@
 
 @property (retain) NSMutableArray* alarmList;
 
+@property CGFloat screenWidth;
+@property CGFloat tableWidth;
+@property CGFloat cellBorder;
+@property CGFloat cellSeparator;
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 -(void) refreshData;
 -(IBAction) reload:(id) sender;
 

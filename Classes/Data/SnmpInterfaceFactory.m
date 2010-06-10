@@ -91,8 +91,8 @@ static ContextService* contextService = nil;
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:context];
 	[snmpInterfaceRequest setEntity:entity];
-	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"snmpInterfaceId == %@", snmpInterfaceId];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"snmpInterfaceId == %@", snmpInterfaceId];
 	[snmpInterfaceRequest setPredicate:predicate];
 
 	NSError* error = nil;

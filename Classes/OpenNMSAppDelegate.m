@@ -41,12 +41,16 @@
 @synthesize tabBarController;
 @synthesize contextService;
 @synthesize settingsActive;
+@synthesize addInterfaceActive;
+@synthesize ipField;
+@synthesize ipAlert;
 
 -(id) init
 {
 	if (self = [super init]) {
 		contextService = [[ContextService alloc] init];
 		settingsActive = NO;
+        addInterfaceActive = NO;
 	}
 	return self;
 }
@@ -72,6 +76,9 @@
 
 - (void) openSettings
 {
+    if (settingsActive) return;
+    if (addInterfaceActive) return;
+
 	settingsActive = YES;
 	NSString* plist = [[NSBundle mainBundle] pathForResource:@"Root" ofType:@"plist" inDirectory:@"Settings.bundle"];
 #if DEBUG
@@ -93,6 +100,55 @@
 {
 	[tabBarController dismissModalViewControllerAnimated:YES];
 	settingsActive = NO;
+}
+
+- (void) openAddInterface
+{
+    if (settingsActive) return;
+    if (addInterfaceActive) return;
+
+    addInterfaceActive = YES;
+
+    ipAlert = [[UIAlertView alloc] initWithTitle:@"Discover New IP Address" 
+                                                     message:@"\n" // IMPORTANT
+                                                    delegate:self
+                                           cancelButtonTitle:@"Cancel" 
+                                           otherButtonTitles:@"Add", nil];
+    ipField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)]; 
+    [ipField setBackgroundColor:[UIColor whiteColor]];
+    [ipField setPlaceholder:@"IP Address"];
+    [ipField setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+    [ipField setEnablesReturnKeyAutomatically:YES];
+    [ipField setDelegate:self];
+    [ipAlert addSubview:ipField];
+    
+    // set cursor and show keyboard
+    [ipField becomeFirstResponder];
+    
+    [ipAlert show];
+    [ipAlert autorelease];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [ipAlert dismissWithClickedButtonIndex:1 animated:YES];
+    return YES;
+}
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != [alertView cancelButtonIndex])
+    {
+        UIAlertView *a = [[UIAlertView alloc]
+                          initWithTitle: @"IP Address"
+                          message: [NSString stringWithFormat:@"You typed %@!", ipField.text]
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+        [a show];
+        [a autorelease];
+    }
+    addInterfaceActive = NO;
 }
 
 - (ContextService*) contextService

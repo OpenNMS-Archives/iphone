@@ -60,6 +60,11 @@
 @synthesize cellBorder;
 @synthesize cellSeparator;
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;
+}
+
 - (void) loadView
 {
 	[super loadView];

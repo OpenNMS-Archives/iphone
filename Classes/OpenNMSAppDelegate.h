@@ -34,10 +34,11 @@
 #import <UIKit/UIKit.h>
 #import "ContextService.h"
 
-@interface OpenNMSAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
+@interface OpenNMSAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UITextFieldDelegate> {
     UIWindow* window;
     UITabBarController* tabBarController;
 	BOOL settingsActive;
+    BOOL addInterfaceActive;
 
 	ContextService* contextService;
 }
@@ -45,13 +46,19 @@
 @property (nonatomic, retain) IBOutlet UIWindow* window;
 @property (nonatomic, retain) IBOutlet UITabBarController* tabBarController;
 @property (assign) BOOL settingsActive;
-
+@property (assign) BOOL addInterfaceActive;
 @property (retain, readonly) ContextService* contextService;
+@property (retain) UITextField* ipField;
+@property (retain) UIAlertView* ipAlert;
 
 - (ContextService *) contextService;
 - (NSManagedObjectContext *) managedObjectContext;
 
 - (void) openSettings;
 - (void) closeSettings;
+
+- (void) openAddInterface;
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex;
+- (BOOL)textFieldShouldReturn:(UITextField *)textField;
 
 @end

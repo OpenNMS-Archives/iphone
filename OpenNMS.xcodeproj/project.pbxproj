@@ -36,6 +36,10 @@
 		44367C4C10397B30008E6799 /* EventFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4710397B30008E6799 /* EventFactory.m */; };
 		44367C4D10397B30008E6799 /* EventUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4910397B30008E6799 /* EventUpdateHandler.m */; };
 		44367C4E10397B30008E6799 /* EventUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367C4B10397B30008E6799 /* EventUpdater.m */; };
+		4437965511C07FDF00D36464 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437965211C07FDF00D36464 /* Icon-Small-50.png */; };
+		4437965611C07FDF00D36464 /* iPadAppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437965311C07FDF00D36464 /* iPadAppIcon.png */; };
+		4437965711C07FDF00D36464 /* iPhoneAppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437965411C07FDF00D36464 /* iPhoneAppIcon.png */; };
+		4437966511C0845100D36464 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437966411C0845100D36464 /* Default-Portrait.png */; };
 		445221F71030848500F77B2C /* Alarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EC1030848500F77B2C /* Alarm.m */; };
 		445221F81030848500F77B2C /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EE1030848500F77B2C /* Event.m */; };
 		445221F91030848500F77B2C /* IpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F01030848500F77B2C /* IpInterface.m */; };
@@ -57,7 +61,6 @@
 		44700FD31007D61A006CE665 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44700FCF1007D60B006CE665 /* libz.1.dylib */; };
 		44700FD61007D688006CE665 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44700FD51007D688006CE665 /* libxml2.dylib */; };
 		44700FF81007D781006CE665 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FF61007D781006CE665 /* Icon-Small.png */; };
-		44700FF91007D781006CE665 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FF71007D781006CE665 /* Icon.png */; };
 		447010001007DA78006CE665 /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FFE1007DA78006CE665 /* clock.png */; };
 		447010011007DA78006CE665 /* ekg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44700FFF1007DA78006CE665 /* ekg.png */; };
 		447010201007F0D7006CE665 /* AlarmView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4470101E1007F0D7006CE665 /* AlarmView.xib */; };
@@ -173,6 +176,10 @@
 		44367C4910397B30008E6799 /* EventUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventUpdateHandler.m; path = Data/EventUpdateHandler.m; sourceTree = "<group>"; };
 		44367C4A10397B30008E6799 /* EventUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventUpdater.h; path = Data/EventUpdater.h; sourceTree = "<group>"; };
 		44367C4B10397B30008E6799 /* EventUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventUpdater.m; path = Data/EventUpdater.m; sourceTree = "<group>"; };
+		4437965211C07FDF00D36464 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-50.png"; path = "Resources/Images/Icon-Small-50.png"; sourceTree = "<group>"; };
+		4437965311C07FDF00D36464 /* iPadAppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iPadAppIcon.png; path = Resources/Images/iPadAppIcon.png; sourceTree = "<group>"; };
+		4437965411C07FDF00D36464 /* iPhoneAppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iPhoneAppIcon.png; path = Resources/Images/iPhoneAppIcon.png; sourceTree = "<group>"; };
+		4437966411C0845100D36464 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Images/Default-Portrait.png"; sourceTree = "<group>"; };
 		445221EB1030848500F77B2C /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
 		445221EC1030848500F77B2C /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
 		445221ED1030848500F77B2C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
@@ -211,7 +218,6 @@
 		44700FCF1007D60B006CE665 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
 		44700FD51007D688006CE665 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		44700FF61007D781006CE665 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "Resources/Images/Icon-Small.png"; sourceTree = "<group>"; };
-		44700FF71007D781006CE665 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Images/Icon.png; sourceTree = "<group>"; };
 		44700FFE1007DA78006CE665 /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = clock.png; path = Resources/Images/clock.png; sourceTree = "<group>"; };
 		44700FFF1007DA78006CE665 /* ekg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ekg.png; path = Resources/Images/ekg.png; sourceTree = "<group>"; };
 		4470101E1007F0D7006CE665 /* AlarmView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AlarmView.xib; path = Resources/Interfaces/AlarmView.xib; sourceTree = "<group>"; };
@@ -492,6 +498,10 @@
 		443DB6E01028F4B300785DE6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4437966411C0845100D36464 /* Default-Portrait.png */,
+				4437965211C07FDF00D36464 /* Icon-Small-50.png */,
+				4437965311C07FDF00D36464 /* iPadAppIcon.png */,
+				4437965411C07FDF00D36464 /* iPhoneAppIcon.png */,
 				44981CCA100EA9C3006BB193 /* Default.png */,
 				44E2A161100E195100DD5A1D /* opennms-headingbg.png */,
 				44BBA449100CE90B001257CB /* o.png */,
@@ -500,7 +510,6 @@
 				44700FFE1007DA78006CE665 /* clock.png */,
 				44700FFF1007DA78006CE665 /* ekg.png */,
 				44700FF61007D781006CE665 /* Icon-Small.png */,
-				44700FF71007D781006CE665 /* Icon.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -737,7 +746,6 @@
 			files = (
 				28AD73880D9D96C1002E5188 /* MainWindow.xib in Resources */,
 				44700FF81007D781006CE665 /* Icon-Small.png in Resources */,
-				44700FF91007D781006CE665 /* Icon.png in Resources */,
 				447010001007DA78006CE665 /* clock.png in Resources */,
 				447010011007DA78006CE665 /* ekg.png in Resources */,
 				447010201007F0D7006CE665 /* AlarmView.xib in Resources */,
@@ -754,6 +762,10 @@
 				4455723A11BF4E73006CE642 /* AlarmView.xib in Resources */,
 				4455723B11BF4E73006CE642 /* NodeListView.xib in Resources */,
 				4455723C11BF4E73006CE642 /* OutageView.xib in Resources */,
+				4437965511C07FDF00D36464 /* Icon-Small-50.png in Resources */,
+				4437965611C07FDF00D36464 /* iPadAppIcon.png in Resources */,
+				4437965711C07FDF00D36464 /* iPhoneAppIcon.png in Resources */,
+				4437966511C0845100D36464 /* Default-Portrait.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

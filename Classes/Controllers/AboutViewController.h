@@ -38,6 +38,7 @@
 	IBOutlet UITextView* textView;
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 - (IBAction) openSettings:(id) sender;
 
 @end

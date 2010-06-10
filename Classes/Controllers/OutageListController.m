@@ -51,6 +51,11 @@
 
 @synthesize outageList;
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;
+}
+
 -(void) dealloc
 {
 	[self.fuzzyDate release];

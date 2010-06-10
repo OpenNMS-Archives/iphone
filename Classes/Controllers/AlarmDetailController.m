@@ -60,6 +60,11 @@
 @synthesize cellBorder;
 @synthesize cellSeparator;
 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;
+}
+
 -(void) loadView
 {
 	[super loadView];
@@ -74,15 +79,7 @@
 //	self.spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.navigationController.view addSubview:self.spinner];
 //	[self.view addSubview:self.spinner];
-    
-    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
-    screenWidth = screenArea.size.width;
-    tableWidth = round(screenWidth * 0.9375);
-    if (screenWidth == 768) {
-        tableWidth = round(screenWidth * 0.881510416666667);
-    }
-	cellBorder = round(screenWidth * 0.09375);
-	cellSeparator = round(screenWidth * 0.015625);
+	[self initializeScreenWidth:NO];
 }
 
 -(void) initializeData
@@ -101,6 +98,33 @@
 #endif
 	self.title = [NSString stringWithFormat:@"Alarm #%@", a.alarmId];
 	[self.spinner stopAnimating];
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	[self initializeScreenWidth:YES];
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self.alarmTable reloadData];
+}
+
+-(void) initializeScreenWidth:(BOOL)useHeight
+{
+#if DEBUG
+	NSLog(@"initializeScreenWidth called");
+#endif
+    
+    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
+	if (useHeight) {
+		screenWidth = screenArea.size.height;
+	} else {
+		screenWidth = screenArea.size.width;
+	}
+    tableWidth = round(screenWidth * 0.9375);
+    if (screenWidth == 768) {
+        tableWidth = round(screenWidth * 0.881510416666667);
+    }
+	cellBorder = round(screenWidth * 0.09375);
+	cellSeparator = round(screenWidth * 0.015625);
 }
 
 #pragma mark -

@@ -38,6 +38,7 @@
 #import "NodeSearchUpdater.h"
 #import "NodeUpdateHandler.h"
 #import "Node.h"
+#import "OpenNMSAppDelegate.h"
 
 @implementation NodeListController
 
@@ -46,6 +47,11 @@
 @synthesize searchWasActive;
 @synthesize nodeList;
 @synthesize contextService;
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;
+}
 
 //- (void) viewWillAppear:(BOOL)animated
 //{
@@ -176,6 +182,13 @@
 	return NO;
 }
 
+- (IBAction) addInterface:(id) sender
+{
+#if DEBUG
+	NSLog(@"adding interface");
+#endif
+	[((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) openAddInterface];
+}
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
 {

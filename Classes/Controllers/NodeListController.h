@@ -49,6 +49,8 @@
 @property (retain) NSArray* nodeList;
 @property (retain) ContextService* contextService;
 
--(void) refreshData;
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
+- (void) refreshData;
+- (IBAction) addInterface:(id) sender;
 
 @end

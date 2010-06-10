@@ -69,8 +69,11 @@
 @property CGFloat cellBorder;
 @property CGFloat cellSeparator;
 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
+
 -(void) refreshData;
 
+-(void) initializeScreenWidth:(BOOL)useHeight;
 -(void) initializeData;
 -(void) acknowledgeAlarm;
 -(void) unacknowledgeAlarm;

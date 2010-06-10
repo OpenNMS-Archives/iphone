@@ -49,6 +49,16 @@
 
 @synthesize alarmList;
 
+@synthesize screenWidth;
+@synthesize tableWidth;
+@synthesize cellBorder;
+@synthesize cellSeparator;
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;
+}
+
 -(void) dealloc
 {
 	[self.fuzzyDate release];
@@ -114,6 +124,19 @@
 
 #pragma mark UIViewController delegates
 
+- (void) loadView
+{
+    [super loadView];
+    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
+    screenWidth = screenArea.size.width;
+    tableWidth = round(screenWidth * 0.9375);
+    if (screenWidth == 768) {
+        tableWidth = round(screenWidth * 0.881510416666667);
+    }
+	cellBorder = round(screenWidth * 0.09375);
+	cellSeparator = round(screenWidth * 0.015625);
+}
+
 - (void) viewDidLoad
 {
 	if (!contextService) {
@@ -171,9 +194,13 @@
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 0;
 	CGSize size;
-	NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
+
+    CGFloat dateWidth = round(screenWidth * 0.234375); // 75
+    CGFloat logWidth = screenWidth - (cellSeparator * 3) - dateWidth;
+
+    NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
 	Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
-	size = [CalculateSize calcLabelSize:alarm.logMessage font:[UIFont boldSystemFontOfSize:12] lines:10 width:220.0
+	size = [CalculateSize calcLabelSize:alarm.logMessage font:[UIFont boldSystemFontOfSize:12] lines:10 width:logWidth
 								   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
 	height = size.height;
 	return MAX(height, tableView.rowHeight);
@@ -186,13 +213,6 @@
 	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
 
-    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
-    CGFloat width = screenArea.size.width * 0.9375;
-    if (screenArea.size.width == 768) {
-        width = screenArea.size.width * 0.881510416666667;
-    }
-	CGFloat border = width * 0.015625;
-
 	if ([self.alarmList count] > 0) {
 		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
 		
@@ -201,8 +221,8 @@
 
 		CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
 
-        CGFloat dateWidth = width * 0.234375;
-        CGFloat logWidth = width - (border * 3) - dateWidth;
+        CGFloat dateWidth = round(screenWidth * 0.234375); // 75
+        CGFloat logWidth = screenWidth - (cellSeparator * 3) - dateWidth;
 
 		NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
 		Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
@@ -211,7 +231,7 @@
 		UIColor* color = [sev getDisplayColor];
 		cell.contentView.backgroundColor = color;
 		
-		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(border, 0, logWidth, height)] autorelease];
+		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(cellSeparator, 0, logWidth, height)] autorelease];
 		[cell addColumn:alarm.logMessage];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = alarm.logMessage;
@@ -220,7 +240,7 @@
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(border + logWidth + border, 0, dateWidth, height)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(cellSeparator + logWidth + cellSeparator, 0, dateWidth, height)] autorelease];
 		NSString* eventString = [fuzzyDate format:alarm.lastEventTime];
 		[cell addColumn:eventString];
 		label.font = [UIFont boldSystemFontOfSize:12];

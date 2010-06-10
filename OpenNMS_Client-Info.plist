@@ -8,10 +8,17 @@
 	<string>OpenNMS</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIconFile</key>
-	<string>Icon.png</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.opennms.OpenNMSClient</string>
+	<key>CFBundleIconFile</key>
+	<string>iPhoneAppIcon.png</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>iPadAppIcon.png</string>
+		<string>iPhoneAppIcon.png</string>
+		<string>Icon-Small-50.png</string>
+		<string>Icon-Small.png</string>
+	</array>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

@@ -56,7 +56,8 @@
 @property (retain) NSMutableArray* outageList;
 @property (retain) NodeFactory* nodeFactory;
 
--(void) refreshData;
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
+- (void) refreshData;
 - (IBAction) reload:(id) sender;
 
 @end
