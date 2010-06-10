@@ -40,7 +40,7 @@
 
 @interface BaseUpdater : NSObject {
 	NSURL* url;
-	NSOperationQueue* queue;
+    NSOperationQueue* queue;
 	UpdateHandler* handler;
 	NSData* requestData;
 	NSString* requestMethod;
@@ -55,7 +55,7 @@
 -(id) initWithPath:(NSString*)p;
 
 -(NSString*) filterDate:(NSString*)date;
-+(NSString*) getBaseUrl;
+-(NSString*) getBaseUrl;
 -(void) update;
 
 @end

@@ -44,14 +44,12 @@
 @synthesize requestData;
 @synthesize requestMethod;
 
-static ASINetworkQueue* threadQueue;
-
 -(id) initWithPath:(NSString*)p
 {
 	if (self = [super init]) {
-		queue = [[NSOperationQueue alloc] init];
-		[queue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
-		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [BaseUpdater getBaseUrl], p]];
+        queue = [[NSOperationQueue alloc] init];
+        [queue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
+		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self getBaseUrl], p]];
 #if DEBUG
         NSLog(@"%@: Initialized using URL: %@", self, url);
 #endif
@@ -59,17 +57,10 @@ static ASINetworkQueue* threadQueue;
 	return self;
 }
 
-+(void) initialize
-{
-	if (!threadQueue) {
-		threadQueue = [[ASINetworkQueue alloc] init];
-	}
-}
-
 -(void) dealloc
 {
 	[url release];
-	[queue release];
+    [queue release];
 	
 	[super dealloc];
 }
@@ -81,7 +72,7 @@ static ASINetworkQueue* threadQueue;
 	return string;
 }
 
-+(NSString*) getBaseUrl
+-(NSString*) getBaseUrl
 {
 	NSString* https = [[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http";
 	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"];
@@ -140,11 +131,12 @@ static ASINetworkQueue* threadQueue;
 	request.didFailSelector = @selector(requestFailed:);
 
 #if DEBUG
-	NSLog(@"queue = %@", queue);
+    NSLog(@"queue = %@", queue);
 #endif
-	[requestUrl autorelease];
-	[queue addOperation:request];
-	[queue setSuspended:NO];
+    [queue addOperation:request];
+    [queue setSuspended:NO];
+//    [request startAsynchronous];
+//    [requestUrl autorelease];
 #if DEBUG
 	NSLog(@"%@: finished.", self);
 #endif
