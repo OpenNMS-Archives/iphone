@@ -34,6 +34,7 @@
 #import "config.h"
 #import "OpenNMSAppDelegate.h"
 #import "SettingsViewController.h"
+#import "BaseUpdater.h"
 
 @implementation OpenNMSAppDelegate
 
@@ -139,14 +140,36 @@
 {
     if (buttonIndex != [alertView cancelButtonIndex])
     {
-        UIAlertView *a = [[UIAlertView alloc]
-                          initWithTitle: @"IP Address"
-                          message: [NSString stringWithFormat:@"You typed %@!", ipField.text]
-                          delegate:self
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil];
-        [a show];
-        [a autorelease];
+        NSString* formData = [NSString stringWithFormat:@"ipAddress=%@", ipField.text];
+        NSData* postData = [formData dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        NSString* postLength = [NSString stringWithFormat:@"%d", [postData length]];
+        NSMutableURLRequest* request = [[[NSMutableURLRequest alloc] init] autorelease];
+        NSURL* baseUrl = [NSURL URLWithString:[BaseUpdater getBaseUrl]];
+        [request setURL:[NSURL URLWithString:@"admin/addNewInterface" relativeToURL:baseUrl]];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        [request setHTTPBody:postData];
+        NSHTTPURLResponse* response = nil;
+        NSError* error = nil;
+        NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        NSString* stringResponseData = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+#if DEBUG
+        NSLog(@"%@: Sent request %@, received response %@, with error %@", self, request, response, error);
+        NSLog(@"%@: headers = %@", self, [response allHeaderFields]);
+        NSLog(@"%@: data = %@", self, stringResponseData);
+#endif
+        if (error) {
+            UIAlertView *a = [[UIAlertView alloc]
+                              initWithTitle: [error localizedDescription]
+                              message: [error localizedFailureReason]
+                              delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+            [a show];
+            [a autorelease];
+        }
+        [stringResponseData release];
     }
     addInterfaceActive = NO;
 }
