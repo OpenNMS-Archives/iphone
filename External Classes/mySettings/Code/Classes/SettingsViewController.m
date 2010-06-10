@@ -27,6 +27,11 @@
 	 */
 }
 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;
+}
+
 - (id) initWithConfigFile:(NSString *)configfile {
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
 		settingsdatasource = [[SettingsMetadataSource alloc] initWithConfigFile:configfile];

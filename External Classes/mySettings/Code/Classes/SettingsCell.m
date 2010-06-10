@@ -76,6 +76,8 @@
 			titlelabel.font = [UIFont boldSystemFontOfSize:17];
 			titlelabel.textColor = [UIColor blackColor];
 			
+            titlelabel.backgroundColor = [UIColor clearColor];
+
 			[self.contentView addSubview:titlelabel];
 			[titlelabel release];
 		}
