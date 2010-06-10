@@ -106,6 +106,7 @@
 		44DC95AC103BA31E0065B944 /* CalculateSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DC95AB103BA31E0065B944 /* CalculateSize.m */; };
 		44DD4ABF102DDC50005B4F34 /* OpenNMS.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 44DD4ABE102DDC2A005B4F34 /* OpenNMS.xcdatamodel */; };
 		44DEAF3C102A32E700634C2F /* UpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44DEAF3B102A32E700634C2F /* UpdateHandler.m */; };
+		44E276CE11C15DBD00DE59F1 /* NullUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E276CD11C15DBD00DE59F1 /* NullUpdater.m */; };
 		44E2A162100E195100DD5A1D /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 44E2A161100E195100DD5A1D /* opennms-headingbg.png */; };
 		44E2A2ED100E5EA900DD5A1D /* ColumnarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */; };
 		44E63D52103A3B4D005FC19F /* NodeSearchUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44E63D51103A3B4D005FC19F /* NodeSearchUpdater.m */; };
@@ -293,6 +294,8 @@
 		44DEAE411029E02300634C2F /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		44DEAF3A102A32E700634C2F /* UpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpdateHandler.h; path = Data/UpdateHandler.h; sourceTree = "<group>"; };
 		44DEAF3B102A32E700634C2F /* UpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpdateHandler.m; path = Data/UpdateHandler.m; sourceTree = "<group>"; };
+		44E276CC11C15DBD00DE59F1 /* NullUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NullUpdater.h; sourceTree = "<group>"; };
+		44E276CD11C15DBD00DE59F1 /* NullUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NullUpdater.m; sourceTree = "<group>"; };
 		44E2A161100E195100DD5A1D /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Resources/Images/opennms-headingbg.png"; sourceTree = "<group>"; };
 		44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColumnarTableViewCell.h; path = Views/ColumnarTableViewCell.h; sourceTree = "<group>"; };
 		44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColumnarTableViewCell.m; path = Views/ColumnarTableViewCell.m; sourceTree = "<group>"; };
@@ -577,6 +580,8 @@
 		448148651029D00000083FF9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				44E276CC11C15DBD00DE59F1 /* NullUpdater.h */,
+				44E276CD11C15DBD00DE59F1 /* NullUpdater.m */,
 				443665341032597400F0B7B6 /* ContextService.h */,
 				443665351032597400F0B7B6 /* ContextService.m */,
 				448148691029D25A00083FF9 /* BaseUpdater.h */,
@@ -862,6 +867,7 @@
 				4458311811BD900200CAC95E /* ASIAuthenticationDialog.m in Sources */,
 				4458311E11BD978B00CAC95E /* SliderCell.m in Sources */,
 				4437974B11C0B72300D36464 /* BaseController.m in Sources */,
+				44E276CE11C15DBD00DE59F1 /* NullUpdater.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
