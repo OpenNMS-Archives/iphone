@@ -35,8 +35,9 @@
 #import "FuzzyDate.h"
 #import "Node.h"
 #import "ContextService.h"
+#import "BaseController.h"
 
-@interface NodeDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface NodeDetailController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* nodeTable;
 	@private UIActivityIndicatorView* spinner;
 	@private FuzzyDate* fuzzyDate;
@@ -63,12 +64,6 @@
 @property (nonatomic, retain) NSArray* snmpInterfaces;
 @property (nonatomic, retain) NSArray* events;
 
-@property CGFloat screenWidth;
-@property CGFloat tableWidth;
-@property CGFloat cellBorder;
-@property CGFloat cellSeparator;
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 -(void)initializeData;
 
 @end

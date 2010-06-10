@@ -55,16 +55,6 @@
 @synthesize alarmObjectId;
 @synthesize severity;
 
-@synthesize screenWidth;
-@synthesize tableWidth;
-@synthesize cellBorder;
-@synthesize cellSeparator;
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return YES;
-}
-
 -(void) loadView
 {
 	[super loadView];
@@ -79,7 +69,6 @@
 //	self.spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.navigationController.view addSubview:self.spinner];
 //	[self.view addSubview:self.spinner];
-	[self initializeScreenWidth:NO];
 }
 
 -(void) initializeData
@@ -93,6 +82,7 @@
 	[managedObjectContext refreshObject:a mergeChanges:NO];
 	self.severity = [[[OnmsSeverity alloc] initWithSeverity:a.severity] autorelease];
 	self.alarmTable.backgroundColor = [self.severity getDisplayColor];
+	self.alarmTable.backgroundView.backgroundColor = [self.severity getDisplayColor];
 #if DEBUG
 	NSLog(@"setting color for severity %@", self.severity);
 #endif
@@ -102,29 +92,9 @@
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-	[self initializeScreenWidth:YES];
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self initializeScreenWidth:toInterfaceOrientation];
 	[self.alarmTable reloadData];
-}
-
--(void) initializeScreenWidth:(BOOL)useHeight
-{
-#if DEBUG
-	NSLog(@"initializeScreenWidth called");
-#endif
-    
-    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
-	if (useHeight) {
-		screenWidth = screenArea.size.height;
-	} else {
-		screenWidth = screenArea.size.width;
-	}
-    tableWidth = round(screenWidth * 0.9375);
-    if (screenWidth == 768) {
-        tableWidth = round(screenWidth * 0.881510416666667);
-    }
-	cellBorder = round(screenWidth * 0.09375);
-	cellSeparator = round(screenWidth * 0.015625);
 }
 
 #pragma mark -
@@ -210,6 +180,10 @@
 }
 
 -(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+#if DEBUG
+	NSLog(@"%@: tableView: %@ cellForRowAtIndexPath: %@", self, tableView, indexPath);
+#endif
+
 	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 	cell.backgroundColor = white;
 	cell.textLabel.font = defaultFont;
@@ -218,6 +192,10 @@
     CGFloat leftWidth = 60;
     CGFloat rightWidth = tableWidth - (cellSeparator * 3) - leftWidth;
 
+#if DEBUG
+	NSLog(@"%@: leftWidth: %f, rightWidth: %f", self, leftWidth, rightWidth);
+#endif
+
 	CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
 	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, leftWidth, height)] autorelease];
 	leftLabel.backgroundColor = clear;
@@ -225,7 +203,6 @@
 	leftLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
 	leftLabel.numberOfLines = 10;
 	leftLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-	// leftLabel.textAlignment = UITextAlignmentRight;
 
 	UILabel* rightLabel = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + leftWidth + cellSeparator, 0, rightWidth, height)] autorelease];
 	rightLabel.backgroundColor = clear;
@@ -280,19 +257,23 @@
 	return cell;
 }
 
--(UIView *) tableView: (UITableView *) tableView viewForFooterInSection: (NSInteger) section
+-(UIView *) tableView: (UITableView *)tableView viewForFooterInSection: (NSInteger)section
 {
-    UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, alarmTable.bounds.size.width, 44.0)] autorelease];
+#if DEBUG
+	NSLog(@"%@: tableView: %@ viewForFooterInSection: %@", self, tableView, section);
+#endif
+	
+    UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 44.0)] autorelease];
 	footerView.autoresizesSubviews = YES;
-	footerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	footerView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin);
 	footerView.userInteractionEnabled = YES;
 	
 	footerView.hidden = NO;
 	footerView.multipleTouchEnabled = NO;
 	footerView.opaque = NO;
-	footerView.contentMode = UIViewContentModeScaleToFill;
-	
-    CGFloat buttonWidth = ((screenWidth - (cellBorder * 2) - (cellSeparator * 2)) / 3);
+	footerView.contentMode = (UIViewContentModeScaleToFill & UIViewContentModeRedraw);
+
+    CGFloat buttonWidth = round((screenWidth - (cellBorder * 2) - (cellSeparator * 2)) / 3);
 
 	UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:10];
@@ -346,7 +327,6 @@
 	[self initializeData];
 	[self.alarmTable reloadData];
 	[self.spinner stopAnimating];
-//	[self.alarmTable setNeedsDisplay:YES];
 }
 
 -(void) doAck:(NSString*)action

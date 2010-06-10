@@ -34,8 +34,9 @@
 #import <UIKit/UIKit.h>
 #import "FuzzyDate.h"
 #import "ContextService.h"
+#import "BaseController.h"
 
-@interface AlarmListController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface AlarmListController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* alarmTable;
 	@private UIActivityIndicatorView* spinner;
 	@private FuzzyDate* fuzzyDate;
@@ -51,12 +52,6 @@
 
 @property (retain) NSMutableArray* alarmList;
 
-@property CGFloat screenWidth;
-@property CGFloat tableWidth;
-@property CGFloat cellBorder;
-@property CGFloat cellSeparator;
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 -(void) refreshData;
 -(IBAction) reload:(id) sender;
 

@@ -2,7 +2,7 @@
  * This file is part of the OpenNMS(R) iPhone Application.
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
- * Copyright (C) 2009 The OpenNMS Group, Inc.  All rights reserved.
+ * Copyright (C) 2010 The OpenNMS Group, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,11 +33,18 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AboutViewController : UIViewController {
-	IBOutlet UITextView* textView;
+@interface BaseController : UIViewController {
+	CGFloat screenWidth;
+	CGFloat tableWidth;
+	CGFloat cellBorder;
+	CGFloat cellSeparator;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
-- (IBAction) openSettings:(id) sender;
+@property CGFloat screenWidth;
+@property CGFloat tableWidth;
+@property CGFloat cellBorder;
+@property CGFloat cellSeparator;
+
+-(void)initializeScreenWidth:(UIInterfaceOrientation)interfaceOrientation;
 
 @end

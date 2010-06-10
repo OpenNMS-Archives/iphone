@@ -40,6 +40,7 @@
 		4437965611C07FDF00D36464 /* iPadAppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437965311C07FDF00D36464 /* iPadAppIcon.png */; };
 		4437965711C07FDF00D36464 /* iPhoneAppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437965411C07FDF00D36464 /* iPhoneAppIcon.png */; };
 		4437966511C0845100D36464 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437966411C0845100D36464 /* Default-Portrait.png */; };
+		4437974B11C0B72300D36464 /* BaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4437974A11C0B72300D36464 /* BaseController.m */; };
 		445221F71030848500F77B2C /* Alarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EC1030848500F77B2C /* Alarm.m */; };
 		445221F81030848500F77B2C /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EE1030848500F77B2C /* Event.m */; };
 		445221F91030848500F77B2C /* IpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F01030848500F77B2C /* IpInterface.m */; };
@@ -180,6 +181,8 @@
 		4437965311C07FDF00D36464 /* iPadAppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iPadAppIcon.png; path = Resources/Images/iPadAppIcon.png; sourceTree = "<group>"; };
 		4437965411C07FDF00D36464 /* iPhoneAppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iPhoneAppIcon.png; path = Resources/Images/iPhoneAppIcon.png; sourceTree = "<group>"; };
 		4437966411C0845100D36464 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Images/Default-Portrait.png"; sourceTree = "<group>"; };
+		4437974911C0B72300D36464 /* BaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseController.h; path = Controllers/BaseController.h; sourceTree = "<group>"; };
+		4437974A11C0B72300D36464 /* BaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseController.m; path = Controllers/BaseController.m; sourceTree = "<group>"; };
 		445221EB1030848500F77B2C /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
 		445221EC1030848500F77B2C /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
 		445221ED1030848500F77B2C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
@@ -451,6 +454,8 @@
 				44263D251011301500717409 /* OutageListController.m */,
 				44DC95AA103BA31E0065B944 /* CalculateSize.h */,
 				44DC95AB103BA31E0065B944 /* CalculateSize.m */,
+				4437974911C0B72300D36464 /* BaseController.h */,
+				4437974A11C0B72300D36464 /* BaseController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -856,6 +861,7 @@
 				44DC95AC103BA31E0065B944 /* CalculateSize.m in Sources */,
 				4458311811BD900200CAC95E /* ASIAuthenticationDialog.m in Sources */,
 				4458311E11BD978B00CAC95E /* SliderCell.m in Sources */,
+				4437974B11C0B72300D36464 /* BaseController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

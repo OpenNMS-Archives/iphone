@@ -37,8 +37,9 @@
 #import "OnmsSeverity.h"
 #import "AlarmTableView.h"
 #import "ContextService.h"
+#import "BaseController.h"
 
-@interface AlarmDetailController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface AlarmDetailController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* alarmTable;
 	@private UIActivityIndicatorView* spinner;
 	@private ContextService* contextService;
@@ -64,16 +65,8 @@
 @property (retain) NSManagedObjectID* alarmObjectId;
 @property (nonatomic, retain) OnmsSeverity* severity;
 
-@property CGFloat screenWidth;
-@property CGFloat tableWidth;
-@property CGFloat cellBorder;
-@property CGFloat cellSeparator;
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
-
 -(void) refreshData;
 
--(void) initializeScreenWidth:(BOOL)useHeight;
 -(void) initializeData;
 -(void) acknowledgeAlarm;
 -(void) unacknowledgeAlarm;

@@ -49,16 +49,6 @@
 
 @synthesize alarmList;
 
-@synthesize screenWidth;
-@synthesize tableWidth;
-@synthesize cellBorder;
-@synthesize cellSeparator;
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return YES;
-}
-
 -(void) dealloc
 {
 	[self.fuzzyDate release];
@@ -69,6 +59,13 @@
 	[self.alarmList release];
 
     [super dealloc];
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self initializeScreenWidth:toInterfaceOrientation];
+	[self.alarmTable reloadData];
 }
 
 -(void) refreshData
@@ -124,19 +121,6 @@
 
 #pragma mark UIViewController delegates
 
-- (void) loadView
-{
-    [super loadView];
-    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
-    screenWidth = screenArea.size.width;
-    tableWidth = round(screenWidth * 0.9375);
-    if (screenWidth == 768) {
-        tableWidth = round(screenWidth * 0.881510416666667);
-    }
-	cellBorder = round(screenWidth * 0.09375);
-	cellSeparator = round(screenWidth * 0.015625);
-}
-
 - (void) viewDidLoad
 {
 	if (!contextService) {
@@ -167,6 +151,7 @@
 		[self.alarmTable deselectRowAtIndexPath:tableSelection animated:NO];
 	}
 	[self.alarmTable reloadData];
+	[super viewWillAppear:animated];
 }
 
 #pragma mark UITableView delegates
@@ -221,7 +206,7 @@
 
 		CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
 
-        CGFloat dateWidth = round(screenWidth * 0.234375); // 75
+        CGFloat dateWidth = 75; // 75
         CGFloat logWidth = screenWidth - (cellSeparator * 3) - dateWidth;
 
 		NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];

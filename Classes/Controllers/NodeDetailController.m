@@ -55,14 +55,11 @@
 @synthesize snmpInterfaces;
 @synthesize events;
 
-@synthesize screenWidth;
-@synthesize tableWidth;
-@synthesize cellBorder;
-@synthesize cellSeparator;
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-	return YES;
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	[self initializeScreenWidth:toInterfaceOrientation];
+	[self.nodeTable reloadData];
 }
 
 - (void) loadView
@@ -76,15 +73,6 @@
 	self.spinner.hidesWhenStopped = YES;
 	self.spinner.center = self.view.center;
 	[self.navigationController.view addSubview:self.spinner];
-    
-    CGRect screenArea = [[UIScreen mainScreen] applicationFrame];
-    screenWidth = screenArea.size.width;
-    tableWidth = round(screenWidth * 0.9375);
-    if (screenWidth == 768) {
-        tableWidth = round(screenWidth * 0.881510416666667);
-    }
-	cellBorder = round(screenWidth * 0.09375);
-	cellSeparator = round(screenWidth * 0.015625);
 }
 
 - (void) initializeData
@@ -234,10 +222,11 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		Outage* outage = [self.outages objectAtIndex:indexPath.row];
 
-		CGFloat ipWidth      = round(tableWidth * 0.25);    // 80
+		CGFloat ipWidth      = round(tableWidth * 0.275);   // 88
         CGFloat serviceWidth = round(tableWidth * 0.225);   // 72
-		CGFloat upDownWidth  = round(tableWidth * 0.21875); // 70
-        CGFloat timeWidth    = tableWidth - (cellSeparator * 5) - ipWidth - serviceWidth - upDownWidth;
+//		CGFloat upDownWidth  = round(tableWidth * 0.21875); // 70
+//      CGFloat timeWidth    = tableWidth - (cellSeparator * 5) - ipWidth - serviceWidth - upDownWidth;
+		CGFloat upDownWidth  = tableWidth - (cellSeparator * 4) - ipWidth - serviceWidth;
 
 		// IP Address
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
@@ -266,16 +255,17 @@
 		label.font = font;
 		label.adjustsFontSizeToFitWidth = YES;
 		if (regained != nil) {
-			label.text = @"Regained";
+			label.text = [NSString stringWithFormat:@"Regained (%@)", regained];
 			[cell addColumn:@"Regained"];
 		} else {
-			label.text = @"Lost";
+			label.text = [NSString stringWithFormat:@"Lost (%@)", lost];
 			[cell addColumn:@"Lost"];
 		}
         label.textAlignment = UITextAlignmentRight;
 		[cell.contentView addSubview:label];
 
 		// time
+		/*
 		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator + serviceWidth + cellSeparator + upDownWidth + cellSeparator, 0, timeWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
@@ -289,12 +279,13 @@
 		}
         label.textAlignment = UITextAlignmentRight;
 		[cell.contentView addSubview:label];
+		 */
 		
 	} else if (sectionName == @"IP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		IpInterface* iface = [self.interfaces objectAtIndex:indexPath.row];
 		
-		CGFloat ipWidth               = round(tableWidth * 0.25);    // 80
+		CGFloat ipWidth               = round(tableWidth * 0.275);   // 88
 		CGFloat managedUnmanagedWidth = round(tableWidth * 0.21875); // 70
 		CGFloat hostNameWidth         = tableWidth - (cellSeparator * 4) - ipWidth - managedUnmanagedWidth;
 
@@ -331,7 +322,7 @@
 
         CGFloat ifIndexWidth = round(tableWidth * 0.09375);  // 30
         CGFloat ifSpeedWidth = round(tableWidth * 0.309375); // 99
-        CGFloat ipWidth      = round(tableWidth * 0.25);     // 80
+        CGFloat ipWidth      = round(tableWidth * 0.275);    // 88
         CGFloat ifDescrWidth = tableWidth - (cellSeparator * 5) - ifIndexWidth - ifSpeedWidth - ipWidth;
 
 		// IfIndex

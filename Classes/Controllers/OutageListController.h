@@ -36,10 +36,11 @@
 #import "FuzzyDate.h"
 #import "ContextService.h"
 #import "NodeFactory.h"
+#import "BaseController.h"
 
 #define INDICATOR_TAG 1
 
-@interface OutageListController : UIViewController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface OutageListController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* outageTable;
 	@private UIActivityIndicatorView* spinner;
 	@private ContextService* contextService;
@@ -56,7 +57,6 @@
 @property (retain) NSMutableArray* outageList;
 @property (retain) NodeFactory* nodeFactory;
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 - (void) refreshData;
 - (IBAction) reload:(id) sender;
 
