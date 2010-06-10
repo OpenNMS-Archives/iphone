@@ -34,7 +34,7 @@
 #import "config.h"
 #import "OpenNMSAppDelegate.h"
 #import "SettingsViewController.h"
-#import "BaseUpdater.h"
+#import "NullUpdater.h"
 
 @implementation OpenNMSAppDelegate
 
@@ -121,6 +121,10 @@
     [ipField setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
     [ipField setEnablesReturnKeyAutomatically:YES];
     [ipField setDelegate:self];
+
+    CGAffineTransform moveUp = CGAffineTransformMakeTranslation(0.0, 100.0);
+    [ipAlert setTransform: moveUp];
+
     [ipAlert addSubview:ipField];
     
     // set cursor and show keyboard
@@ -144,7 +148,8 @@
         NSData* postData = [formData dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
         NSString* postLength = [NSString stringWithFormat:@"%d", [postData length]];
         NSMutableURLRequest* request = [[[NSMutableURLRequest alloc] init] autorelease];
-        NSURL* baseUrl = [NSURL URLWithString:[BaseUpdater getBaseUrl]];
+        NullUpdater* updater = [[[NullUpdater alloc] init] autorelease];
+        NSURL* baseUrl = [NSURL URLWithString:[updater getBaseUrl]];
         [request setURL:[NSURL URLWithString:@"admin/addNewInterface" relativeToURL:baseUrl]];
         [request setHTTPMethod:@"POST"];
         [request setValue:postLength forHTTPHeaderField:@"Content-Length"];

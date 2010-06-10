@@ -180,7 +180,7 @@
 	CGFloat height = 0;
 	CGSize size;
 
-    CGFloat dateWidth = round(screenWidth * 0.234375); // 75
+    CGFloat dateWidth = 75; // 75
     CGFloat logWidth = screenWidth - (cellSeparator * 3) - dateWidth;
 
     NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
