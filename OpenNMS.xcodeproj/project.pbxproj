@@ -24,6 +24,7 @@
 		44263D261011301500717409 /* OutageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D251011301500717409 /* OutageListController.m */; };
 		44263D2D1011309700717409 /* AlarmListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D2C1011309700717409 /* AlarmListController.m */; };
 		442D9CBA11BF3F2D0003E7A2 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 442D9CB911BF3F2D0003E7A2 /* MainWindow-iPad.xib */; };
+		4434F9DC11C1B6BF009189BD /* IPAddressInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4434F9DB11C1B6BF009189BD /* IPAddressInputController.m */; };
 		443665361032597400F0B7B6 /* ContextService.m in Sources */ = {isa = PBXBuildFile; fileRef = 443665351032597400F0B7B6 /* ContextService.m */; };
 		44367A1810385E6C008E6799 /* AckUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367A1710385E6C008E6799 /* AckUpdater.m */; };
 		44367A251038608D008E6799 /* AlarmFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367A241038608D008E6799 /* AlarmFactory.m */; };
@@ -41,6 +42,9 @@
 		4437965711C07FDF00D36464 /* iPhoneAppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437965411C07FDF00D36464 /* iPhoneAppIcon.png */; };
 		4437966511C0845100D36464 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437966411C0845100D36464 /* Default-Portrait.png */; };
 		4437974B11C0B72300D36464 /* BaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4437974A11C0B72300D36464 /* BaseController.m */; };
+		4444793411C2BCD2003348D5 /* ip-dialog-box.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444793311C2BCD2003348D5 /* ip-dialog-box.png */; };
+		4444794611C2C0E5003348D5 /* green-button-default.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444794411C2C0E5003348D5 /* green-button-default.png */; };
+		4444794711C2C0E5003348D5 /* green-button-hilighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444794511C2C0E5003348D5 /* green-button-hilighted.png */; };
 		445221F71030848500F77B2C /* Alarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EC1030848500F77B2C /* Alarm.m */; };
 		445221F81030848500F77B2C /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EE1030848500F77B2C /* Event.m */; };
 		445221F91030848500F77B2C /* IpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F01030848500F77B2C /* IpInterface.m */; };
@@ -154,6 +158,8 @@
 		44263D2B1011309700717409 /* AlarmListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmListController.h; path = Controllers/AlarmListController.h; sourceTree = "<group>"; };
 		44263D2C1011309700717409 /* AlarmListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmListController.m; path = Controllers/AlarmListController.m; sourceTree = "<group>"; };
 		442D9CB911BF3F2D0003E7A2 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/Resources/Interfaces/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		4434F9DA11C1B6BF009189BD /* IPAddressInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IPAddressInputController.h; path = Controllers/IPAddressInputController.h; sourceTree = "<group>"; };
+		4434F9DB11C1B6BF009189BD /* IPAddressInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IPAddressInputController.m; path = Controllers/IPAddressInputController.m; sourceTree = "<group>"; };
 		443665341032597400F0B7B6 /* ContextService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextService.h; sourceTree = "<group>"; };
 		443665351032597400F0B7B6 /* ContextService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextService.m; sourceTree = "<group>"; };
 		44367A1610385E6C008E6799 /* AckUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AckUpdater.h; path = Data/AckUpdater.h; sourceTree = "<group>"; };
@@ -184,6 +190,9 @@
 		4437966411C0845100D36464 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Images/Default-Portrait.png"; sourceTree = "<group>"; };
 		4437974911C0B72300D36464 /* BaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseController.h; path = Controllers/BaseController.h; sourceTree = "<group>"; };
 		4437974A11C0B72300D36464 /* BaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseController.m; path = Controllers/BaseController.m; sourceTree = "<group>"; };
+		4444793311C2BCD2003348D5 /* ip-dialog-box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ip-dialog-box.png"; path = "Resources/Images/ip-dialog-box.png"; sourceTree = "<group>"; };
+		4444794411C2C0E5003348D5 /* green-button-default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green-button-default.png"; path = "Resources/Images/green-button-default.png"; sourceTree = "<group>"; };
+		4444794511C2C0E5003348D5 /* green-button-hilighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green-button-hilighted.png"; path = "Resources/Images/green-button-hilighted.png"; sourceTree = "<group>"; };
 		445221EB1030848500F77B2C /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
 		445221EC1030848500F77B2C /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
 		445221ED1030848500F77B2C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
@@ -443,6 +452,8 @@
 		44263CF310112F3300717409 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4434F9DA11C1B6BF009189BD /* IPAddressInputController.h */,
+				4434F9DB11C1B6BF009189BD /* IPAddressInputController.m */,
 				44263CF410112F4100717409 /* AboutViewController.h */,
 				44263CF510112F4100717409 /* AboutViewController.m */,
 				4424345F1024E7C100658DB1 /* AlarmDetailController.h */,
@@ -506,6 +517,9 @@
 		443DB6E01028F4B300785DE6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4444794411C2C0E5003348D5 /* green-button-default.png */,
+				4444794511C2C0E5003348D5 /* green-button-hilighted.png */,
+				4444793311C2BCD2003348D5 /* ip-dialog-box.png */,
 				4437966411C0845100D36464 /* Default-Portrait.png */,
 				4437965211C07FDF00D36464 /* Icon-Small-50.png */,
 				4437965311C07FDF00D36464 /* iPadAppIcon.png */,
@@ -776,6 +790,9 @@
 				4437965611C07FDF00D36464 /* iPadAppIcon.png in Resources */,
 				4437965711C07FDF00D36464 /* iPhoneAppIcon.png in Resources */,
 				4437966511C0845100D36464 /* Default-Portrait.png in Resources */,
+				4444793411C2BCD2003348D5 /* ip-dialog-box.png in Resources */,
+				4444794611C2C0E5003348D5 /* green-button-default.png in Resources */,
+				4444794711C2C0E5003348D5 /* green-button-hilighted.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -868,6 +885,7 @@
 				4458311E11BD978B00CAC95E /* SliderCell.m in Sources */,
 				4437974B11C0B72300D36464 /* BaseController.m in Sources */,
 				44E276CE11C15DBD00DE59F1 /* NullUpdater.m in Sources */,
+				4434F9DC11C1B6BF009189BD /* IPAddressInputController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

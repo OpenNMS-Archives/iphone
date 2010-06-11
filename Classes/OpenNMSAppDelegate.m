@@ -34,6 +34,7 @@
 #import "config.h"
 #import "OpenNMSAppDelegate.h"
 #import "SettingsViewController.h"
+#import "IPAddressInputController.h"
 #import "NullUpdater.h"
 
 @implementation OpenNMSAppDelegate
@@ -43,8 +44,6 @@
 @synthesize contextService;
 @synthesize settingsActive;
 @synthesize addInterfaceActive;
-@synthesize ipField;
-@synthesize ipAlert;
 
 -(id) init
 {
@@ -106,42 +105,24 @@
 - (void) openAddInterface
 {
     if (settingsActive) return;
-    if (addInterfaceActive) return;
 
-    addInterfaceActive = YES;
+    inputController = [[IPAddressInputController alloc] init];
 
-    ipAlert = [[UIAlertView alloc] initWithTitle:@"Discover New IP Address" 
-                                                     message:@"\n" // IMPORTANT
-                                                    delegate:self
-                                           cancelButtonTitle:@"Cancel" 
-                                           otherButtonTitles:@"Add", nil];
-    ipField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)]; 
-    [ipField setBackgroundColor:[UIColor whiteColor]];
-    [ipField setPlaceholder:@"IP Address"];
-    [ipField setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
-    [ipField setEnablesReturnKeyAutomatically:YES];
-    [ipField setDelegate:self];
+    [inputController.addButton addTarget:self action:@selector(closeAddInterface:) forControlEvents:UIControlEventTouchUpInside];
+    [inputController.cancelButton addTarget:self action:@selector(closeAddInterface:) forControlEvents:UIControlEventTouchUpInside];
 
-    CGAffineTransform moveUp = CGAffineTransformMakeTranslation(0.0, 100.0);
-    [ipAlert setTransform: moveUp];
-
-    [ipAlert addSubview:ipField];
-    
-    // set cursor and show keyboard
-    [ipField becomeFirstResponder];
-    
-    [ipAlert show];
-    [ipAlert autorelease];
+    [tabBarController.view addSubview:inputController.view];
+    [inputController release];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (void)closeAddInterface:(id)sender
 {
-    [ipAlert dismissWithClickedButtonIndex:1 animated:YES];
-    return YES;
-}
-
-- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
-{
+    if (sender == inputController.addButton) {
+        NSLog(@"got add!");
+    } else {
+        NSLog(@"got cancel!");
+    }
+    /*
     if (buttonIndex != [alertView cancelButtonIndex])
     {
         NSString* formData = [NSString stringWithFormat:@"ipAddress=%@", ipField.text];
@@ -177,6 +158,7 @@
         [stringResponseData release];
     }
     addInterfaceActive = NO;
+     */
 }
 
 - (ContextService*) contextService

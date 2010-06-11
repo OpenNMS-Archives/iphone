@@ -2,7 +2,7 @@
  * This file is part of the OpenNMS(R) iPhone Application.
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
- * Copyright (C) 2009 The OpenNMS Group, Inc.  All rights reserved.
+ * Copyright (C) 2010 The OpenNMS Group, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,32 +32,19 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "ContextService.h"
-#import "IPAddressInputController.h"
 
-@interface OpenNMSAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UITextFieldDelegate> {
-    UIWindow* window;
-    UITabBarController* tabBarController;
-    IPAddressInputController* inputController;
-	BOOL settingsActive;
-    BOOL addInterfaceActive;
-
-	ContextService* contextService;
+@interface RoundedView : UIView {
+    int radius;
+    UIColor *cornerColor;
+    BOOL roundUpperLeft, roundUpperRight, 
+    roundLowerLeft, roundLowerRight;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow* window;
-@property (nonatomic, retain) IBOutlet UITabBarController* tabBarController;
-@property (assign) BOOL settingsActive;
-@property (assign) BOOL addInterfaceActive;
-@property (retain, readonly) ContextService* contextService;
-
-- (ContextService *) contextService;
-- (NSManagedObjectContext *) managedObjectContext;
-
-- (void) openSettings;
-- (void) closeSettings;
-
-- (void) openAddInterface;
-- (void) closeAddInterface:(id)sender;
+@property (nonatomic,retain) UIColor *cornerColor;
+@property (nonatomic) int radius;
+@property (nonatomic) BOOL roundUpperLeft;
+@property (nonatomic) BOOL roundUpperRight;
+@property (nonatomic) BOOL roundLowerLeft;
+@property (nonatomic) BOOL roundLowerRight;
 
 @end
