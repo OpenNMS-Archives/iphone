@@ -33,6 +33,7 @@
 
 #import "config.h"
 #import "IPAddressInputController.h"
+#import "BaseUpdater.h"
 
 @implementation IPAddressInputController
 
