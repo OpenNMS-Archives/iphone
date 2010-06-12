@@ -38,15 +38,6 @@
 static NSManagedObjectModel* managedObjectModel;
 static NSPersistentStoreCoordinator* persistentStoreCoordinator;
 
-@synthesize managedObjectContext;
-
--(void) dealloc
-{
-	[managedObjectModel release];
-	
-	[super dealloc];
-}
-
 - (NSString *)applicationDocumentsDirectory {
 	return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
@@ -89,17 +80,17 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
 }
 
 - (NSManagedObjectContext *) managedObjectContext {
-	
-    if (managedObjectContext != nil) {
-        return managedObjectContext;
-    }
-	
+	if (managedObjectContext) {
+		return managedObjectContext;
+	}
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
-        managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [managedObjectContext setPersistentStoreCoordinator: coordinator];
+		NSManagedObjectContext* moc = [[NSManagedObjectContext alloc] init];
+		[moc setPersistentStoreCoordinator:coordinator];
+//		managedObjectContext = moc;
+		return moc;
     }
-    return managedObjectContext;
+    return nil;
 }
 
 @end

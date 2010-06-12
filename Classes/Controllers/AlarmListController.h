@@ -36,23 +36,21 @@
 #import "ContextService.h"
 #import "BaseController.h"
 
-@interface AlarmListController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private UITableView* alarmTable;
-	@private UIActivityIndicatorView* spinner;
+@interface AlarmListController : BaseController <UINavigationBarDelegate> {
 	@private FuzzyDate* fuzzyDate;
-	@private ContextService* contextService;
 
-	@private NSMutableArray* alarmList;
+    @private NSFetchedResultsController* _fetchedResultsController;
+    @private NSManagedObjectContext* _viewMoc;
+    @private NSManagedObjectContext* _updateMoc;
 }
 
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
-@property (retain) IBOutlet UITableView* alarmTable;
-@property (retain) ContextService* contextService;
 
-@property (retain) NSMutableArray* alarmList;
+@property (retain) NSFetchedResultsController* _fetchedResultsController;
+@property (retain) NSManagedObjectContext* _viewMoc;
+@property (retain) NSManagedObjectContext* _updateMoc;
 
--(void) refreshData;
--(IBAction) reload:(id) sender;
+- (void) initializeData;
+- (IBAction) reload:(id) sender;
 
 @end

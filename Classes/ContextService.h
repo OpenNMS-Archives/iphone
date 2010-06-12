@@ -34,9 +34,9 @@
 #import <Foundation/Foundation.h>
 
 @interface ContextService : NSObject {
-    NSManagedObjectContext *managedObjectContext;           
+	NSManagedObjectContext* managedObjectContext;
 }
 
-@property (retain, readonly) NSManagedObjectContext *managedObjectContext;
+- (NSManagedObjectContext *) managedObjectContext;
 
 @end

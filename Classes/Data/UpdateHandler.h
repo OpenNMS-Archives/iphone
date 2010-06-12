@@ -44,15 +44,19 @@
 	SEL method;
 	NSObject* methodTarget;
 	BOOL clearOldObjects;
+	NSManagedObjectContext* context;
 }
 
 @property (retain) UIActivityIndicatorView* spinner;
 @property (retain) ContextService* contextService;
+@property (retain) NSManagedObjectContext* context;
 @property (assign) SEL method;
 @property (retain) NSObject* methodTarget;
 @property (assign) BOOL clearOldObjects;
 
+-(id) initWithContext:(NSManagedObjectContext*)context;
 -(id) initWithMethod:(SEL)selector target:(NSObject*)target;
+-(id) initWithMethod:(SEL)selector target:(NSObject*)target context:(NSManagedObjectContext*)context;
 
 -(NSString*)     cleanUpString:(NSString *)html;
 -(NSString*)     stringForDate:(NSString*)date;

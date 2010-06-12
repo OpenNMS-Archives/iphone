@@ -37,16 +37,19 @@
 @implementation ColumnarTableViewCell
 
 @synthesize columns;
+@synthesize entries;
 
 - (id)init {
 	if (self = [super init]) {
 		self.columns = [NSMutableArray array];
+		self.entries = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
 
 - (void)dealloc {
 	[self.columns release];
+	[self.entries release];
     [super dealloc];
 }
 
@@ -54,6 +57,15 @@
 {
 	if (value) {
 		[self.columns addObject:value];
+	}
+}
+- (void)addEntry:(NSString *)key value:(UILabel *)value
+{
+	if (key) {
+		[self.columns addObject:key];
+		if (value) {
+			[self.entries setObject:value forKey:key];
+		}
 	}
 }
 

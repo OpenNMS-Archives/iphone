@@ -40,10 +40,6 @@
 #import "BaseController.h"
 
 @interface AlarmDetailController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private UITableView* alarmTable;
-	@private UIActivityIndicatorView* spinner;
-	@private ContextService* contextService;
-	
 	@private FuzzyDate* fuzzyDate;
 	@private UIFont* defaultFont;
 	@private UIColor* clear;
@@ -53,10 +49,6 @@
 	@private OnmsSeverity* severity;
 }
 
-@property (retain) UITableView* alarmTable;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
-
-@property (nonatomic, retain) ContextService* contextService;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 @property (nonatomic, retain) UIFont* defaultFont;
 @property (nonatomic, retain) UIColor* clear;

@@ -39,7 +39,6 @@
 {
 	NSString* escaped = [searchString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	NSString* path = [NSString stringWithFormat:@"/nodes?comparator=contains&match=any&label=%@&ipInterface.ipAddress=%@&ipInterface.ipHostName=%@", escaped, escaped, escaped];
-	NSLog(@"path = %@", path);
 	self = [super initWithPath:path];
 	return self;
 }

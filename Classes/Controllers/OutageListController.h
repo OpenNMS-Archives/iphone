@@ -34,30 +34,27 @@
 #import <UIKit/UIKit.h>
 #import "NodeDetailController.h"
 #import "FuzzyDate.h"
-#import "ContextService.h"
 #import "NodeFactory.h"
 #import "BaseController.h"
 
 #define INDICATOR_TAG 1
 
-@interface OutageListController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private UITableView* outageTable;
-	@private UIActivityIndicatorView* spinner;
-	@private ContextService* contextService;
+@interface OutageListController : BaseController <UINavigationBarDelegate> {
 	@private FuzzyDate* fuzzyDate;
 	@private NodeFactory* nodeFactory;
-
-	@private NSMutableArray* outageList;
+    @private NSFetchedResultsController* _fetchedResultsController;
+    @private NSManagedObjectContext* _viewMoc;
+    @private NSManagedObjectContext* _updateMoc;
 }
 
-@property (retain) IBOutlet UITableView* outageTable;
-@property (retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (retain) FuzzyDate* fuzzyDate;
-@property (retain) ContextService* contextService;
-@property (retain) NSMutableArray* outageList;
 @property (retain) NodeFactory* nodeFactory;
 
-- (void) refreshData;
+@property (retain) NSFetchedResultsController* _fetchedResultsController;
+@property (retain) NSManagedObjectContext* _viewMoc;
+@property (retain) NSManagedObjectContext* _updateMoc;
+
+- (void) mergeChangesFromContextSaveNotification:(NSNotification*)notification;
 - (IBAction) reload:(id) sender;
 
 @end

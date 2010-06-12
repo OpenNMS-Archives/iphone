@@ -47,6 +47,7 @@
 
 static OutageFactory* outageFactorySingleton = nil;
 static ContextService* contextService = nil;
+static NSManagedObjectContext* context = nil;
 
 // 2 weeks
 #define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
@@ -59,6 +60,7 @@ static ContextService* contextService = nil;
 		initialized = YES;
 		outageFactorySingleton = [[OutageFactory alloc] init];
 		contextService         = [[ContextService alloc] init];
+        context                = [contextService managedObjectContext];
 	}
 }
 
@@ -79,6 +81,12 @@ static ContextService* contextService = nil;
 	return self;
 }
 
+-(void) dealloc
+{
+    [context release];
+    [super dealloc];
+}
+
 -(void) finish
 {
 	isFinished = YES;
@@ -86,7 +94,6 @@ static ContextService* contextService = nil;
 
 -(Outage*) getCoreDataOutage:(NSNumber*) outageId
 {
-	NSManagedObjectContext* context = [contextService managedObjectContext];
 	NSFetchRequest* outageRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
@@ -111,7 +118,6 @@ static ContextService* contextService = nil;
 
 -(NSArray*) getCoreDataOutagesForNode:(NSNumber*) nodeId
 {
-	NSManagedObjectContext* context = [contextService managedObjectContext];
 	NSFetchRequest* nodeOutageRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
 	[nodeOutageRequest setEntity:entity];
@@ -156,7 +162,7 @@ static ContextService* contextService = nil;
 #endif
 		[factoryLock lock];
 		OutageListUpdater* outageUpdater = [[OutageListUpdater alloc] initWithNode:nodeId];
-		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
+		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] initWithMethod:@selector(finish) target:self context:context];
 		outageUpdater.handler = outageHandler;
 		
 		[outageUpdater update];
@@ -187,7 +193,7 @@ static ContextService* contextService = nil;
 #endif
 		[factoryLock lock];
 		OutageListUpdater* outageUpdater = [[OutageListUpdater alloc] initWithOutage:outageId];
-		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] init];
+		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] initWithContext:context];
 		outageUpdater.handler = outageHandler;
 
 		[outageUpdater update];

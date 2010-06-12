@@ -41,15 +41,8 @@
 
 @implementation OutageUpdateHandler
 
--(void) dealloc
-{
-	[super dealloc];
-}
-
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
-	NSManagedObjectContext *moc = [contextService managedObjectContext];
-
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
     [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
@@ -83,22 +76,26 @@
 			}
 		}
 
+#if DEBUG
+        NSLog(@"%@: got outageId = %d", self, outageId);
+#endif
+        
 		NSFetchRequest *outageRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *outageEntity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:moc];
+		NSEntityDescription *outageEntity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
 		[outageRequest setEntity:outageEntity];
 		
 		NSPredicate *outagePredicate = [NSPredicate predicateWithFormat:@"outageId == %@", outageId];
 		[outageRequest setPredicate:outagePredicate];
 		
 		NSError* error = nil;
-		NSArray *outageArray = [moc executeFetchRequest:outageRequest error:&error];
+		NSArray *outageArray = [context executeFetchRequest:outageRequest error:&error];
 		if (!outageArray || [outageArray count] == 0) {
 			if (error) {
 				NSLog(@"error fetching outage for ID %@: %@", outageId, [error localizedDescription]);
 				[error release];
 			}
-			outage = (Outage*)[NSEntityDescription insertNewObjectForEntityForName:@"Outage" inManagedObjectContext:moc];
+			outage = (Outage*)[NSEntityDescription insertNewObjectForEntityForName:@"Outage" inManagedObjectContext:context];
 		} else {
 			outage = (Outage*)[outageArray objectAtIndex:0];
 		}
@@ -175,14 +172,14 @@
 	if (self.clearOldObjects) {
 		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:moc];
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
 		[request setEntity:entity];
 		
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lastModified < %@", lastModified];
 		[request setPredicate:predicate];
 		
 		NSError* error = nil;
-		NSArray *outagesToDelete = [moc executeFetchRequest:request error:&error];
+		NSArray *outagesToDelete = [context executeFetchRequest:request error:&error];
 		if (!outagesToDelete) {
 			if (error) {
 				NSLog(@"error fetching outages to delete (older than %@): %@", lastModified, [error localizedDescription]);
@@ -195,13 +192,13 @@
 #ifdef DEBUG
 				NSLog(@"deleting %@", outage);
 #endif
-				[moc deleteObject:outage];
+				[context deleteObject:outage];
 			}
 		}
 	}
 
 	NSError* error = nil;
-	if (![moc save:&error]) {
+	if (![context save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@ (%@)", [error localizedDescription], [error localizedFailureReason]);
 	}
 

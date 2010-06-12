@@ -39,6 +39,7 @@
 
 @synthesize spinner;
 @synthesize contextService;
+@synthesize context;
 @synthesize method;
 @synthesize methodTarget;
 @synthesize clearOldObjects;
@@ -53,6 +54,14 @@
 	return self;
 }
 
+-(id) initWithContext:(NSManagedObjectContext*)c
+{
+    if (self = [super init]) {
+        self.context = c;
+    }
+    return self;
+}
+
 -(id) initWithMethod:(SEL)selector target:(NSObject*)target
 {
 	if (self = [super init]) {
@@ -61,6 +70,20 @@
 		self.method = selector;
 		self.methodTarget = target;
 		self.clearOldObjects = NO;
+		self.context = [self.contextService managedObjectContext];
+	}
+	return self;
+}
+
+-(id) initWithMethod:(SEL)selector target:(NSObject*)target context:(NSManagedObjectContext*)c
+{
+	if (self = [super init]) {
+		self.spinner = nil;
+		self.contextService = [[ContextService alloc] init];
+		self.method = selector;
+		self.methodTarget = target;
+		self.clearOldObjects = NO;
+		self.context = c;
 	}
 	return self;
 }
@@ -69,6 +92,7 @@
 {
 	[self.spinner release];
 	[self.contextService release];
+	[self.context release];
 	[self.methodTarget release];
 
 	[super dealloc];

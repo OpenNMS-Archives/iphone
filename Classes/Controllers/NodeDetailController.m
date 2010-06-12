@@ -44,7 +44,6 @@
 @implementation NodeDetailController
 
 @synthesize nodeTable;
-@synthesize spinner;
 @synthesize fuzzyDate;
 
 @synthesize nodeId;
@@ -192,7 +191,7 @@
 	return [self.sections objectAtIndex:section];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tv heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 0;
 	if ([self.sections objectAtIndex:indexPath.section] == @"Recent Events") {
 		Event* event = [self.events objectAtIndex:indexPath.row];
@@ -200,10 +199,10 @@
 					lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 50.0) mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
 		height = size.height;
 	}
-	return MAX(height, tableView.rowHeight);
+	return MAX(height, tv.rowHeight);
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSString* sectionName = [self.sections objectAtIndex:indexPath.section];
 
 	UIColor* white = [UIColor colorWithWhite:1.0 alpha:1.0];
@@ -216,7 +215,7 @@
 
 	UILabel* label = nil;
 
-	CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+	CGFloat height = [self tableView:tv heightForRowAtIndexPath:indexPath];
 
 	if (sectionName == @"Recent Outages") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -229,7 +228,7 @@
 		CGFloat upDownWidth  = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 4) - ipWidth - serviceWidth;
 
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ipWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.adjustsFontSizeToFitWidth = YES;
@@ -238,7 +237,7 @@
 		[cell.contentView addSubview:label];
 
 		// Service
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator, 0, serviceWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator, 0, serviceWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.adjustsFontSizeToFitWidth = YES;
@@ -250,7 +249,7 @@
 		NSString* lost = [fuzzyDate format:outage.ifLostService];
 
 		// Up/Down
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator + serviceWidth + orientationHandler.cellSeparator, 0, upDownWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator + serviceWidth + orientationHandler.cellSeparator, 0, upDownWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.adjustsFontSizeToFitWidth = YES;
@@ -273,7 +272,7 @@
 		CGFloat hostNameWidth         = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 4) - ipWidth - managedUnmanagedWidth;
 
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ipWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ipAddress;
@@ -282,7 +281,7 @@
 		[cell.contentView addSubview:label];
 		
 		// Host Name
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator, 0, hostNameWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator, 0, hostNameWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.hostName;
@@ -291,7 +290,7 @@
 		[cell.contentView addSubview:label];
 		
 		// Managed/Unmanaged
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator + hostNameWidth + orientationHandler.cellSeparator, 0, managedUnmanagedWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator + hostNameWidth + orientationHandler.cellSeparator, 0, managedUnmanagedWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.managedFlag isEqual:@"M"]? @"Managed" : @"Unmanaged";
@@ -309,7 +308,7 @@
         CGFloat ifDescrWidth = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 5) - ifIndexWidth - ifSpeedWidth - ipWidth;
 
 		// IfIndex
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ifIndexWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ifIndexWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifIndex stringValue];
@@ -317,7 +316,7 @@
 		[cell.contentView addSubview:label];
 
 		// IfDescr
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator, 0, ifDescrWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator, 0, ifDescrWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ifDescription;
@@ -325,7 +324,7 @@
 		[cell.contentView addSubview:label];
 		
 		// IfSpeed
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator + ifDescrWidth + orientationHandler.cellSeparator, 0, ifSpeedWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator + ifDescrWidth + orientationHandler.cellSeparator, 0, ifSpeedWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifSpeed stringValue];
@@ -333,7 +332,7 @@
 		[cell.contentView addSubview:label];
 		
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator + ifDescrWidth + orientationHandler.cellSeparator + ifSpeedWidth + orientationHandler.cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator + ifDescrWidth + orientationHandler.cellSeparator + ifSpeedWidth + orientationHandler.cellSeparator, 0, ipWidth, tv.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ipAddress;

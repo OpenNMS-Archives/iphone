@@ -121,7 +121,9 @@
 
 - (IBAction)cancelClicked
 {
+#if DEBUG
     NSLog(@"%@: cancel clicked", self);
+#endif
 	[self dismissModalViewControllerAnimated:YES];
 }
 

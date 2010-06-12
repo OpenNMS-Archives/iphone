@@ -43,21 +43,27 @@
 
 @implementation AlarmListController
 
-@synthesize alarmTable;
 @synthesize fuzzyDate;
-@synthesize contextService;
-@synthesize spinner;
 
-@synthesize alarmList;
+@synthesize _fetchedResultsController;
+@synthesize _viewMoc;
+@synthesize _updateMoc;
+
+-(id)init
+{
+    if (self = [super init]) {
+       [self initializeData];
+        cellIdentifier = @"alarmList";
+    }
+    return self;
+}
 
 -(void) dealloc
 {
-	[self.fuzzyDate release];
-	[self.alarmTable release];
-	[self.contextService release];
-	[self.spinner release];
-
-	[self.alarmList release];
+    fuzzyDate = nil;
+    _fetchedResultsController = nil;
+    _viewMoc = nil;
+    _updateMoc = nil;
 
     [super dealloc];
 }
@@ -65,57 +71,62 @@
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[self.alarmTable reloadData];
+    [self initializeData];
 }
 
--(void) refreshData
+-(NSManagedObjectContext*)viewMoc
 {
-	if (!self.alarmList) {
-		[spinner startAnimating];
-		self.alarmList = [NSMutableArray array];
-	}
-	
-	NSManagedObjectContext *context = [contextService managedObjectContext];
-	
-	NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
-	[req setResultType:NSManagedObjectIDResultType];
-	
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
-	[req setEntity:entity];
-	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
-	[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	[sortDescriptor release];
-	
-	NSError* error = nil;
-	NSArray *array = [context executeFetchRequest:req error:&error];
-	if (array == nil) {
-		if (error) {
-			NSLog(@"error fetching alarms: %@", [error localizedDescription]);
-		} else {
-			NSLog(@"error fetching alarms");
-		}
-	} else {
-		[self.alarmList removeAllObjects];
-		[self.alarmList addObjectsFromArray:array];
-	}
-	[self.alarmTable reloadData];
+    if (!_viewMoc) {
+        _viewMoc = [contextService managedObjectContext];
+    }
+    return _viewMoc;
+}
+
+-(NSManagedObjectContext*)updateMoc
+{
+    if (!_updateMoc) {
+        _updateMoc = [contextService managedObjectContext];
+        //        [self registerListener:_updateMoc];
+    }
+    return _updateMoc;
+}
+
+-(NSFetchedResultsController*)fetchedResultsController
+{
+    if (_fetchedResultsController == nil) {
+        NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:[self viewMoc]];
+        [fetchRequest setEntity:entity];
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+        [fetchRequest setSortDescriptors:sortDescriptors];
+        [sortDescriptors release];
+        [sortDescriptor release];
+        
+        NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]
+                                                  initWithFetchRequest:fetchRequest
+                                                  managedObjectContext:[self viewMoc]
+                                                  sectionNameKeyPath:nil
+                                                  cacheName:@"alarmByLastEventTime"];
+        controller.delegate = self;
+        _fetchedResultsController = controller;
+    }
+    return _fetchedResultsController;
 }
 
 -(void) initializeData
 {
+    [super initializeData];
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
-	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
+	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[self updateMoc]] autorelease];
 	handler.clearOldObjects = YES;
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
-	[self.spinner stopAnimating];
 }
 
 -(IBAction) reload:(id) sender
 {
-	[spinner startAnimating];
 	[self initializeData];
 }
 
@@ -123,10 +134,6 @@
 
 - (void) viewDidLoad
 {
-	if (!contextService) {
-		contextService = [[ContextService alloc] init];
-	}
-
 	self.fuzzyDate = [[FuzzyDate alloc] init];
 	[self initializeData];
 	[super viewDidLoad];
@@ -134,36 +141,13 @@
 
 - (void) viewDidUnload
 {
-	[contextService release];
-	contextService = nil;
-	
-	[self.alarmTable release];
 	[self.fuzzyDate release];
-	[self.alarmList release];
-
 	[super viewDidUnload];
-}
-
--(void) viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	NSIndexPath* tableSelection = [self.alarmTable indexPathForSelectedRow];
-	if (tableSelection) {
-		[self.alarmTable deselectRowAtIndexPath:tableSelection animated:NO];
-	}
-	[self.alarmTable reloadData];
 }
 
 #pragma mark UITableView delegates
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [self.alarmList count];
-}
-
+/*
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	if ([self.alarmList count] > 0) {
@@ -175,84 +159,72 @@
 		[adc release];
 	}
 }
+*/
 
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)configureCell:(UITableViewCell*)cellToConfigure atIndexPath:(NSIndexPath*)indexPath
+{
+    [super configureCell:cellToConfigure atIndexPath:indexPath];
+	ColumnarTableViewCell* cell = (ColumnarTableViewCell*)cellToConfigure;
+
+	UIView* backgroundView = [[[UIView alloc] init] autorelease];
+	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
+	cell.selectedBackgroundView = backgroundView;
+    
+    UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
+    
+    // set the border based on the severity (can only set entire table background color :( )
+    // tableView.separatorColor = [self getSeparatorColorForSeverity:alarm.severity];
+    
+    CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+    
+    CGFloat dateWidth = 75; // 75
+    CGFloat logWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - dateWidth;
+    
+    Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+    
+#if DEBUG
+    NSLog(@"%@: Alarm = %@", self, alarm);
+#endif
+    OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:alarm.severity] autorelease];
+    UIColor* color = [sev getDisplayColor];
+    cell.contentView.backgroundColor = color;
+    
+    UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, logWidth, height)] autorelease];
+    [cell addColumn:alarm.logMessage];
+    label.font = [UIFont boldSystemFontOfSize:12];
+    label.text = alarm.logMessage;
+    label.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
+    label.numberOfLines = 10;
+    label.textColor = [UIColor blackColor];
+    label.backgroundColor = clear;
+    [cell.contentView addSubview:label];
+    
+    label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + logWidth + orientationHandler.cellSeparator, 0, dateWidth, height)] autorelease];
+    NSString* eventString = [fuzzyDate format:alarm.lastEventTime];
+    [cell addColumn:eventString];
+    label.font = [UIFont boldSystemFontOfSize:12];
+    label.text = eventString;
+    label.textAlignment = UITextAlignmentRight;
+    label.backgroundColor = clear;
+    [cell.contentView addSubview:label];
+
+	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	[cell sizeToFit];
+}
+
+-(CGFloat) tableView:(UITableView *)tv heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+
 	CGFloat height = 0;
 	CGSize size;
 
     CGFloat dateWidth = 75; // 75
     CGFloat logWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - dateWidth;
 
-    NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
-	Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
 	size = [CalculateSize calcLabelSize:alarm.logMessage font:[UIFont boldSystemFontOfSize:12] lines:10 width:logWidth
 								   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
 	height = size.height;
-	return MAX(height, tableView.rowHeight);
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
-
-	UIView* backgroundView = [[[UIView alloc] init] autorelease];
-	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
-	cell.selectedBackgroundView = backgroundView;
-
-#if DEBUG
-	NSLog(@"%@: %d alarms found", self, [self.alarmList count]);
-#endif
-	if ([self.alarmList count] > 0) {
-		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
-
-		// set the border based on the severity (can only set entire table background color :( )
-		// tableView.separatorColor = [self getSeparatorColorForSeverity:alarm.severity];
-
-		CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
-
-        CGFloat dateWidth = 75; // 75
-        CGFloat logWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - dateWidth;
-
-		NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
-		Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
-
-#if DEBUG
-		NSLog(@"%@: Alarm = %@", self, alarm);
-#endif
-		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:alarm.severity] autorelease];
-		UIColor* color = [sev getDisplayColor];
-		cell.contentView.backgroundColor = color;
-		
-		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, logWidth, height)] autorelease];
-		[cell addColumn:alarm.logMessage];
-		label.font = [UIFont boldSystemFontOfSize:12];
-		label.text = alarm.logMessage;
-		label.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
-		label.numberOfLines = 10;
-		label.textColor = [UIColor blackColor];
-		label.backgroundColor = clear;
-		[cell.contentView addSubview:label];
-
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + logWidth + orientationHandler.cellSeparator, 0, dateWidth, height)] autorelease];
-		NSString* eventString = [fuzzyDate format:alarm.lastEventTime];
-		[cell addColumn:eventString];
-		label.font = [UIFont boldSystemFontOfSize:12];
-		label.text = eventString;
-        label.textAlignment = UITextAlignmentRight;
-		label.backgroundColor = clear;
-		[cell.contentView addSubview:label];
-		
-		NSLog(@"label = %@", label);
-	} else {
-#if DEBUG
-		NSLog(@"%@: no alarms to list", self);
-#endif
-		cell.textLabel.text = @"";
-	}
-	
-	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	[cell sizeToFit];
-	
-	return cell;
+	return MAX(height, tv.rowHeight);
 }
 
 @end

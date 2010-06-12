@@ -36,10 +36,13 @@
 
 @interface ColumnarTableViewCell : UITableViewCell {
 	NSMutableArray* columns;
+	NSMutableDictionary* entries;
 }
 
 @property (nonatomic, retain) NSMutableArray* columns;
+@property (nonatomic, retain) NSMutableDictionary* entries;
 
 - (void)addColumn:(NSString*)value;
+- (void)addEntry:(NSString*)key value:(UILabel*)value;
 
 @end

@@ -151,7 +151,9 @@ static ContextService* contextService = nil;
 		alarm = [self getRemoteAlarm:alarmId];
 	}
 
+#ifdef DEBUG
 	NSLog(@"returning alarm: %@", alarm);
+#endif
 	return alarm;
 }
 

@@ -43,10 +43,6 @@
 
 @implementation AlarmDetailController
 
-@synthesize alarmTable;
-@synthesize spinner;
-@synthesize contextService;
-
 @synthesize fuzzyDate;
 @synthesize defaultFont;
 @synthesize clear;
@@ -58,11 +54,11 @@
 -(void) loadView
 {
 	[super loadView];
-	self.alarmTable = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
-	self.alarmTable.delegate = self;
-	self.alarmTable.dataSource = self;
-	self.alarmTable.rowHeight = 34.0;
-	self.view = self.alarmTable;
+	tableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
+	tableView.delegate = self;
+	tableView.dataSource = self;
+	tableView.rowHeight = 34.0;
+	self.view = tableView;
 	self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 	self.spinner.hidesWhenStopped = YES;
 	self.spinner.center = self.view.center;
@@ -81,8 +77,8 @@
 	Alarm* a = (Alarm*)[managedObjectContext objectWithID:self.alarmObjectId];
 	[managedObjectContext refreshObject:a mergeChanges:NO];
 	self.severity = [[[OnmsSeverity alloc] initWithSeverity:a.severity] autorelease];
-	self.alarmTable.backgroundColor = [self.severity getDisplayColor];
-	self.alarmTable.backgroundView.backgroundColor = [self.severity getDisplayColor];
+	tableView.backgroundColor = [self.severity getDisplayColor];
+	tableView.backgroundView.backgroundColor = [self.severity getDisplayColor];
 #if DEBUG
 	NSLog(@"setting color for severity %@", self.severity);
 #endif
@@ -94,7 +90,7 @@
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 	[self initializeScreenWidth:toInterfaceOrientation];
-	[self.alarmTable reloadData];
+	[tableView reloadData];
 }
 
 #pragma mark -
@@ -102,50 +98,35 @@
 
 -(void) dealloc
 {
-	[self.alarmTable release];
-	[self.contextService release];
-
-	[self.fuzzyDate release];
-	[self.defaultFont release];
-	[self.clear release];
-	[self.white release];
-	
-	[self.alarmObjectId release];
-	[self.severity release];
-	
+    tableView = nil;
+    fuzzyDate = nil;
+    defaultFont = nil;
+    clear = nil;
+    white = nil;
+    alarmObjectId = nil;
+    severity = nil;
 	[super dealloc];
-}
-
--(void) viewWillAppear:(BOOL)animated
-{
-	[self initializeData];
-	[super viewWillAppear:animated];
 }
 
 -(void) viewDidLoad
 {
-	self.contextService = [[ContextService alloc] init];
-	self.fuzzyDate = [[FuzzyDate alloc] init];
-	self.fuzzyDate.mini = YES;
-	self.defaultFont = [UIFont boldSystemFontOfSize:11];
-	self.clear = [UIColor colorWithWhite:1.0 alpha:0.0];
-	self.white = [UIColor colorWithWhite:1.0 alpha:1.0];
-
+	fuzzyDate = [[FuzzyDate alloc] init];
+	fuzzyDate.mini = YES;
+	defaultFont = [UIFont boldSystemFontOfSize:11];
+	clear = [UIColor colorWithWhite:1.0 alpha:0.0];
+	white = [UIColor colorWithWhite:1.0 alpha:1.0];
 	[self initializeData];
 	[super viewDidLoad];
 }
 
 -(void) viewDidUnload
 {
-	[self.contextService release];
-	
-	[self.fuzzyDate release];
-	[self.defaultFont release];
-	[self.clear release];
-	[self.white release];
-
-	[self.alarmObjectId release];
-
+    fuzzyDate = nil;
+    defaultFont = nil;
+    clear = nil;
+    white = nil;
+    alarmObjectId = nil;
+    severity = nil;
 	[super viewDidUnload];
 }
 
@@ -160,7 +141,7 @@
 	return 1;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(CGFloat) tableView:(UITableView *)tv heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 0;
 	CGSize size;
 	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
@@ -176,26 +157,25 @@
 			height = size.height;
 			break;
 	}
-	return MAX(height, tableView.rowHeight);
+	return MAX(height, tv.rowHeight);
 }
 
--(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-#if DEBUG
-	NSLog(@"%@: tableView: %@ cellForRowAtIndexPath: %@", self, tableView, indexPath);
-#endif
+- (void)configureCell:(UITableViewCell*)cellToConfigure atIndexPath:(NSIndexPath*)indexPath
+{
+    [super configureCell:cellToConfigure atIndexPath:indexPath];
+	ColumnarTableViewCell* cell = (ColumnarTableViewCell*)cellToConfigure;
 
-	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
 	cell.backgroundColor = white;
 	cell.textLabel.font = defaultFont;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     CGFloat leftWidth = 60;
     CGFloat rightWidth = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - leftWidth;
-
+    
 #if DEBUG
 	NSLog(@"%@: leftWidth: %f, rightWidth: %f", self, leftWidth, rightWidth);
 #endif
-
+    
 	CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
 	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, leftWidth, height)] autorelease];
 	leftLabel.backgroundColor = clear;
@@ -203,7 +183,7 @@
 	leftLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
 	leftLabel.numberOfLines = 10;
 	leftLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-
+    
 	UILabel* rightLabel = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + leftWidth + orientationHandler.cellSeparator, 0, rightWidth, height)] autorelease];
 	rightLabel.backgroundColor = clear;
 	rightLabel.font = defaultFont;
@@ -243,24 +223,22 @@
 			rightLabel.text = [fuzzyDate format:a.ackTime];
 			break;
 	}
-
+    
 	
 	[cell addColumn:@"key"];
 	[cell.contentView addSubview:leftLabel];
 	
 	[cell addColumn:@"value"];
 	[cell.contentView addSubview:rightLabel];
-
+    
 	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[cell sizeToFit];
-	
-	return cell;
 }
 
--(UIView *) tableView: (UITableView *)tableView viewForFooterInSection: (NSInteger)section
+-(UIView *) tableView: (UITableView *)tv viewForFooterInSection: (NSInteger)section
 {
 #if DEBUG
-	NSLog(@"%@: tableView: %@ viewForFooterInSection: %@", self, tableView, section);
+	NSLog(@"%@: tableView: %@ viewForFooterInSection: %@", self, tv, section);
 #endif
 	
     UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, orientationHandler.screenWidth, 44.0)] autorelease];
@@ -309,7 +287,7 @@
 	return footerView;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+-(CGFloat) tableView:(UITableView *)tv heightForFooterInSection:(NSInteger)section
 {
 	return 45.0f;
 }
@@ -325,8 +303,8 @@
 	a = [[AlarmFactory getInstance] getRemoteAlarm:a.alarmId];
 	self.alarmObjectId = [a objectID];
 	[self initializeData];
-	[self.alarmTable reloadData];
-	[self.spinner stopAnimating];
+	[tableView reloadData];
+	[spinner stopAnimating];
 }
 
 -(void) doAck:(NSString*)action

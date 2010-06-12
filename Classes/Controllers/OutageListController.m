@@ -43,97 +43,147 @@
 
 @implementation OutageListController
 
-@synthesize outageTable;
-@synthesize spinner;
 @synthesize fuzzyDate;
-@synthesize contextService;
 @synthesize nodeFactory;
 
-@synthesize outageList;
+@synthesize _fetchedResultsController;
+@synthesize _viewMoc;
+@synthesize _updateMoc;
+
+-(id)init
+{
+    if (self = [super init]) {
+        [self initializeData];
+        cellIdentifier = @"outageList";
+    }
+    return self;
+}
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[self.outageTable reloadData];
+    [self initializeData];
+}
+
+-(void)registerListener:(NSManagedObjectContext*)context
+{
+    NSNotificationCenter* dnc = [NSNotificationCenter defaultCenter];
+    [dnc addObserver:self selector:@selector(mergeChangesFromContextSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:context];
+#if DEBUG
+    NSLog(@"%@: observer registered", self);
+#endif
+}
+
+-(void)unregisterListener:(NSManagedObjectContext*)context
+{
+    NSNotificationCenter* dnc = [NSNotificationCenter defaultCenter];
+    [dnc removeObserver:self];
+#if DEBUG
+    NSLog(@"%@: observer removed", self);
+#endif
 }
 
 -(void) dealloc
 {
-	[self.fuzzyDate release];
-	[self.outageTable release];
-	[self.contextService release];
-	[self.spinner release];
-
-	[self.outageList release];
-	
+    [self unregisterListener:_updateMoc];
+    fuzzyDate = nil;
+    contextService = nil;
+    spinner = nil;
+    _fetchedResultsController = nil;
+    _viewMoc = nil;
+    _updateMoc = nil;
+    
     [super dealloc];
 }
 
--(void) refreshData
+-(NSManagedObjectContext*)viewMoc
 {
-	if (!contextService) {
-		contextService = [[ContextService alloc] init];
-	}
-	
-	NSManagedObjectContext *context = [contextService managedObjectContext];
-	
-	NSFetchRequest* req = [[[NSFetchRequest alloc] init] autorelease];
-	
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
-	[req setEntity:entity];
-	
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"ifLostService" ascending:NO];
-	[req setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	[sortDescriptor release];
-	
-	NSError* error = nil;
-	NSArray *array = [context executeFetchRequest:req error:&error];
-	if (array == nil) {
-		if (error) {
-			NSLog(@"error fetching outages: %@", [error localizedDescription]);
-		} else {
-			NSLog(@"error fetching outages");
-		}
-	} else {
-		[self.outageList removeAllObjects];
-		NSMutableArray* nodeIds = [[NSMutableArray alloc] initWithCapacity:[array count]];
-//		NSMutableArray* outages = [[NSMutableArray alloc] initWithCapacity:[array count]];
-		NSEnumerator* iter = [array reverseObjectEnumerator];
-		Outage* outage;
-		while ((outage = [iter nextObject]) != NULL) {
-			if (![nodeIds containsObject:outage.nodeId]) {
-				[nodeIds addObject:outage.nodeId];
-				[outageList insertObject:[outage objectID] atIndex:0];
-			}
-		}
-		[nodeIds release];
-//		[outages release];
-	}
-	
-	[self.outageTable reloadData];
+    if (!_viewMoc) {
+        _viewMoc = [contextService managedObjectContext];
+    }
+    return _viewMoc;
+}
+
+-(NSManagedObjectContext*)updateMoc
+{
+    if (!_updateMoc) {
+        _updateMoc = [contextService managedObjectContext];
+//        [self registerListener:_updateMoc];
+    }
+    return _updateMoc;
+}
+
+-(NSFetchedResultsController*)fetchedResultsController
+{
+#if DEBUG
+	NSLog(@"%@: fetchedResultsController", self);
+#endif
+    if (_fetchedResultsController == nil) {
+        NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:[self viewMoc]];
+        [fetchRequest setEntity:entity];
+#if DEBUG
+        NSLog(@"%@: fetchRequest = %@", self, fetchRequest);
+#endif
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"ifLostService" ascending:NO];
+        NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+#if DEBUG
+        NSLog(@"%@: sortDescriptors = %@", self, sortDescriptors);
+#endif
+        [fetchRequest setSortDescriptors:sortDescriptors];
+        [sortDescriptors release];
+        [sortDescriptor release];
+        
+#if DEBUG
+        NSLog(@"%@: getting new controller", self);
+#endif
+        NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]
+                                                  initWithFetchRequest:fetchRequest
+                                                  managedObjectContext:[self viewMoc]
+                                                  sectionNameKeyPath:nil
+                                                  cacheName:@"outageByIfLostService"];
+#if DEBUG
+        NSLog(@"%@: fetchedResultsController = %@", self, controller);
+#endif
+        controller.delegate = self;
+        _fetchedResultsController = controller;
+    }
+    return _fetchedResultsController;
 }
 
 -(void) initializeData
 {
-	if (!self.outageList) {
-		[spinner startAnimating];
-		self.outageList = [NSMutableArray array];
-	}
-
+    [super initializeData];
 	OutageListUpdater* updater = [[[OutageListUpdater alloc] init] autorelease];
-	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
+	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[self updateMoc]] autorelease];
 	handler.clearOldObjects = YES;
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
-	[self.spinner stopAnimating];
+}
+
+- (void) mergeChangesFromContextSaveNotification:(NSNotification*)notification
+{
+#if DEBUG
+    NSLog(@"%@: mergeChangesFromContextSaveNotification:%@", self, notification);
+#endif
+    NSManagedObjectContext* viewMoc = [self viewMoc];
+	if (viewMoc) {
+#if DEBUG
+        NSLog(@"merging changes");
+#endif
+        NSArray* updates = [[notification.userInfo objectForKey:@"updated"] allObjects];
+        for (NSInteger i = [updates count]-1; i >= 0; i--)
+        {
+            [[viewMoc objectWithID:[[updates objectAtIndex:i] objectID]] willAccessValueForKey:nil];
+        }
+		[viewMoc mergeChangesFromContextDidSaveNotification:notification];
+	}
 }
 
 -(IBAction) reload:(id) sender
 {
-	[spinner startAnimating];
 	[self initializeData];
-//	[self.outageTable setNeedsDisplay:YES];
 }
 
 #pragma mark UIViewController delegates
@@ -151,33 +201,13 @@
 
 - (void) viewDidUnload
 {
-	[self.fuzzyDate release];
-	[self.outageTable release];
-	[self.outageList release];
+    fuzzyDate = nil;
+    _fetchedResultsController = nil;
 	
 	[super viewDidUnload];
 }
 
--(void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-	NSIndexPath* tableSelection = [self.outageTable indexPathForSelectedRow];
-	if (tableSelection) {
-		[self.outageTable deselectRowAtIndexPath:tableSelection animated:NO];
-	}
-	[self.outageTable reloadData];
-}
-
-#pragma mark UITableView delegates
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [self.outageList count];
-}
-
+/*
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
 	if ([self.outageList count] > 0) {
@@ -197,47 +227,46 @@
 		}
 	}
 }
+*/
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-#ifdef DEBUG
-	NSLog(@"%@: tableView:%@ cellForRowAtIndexPath:%@", self, tableView, indexPath);
-#endif
-	ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithFrame:CGRectZero] autorelease];
+- (void)configureCell:(UITableViewCell*)cellToConfigure atIndexPath:(NSIndexPath*)indexPath
+{
+    [super configureCell:cellToConfigure atIndexPath:indexPath];
+	ColumnarTableViewCell* cell = (ColumnarTableViewCell*)cellToConfigure;
 
 	// Set the selected color.
 	UIView* backgroundView = [[[UIView alloc] init] autorelease];
 	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
 
-	if ([self.outageList count] > 0) {
+	CGFloat nodeLabelWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - IFLOSTSERVICEWIDTH;
 
-        CGFloat nodeLabelWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - IFLOSTSERVICEWIDTH;
+    Outage* outage = (Outage*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+	
+	if (outage) {
+		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, nodeLabelWidth, self.tableView.rowHeight)] autorelease];
 		
-		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, nodeLabelWidth, tableView.rowHeight)] autorelease];
-		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
+        NSString* nodeLabel = outage.ipAddress;
+        Node* node = [self.nodeFactory getCoreDataNode:outage.nodeId];
+        if (node != nil) {
+            nodeLabel = node.label;
+        }
+        [cell addColumn:nodeLabel];
+        label.font = [UIFont boldSystemFontOfSize:12];
+        label.text = nodeLabel;
+        [cell.contentView addSubview:label];
 		
-		if (objId) {
-			Outage* outage = (Outage*)[[contextService managedObjectContext] objectWithID:objId];
-			NSString* nodeLabel = outage.ipAddress;
-			Node* node = [self.nodeFactory getCoreDataNode:outage.nodeId];
-			if (node != nil) {
-				nodeLabel = node.label;
-			}
-			[cell addColumn:nodeLabel];
-			label.font = [UIFont boldSystemFontOfSize:12];
-			label.text = nodeLabel;
-			[cell.contentView addSubview:label];
-
-			label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + nodeLabelWidth + orientationHandler.cellSeparator, 0, IFLOSTSERVICEWIDTH, tableView.rowHeight)] autorelease];
-			NSString* date = [fuzzyDate format:outage.ifLostService];
-			[cell addColumn:date];
-			label.font = [UIFont boldSystemFontOfSize:12];
-			label.text = date;
-			[cell.contentView addSubview:label];
-		}
-	}
-
-	return cell;
+        label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + nodeLabelWidth + orientationHandler.cellSeparator, 0, IFLOSTSERVICEWIDTH, self.tableView.rowHeight)] autorelease];
+        NSString* date = [fuzzyDate format:outage.ifLostService];
+        [cell addColumn:date];
+        label.font = [UIFont boldSystemFontOfSize:12];
+        label.text = date;
+        [cell.contentView addSubview:label];
+	} else {
+#ifdef DEBUG
+        NSLog(@"%@: no outage found", self);
+#endif
+    }
 }
 
 @end

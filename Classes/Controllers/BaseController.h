@@ -33,13 +33,29 @@
 
 #import <UIKit/UIKit.h>
 #import "OrientationHandler.h"
+#import "ContextService.h"
 
-@interface BaseController : UIViewController {
+@interface BaseController : UIViewController <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate> {
     OrientationHandler* orientationHandler;
+    ContextService* contextService;
+    IBOutlet UIActivityIndicatorView* spinner;
+    IBOutlet UITableView* tableView;
+    NSString* cellIdentifier;
 }
 
 @property (nonatomic, retain) OrientationHandler* orientationHandler;
+@property (retain) ContextService* contextService;
+@property (retain) UIActivityIndicatorView* spinner;
+@property (retain) UITableView* tableView;
+@property (nonatomic, retain) NSString* cellIdentifier;
 
--(void)initializeScreenWidth:(UIInterfaceOrientation)interfaceOrientation;
+-(void) initializeScreenWidth:(UIInterfaceOrientation)interfaceOrientation;
+-(NSFetchedResultsController*) fetchedResultsController;
+-(void) initializeData;
+-(void) refreshData;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section;
+- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void) configureCell:(UITableViewCell*)cellToConfigure atIndexPath:(NSIndexPath*)indexPath;
 
 @end

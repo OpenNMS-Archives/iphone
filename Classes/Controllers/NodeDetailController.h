@@ -39,7 +39,6 @@
 
 @interface NodeDetailController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	@private UITableView* nodeTable;
-	@private UIActivityIndicatorView* spinner;
 	@private FuzzyDate* fuzzyDate;
 
 	@private NSMutableArray* sections;
@@ -53,7 +52,6 @@
 }
 
 @property (retain) IBOutlet UITableView* nodeTable;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView* spinner;
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 
 @property (nonatomic, retain) NSMutableArray* sections;
