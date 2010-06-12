@@ -31,6 +31,7 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "AboutViewController.h"
 #import "OpenNMSAppDelegate.h"
 
@@ -44,6 +45,7 @@
 - (void)viewDidLoad {
 	[textView setFont:[UIFont systemFontOfSize:13]];
     [super viewDidLoad];
+	textView.text = [NSString stringWithFormat:@"%@\n\n%@", VERSION_STRING, textView.text];
 }
 
 - (void)dealloc {

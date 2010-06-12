@@ -38,16 +38,11 @@
 
 @synthesize orientationHandler;
 
--(id)init
-{
-    if (self = [super init]) {
-        orientationHandler = [[OrientationHandler alloc] init];
-    }
-    return self;
-}
-
 -(void)initializeScreenWidth:(UIInterfaceOrientation)interfaceOrientation
 {
+    if (!orientationHandler) {
+        orientationHandler = [[OrientationHandler alloc] init];
+    }
     [orientationHandler updateWithOrientation:interfaceOrientation];
 }
 
@@ -56,8 +51,14 @@
 #if DEBUG
 	NSLog(@"%@: loadView", self);
 #endif
-	[super loadView];
 	[self initializeScreenWidth:[[UIApplication sharedApplication] statusBarOrientation]];
+	[super loadView];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+	[self initializeScreenWidth:[[UIApplication sharedApplication] statusBarOrientation]];
+    [super viewWillAppear:animated];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -67,8 +68,11 @@
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration
 {
-    [orientationHandler updateWithOrientation:orientation];
+#if DEBUG
+    NSLog(@"%@: willRotateToInterfaceOrientation:%d", self, orientation);
+#endif
     [super willRotateToInterfaceOrientation:orientation duration:duration];
+    [orientationHandler updateWithOrientation:orientation];
 }
 
 @end

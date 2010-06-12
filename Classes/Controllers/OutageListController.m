@@ -160,6 +160,7 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
 	NSIndexPath* tableSelection = [self.outageTable indexPathForSelectedRow];
 	if (tableSelection) {
 		[self.outageTable deselectRowAtIndexPath:tableSelection animated:NO];

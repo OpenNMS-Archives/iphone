@@ -31,6 +31,7 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "AlarmListController.h"
 #import "ColumnarTableViewCell.h"
 #import "AlarmDetailController.h"
@@ -145,12 +146,12 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
+	[super viewWillAppear:animated];
 	NSIndexPath* tableSelection = [self.alarmTable indexPathForSelectedRow];
 	if (tableSelection) {
 		[self.alarmTable deselectRowAtIndexPath:tableSelection animated:NO];
 	}
 	[self.alarmTable reloadData];
-	[super viewWillAppear:animated];
 }
 
 #pragma mark UITableView delegates
@@ -197,9 +198,12 @@
 	backgroundView.backgroundColor = [UIColor colorWithRed:0.1 green:0.0 blue:1.0 alpha:0.75];
 	cell.selectedBackgroundView = backgroundView;
 
+#if DEBUG
+	NSLog(@"%@: %d alarms found", self, [self.alarmList count]);
+#endif
 	if ([self.alarmList count] > 0) {
 		UIColor* clear = [UIColor colorWithWhite:1.0 alpha:0.0];
-		
+
 		// set the border based on the severity (can only set entire table background color :( )
 		// tableView.separatorColor = [self getSeparatorColorForSeverity:alarm.severity];
 
@@ -211,6 +215,9 @@
 		NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
 		Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
 
+#if DEBUG
+		NSLog(@"%@: Alarm = %@", self, alarm);
+#endif
 		OnmsSeverity* sev = [[[OnmsSeverity alloc] initWithSeverity:alarm.severity] autorelease];
 		UIColor* color = [sev getDisplayColor];
 		cell.contentView.backgroundColor = color;
@@ -221,6 +228,7 @@
 		label.text = alarm.logMessage;
 		label.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
 		label.numberOfLines = 10;
+		label.textColor = [UIColor blackColor];
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 
@@ -232,8 +240,12 @@
         label.textAlignment = UITextAlignmentRight;
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
+		
+		NSLog(@"label = %@", label);
 	} else {
-		NSLog(@"no alarms to list");
+#if DEBUG
+		NSLog(@"%@: no alarms to list", self);
+#endif
 		cell.textLabel.text = @"";
 	}
 	

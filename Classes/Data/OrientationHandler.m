@@ -44,6 +44,9 @@
 
 -(id)init
 {
+#if DEBUG
+    NSLog(@"%@: init", self);
+#endif
     if (self = [super init]) {
         [self updateWithOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
     }
@@ -52,6 +55,9 @@
 
 -(id)initWithOrientation:(UIInterfaceOrientation)orientation
 {
+#if DEBUG
+    NSLog(@"%@: initWithOrientation:%d", self, orientation);
+#endif
     if (self = [super init]) {
         [self updateWithOrientation:orientation];
     }

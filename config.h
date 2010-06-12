@@ -34,3 +34,11 @@
 #ifndef DEBUG
 #define DEBUG 1
 #endif
+
+#ifndef VERSION
+#define VERSION "1.0.0"
+#endif
+
+#ifndef VERSION_STRING
+#define VERSION_STRING @"OpenNMS v1.0.0"
+#endif
