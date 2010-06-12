@@ -34,23 +34,21 @@
 #import "config.h"
 #import "OpenNMSAppDelegate.h"
 #import "SettingsViewController.h"
-#import "IPAddressInputController.h"
 #import "NullUpdater.h"
 
 @implementation OpenNMSAppDelegate
 
 @synthesize window;
 @synthesize tabBarController;
+@synthesize navigationController;
 @synthesize contextService;
 @synthesize settingsActive;
-@synthesize addInterfaceActive;
 
 -(id) init
 {
 	if (self = [super init]) {
 		contextService = [[ContextService alloc] init];
 		settingsActive = NO;
-        addInterfaceActive = NO;
 	}
 	return self;
 }
@@ -77,7 +75,6 @@
 - (void) openSettings
 {
     if (settingsActive) return;
-    if (addInterfaceActive) return;
 
 	settingsActive = YES;
 	NSString* plist = [[NSBundle mainBundle] pathForResource:@"Root" ofType:@"plist" inDirectory:@"Settings.bundle"];
@@ -87,7 +84,6 @@
 	SettingsViewController *settingsviewcontroller = [[SettingsViewController alloc] initWithConfigFile:plist];
 	UINavigationController* unc = [[UINavigationController alloc] initWithRootViewController:settingsviewcontroller];
 	settingsviewcontroller.title = @"Settings";
-//	unc.navigationBar.tintColor = [UIColor colorWithRed:0.2117647 green:0.4117647 blue:0.0117647 alpha:1.0];
 	UIBarButtonItem* button = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeSettings)] autorelease];
 	[button setEnabled:YES];
 	settingsviewcontroller.navigationItem.rightBarButtonItem = button;
@@ -100,65 +96,6 @@
 {
 	[tabBarController dismissModalViewControllerAnimated:YES];
 	settingsActive = NO;
-}
-
-- (void) openAddInterface
-{
-    if (settingsActive) return;
-
-    inputController = [[IPAddressInputController alloc] init];
-
-    [inputController.addButton addTarget:self action:@selector(closeAddInterface:) forControlEvents:UIControlEventTouchUpInside];
-    [inputController.cancelButton addTarget:self action:@selector(closeAddInterface:) forControlEvents:UIControlEventTouchUpInside];
-
-    [tabBarController.view addSubview:inputController.view];
-    [inputController release];
-}
-
-- (void)closeAddInterface:(id)sender
-{
-    if (sender == inputController.addButton) {
-        NSLog(@"got add!");
-    } else {
-        NSLog(@"got cancel!");
-    }
-    /*
-    if (buttonIndex != [alertView cancelButtonIndex])
-    {
-        NSString* formData = [NSString stringWithFormat:@"ipAddress=%@", ipField.text];
-        NSData* postData = [formData dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-        NSString* postLength = [NSString stringWithFormat:@"%d", [postData length]];
-        NSMutableURLRequest* request = [[[NSMutableURLRequest alloc] init] autorelease];
-        NullUpdater* updater = [[[NullUpdater alloc] init] autorelease];
-        NSURL* baseUrl = [NSURL URLWithString:[updater getBaseUrl]];
-        [request setURL:[NSURL URLWithString:@"admin/addNewInterface" relativeToURL:baseUrl]];
-        [request setHTTPMethod:@"POST"];
-        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [request setHTTPBody:postData];
-        NSHTTPURLResponse* response = nil;
-        NSError* error = nil;
-        NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-        NSString* stringResponseData = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-#if DEBUG
-        NSLog(@"%@: Sent request %@, received response %@, with error %@", self, request, response, error);
-        NSLog(@"%@: headers = %@", self, [response allHeaderFields]);
-        NSLog(@"%@: data = %@", self, stringResponseData);
-#endif
-        if (error) {
-            UIAlertView *a = [[UIAlertView alloc]
-                              initWithTitle: [error localizedDescription]
-                              message: [error localizedFailureReason]
-                              delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil];
-            [a show];
-            [a autorelease];
-        }
-        [stringResponseData release];
-    }
-    addInterfaceActive = NO;
-     */
 }
 
 - (ContextService*) contextService

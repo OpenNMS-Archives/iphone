@@ -35,20 +35,19 @@
 #import "ContextService.h"
 #import "IPAddressInputController.h"
 
-@interface OpenNMSAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UITextFieldDelegate> {
+@interface OpenNMSAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate> {
     UIWindow* window;
     UITabBarController* tabBarController;
-    IPAddressInputController* inputController;
+    UINavigationController* navigationController;
 	BOOL settingsActive;
-    BOOL addInterfaceActive;
 
 	ContextService* contextService;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow* window;
 @property (nonatomic, retain) IBOutlet UITabBarController* tabBarController;
+@property (nonatomic, retain) IBOutlet UINavigationController* navigationController;
 @property (assign) BOOL settingsActive;
-@property (assign) BOOL addInterfaceActive;
 @property (retain, readonly) ContextService* contextService;
 
 - (ContextService *) contextService;
@@ -56,8 +55,5 @@
 
 - (void) openSettings;
 - (void) closeSettings;
-
-- (void) openAddInterface;
-- (void) closeAddInterface:(id)sender;
 
 @end

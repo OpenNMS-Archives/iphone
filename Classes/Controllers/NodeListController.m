@@ -38,7 +38,6 @@
 #import "NodeSearchUpdater.h"
 #import "NodeUpdateHandler.h"
 #import "Node.h"
-#import "OpenNMSAppDelegate.h"
 
 @implementation NodeListController
 
@@ -52,12 +51,6 @@
 {
 	return YES;
 }
-
-//- (void) viewWillAppear:(BOOL)animated
-//{
-//	[self.navigationController setNavigationBarHidden:YES];
-//	[super viewWillAppear:animated];
-//}
 
 - (void) viewDidLoad
 {
@@ -182,14 +175,6 @@
 	return NO;
 }
 
-- (IBAction) addInterface:(id) sender
-{
-#if DEBUG
-	NSLog(@"adding interface");
-#endif
-	[((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) openAddInterface];
-}
-
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
 {
     [self filterContentForSearchText:[self.searchDisplayController.searchBar text] scope:
@@ -197,6 +182,16 @@
     
     // Return YES to cause the search result table view to be reloaded.
     return YES;
+}
+
+- (IBAction) addInterface:(id) sender
+{
+#if DEBUG
+	NSLog(@"%@: adding interface", self);
+#endif
+	IPAddressInputController* inputController = [[IPAddressInputController alloc] initWithNibName:@"DiscoverIPAddressView" bundle:nil];
+    [self presentModalViewController:inputController animated:YES];
+	[inputController release];
 }
 
 @end

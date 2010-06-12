@@ -24,6 +24,7 @@
 		44263D261011301500717409 /* OutageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D251011301500717409 /* OutageListController.m */; };
 		44263D2D1011309700717409 /* AlarmListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263D2C1011309700717409 /* AlarmListController.m */; };
 		442D9CBA11BF3F2D0003E7A2 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 442D9CB911BF3F2D0003E7A2 /* MainWindow-iPad.xib */; };
+		44303A3F11C2DB5E00D50F73 /* OrientationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44303A3E11C2DB5E00D50F73 /* OrientationHandler.m */; };
 		4434F9DC11C1B6BF009189BD /* IPAddressInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4434F9DB11C1B6BF009189BD /* IPAddressInputController.m */; };
 		443665361032597400F0B7B6 /* ContextService.m in Sources */ = {isa = PBXBuildFile; fileRef = 443665351032597400F0B7B6 /* ContextService.m */; };
 		44367A1810385E6C008E6799 /* AckUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44367A1710385E6C008E6799 /* AckUpdater.m */; };
@@ -45,6 +46,8 @@
 		4444793411C2BCD2003348D5 /* ip-dialog-box.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444793311C2BCD2003348D5 /* ip-dialog-box.png */; };
 		4444794611C2C0E5003348D5 /* green-button-default.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444794411C2C0E5003348D5 /* green-button-default.png */; };
 		4444794711C2C0E5003348D5 /* green-button-hilighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444794511C2C0E5003348D5 /* green-button-hilighted.png */; };
+		4448642A11C2FD9400D54649 /* DiscoverIPAddressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4448642911C2FD9400D54649 /* DiscoverIPAddressView.xib */; };
+		4448646211C304CA00D54649 /* DiscoverIPAddressView-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4448646111C304CA00D54649 /* DiscoverIPAddressView-iPad.xib */; };
 		445221F71030848500F77B2C /* Alarm.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EC1030848500F77B2C /* Alarm.m */; };
 		445221F81030848500F77B2C /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221EE1030848500F77B2C /* Event.m */; };
 		445221F91030848500F77B2C /* IpInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 445221F01030848500F77B2C /* IpInterface.m */; };
@@ -73,7 +76,6 @@
 		448148561029CBDF00083FF9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 448148551029CBDF00083FF9 /* CoreData.framework */; };
 		4481486B1029D25A00083FF9 /* BaseUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4481486A1029D25A00083FF9 /* BaseUpdater.m */; };
 		4481488E1029D41400083FF9 /* AlarmListUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 4481488D1029D41400083FF9 /* AlarmListUpdater.m */; };
-		448160E711BF446C00F19CFC /* AboutTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 448160E611BF446C00F19CFC /* AboutTextView.xib */; };
 		448AC2C510097B6700C2621C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 448AC2C410097B6700C2621C /* Settings.bundle */; };
 		448D5AF8102BC9F5008416E3 /* AlarmUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 448D5AF7102BC9F5008416E3 /* AlarmUpdater.m */; };
 		448EE92C101E0CF800063B32 /* OnmsSeverity.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EE92B101E0CF800063B32 /* OnmsSeverity.m */; };
@@ -158,6 +160,8 @@
 		44263D2B1011309700717409 /* AlarmListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmListController.h; path = Controllers/AlarmListController.h; sourceTree = "<group>"; };
 		44263D2C1011309700717409 /* AlarmListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmListController.m; path = Controllers/AlarmListController.m; sourceTree = "<group>"; };
 		442D9CB911BF3F2D0003E7A2 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/Resources/Interfaces/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		44303A3D11C2DB5E00D50F73 /* OrientationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrientationHandler.h; path = Data/OrientationHandler.h; sourceTree = "<group>"; };
+		44303A3E11C2DB5E00D50F73 /* OrientationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OrientationHandler.m; path = Data/OrientationHandler.m; sourceTree = "<group>"; };
 		4434F9DA11C1B6BF009189BD /* IPAddressInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IPAddressInputController.h; path = Controllers/IPAddressInputController.h; sourceTree = "<group>"; };
 		4434F9DB11C1B6BF009189BD /* IPAddressInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IPAddressInputController.m; path = Controllers/IPAddressInputController.m; sourceTree = "<group>"; };
 		443665341032597400F0B7B6 /* ContextService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextService.h; sourceTree = "<group>"; };
@@ -193,6 +197,8 @@
 		4444793311C2BCD2003348D5 /* ip-dialog-box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ip-dialog-box.png"; path = "Resources/Images/ip-dialog-box.png"; sourceTree = "<group>"; };
 		4444794411C2C0E5003348D5 /* green-button-default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green-button-default.png"; path = "Resources/Images/green-button-default.png"; sourceTree = "<group>"; };
 		4444794511C2C0E5003348D5 /* green-button-hilighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green-button-hilighted.png"; path = "Resources/Images/green-button-hilighted.png"; sourceTree = "<group>"; };
+		4448642911C2FD9400D54649 /* DiscoverIPAddressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DiscoverIPAddressView.xib; path = Resources/Interfaces/DiscoverIPAddressView.xib; sourceTree = "<group>"; };
+		4448646111C304CA00D54649 /* DiscoverIPAddressView-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "DiscoverIPAddressView-iPad.xib"; path = "Resources-iPad/Resources/Interfaces/DiscoverIPAddressView-iPad.xib"; sourceTree = "<group>"; };
 		445221EB1030848500F77B2C /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
 		445221EC1030848500F77B2C /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
 		445221ED1030848500F77B2C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
@@ -240,7 +246,6 @@
 		4481486A1029D25A00083FF9 /* BaseUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseUpdater.m; path = Data/BaseUpdater.m; sourceTree = "<group>"; };
 		4481488C1029D41400083FF9 /* AlarmListUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmListUpdater.h; path = Data/AlarmListUpdater.h; sourceTree = "<group>"; };
 		4481488D1029D41400083FF9 /* AlarmListUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmListUpdater.m; path = Data/AlarmListUpdater.m; sourceTree = "<group>"; };
-		448160E611BF446C00F19CFC /* AboutTextView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AboutTextView.xib; path = Resources/AboutTextView.xib; sourceTree = "<group>"; };
 		448AC2C410097B6700C2621C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = Resources/Settings.bundle; sourceTree = "<group>"; };
 		448D5AF6102BC9F5008416E3 /* AlarmUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmUpdater.h; path = Data/AlarmUpdater.h; sourceTree = "<group>"; };
 		448D5AF7102BC9F5008416E3 /* AlarmUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmUpdater.m; path = Data/AlarmUpdater.m; sourceTree = "<group>"; };
@@ -401,7 +406,6 @@
 				448148551029CBDF00083FF9 /* CoreData.framework */,
 				44C1F81F10359D140087291F /* SystemConfiguration.framework */,
 				44BE14FA11BDBA8A0033B0B3 /* MobileCoreServices.framework */,
-				448160E611BF446C00F19CFC /* AboutTextView.xib */,
 			);
 			name = OpenNMS;
 			sourceTree = "<group>";
@@ -510,6 +514,7 @@
 				4470101E1007F0D7006CE665 /* AlarmView.xib */,
 				44EEAFAF101BA7340023D5BD /* NodeListView.xib */,
 				4470101F1007F0D7006CE665 /* OutageView.xib */,
+				4448642911C2FD9400D54649 /* DiscoverIPAddressView.xib */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -539,6 +544,7 @@
 		4455723611BF4DD6006CE642 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				4448646111C304CA00D54649 /* DiscoverIPAddressView-iPad.xib */,
 				4455723711BF4E73006CE642 /* AlarmView.xib */,
 				4455723811BF4E73006CE642 /* NodeListView.xib */,
 				4455723911BF4E73006CE642 /* OutageView.xib */,
@@ -594,6 +600,8 @@
 		448148651029D00000083FF9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				44303A3D11C2DB5E00D50F73 /* OrientationHandler.h */,
+				44303A3E11C2DB5E00D50F73 /* OrientationHandler.m */,
 				44E276CC11C15DBD00DE59F1 /* NullUpdater.h */,
 				44E276CD11C15DBD00DE59F1 /* NullUpdater.m */,
 				443665341032597400F0B7B6 /* ContextService.h */,
@@ -782,7 +790,6 @@
 				44981CCB100EA9C3006BB193 /* Default.png in Resources */,
 				44EEAFB0101BA7340023D5BD /* NodeListView.xib in Resources */,
 				442D9CBA11BF3F2D0003E7A2 /* MainWindow-iPad.xib in Resources */,
-				448160E711BF446C00F19CFC /* AboutTextView.xib in Resources */,
 				4455723A11BF4E73006CE642 /* AlarmView.xib in Resources */,
 				4455723B11BF4E73006CE642 /* NodeListView.xib in Resources */,
 				4455723C11BF4E73006CE642 /* OutageView.xib in Resources */,
@@ -793,6 +800,8 @@
 				4444793411C2BCD2003348D5 /* ip-dialog-box.png in Resources */,
 				4444794611C2C0E5003348D5 /* green-button-default.png in Resources */,
 				4444794711C2C0E5003348D5 /* green-button-hilighted.png in Resources */,
+				4448642A11C2FD9400D54649 /* DiscoverIPAddressView.xib in Resources */,
+				4448646211C304CA00D54649 /* DiscoverIPAddressView-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -886,6 +895,7 @@
 				4437974B11C0B72300D36464 /* BaseController.m in Sources */,
 				44E276CE11C15DBD00DE59F1 /* NullUpdater.m in Sources */,
 				4434F9DC11C1B6BF009189BD /* IPAddressInputController.m in Sources */,
+				44303A3F11C2DB5E00D50F73 /* OrientationHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

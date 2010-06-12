@@ -54,7 +54,6 @@
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[self initializeScreenWidth:toInterfaceOrientation];
 	[self.outageTable reloadData];
 }
 
@@ -211,9 +210,9 @@
 
 	if ([self.outageList count] > 0) {
 
-        CGFloat nodeLabelWidth = screenWidth - (cellSeparator * 3) - IFLOSTSERVICEWIDTH;
+        CGFloat nodeLabelWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - IFLOSTSERVICEWIDTH;
 		
-		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(cellSeparator, 0, nodeLabelWidth, tableView.rowHeight)] autorelease];
+		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, nodeLabelWidth, tableView.rowHeight)] autorelease];
 		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
 		
 		if (objId) {
@@ -228,7 +227,7 @@
 			label.text = nodeLabel;
 			[cell.contentView addSubview:label];
 
-			label = [[[UILabel	alloc] initWithFrame:CGRectMake(cellSeparator + nodeLabelWidth + cellSeparator, 0, IFLOSTSERVICEWIDTH, tableView.rowHeight)] autorelease];
+			label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + nodeLabelWidth + orientationHandler.cellSeparator, 0, IFLOSTSERVICEWIDTH, tableView.rowHeight)] autorelease];
 			NSString* date = [fuzzyDate format:outage.ifLostService];
 			[cell addColumn:date];
 			label.font = [UIFont boldSystemFontOfSize:12];

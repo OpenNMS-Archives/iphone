@@ -166,12 +166,12 @@
 	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
 	switch(indexPath.row) {
 		case 0:
-			size = [CalculateSize calcLabelSize:a.uei font:defaultFont lines:10 width:(tableWidth - (cellSeparator * 3) - 60)
+			size = [CalculateSize calcLabelSize:a.uei font:defaultFont lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 60)
 										   mode:(UILineBreakModeCharacterWrap|UILineBreakModeTailTruncation)];
 			height = size.height;
 			break;
 		case 3:
-			size = [CalculateSize calcLabelSize:a.logMessage font:defaultFont lines:10 width:(tableWidth - (cellSeparator * 3) - 60)
+			size = [CalculateSize calcLabelSize:a.logMessage font:defaultFont lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 60)
 										   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
 			height = size.height;
 			break;
@@ -190,21 +190,21 @@
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     CGFloat leftWidth = 60;
-    CGFloat rightWidth = tableWidth - (cellSeparator * 3) - leftWidth;
+    CGFloat rightWidth = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - leftWidth;
 
 #if DEBUG
 	NSLog(@"%@: leftWidth: %f, rightWidth: %f", self, leftWidth, rightWidth);
 #endif
 
 	CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
-	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, leftWidth, height)] autorelease];
+	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, leftWidth, height)] autorelease];
 	leftLabel.backgroundColor = clear;
 	leftLabel.font = defaultFont;
 	leftLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
 	leftLabel.numberOfLines = 10;
 	leftLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
-	UILabel* rightLabel = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + leftWidth + cellSeparator, 0, rightWidth, height)] autorelease];
+	UILabel* rightLabel = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + leftWidth + orientationHandler.cellSeparator, 0, rightWidth, height)] autorelease];
 	rightLabel.backgroundColor = clear;
 	rightLabel.font = defaultFont;
 	rightLabel.lineBreakMode = UILineBreakModeWordWrap | UILineBreakModeTailTruncation;
@@ -263,7 +263,7 @@
 	NSLog(@"%@: tableView: %@ viewForFooterInSection: %@", self, tableView, section);
 #endif
 	
-    UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 44.0)] autorelease];
+    UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, orientationHandler.screenWidth, 44.0)] autorelease];
 	footerView.autoresizesSubviews = YES;
 	footerView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin);
 	footerView.userInteractionEnabled = YES;
@@ -273,11 +273,11 @@
 	footerView.opaque = NO;
 	footerView.contentMode = (UIViewContentModeScaleToFill & UIViewContentModeRedraw);
 
-    CGFloat buttonWidth = round((screenWidth - (cellBorder * 2) - (cellSeparator * 2)) / 3);
+    CGFloat buttonWidth = round((orientationHandler.screenWidth - (orientationHandler.cellBorder * 2) - (orientationHandler.cellSeparator * 2)) / 3);
 
 	UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:10];
-	[button setFrame:CGRectMake(cellBorder, cellSeparator, buttonWidth, 40)];
+	[button setFrame:CGRectMake(orientationHandler.cellBorder, orientationHandler.cellSeparator, buttonWidth, 40)];
 	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
 	if (a.ackTime == nil) {
 		[button addTarget:self action:@selector(acknowledgeAlarm) forControlEvents:UIControlEventTouchUpInside];
@@ -292,7 +292,7 @@
 	
 	button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:11];
-	[button setFrame:CGRectMake(cellBorder + buttonWidth + cellSeparator, cellSeparator, buttonWidth, 40)];
+	[button setFrame:CGRectMake(orientationHandler.cellBorder + buttonWidth + orientationHandler.cellSeparator, orientationHandler.cellSeparator, buttonWidth, 40)];
 	[button addTarget:self action:@selector(escalateAlarm) forControlEvents:UIControlEventTouchUpInside];
 	[button setTitle:@"Escalate" forState:UIControlStateNormal];
 	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -300,7 +300,7 @@
 	
 	button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:11];
-	[button setFrame:CGRectMake(cellBorder + buttonWidth + cellSeparator + buttonWidth + cellSeparator, cellSeparator, buttonWidth, 40)];
+	[button setFrame:CGRectMake(orientationHandler.cellBorder + buttonWidth + orientationHandler.cellSeparator + buttonWidth + orientationHandler.cellSeparator, orientationHandler.cellSeparator, buttonWidth, 40)];
 	[button addTarget:self action:@selector(clearAlarm) forControlEvents:UIControlEventTouchUpInside];
 	[button setTitle:@"Clear" forState:UIControlStateNormal];
 	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

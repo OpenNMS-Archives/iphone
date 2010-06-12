@@ -197,7 +197,7 @@
 	if ([self.sections objectAtIndex:indexPath.section] == @"Recent Events") {
 		Event* event = [self.events objectAtIndex:indexPath.row];
 		CGSize size = [CalculateSize calcLabelSize:event.logMessage font:[UIFont boldSystemFontOfSize:11]
-					lines:10 width:(tableWidth - (cellSeparator * 3) - 50.0) mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
+					lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 50.0) mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
 		height = size.height;
 	}
 	return MAX(height, tableView.rowHeight);
@@ -222,14 +222,14 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		Outage* outage = [self.outages objectAtIndex:indexPath.row];
 
-		CGFloat ipWidth      = round(tableWidth * 0.275);   // 88
-        CGFloat serviceWidth = round(tableWidth * 0.225);   // 72
-//		CGFloat upDownWidth  = round(tableWidth * 0.21875); // 70
-//      CGFloat timeWidth    = tableWidth - (cellSeparator * 5) - ipWidth - serviceWidth - upDownWidth;
-		CGFloat upDownWidth  = tableWidth - (cellSeparator * 4) - ipWidth - serviceWidth;
+		CGFloat ipWidth      = round(orientationHandler.tableWidth * 0.275);   // 88
+        CGFloat serviceWidth = round(orientationHandler.tableWidth * 0.225);   // 72
+//		CGFloat upDownWidth  = round(orientationHandler.tableWidth * 0.21875); // 70
+//      CGFloat timeWidth    = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 5) - ipWidth - serviceWidth - upDownWidth;
+		CGFloat upDownWidth  = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 4) - ipWidth - serviceWidth;
 
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.adjustsFontSizeToFitWidth = YES;
@@ -238,7 +238,7 @@
 		[cell.contentView addSubview:label];
 
 		// Service
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator, 0, serviceWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator, 0, serviceWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.adjustsFontSizeToFitWidth = YES;
@@ -250,7 +250,7 @@
 		NSString* lost = [fuzzyDate format:outage.ifLostService];
 
 		// Up/Down
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator + serviceWidth + cellSeparator, 0, upDownWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator + serviceWidth + orientationHandler.cellSeparator, 0, upDownWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.adjustsFontSizeToFitWidth = YES;
@@ -264,33 +264,16 @@
         label.textAlignment = UITextAlignmentRight;
 		[cell.contentView addSubview:label];
 
-		// time
-		/*
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator + serviceWidth + cellSeparator + upDownWidth + cellSeparator, 0, timeWidth, tableView.rowHeight)] autorelease];
-		label.backgroundColor = clear;
-		label.font = font;
-		label.adjustsFontSizeToFitWidth = YES;
-		if (regained != nil) {
-			label.text = regained;
-			[cell addColumn:regained];
-		} else {
-			label.text = lost;
-			[cell addColumn:lost];
-		}
-        label.textAlignment = UITextAlignmentRight;
-		[cell.contentView addSubview:label];
-		 */
-		
 	} else if (sectionName == @"IP Interfaces") {
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		IpInterface* iface = [self.interfaces objectAtIndex:indexPath.row];
 		
-		CGFloat ipWidth               = round(tableWidth * 0.275);   // 88
-		CGFloat managedUnmanagedWidth = round(tableWidth * 0.21875); // 70
-		CGFloat hostNameWidth         = tableWidth - (cellSeparator * 4) - ipWidth - managedUnmanagedWidth;
+		CGFloat ipWidth               = round(orientationHandler.tableWidth * 0.275);   // 88
+		CGFloat managedUnmanagedWidth = round(orientationHandler.tableWidth * 0.21875); // 70
+		CGFloat hostNameWidth         = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 4) - ipWidth - managedUnmanagedWidth;
 
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ipAddress;
@@ -299,7 +282,7 @@
 		[cell.contentView addSubview:label];
 		
 		// Host Name
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator, 0, hostNameWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator, 0, hostNameWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.hostName;
@@ -308,7 +291,7 @@
 		[cell.contentView addSubview:label];
 		
 		// Managed/Unmanaged
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ipWidth + cellSeparator + hostNameWidth + cellSeparator, 0, managedUnmanagedWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ipWidth + orientationHandler.cellSeparator + hostNameWidth + orientationHandler.cellSeparator, 0, managedUnmanagedWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.managedFlag isEqual:@"M"]? @"Managed" : @"Unmanaged";
@@ -320,13 +303,13 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		SnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
 
-        CGFloat ifIndexWidth = round(tableWidth * 0.09375);  // 30
-        CGFloat ifSpeedWidth = round(tableWidth * 0.309375); // 99
-        CGFloat ipWidth      = round(tableWidth * 0.275);    // 88
-        CGFloat ifDescrWidth = tableWidth - (cellSeparator * 5) - ifIndexWidth - ifSpeedWidth - ipWidth;
+        CGFloat ifIndexWidth = round(orientationHandler.tableWidth * 0.09375);  // 30
+        CGFloat ifSpeedWidth = round(orientationHandler.tableWidth * 0.309375); // 99
+        CGFloat ipWidth      = round(orientationHandler.tableWidth * 0.275);    // 88
+        CGFloat ifDescrWidth = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 5) - ifIndexWidth - ifSpeedWidth - ipWidth;
 
 		// IfIndex
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, ifIndexWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, ifIndexWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifIndex stringValue];
@@ -334,7 +317,7 @@
 		[cell.contentView addSubview:label];
 
 		// IfDescr
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ifIndexWidth + cellSeparator, 0, ifDescrWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator, 0, ifDescrWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ifDescription;
@@ -342,7 +325,7 @@
 		[cell.contentView addSubview:label];
 		
 		// IfSpeed
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ifIndexWidth + cellSeparator + ifDescrWidth + cellSeparator, 0, ifSpeedWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator + ifDescrWidth + orientationHandler.cellSeparator, 0, ifSpeedWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifSpeed stringValue];
@@ -350,7 +333,7 @@
 		[cell.contentView addSubview:label];
 		
 		// IP Address
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator + ifIndexWidth + cellSeparator + ifDescrWidth + cellSeparator + ifSpeedWidth + cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + ifIndexWidth + orientationHandler.cellSeparator + ifDescrWidth + orientationHandler.cellSeparator + ifSpeedWidth + orientationHandler.cellSeparator, 0, ipWidth, tableView.rowHeight)] autorelease];
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = iface.ipAddress;
@@ -367,9 +350,9 @@
 		cell.backgroundColor = color;
 
         CGFloat timeWidth = 50;
-        CGFloat logWidth = tableWidth - (cellSeparator * 3) - timeWidth;
+        CGFloat logWidth = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - timeWidth;
 
-		label = [[[UILabel alloc] initWithFrame:CGRectMake(cellSeparator, 0, logWidth, height)] autorelease];
+		label = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, logWidth, height)] autorelease];
 		[cell addColumn:event.logMessage];
 		
 		label.font = font;
@@ -379,7 +362,7 @@
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 		
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(cellSeparator + logWidth + cellSeparator, 0, timeWidth, height)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + logWidth + orientationHandler.cellSeparator, 0, timeWidth, height)] autorelease];
 		NSString* eventString = [fuzzyDate format:event.time];
 		[cell addColumn:eventString];
 		label.backgroundColor = clear;

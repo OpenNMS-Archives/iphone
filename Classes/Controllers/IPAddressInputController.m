@@ -1,78 +1,46 @@
-//
-//  IPAddressInputController.m
-//  OpenNMS
-//
-//  Created by Benjamin Reed on 6/10/10.
-//  Copyright 2010 The OpenNMS Group. All rights reserved.
-//
+/*******************************************************************************
+ * This file is part of the OpenNMS(R) iPhone Application.
+ * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
+ *
+ * Copyright (C) 2010 The OpenNMS Group, Inc.  All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc.:
+ *
+ *      51 Franklin Street
+ *      5th Floor
+ *      Boston, MA 02110-1301
+ *      USA
+ *
+ * For more information contact:
+ *
+ *      OpenNMS Licensing <license@opennms.org>
+ *      http://www.opennms.org/
+ *      http://www.opennms.com/
+ *
+ *******************************************************************************/
 
 #import "config.h"
 #import "IPAddressInputController.h"
 
 @implementation IPAddressInputController
 
+@synthesize baseView;
+@synthesize label;
 @synthesize ipAddress;
 @synthesize addButton;
 @synthesize cancelButton;
-
-- (void)loadView {
-    [super loadView];
-    self.wantsFullScreenLayout = NO;
-    
-//	[self initializeScreenWidth:[[UIApplication sharedApplication] statusBarOrientation]];
-
-    CGFloat leftOffset = round((self.screenWidth - 270.0) /2);
-    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(leftOffset, 40, 270, 125)];
-
-    [view setBackgroundColor:[UIColor clearColor]];
-
-    // UIButton handles transparency properly  :P
-    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0, 270, 125);
-    button.enabled = NO;
-    button.userInteractionEnabled = NO;
-    [button setBackgroundImage:[UIImage imageNamed:@"ip-dialog-box.png"] forState:UIControlStateDisabled];
-    [view addSubview:button];
-    
-    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 250, 21)];
-    label.text = @"Discover an Interface:";
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.textAlignment = UITextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:label.font.pointSize];
-    [view addSubview:label];
-    [label autorelease];
-
-    UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 39, 250, 31)];
-    textField.placeholder = @"IP Address";
-//    textField.backgroundColor = [UIColor whiteColor];
-    textField.backgroundColor = [UIColor clearColor];
-    textField.borderStyle = UITextBorderStyleRoundedRect;
-    textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    self.ipAddress = textField;
-    [view addSubview:textField];
-    [textField autorelease];
-
-    button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(10, 78, 120, 37);
-    [button setBackgroundImage:[UIImage imageNamed:@"green-button-default.png"] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"green-button-hilighted.png"] forState:UIControlStateHighlighted];
-    [button setTitle:@"Cancel" forState:UIControlStateNormal];
-    self.cancelButton = button;
-    [view addSubview:button];
-
-    button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(140, 78, 120, 37);
-    [button setBackgroundImage:[UIImage imageNamed:@"green-button-default.png"] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"green-button-hilighted.png"] forState:UIControlStateHighlighted];
-    [button setTitle:@"Add" forState:UIControlStateNormal];
-    [button setHighlighted:YES];
-    self.addButton = button;
-    [view addSubview:button];
-    
-    self.view = view;
-    [view autorelease];
-}
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -81,27 +49,69 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	[ipAddress becomeFirstResponder];
+}
+
 - (void)viewDidUnload {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+	self.baseView = nil;
+	self.label = nil;
     self.ipAddress = nil;
     self.addButton = nil;
     self.cancelButton = nil;
 }
 
-- (IBAction) addClicked
-{
-#if DEBUG
-    NSLog(@"addClicked");
-#endif
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch * touch = [touches anyObject];
+    if(touch.phase == UITouchPhaseBegan) {
+        [ipAddress resignFirstResponder];
+    }
 }
 
-- (IBAction) cancelClicked
+- (IBAction)addClicked:(id)sender
 {
 #if DEBUG
-    NSLog(@"cancelClicked");
+    NSLog(@"%@: addClicked called, IP Address = %@", self, ipAddress);
 #endif
+    NSString* formData = [NSString stringWithFormat:@"ipAddress=%@", ipAddress.text];
+    NSData* postData = [formData dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString* postLength = [NSString stringWithFormat:@"%d", [postData length]];
+    NSMutableURLRequest* request = [[[NSMutableURLRequest alloc] init] autorelease];
+    NSURL* baseUrl = [NSURL URLWithString:[BaseUpdater getBaseUrl]];
+    [request setURL:[NSURL URLWithString:@"admin/addNewInterface" relativeToURL:baseUrl]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    NSHTTPURLResponse* response = nil;
+    NSError* error = nil;
+    NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSString* stringResponseData = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+#if DEBUG
+    NSLog(@"%@: Sent request %@, received response %@, with error %@", self, request, response, error);
+    NSLog(@"%@: headers = %@", self, [response allHeaderFields]);
+    NSLog(@"%@: data = %@", self, stringResponseData);
+#endif
+    if (error) {
+        UIAlertView *a = [[UIAlertView alloc]
+                          initWithTitle: [error localizedDescription]
+                          message: [error localizedFailureReason]
+                          delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+        [a show];
+        [a autorelease];
+    }
+    [stringResponseData release];
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (IBAction)cancelClicked:(id)sender
+{
+    NSLog(@"%@: cancel clicked", self);
+	[self dismissModalViewControllerAnimated:YES];
 }
 
 @end

@@ -32,23 +32,22 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "BaseController.h"
 
-@interface IPAddressInputController : BaseController {
-	IBOutlet UIView* baseView;
-	IBOutlet UILabel* label;
-    IBOutlet UITextField* ipAddress;
-    IBOutlet UIButton* addButton;
-    IBOutlet UIButton* cancelButton;
+@interface OrientationHandler : NSObject {
+	CGFloat screenWidth;
+	CGFloat tableWidth;
+	CGFloat cellBorder;
+	CGFloat cellSeparator;
+    BOOL iPad;
 }
 
-@property (nonatomic, retain) UIView* baseView;
-@property (nonatomic, retain) UILabel* label;
-@property (nonatomic, retain) UITextField* ipAddress;
-@property (nonatomic, retain) UIButton* addButton;
-@property (nonatomic, retain) UIButton* cancelButton;
+@property CGFloat screenWidth;
+@property CGFloat tableWidth;
+@property CGFloat cellBorder;
+@property CGFloat cellSeparator;
+@property BOOL iPad;
 
--(IBAction) addClicked:(id)sender;
--(IBAction) cancelClicked:(id)sender;
+-(id)initWithOrientation:(UIInterfaceOrientation)orientation;
+-(void)updateWithOrientation:(UIInterfaceOrientation)orientation;
 
 @end

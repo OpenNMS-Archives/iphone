@@ -49,7 +49,7 @@
 	if (self = [super init]) {
         queue = [[NSOperationQueue alloc] init];
         [queue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
-		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self getBaseUrl], p]];
+		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [BaseUpdater getBaseUrl], p]];
 #if DEBUG
         NSLog(@"%@: Initialized using URL: %@", self, url);
 #endif
@@ -72,7 +72,7 @@
 	return string;
 }
 
--(NSString*) getBaseUrl
++(NSString*) getBaseUrl
 {
 	NSString* https = [[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http";
 	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"];

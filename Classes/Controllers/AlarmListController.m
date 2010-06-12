@@ -64,7 +64,6 @@
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[self initializeScreenWidth:toInterfaceOrientation];
 	[self.alarmTable reloadData];
 }
 
@@ -181,7 +180,7 @@
 	CGSize size;
 
     CGFloat dateWidth = 75; // 75
-    CGFloat logWidth = screenWidth - (cellSeparator * 3) - dateWidth;
+    CGFloat logWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - dateWidth;
 
     NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
 	Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
@@ -207,7 +206,7 @@
 		CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
 
         CGFloat dateWidth = 75; // 75
-        CGFloat logWidth = screenWidth - (cellSeparator * 3) - dateWidth;
+        CGFloat logWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - dateWidth;
 
 		NSManagedObjectID* alarmObjId = [self.alarmList objectAtIndex:indexPath.row];
 		Alarm* alarm = (Alarm*)[[contextService managedObjectContext] objectWithID:alarmObjId];
@@ -216,7 +215,7 @@
 		UIColor* color = [sev getDisplayColor];
 		cell.contentView.backgroundColor = color;
 		
-		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(cellSeparator, 0, logWidth, height)] autorelease];
+		UILabel *label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, logWidth, height)] autorelease];
 		[cell addColumn:alarm.logMessage];
 		label.font = [UIFont boldSystemFontOfSize:12];
 		label.text = alarm.logMessage;
@@ -225,7 +224,7 @@
 		label.backgroundColor = clear;
 		[cell.contentView addSubview:label];
 
-		label = [[[UILabel	alloc] initWithFrame:CGRectMake(cellSeparator + logWidth + cellSeparator, 0, dateWidth, height)] autorelease];
+		label = [[[UILabel	alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator + logWidth + orientationHandler.cellSeparator, 0, dateWidth, height)] autorelease];
 		NSString* eventString = [fuzzyDate format:alarm.lastEventTime];
 		[cell addColumn:eventString];
 		label.font = [UIFont boldSystemFontOfSize:12];

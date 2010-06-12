@@ -55,7 +55,7 @@
 -(id) initWithPath:(NSString*)p;
 
 -(NSString*) filterDate:(NSString*)date;
--(NSString*) getBaseUrl;
++(NSString*) getBaseUrl;
 -(void) update;
 
 @end

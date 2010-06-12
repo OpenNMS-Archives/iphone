@@ -32,18 +32,13 @@
  *******************************************************************************/
 
 #import <UIKit/UIKit.h>
+#import "OrientationHandler.h"
 
 @interface BaseController : UIViewController {
-	CGFloat screenWidth;
-	CGFloat tableWidth;
-	CGFloat cellBorder;
-	CGFloat cellSeparator;
+    OrientationHandler* orientationHandler;
 }
 
-@property CGFloat screenWidth;
-@property CGFloat tableWidth;
-@property CGFloat cellBorder;
-@property CGFloat cellSeparator;
+@property (nonatomic, retain) OrientationHandler* orientationHandler;
 
 -(void)initializeScreenWidth:(UIInterfaceOrientation)interfaceOrientation;
 

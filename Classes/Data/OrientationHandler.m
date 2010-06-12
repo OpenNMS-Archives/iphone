@@ -32,43 +32,54 @@
  *******************************************************************************/
 
 #import "config.h"
-#import "BaseController.h"
+#import "OrientationHandler.h"
 
-@implementation BaseController
+@implementation OrientationHandler
 
-@synthesize orientationHandler;
+@synthesize screenWidth;
+@synthesize tableWidth;
+@synthesize cellBorder;
+@synthesize cellSeparator;
+@synthesize iPad;
 
 -(id)init
 {
     if (self = [super init]) {
-        orientationHandler = [[OrientationHandler alloc] init];
+        [self updateWithOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
     }
     return self;
 }
 
--(void)initializeScreenWidth:(UIInterfaceOrientation)interfaceOrientation
+-(id)initWithOrientation:(UIInterfaceOrientation)orientation
 {
-    [orientationHandler updateWithOrientation:interfaceOrientation];
+    if (self = [super init]) {
+        [self updateWithOrientation:orientation];
+    }
+    return self;
 }
 
--(void)loadView
+-(void)updateWithOrientation:(UIInterfaceOrientation)orientation
 {
+    CGRect screenArea = [[UIScreen mainScreen] bounds];
+	if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) {
+		screenWidth = screenArea.size.width;
+	} else {
+		screenWidth = screenArea.size.height;
+	}
+    if (screenWidth == 768 || screenWidth == 1024) {
+        tableWidth = screenWidth - 88;
+		cellBorder = 44;
+		cellSeparator = 10;
+        iPad = YES;
+    } else {
+		tableWidth = screenWidth - 20;
+		cellBorder = 10;
+		cellSeparator = 5;
+        iPad = NO;
+	}
 #if DEBUG
-	NSLog(@"%@: loadView", self);
+	NSLog(@"%@: updateWithOrientation screenArea = %@, screenWidth = %f, tableWidth = %f, cellBorder = %f, cellSeparator = %f", self, NSStringFromCGRect(screenArea), screenWidth, tableWidth, cellBorder, cellSeparator);
 #endif
-	[super loadView];
-	[self initializeScreenWidth:[[UIApplication sharedApplication] statusBarOrientation]];
-}
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return YES;
-}
-
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration
-{
-    [orientationHandler updateWithOrientation:orientation];
-    [super willRotateToInterfaceOrientation:orientation duration:duration];
 }
 
 @end

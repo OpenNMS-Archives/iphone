@@ -34,6 +34,7 @@
 #import <UIKit/UIKit.h>
 #import "NodeDetailController.h"
 #import "ContextService.h"
+#import "IPAddressInputController.h"
 
 @interface NodeListController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
 	@private NSString* savedSearchTerm;
@@ -49,7 +50,6 @@
 @property (retain) NSArray* nodeList;
 @property (retain) ContextService* contextService;
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 - (void) refreshData;
 - (IBAction) addInterface:(id) sender;
 
