@@ -71,7 +71,16 @@
     }
 }
 
-- (IBAction)addClicked:(id)sender
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+	if (textField == ipAddress) {
+		[ipAddress resignFirstResponder];
+		[self addClicked];
+	}
+	return YES;
+}
+
+- (IBAction)addClicked
 {
 #if DEBUG
     NSLog(@"%@: addClicked called, IP Address = %@", self, ipAddress);
@@ -86,6 +95,7 @@
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
+	[request setTimeoutInterval:5];
     NSHTTPURLResponse* response = nil;
     NSError* error = nil;
     NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
@@ -109,7 +119,7 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (IBAction)cancelClicked:(id)sender
+- (IBAction)cancelClicked
 {
     NSLog(@"%@: cancel clicked", self);
 	[self dismissModalViewControllerAnimated:YES];

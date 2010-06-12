@@ -34,7 +34,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseController.h"
 
-@interface IPAddressInputController : BaseController {
+@interface IPAddressInputController : BaseController <UITextFieldDelegate> {
 	IBOutlet UIView* baseView;
 	IBOutlet UILabel* label;
     IBOutlet UITextField* ipAddress;
@@ -48,7 +48,7 @@
 @property (nonatomic, retain) UIButton* addButton;
 @property (nonatomic, retain) UIButton* cancelButton;
 
--(IBAction) addClicked:(id)sender;
--(IBAction) cancelClicked:(id)sender;
+-(IBAction) addClicked;
+-(IBAction) cancelClicked;
 
 @end
