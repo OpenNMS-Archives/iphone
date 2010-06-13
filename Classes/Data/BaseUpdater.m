@@ -75,18 +75,10 @@
 +(NSString*) getBaseUrl
 {
 	NSString* https = [[NSUserDefaults standardUserDefaults] boolForKey:@"https_preference"]? @"https" : @"http";
-	NSString* username = [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"];
-	NSString* password = [[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"];
 	NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"];
 	NSString* port = [[NSUserDefaults standardUserDefaults] stringForKey:@"port_preference"];
 	NSString* path = [[NSUserDefaults standardUserDefaults] stringForKey:@"rest_preference"];
 	
-	if (username == nil) {
-		username = @"admin";
-	}
-	if (password == nil) {
-		password = @"admin";
-	}
 	if (host == nil) {
 		host = @"localhost";
 	}

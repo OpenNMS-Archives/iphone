@@ -58,4 +58,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void) configureCell:(UITableViewCell*)cellToConfigure atIndexPath:(NSIndexPath*)indexPath;
 
+- (UIBarButtonItem*) getSpinner;
+
 @end

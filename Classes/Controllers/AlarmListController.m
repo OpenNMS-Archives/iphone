@@ -95,13 +95,19 @@
 
 -(void) initializeData
 {
+    self.navigationItem.rightBarButtonItem = [self getSpinner];
     [super initializeData];
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
 	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[contextService managedObjectContext]] autorelease];
 	handler.clearOldObjects = YES;
-	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
+}
+
+-(void) refreshData
+{
+    [super refreshData];
+    self.navigationItem.rightBarButtonItem = nil;
 }
 
 -(IBAction) reload:(id) sender

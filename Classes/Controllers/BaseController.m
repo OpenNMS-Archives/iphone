@@ -234,4 +234,21 @@
 	}
 }
 
+- (UIBarButtonItem*) getSpinner
+{
+    CGRect frame = CGRectMake(0.0, 0.0, 25.0, 25.0);
+	UIActivityIndicatorView* loading = [[UIActivityIndicatorView alloc] initWithFrame:frame];
+	[loading startAnimating];
+	[loading sizeToFit];
+	loading.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin |
+								UIViewAutoresizingFlexibleRightMargin |
+								UIViewAutoresizingFlexibleTopMargin |
+								UIViewAutoresizingFlexibleBottomMargin);
+	UIBarButtonItem *loadingView = [[UIBarButtonItem alloc] initWithCustomView:loading];
+    loadingView.style = UIBarButtonItemStyleBordered;
+    [loading release];
+    [loadingView autorelease];
+    return loadingView;
+}
+
 @end
