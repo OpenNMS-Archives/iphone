@@ -45,7 +45,15 @@
 - (void)viewDidLoad {
 	[textView setFont:[UIFont systemFontOfSize:13]];
     [super viewDidLoad];
-	textView.text = [NSString stringWithFormat:@"%@\n\n%@", VERSION_STRING, textView.text];
+    
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *finalPath = [path stringByAppendingPathComponent:@"Info.plist"];
+    NSDictionary *plistData = [[NSDictionary dictionaryWithContentsOfFile:finalPath] retain];
+    
+    NSString *versionString = [NSString stringWithFormat:@"v%@", [plistData objectForKey:@"CFBundleVersion"]];
+    
+	textView.text = [NSString stringWithFormat:@"%@\n\n%@", versionString, textView.text];
+    [plistData release];
 }
 
 - (void)dealloc {
