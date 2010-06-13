@@ -176,7 +176,7 @@
 			}
 		} else {
 			for (id snmpInterface in snmpInterfacesToDelete) {
-#ifdef DEBUG
+#if DEBUG
 				NSLog(@"deleting %@", snmpInterface);
 #endif
 				[moc deleteObject:snmpInterface];

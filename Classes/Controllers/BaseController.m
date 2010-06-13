@@ -212,7 +212,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-#ifdef DEBUG
+#if DEBUG
 	NSLog(@"%@: tableView:%@ cellForRowAtIndexPath:%@", self, tv, indexPath);
 #endif
 	ColumnarTableViewCell* cell = (ColumnarTableViewCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];

@@ -178,7 +178,7 @@
 			}
 		} else {
 			for (id ipInterface in ipInterfacesToDelete) {
-#ifdef DEBUG
+#if DEBUG
 				NSLog(@"deleting %@", ipInterface);
 #endif
 				[moc deleteObject:ipInterface];

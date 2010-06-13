@@ -201,7 +201,7 @@
 			}
 		} else {
 			for (id event in eventsToDelete) {
-#ifdef DEBUG
+#if DEBUG
 				NSLog(@"deleting %@", event);
 #endif
 				[moc deleteObject:event];

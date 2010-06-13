@@ -175,7 +175,7 @@
 			}
 		} else {
 			for (id alarm in alarmsToDelete) {
-#ifdef DEBUG
+#if DEBUG
 				NSLog(@"deleting %@", alarm);
 #endif
 				[moc deleteObject:alarm];

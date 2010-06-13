@@ -199,7 +199,7 @@
 			}
 		} else {
 			for (id outage in outagesToDelete) {
-#ifdef DEBUG
+#if DEBUG
 				NSLog(@"deleting %@", outage);
 #endif
 				[context deleteObject:outage];

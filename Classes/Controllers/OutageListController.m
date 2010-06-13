@@ -202,7 +202,7 @@
         label.text = date;
         [cell.contentView addSubview:label];
 	} else {
-#ifdef DEBUG
+#if DEBUG
         NSLog(@"%@: no outage found", self);
 #endif
     }
