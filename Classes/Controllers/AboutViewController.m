@@ -52,7 +52,7 @@
     
     NSString *versionString = [NSString stringWithFormat:@"v%@", [plistData objectForKey:@"CFBundleVersion"]];
     
-	textView.text = [NSString stringWithFormat:@"%@\n\n%@", versionString, textView.text];
+	textView.text = [NSString stringWithFormat:@"OpenNMS %@\n\n%@", versionString, textView.text];
     [plistData release];
 }
 
