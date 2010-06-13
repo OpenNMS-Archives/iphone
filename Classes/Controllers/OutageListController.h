@@ -40,21 +40,16 @@
 #define INDICATOR_TAG 1
 
 @interface OutageListController : BaseController <UINavigationBarDelegate> {
-	@private FuzzyDate* fuzzyDate;
-	@private NodeFactory* nodeFactory;
-    @private NSFetchedResultsController* _fetchedResultsController;
-    @private NSManagedObjectContext* _viewMoc;
-    @private NSManagedObjectContext* _updateMoc;
+	FuzzyDate* fuzzyDate;
+	NodeFactory* nodeFactory;
+    NSFetchedResultsController* _fetchedResultsController;
 }
 
 @property (retain) FuzzyDate* fuzzyDate;
 @property (retain) NodeFactory* nodeFactory;
 
 @property (retain) NSFetchedResultsController* _fetchedResultsController;
-@property (retain) NSManagedObjectContext* _viewMoc;
-@property (retain) NSManagedObjectContext* _updateMoc;
 
-- (void) mergeChangesFromContextSaveNotification:(NSNotification*)notification;
 - (IBAction) reload:(id) sender;
 
 @end

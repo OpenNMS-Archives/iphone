@@ -56,7 +56,8 @@
 		[self autorelease];
 		return;
 	}
-	
+
+	NSMutableArray* nodeIds = [NSMutableArray array];
 	NSDate* lastModified = [NSDate date];
 	NSArray* xmlOutages;
 	if ([[[document rootElement] name] isEqual:@"outage"]) {
@@ -165,6 +166,15 @@
 					outage.serviceRegainedEventId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
 					break;
 				}
+			}
+		}
+		
+		if (outage.nodeId) {
+			if ([nodeIds containsObject:outage.nodeId]) {
+				// another outage for the same node; ignore
+				[context deleteObject:outage];
+			} else {
+				[nodeIds addObject:outage.nodeId];
 			}
 		}
 	}

@@ -47,13 +47,10 @@
 @synthesize nodeFactory;
 
 @synthesize _fetchedResultsController;
-@synthesize _viewMoc;
-@synthesize _updateMoc;
 
 -(id)init
 {
     if (self = [super init]) {
-        [self initializeData];
         cellIdentifier = @"outageList";
     }
     return self;
@@ -65,52 +62,13 @@
     [self initializeData];
 }
 
--(void)registerListener:(NSManagedObjectContext*)context
-{
-    NSNotificationCenter* dnc = [NSNotificationCenter defaultCenter];
-    [dnc addObserver:self selector:@selector(mergeChangesFromContextSaveNotification:) name:NSManagedObjectContextDidSaveNotification object:context];
-#if DEBUG
-    NSLog(@"%@: observer registered", self);
-#endif
-}
-
--(void)unregisterListener:(NSManagedObjectContext*)context
-{
-    NSNotificationCenter* dnc = [NSNotificationCenter defaultCenter];
-    [dnc removeObserver:self];
-#if DEBUG
-    NSLog(@"%@: observer removed", self);
-#endif
-}
-
 -(void) dealloc
 {
-    [self unregisterListener:_updateMoc];
     fuzzyDate = nil;
-    contextService = nil;
     spinner = nil;
     _fetchedResultsController = nil;
-    _viewMoc = nil;
-    _updateMoc = nil;
     
     [super dealloc];
-}
-
--(NSManagedObjectContext*)viewMoc
-{
-    if (!_viewMoc) {
-        _viewMoc = [contextService managedObjectContext];
-    }
-    return _viewMoc;
-}
-
--(NSManagedObjectContext*)updateMoc
-{
-    if (!_updateMoc) {
-        _updateMoc = [contextService managedObjectContext];
-//        [self registerListener:_updateMoc];
-    }
-    return _updateMoc;
 }
 
 -(NSFetchedResultsController*)fetchedResultsController
@@ -118,9 +76,9 @@
 #if DEBUG
 	NSLog(@"%@: fetchedResultsController", self);
 #endif
-    if (_fetchedResultsController == nil) {
+    if (!_fetchedResultsController) {
         NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
-        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:[self viewMoc]];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:[contextService managedObjectContext]];
         [fetchRequest setEntity:entity];
 #if DEBUG
         NSLog(@"%@: fetchRequest = %@", self, fetchRequest);
@@ -139,7 +97,7 @@
 #endif
         NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]
                                                   initWithFetchRequest:fetchRequest
-                                                  managedObjectContext:[self viewMoc]
+                                                  managedObjectContext:[contextService managedObjectContext]
                                                   sectionNameKeyPath:nil
                                                   cacheName:@"outageByIfLostService"];
 #if DEBUG
@@ -155,30 +113,11 @@
 {
     [super initializeData];
 	OutageListUpdater* updater = [[[OutageListUpdater alloc] init] autorelease];
-	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[self updateMoc]] autorelease];
+	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[contextService managedObjectContext]] autorelease];
 	handler.clearOldObjects = YES;
 	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
-}
-
-- (void) mergeChangesFromContextSaveNotification:(NSNotification*)notification
-{
-#if DEBUG
-    NSLog(@"%@: mergeChangesFromContextSaveNotification:%@", self, notification);
-#endif
-    NSManagedObjectContext* viewMoc = [self viewMoc];
-	if (viewMoc) {
-#if DEBUG
-        NSLog(@"merging changes");
-#endif
-        NSArray* updates = [[notification.userInfo objectForKey:@"updated"] allObjects];
-        for (NSInteger i = [updates count]-1; i >= 0; i--)
-        {
-            [[viewMoc objectWithID:[[updates objectAtIndex:i] objectID]] willAccessValueForKey:nil];
-        }
-		[viewMoc mergeChangesFromContextDidSaveNotification:notification];
-	}
 }
 
 -(IBAction) reload:(id) sender
@@ -202,32 +141,32 @@
 - (void) viewDidUnload
 {
     fuzzyDate = nil;
-    _fetchedResultsController = nil;
 	
 	[super viewDidUnload];
 }
 
-/*
+- (void) viewWillAppear:(BOOL)animated
+{
+	[self initializeData];
+	[super viewWillAppear:animated];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	if ([self.outageList count] > 0) {
-		NSManagedObjectID* objId = [self.outageList objectAtIndex:indexPath.row];
-		if (objId) {
-#ifdef DEBUG
-			NSLog(@"viewing outage with object ID %@", objId);
-#endif
-			Outage* outage = (Outage*)[[contextService managedObjectContext] objectWithID:objId];
-			NodeDetailController* ndc = [[NodeDetailController alloc] init];
-			ndc.nodeId = outage.nodeId;
-			UINavigationController* cont = [self navigationController];
-			[cont pushViewController:ndc animated:YES];
-			[ndc release];
-		} else {
-			NSLog(@"warning, no outage object at row %d", indexPath.row);
-		}
+    Outage* outage = (Outage*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+	if (outage) {
+		NodeDetailController* ndc = [[NodeDetailController alloc] init];
+		ndc.nodeId = outage.nodeId;
+		UINavigationController* cont = [self navigationController];
+		[cont pushViewController:ndc animated:YES];
+		[ndc release];
 	}
 }
-*/
 
 - (void)configureCell:(UITableViewCell*)cellToConfigure atIndexPath:(NSIndexPath*)indexPath
 {

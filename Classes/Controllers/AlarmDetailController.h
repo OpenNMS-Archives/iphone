@@ -40,26 +40,19 @@
 #import "BaseController.h"
 
 @interface AlarmDetailController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
-	@private FuzzyDate* fuzzyDate;
-	@private UIFont* defaultFont;
-	@private UIColor* clear;
-	@private UIColor* white;
+	FuzzyDate* fuzzyDate;
 
-	@private NSManagedObjectID* alarmObjectId;
-	@private OnmsSeverity* severity;
+    NSNumber* alarmId;
+    NSManagedObjectID* alarmObjectId;
+    OnmsSeverity* severity;
 }
 
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
-@property (nonatomic, retain) UIFont* defaultFont;
-@property (nonatomic, retain) UIColor* clear;
-@property (nonatomic, retain) UIColor* white;
 
+@property (retain) NSNumber* alarmId;
 @property (retain) NSManagedObjectID* alarmObjectId;
 @property (nonatomic, retain) OnmsSeverity* severity;
 
--(void) refreshData;
-
--(void) initializeData;
 -(void) acknowledgeAlarm;
 -(void) unacknowledgeAlarm;
 -(void) escalateAlarm;

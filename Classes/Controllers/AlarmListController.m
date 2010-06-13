@@ -46,8 +46,6 @@
 @synthesize fuzzyDate;
 
 @synthesize _fetchedResultsController;
-@synthesize _viewMoc;
-@synthesize _updateMoc;
 
 -(id)init
 {
@@ -62,8 +60,6 @@
 {
     fuzzyDate = nil;
     _fetchedResultsController = nil;
-    _viewMoc = nil;
-    _updateMoc = nil;
 
     [super dealloc];
 }
@@ -74,28 +70,11 @@
     [self initializeData];
 }
 
--(NSManagedObjectContext*)viewMoc
-{
-    if (!_viewMoc) {
-        _viewMoc = [contextService managedObjectContext];
-    }
-    return _viewMoc;
-}
-
--(NSManagedObjectContext*)updateMoc
-{
-    if (!_updateMoc) {
-        _updateMoc = [contextService managedObjectContext];
-        //        [self registerListener:_updateMoc];
-    }
-    return _updateMoc;
-}
-
 -(NSFetchedResultsController*)fetchedResultsController
 {
     if (_fetchedResultsController == nil) {
         NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
-        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:[self viewMoc]];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:[contextService managedObjectContext]];
         [fetchRequest setEntity:entity];
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
         NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
@@ -105,7 +84,7 @@
         
         NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]
                                                   initWithFetchRequest:fetchRequest
-                                                  managedObjectContext:[self viewMoc]
+                                                  managedObjectContext:[contextService managedObjectContext]
                                                   sectionNameKeyPath:nil
                                                   cacheName:@"alarmByLastEventTime"];
         controller.delegate = self;
@@ -118,7 +97,7 @@
 {
     [super initializeData];
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
-	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[self updateMoc]] autorelease];
+	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[contextService managedObjectContext]] autorelease];
 	handler.clearOldObjects = YES;
 	handler.spinner = spinner;
 	updater.handler = handler;
@@ -145,21 +124,29 @@
 	[super viewDidUnload];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+	[self initializeData];
+	[super viewWillAppear:animated];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    _fetchedResultsController = nil;
+}
 #pragma mark UITableView delegates
 
-/*
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	if ([self.alarmList count] > 0) {
-		NSManagedObjectID* objId = [self.alarmList objectAtIndex:indexPath.row];
+    Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+	if (alarm) {
 		AlarmDetailController* adc = [[AlarmDetailController alloc] init];
-		[adc setAlarmObjectId:objId];
+        adc.alarmId = alarm.alarmId;
 		UINavigationController* cont = [self navigationController];
 		[cont pushViewController:adc animated:YES];
 		[adc release];
 	}
 }
-*/
 
 - (void)configureCell:(UITableViewCell*)cellToConfigure atIndexPath:(NSIndexPath*)indexPath
 {

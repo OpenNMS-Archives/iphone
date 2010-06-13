@@ -44,10 +44,8 @@
 @implementation AlarmDetailController
 
 @synthesize fuzzyDate;
-@synthesize defaultFont;
-@synthesize clear;
-@synthesize white;
 
+@synthesize alarmId;
 @synthesize alarmObjectId;
 @synthesize severity;
 
@@ -65,25 +63,32 @@
 //	self.spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.navigationController.view addSubview:self.spinner];
 //	[self.view addSubview:self.spinner];
+    cellIdentifier = @"alarmDetail";
 }
 
 -(void) initializeData
 {
+    [super initializeData];
 #if DEBUG
-	NSLog(@"initializeData called");
+	NSLog(@"%@: initializeData called", self);
 #endif
 	[fuzzyDate touch];
-	NSManagedObjectContext* managedObjectContext = [contextService managedObjectContext];
-	Alarm* a = (Alarm*)[managedObjectContext objectWithID:self.alarmObjectId];
-	[managedObjectContext refreshObject:a mergeChanges:NO];
+    Alarm* a = [[AlarmFactory getInstance] getAlarm:alarmId];
+    if (!a) {
+        NSLog(@"no alarm found for alarm ID %@", alarmId);
+        return;
+    }
+#if DEBUG
+    NSLog(@"%@: alarm = %@", self, a);
+#endif
 	self.severity = [[[OnmsSeverity alloc] initWithSeverity:a.severity] autorelease];
 	tableView.backgroundColor = [self.severity getDisplayColor];
 	tableView.backgroundView.backgroundColor = [self.severity getDisplayColor];
 #if DEBUG
 	NSLog(@"setting color for severity %@", self.severity);
 #endif
-	self.title = [NSString stringWithFormat:@"Alarm #%@", a.alarmId];
-	[self.spinner stopAnimating];
+	self.title = [NSString stringWithFormat:@"Alarm #%@", alarmId];
+    [self refreshData];
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -100,34 +105,24 @@
 {
     tableView = nil;
     fuzzyDate = nil;
-    defaultFont = nil;
-    clear = nil;
-    white = nil;
-    alarmObjectId = nil;
+    alarmId = nil;
     severity = nil;
 	[super dealloc];
 }
 
 -(void) viewDidLoad
 {
-	fuzzyDate = [[FuzzyDate alloc] init];
-	fuzzyDate.mini = YES;
-	defaultFont = [UIFont boldSystemFontOfSize:11];
-	clear = [UIColor colorWithWhite:1.0 alpha:0.0];
-	white = [UIColor colorWithWhite:1.0 alpha:1.0];
-	[self initializeData];
 	[super viewDidLoad];
+    fuzzyDate = [[FuzzyDate alloc] init];
+    fuzzyDate.mini = YES;
+	[self initializeData];
 }
 
 -(void) viewDidUnload
 {
-    fuzzyDate = nil;
-    defaultFont = nil;
-    clear = nil;
-    white = nil;
-    alarmObjectId = nil;
-    severity = nil;
 	[super viewDidUnload];
+    fuzzyDate = nil;
+    severity = nil;
 }
 
 #pragma mark UITableView delegates
@@ -144,7 +139,8 @@
 -(CGFloat) tableView:(UITableView *)tv heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 0;
 	CGSize size;
-	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
+    Alarm* a = [[AlarmFactory getInstance] getAlarm:alarmId];
+    UIFont* defaultFont = [UIFont boldSystemFontOfSize:11];
 	switch(indexPath.row) {
 		case 0:
 			size = [CalculateSize calcLabelSize:a.uei font:defaultFont lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 60)
@@ -160,11 +156,13 @@
 	return MAX(height, tv.rowHeight);
 }
 
-- (void)configureCell:(UITableViewCell*)cellToConfigure atIndexPath:(NSIndexPath*)indexPath
+- (UITableViewCell*)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [super configureCell:cellToConfigure atIndexPath:indexPath];
-	ColumnarTableViewCell* cell = (ColumnarTableViewCell*)cellToConfigure;
+    ColumnarTableViewCell* cell = [[[ColumnarTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
 
+    UIFont* defaultFont = [UIFont boldSystemFontOfSize:11];
+    UIColor* white = [UIColor whiteColor];
+    UIColor* clear = [UIColor clearColor];
 	cell.backgroundColor = white;
 	cell.textLabel.font = defaultFont;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -191,7 +189,7 @@
 	rightLabel.numberOfLines = 10;
 	rightLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
-	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
+    Alarm* a = [[AlarmFactory getInstance] getAlarm:alarmId];
 	switch(indexPath.row) {
 		case 0:
 			leftLabel.text = @"UEI";
@@ -233,6 +231,8 @@
     
 	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[cell sizeToFit];
+	
+	return cell;
 }
 
 -(UIView *) tableView: (UITableView *)tv viewForFooterInSection: (NSInteger)section
@@ -256,7 +256,8 @@
 	UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:10];
 	[button setFrame:CGRectMake(orientationHandler.cellBorder, orientationHandler.cellSeparator, buttonWidth, 40)];
-	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
+    AlarmFactory* af = [AlarmFactory getInstance];
+    Alarm* a = [af getAlarm:alarmId];
 	if (a.ackTime == nil) {
 		[button addTarget:self action:@selector(acknowledgeAlarm) forControlEvents:UIControlEventTouchUpInside];
 		[button setTitle:@"Acknowledge" forState:UIControlStateNormal];
@@ -292,29 +293,21 @@
 	return 45.0f;
 }
 
--(void) refreshData
-{
-#if DEBUG
-	NSLog(@"%@: refreshData called", self);
-#endif
-	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
-	// FIXME: need to know when the ack has gone through
-	usleep(4000000);
-	a = [[AlarmFactory getInstance] getRemoteAlarm:a.alarmId];
-	self.alarmObjectId = [a objectID];
-	[self initializeData];
-	[tableView reloadData];
-	[spinner stopAnimating];
-}
-
 -(void) doAck:(NSString*)action
 {
 	[self.spinner startAnimating];
-	Alarm* a = (Alarm*)[[contextService managedObjectContext] objectWithID:self.alarmObjectId];
-	NSLog(@"performing action %@ on alarm %@", action, a.alarmId);
-	AckUpdater* updater = [[[AckUpdater alloc] initWithAlarmId:a.alarmId action:action] autorelease];
-	updater.handler = [[[UpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
+
+	NSLog(@"performing action %@ on alarm ID %@", action, alarmId);
+	AckUpdater* updater = [[[AckUpdater alloc] initWithAlarmId:alarmId action:action] autorelease];
+	updater.handler = [[[UpdateHandler alloc] initWithMethod:@selector(ackFinished) target:self] autorelease];
 	[updater update];
+}
+
+-(void) ackFinished
+{
+	// FIXME: need to know when the ack has gone through
+    usleep(4000000);
+    [self initializeData];
 }
 
 -(void) acknowledgeAlarm

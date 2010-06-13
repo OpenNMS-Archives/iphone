@@ -58,6 +58,10 @@
 #endif
 	[self initializeScreenWidth:[[UIApplication sharedApplication] statusBarOrientation]];
     cellIdentifier = nil;
+    contextService = [[ContextService alloc] init];
+#if DEBUG
+    NSLog(@"%@: contextService = %@", self, contextService);
+#endif
 	[super loadView];
 }
 
@@ -71,7 +75,7 @@
         if (tableSelection) {
             [tableView deselectRowAtIndexPath:tableSelection animated:NO];
         }
-        [tableView reloadData];
+		[self refreshData];
     }
 }
 
@@ -87,6 +91,9 @@
 #endif
     [super willRotateToInterfaceOrientation:orientation duration:duration];
     [orientationHandler updateWithOrientation:orientation];
+	if (tableView) {
+		[tableView reloadData];
+	}
 }
 
 -(NSFetchedResultsController*) fetchedResultsController
@@ -100,25 +107,21 @@
 	NSLog(@"%@: initializeData", self);
 #endif
 	[spinner startAnimating];
-	if (!contextService) {
-		contextService = [[ContextService alloc] init];
-	}
-#if DEBUG
-	NSLog(@"%@: contextService = %@", self, contextService);
-#endif
 }
 
 -(void) refreshData
 {
-    NSError *error;
-    @try {
-        if (![[self fetchedResultsController] performFetch:&error]) {
-            NSLog(@"%@: error fetching: %@", self, error);
-            [error release];
+    if ([self fetchedResultsController]) {
+        NSError *error;
+        @try {
+            if (![[self fetchedResultsController] performFetch:&error]) {
+                NSLog(@"%@: error fetching: %@", self, error);
+                [error release];
+            }
         }
-    }
-    @catch (NSException* exception) {
-        NSLog(@"%@: Caught %@: %@", self, [exception name], [exception reason]);
+        @catch (NSException* exception) {
+            NSLog(@"%@: Caught %@: %@", self, [exception name], [exception reason]);
+        }
     }
     [tableView reloadData];
 	[spinner stopAnimating];

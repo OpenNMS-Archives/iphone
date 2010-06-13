@@ -43,6 +43,14 @@
 @synthesize addButton;
 @synthesize cancelButton;
 
+- (id) init
+{
+	if (self = [super init]) {
+		cellIdentifier = @"ipAddressInput";
+	}
+	return self;
+}
+
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];

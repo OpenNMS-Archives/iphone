@@ -54,6 +54,14 @@
 @synthesize snmpInterfaces;
 @synthesize events;
 
+- (id) init
+{
+	if (self = [super init]) {
+		cellIdentifier = @"nodeDetail";
+	}
+	return self;
+}
+
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];

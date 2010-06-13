@@ -87,7 +87,7 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
     if (coordinator != nil) {
 		NSManagedObjectContext* moc = [[NSManagedObjectContext alloc] init];
 		[moc setPersistentStoreCoordinator:coordinator];
-//		managedObjectContext = moc;
+		managedObjectContext = moc;
 		return moc;
     }
     return nil;

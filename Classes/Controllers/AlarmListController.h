@@ -40,15 +40,11 @@
 	@private FuzzyDate* fuzzyDate;
 
     @private NSFetchedResultsController* _fetchedResultsController;
-    @private NSManagedObjectContext* _viewMoc;
-    @private NSManagedObjectContext* _updateMoc;
 }
 
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 
 @property (retain) NSFetchedResultsController* _fetchedResultsController;
-@property (retain) NSManagedObjectContext* _viewMoc;
-@property (retain) NSManagedObjectContext* _updateMoc;
 
 - (void) initializeData;
 - (IBAction) reload:(id) sender;
