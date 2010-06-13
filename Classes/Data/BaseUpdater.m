@@ -97,7 +97,8 @@
 		path = @"/opennms/rest";
 	}
 
-	return [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@", https, username, password, host, port, path ];
+//	return [NSString stringWithFormat:@"%@://%@:%@@%@:%@%@", https, username, password, host, port, path ];
+	return [NSString stringWithFormat:@"%@://%@:%@%@", https, host, port, path ];
 }
 
 -(void) update
@@ -107,6 +108,8 @@
 #endif
 	NSURL* requestUrl = [url copy];
 	ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:requestUrl] autorelease];
+    [request setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"]];
+    [request setPassword:[[NSUserDefaults standardUserDefaults] stringForKey:@"password_preference"]];
 	if (self.requestData) {
 		[request appendPostData:self.requestData];
 	}

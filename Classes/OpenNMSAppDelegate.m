@@ -34,7 +34,6 @@
 #import "config.h"
 #import "OpenNMSAppDelegate.h"
 #import "SettingsViewController.h"
-#import "NullUpdater.h"
 
 @implementation OpenNMSAppDelegate
 
