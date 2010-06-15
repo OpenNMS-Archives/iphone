@@ -86,7 +86,9 @@ static ContextService* contextService = nil;
 
 -(SnmpInterface*) getCoreDataSnmpInterface:(NSNumber*) snmpInterfaceId
 {
+    SnmpInterface* iface = nil;
 	NSManagedObjectContext* context = [contextService managedObjectContext];
+    [context lock];
 	NSFetchRequest* snmpInterfaceRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:context];
@@ -100,18 +102,20 @@ static ContextService* contextService = nil;
 	[snmpInterfaceRequest release];
 	if (!results || [results count] == 0) {
 		if (error) {
-			NSLog(@"error fetching snmpInterface for ID %@: %@", snmpInterfaceId, [error localizedDescription]);
+			NSLog(@"%@: error fetching snmpInterface for ID %@: %@", self, snmpInterfaceId, [error localizedDescription]);
 			[error release];
 		}
-		return nil;
 	} else {
-		return (SnmpInterface*)[results objectAtIndex:0];
+		iface = (SnmpInterface*)[results objectAtIndex:0];
 	}
+    [context unlock];
+    return iface;
 }
 
 -(NSArray*) getCoreDataSnmpInterfacesForNode:(NSNumber*) nodeId
 {
 	NSManagedObjectContext* context = [contextService managedObjectContext];
+    [context lock];
 	NSFetchRequest* nodeSnmpInterfaceRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:context];
 	[nodeSnmpInterfaceRequest setEntity:entity];
@@ -132,15 +136,14 @@ static ContextService* contextService = nil;
 	[nodeSnmpInterfaceRequest release];
 	if (!results) {
 		if (error) {
-			NSLog(@"error fetching snmpInterfaces for node ID %@: %@", nodeId, [error localizedDescription]);
+			NSLog(@"%@: error fetching snmpInterfaces for node ID %@: %@", self, nodeId, [error localizedDescription]);
 			[error release];
 		} else {
-			NSLog(@"error fetching snmpInterfaces for node ID %@", nodeId);
+			NSLog(@"%@: error fetching snmpInterfaces for node ID %@", self, nodeId);
 		}
-		return nil;
-	} else {
-		return results;
 	}
+    [context unlock];
+    return results;
 }
 
 -(NSArray*) getSnmpInterfacesForNode:(NSNumber*) nodeId
@@ -158,7 +161,7 @@ static ContextService* contextService = nil;
 	}
 	if (refreshSnmpInterfaces) {
 #if DEBUG
-		NSLog(@"snmpInterface(s) not found, or last modified(s) out of date");
+		NSLog(@"%@: snmpInterface(s) not found, or last modified(s) out of date", self);
 #endif
 		[factoryLock lock];
 		SnmpInterfaceUpdater* snmpInterfaceUpdater = [[SnmpInterfaceUpdater alloc] initWithNodeId:nodeId];
@@ -173,7 +176,7 @@ static ContextService* contextService = nil;
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
 #if DEBUG
-			NSLog(@"waiting for getSnmpInterfacesForNode");
+			NSLog(@"%@: waiting for getSnmpInterfacesForNode", self);
 #endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}

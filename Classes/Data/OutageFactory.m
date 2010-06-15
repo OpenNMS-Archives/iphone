@@ -94,6 +94,8 @@ static NSManagedObjectContext* context = nil;
 
 -(Outage*) getCoreDataOutage:(NSNumber*) outageId
 {
+    [context lock];
+    Outage* outage = nil;
 	NSFetchRequest* outageRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
@@ -110,14 +112,16 @@ static NSManagedObjectContext* context = nil;
 			NSLog(@"error fetching outage for ID %@: %@", outageId, [error localizedDescription]);
 			[error release];
 		}
-		return nil;
 	} else {
-		return (Outage*)[results objectAtIndex:0];
+		outage = (Outage*)[results objectAtIndex:0];
 	}
+    [context unlock];
+    return outage;
 }
 
 -(NSArray*) getCoreDataOutagesForNode:(NSNumber*) nodeId
 {
+    [context lock];
 	NSFetchRequest* nodeOutageRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
 	[nodeOutageRequest setEntity:entity];
@@ -137,10 +141,9 @@ static NSManagedObjectContext* context = nil;
 		} else {
 			NSLog(@"error fetching outages for node ID %@", nodeId);
 		}
-		return nil;
-	} else {
-		return results;
 	}
+    [context unlock];
+    return results;
 }
 
 -(NSArray*) getOutagesForNode:(NSNumber*) nodeId
@@ -162,7 +165,7 @@ static NSManagedObjectContext* context = nil;
 #endif
 		[factoryLock lock];
 		OutageListUpdater* outageUpdater = [[OutageListUpdater alloc] initWithNode:nodeId];
-		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] initWithMethod:@selector(finish) target:self context:context];
+		OutageUpdateHandler* outageHandler = [[OutageUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		outageUpdater.handler = outageHandler;
 		
 		[outageUpdater update];

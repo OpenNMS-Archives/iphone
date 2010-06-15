@@ -88,7 +88,8 @@ static ContextService* contextService = nil;
 {
 	Alarm* alarm = nil;
 	NSManagedObjectContext* context = [contextService managedObjectContext];
-	
+	[context lock];
+    
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
@@ -102,7 +103,7 @@ static ContextService* contextService = nil;
 	[request release];
 	if (!results || [results count] == 0) {
 		if (error) {
-			NSLog(@"error fetching alarm for ID %@: %@", alarmId, [error localizedDescription]);
+			NSLog(@"%@: error fetching alarm for ID %@: %@", self, alarmId, [error localizedDescription]);
 			[error release];
 		}
 		return nil;
@@ -110,6 +111,7 @@ static ContextService* contextService = nil;
 		alarm = (Alarm*)[results objectAtIndex:0];
 		[context refreshObject:alarm mergeChanges:NO];
 	}
+    [context unlock];
 	return alarm;
 }
 
@@ -128,7 +130,7 @@ static ContextService* contextService = nil;
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
 #if DEBUG
-			NSLog(@"waiting for getRemoteAlarm");
+			NSLog(@"%@: waiting for getRemoteAlarm", self);
 #endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
@@ -146,13 +148,13 @@ static ContextService* contextService = nil;
 
 	if (!alarm || ([alarm.lastModified timeIntervalSinceNow] > CUTOFF)) {
 #if DEBUG
-		NSLog(@"alarm %@ not found, or last modified out of date", alarmId);
+		NSLog(@"%@: alarm ID %@ not found, or last modified out of date", self, alarmId);
 #endif
 		alarm = [self getRemoteAlarm:alarmId];
 	}
 
 #if DEBUG
-	NSLog(@"returning alarm: %@", alarm);
+	NSLog(@"%@: returning alarm: %@", self, alarm);
 #endif
 	return alarm;
 }

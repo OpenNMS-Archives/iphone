@@ -36,7 +36,6 @@
 #import "Alarm.h"
 #import "OnmsSeverity.h"
 #import "AlarmTableView.h"
-#import "ContextService.h"
 #import "BaseController.h"
 
 @interface AlarmDetailController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {

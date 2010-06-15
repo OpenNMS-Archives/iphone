@@ -58,6 +58,7 @@
 	} else {
 		xmlNodes = [[document rootElement] elementsForName:@"node"];
 	}
+    [moc lock];
 	for (id xmlNode in xmlNodes) {
 		Node* node;
 
@@ -108,6 +109,7 @@
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
+    [moc unlock];
 	[super requestDidFinish:request];
 	[self autorelease];
 }

@@ -72,6 +72,7 @@
 	} else {
 		xmlIpInterfaces = [[document rootElement] elementsForName:@"ipInterface"];
 	}
+    [moc lock];
 	for (id xmlIpInterface in xmlIpInterfaces) {
 		count++;
 		IpInterface* ipInterface;
@@ -94,7 +95,7 @@
 				// ignore
 #if DEBUG
 			} else {
-				NSLog(@"unknown ipInterface attribute: %@", [attr name]);
+				NSLog(@"%@: unknown ipInterface attribute: %@", self, [attr name]);
 #endif
 			}
 		}
@@ -111,7 +112,7 @@
 		NSArray *ipInterfaceArray = [moc executeFetchRequest:ipInterfaceRequest error:&error];
 		if (!ipInterfaceArray || [ipInterfaceArray count] == 0) {
 			if (error) {
-				NSLog(@"error fetching ipInterface for ID %@: %@", ipInterfaceId, [error localizedDescription]);
+				NSLog(@"%@: error fetching ipInterface for ID %@: %@", self, ipInterfaceId, [error localizedDescription]);
 				[error release];
 			}
 			ipInterface = (IpInterface*)[NSEntityDescription insertNewObjectForEntityForName:@"IpInterface" inManagedObjectContext:moc];
@@ -150,7 +151,7 @@
 	}
 
 #if DEBUG
-	NSLog(@"found %d IP interfaces", count);
+	NSLog(@"%@: found %d IP interfaces", self, count);
 #endif
 
 	if (self.clearOldObjects) {
@@ -188,10 +189,10 @@
 
 	NSError* error = nil;
 	if (![moc save:&error]) {
-		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-
+    [moc unlock];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];

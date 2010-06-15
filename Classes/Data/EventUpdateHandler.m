@@ -73,6 +73,7 @@
 	} else {
 		xmlEvents = [[document rootElement] elementsForName:@"event"];
 	}
+    [moc lock];
 	for (id xmlEvent in xmlEvents) {
 		count++;
 		Event* event;
@@ -93,7 +94,7 @@
 				eventSeverity = [attr stringValue];
 #if DEBUG
 			} else {
-				NSLog(@"unknown event attribute: %@", [attr name]);
+				NSLog(@"%@: unknown event attribute: %@", self, [attr name]);
 #endif
 			}
 		}
@@ -110,7 +111,7 @@
 		NSArray *eventArray = [moc executeFetchRequest:eventRequest error:&error];
 		if (!eventArray || [eventArray count] == 0) {
 			if (error) {
-				NSLog(@"error fetching event for ID %@: %@", eventId, [error localizedDescription]);
+				NSLog(@"%@: error fetching event for ID %@: %@", self, eventId, [error localizedDescription]);
 				[error release];
 			}
 			event = (Event*)[NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:moc];
@@ -194,10 +195,10 @@
 		NSArray *eventsToDelete = [moc executeFetchRequest:request error:&error];
 		if (!eventsToDelete) {
 			if (error) {
-				NSLog(@"error fetching events to delete (older than %@): %@", lastModified, [error localizedDescription]);
+				NSLog(@"%@: error fetching events to delete (older than %@): %@", self, lastModified, [error localizedDescription]);
 				[error release];
 			} else {
-				NSLog(@"error fetching events to delete (older than %@)", lastModified);
+				NSLog(@"%@: error fetching events to delete (older than %@)", self, lastModified);
 			}
 		} else {
 			for (id event in eventsToDelete) {
@@ -211,10 +212,10 @@
 
 	NSError* error = nil;
 	if (![moc save:&error]) {
-		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-
+    [moc unlock];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];

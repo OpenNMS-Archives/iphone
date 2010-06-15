@@ -78,7 +78,7 @@
 	settingsActive = YES;
 	NSString* plist = [[NSBundle mainBundle] pathForResource:@"Root" ofType:@"plist" inDirectory:@"Settings.bundle"];
 #if DEBUG
-	NSLog(@"root bundle path = %@", plist);
+	NSLog(@"%@: root bundle path = %@", self, plist);
 #endif
 	SettingsViewController *settingsviewcontroller = [[SettingsViewController alloc] initWithConfigFile:plist];
 	UINavigationController* unc = [[UINavigationController alloc] initWithRootViewController:settingsviewcontroller];

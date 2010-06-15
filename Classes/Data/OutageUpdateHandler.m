@@ -65,6 +65,7 @@
 	} else {
 		xmlOutages = [[document rootElement] elementsForName:@"outage"];
 	}
+    [context lock];
 	for (id xmlOutage in xmlOutages) {
 		Outage* outage;
 		
@@ -211,7 +212,7 @@
 	if (![context save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@ (%@)", [error localizedDescription], [error localizedFailureReason]);
 	}
-
+    [context unlock];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];

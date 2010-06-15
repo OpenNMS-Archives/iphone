@@ -67,6 +67,7 @@
 	} else {
 		xmlSnmpInterfaces = [[document rootElement] elementsForName:@"snmpInterface"];
 	}
+    [moc lock];
 	for (id xmlSnmpInterface in xmlSnmpInterfaces) {
 		count++;
 		SnmpInterface* snmpInterface;
@@ -86,7 +87,7 @@
 				// ignore
 #if DEBUG
 			} else {
-				NSLog(@"unknown snmpInterface attribute: %@", [attr name]);
+				NSLog(@"%@: unknown snmpInterface attribute: %@", self, [attr name]);
 #endif
 			}
 		}
@@ -103,7 +104,7 @@
 		NSArray *snmpInterfaceArray = [moc executeFetchRequest:snmpInterfaceRequest error:&error];
 		if (!snmpInterfaceArray || [snmpInterfaceArray count] == 0) {
 			if (error) {
-				NSLog(@"error fetching snmpInterface for ID %@: %@", snmpInterfaceId, [error localizedDescription]);
+				NSLog(@"%@: error fetching snmpInterface for ID %@: %@", self, snmpInterfaceId, [error localizedDescription]);
 				[error release];
 			}
 			snmpInterface = (SnmpInterface*)[NSEntityDescription insertNewObjectForEntityForName:@"SnmpInterface" inManagedObjectContext:moc];
@@ -148,7 +149,7 @@
 	}
 
 #if DEBUG
-	NSLog(@"found %d SNMP interfaces", count);
+	NSLog(@"%@: found %d SNMP interfaces", self, count);
 #endif
 
 	if (self.clearOldObjects) {
@@ -169,15 +170,15 @@
 		NSArray *snmpInterfacesToDelete = [moc executeFetchRequest:request error:&error];
 		if (!snmpInterfacesToDelete) {
 			if (error) {
-				NSLog(@"error fetching snmpInterfaces to delete (older than %@): %@", lastModified, [error localizedDescription]);
+				NSLog(@"%@: error fetching snmpInterfaces to delete (older than %@): %@", self, lastModified, [error localizedDescription]);
 				[error release];
 			} else {
-				NSLog(@"error fetching snmpInterfaces to delete (older than %@)", lastModified);
+				NSLog(@"%@: error fetching snmpInterfaces to delete (older than %@)", self, lastModified);
 			}
 		} else {
 			for (id snmpInterface in snmpInterfacesToDelete) {
 #if DEBUG
-				NSLog(@"deleting %@", snmpInterface);
+				NSLog(@"%@: deleting %@", self, snmpInterface);
 #endif
 				[moc deleteObject:snmpInterface];
 			}
@@ -186,10 +187,10 @@
 
 	NSError* error = nil;
 	if (![moc save:&error]) {
-		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-
+    [moc unlock];
 	[super requestDidFinish:request];
 	[self autorelease];
 }

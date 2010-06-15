@@ -88,4 +88,14 @@
 #endif
 }
 
+-(CGFloat)iPhoneSize:(CGFloat)size
+{
+    /*
+    if (screenWidth == 640 || screenWidth == 960) {
+        return (size * 2);
+    }
+     */
+    return size;
+}
+
 @end

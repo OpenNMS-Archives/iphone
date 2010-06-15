@@ -310,9 +310,9 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		SnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
 
-        CGFloat ifIndexWidth = round(orientationHandler.tableWidth * 0.09375);  // 30
-        CGFloat ifSpeedWidth = round(orientationHandler.tableWidth * 0.309375); // 99
-        CGFloat ipWidth      = round(orientationHandler.tableWidth * 0.275);    // 88
+        CGFloat ifIndexWidth = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.09375)];
+        CGFloat ifSpeedWidth = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.15625)];
+        CGFloat ipWidth      = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.203125)];
         CGFloat ifDescrWidth = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 5) - ifIndexWidth - ifSpeedWidth - ipWidth;
 
 		// IfIndex
@@ -320,6 +320,7 @@
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifIndex stringValue];
+        label.adjustsFontSizeToFitWidth = YES;
 		[cell addColumn:[iface.ifIndex stringValue]];
 		[cell.contentView addSubview:label];
 
@@ -336,6 +337,7 @@
 		label.backgroundColor = clear;
 		label.font = font;
 		label.text = [iface.ifSpeed stringValue];
+        label.adjustsFontSizeToFitWidth = YES;
 		[cell addColumn:[iface.ifSpeed stringValue]];
 		[cell.contentView addSubview:label];
 		
@@ -345,6 +347,7 @@
 		label.font = font;
 		label.text = iface.ipAddress;
         label.textAlignment = UITextAlignmentRight;
+        label.adjustsFontSizeToFitWidth = YES;
 		[cell addColumn:iface.ipAddress];
 		[cell.contentView addSubview:label];
 	} else if (sectionName == @"Recent Events") {

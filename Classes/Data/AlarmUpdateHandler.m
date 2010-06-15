@@ -64,6 +64,7 @@
 	} else {
 		xmlAlarms = [[document rootElement] elementsForName:@"alarm"];
 	}
+    [moc lock];
 	for (id xmlAlarm in xmlAlarms) {
 		Alarm* alarm;
 
@@ -84,7 +85,7 @@
 				// ignore
 #if DEBUG
 			} else {
-				NSLog(@"unknown alarm attribute: %@", [attr name]);
+				NSLog(@"%@: unknown alarm attribute: %@", self, [attr name]);
 #endif
 			}
 		}
@@ -101,7 +102,7 @@
 		NSArray *alarmArray = [moc executeFetchRequest:alarmRequest error:&error];
 		if (!alarmArray || [alarmArray count] == 0) {
 			if (error) {
-				NSLog(@"error fetching alarm for ID %@: %@", alarmId, [error localizedDescription]);
+				NSLog(@"%@: error fetching alarm for ID %@: %@", self, alarmId, [error localizedDescription]);
 				[error release];
 			}
 			alarm = (Alarm*)[NSEntityDescription insertNewObjectForEntityForName:@"Alarm" inManagedObjectContext:moc];
@@ -168,10 +169,10 @@
 		NSArray *alarmsToDelete = [moc executeFetchRequest:request error:&error];
 		if (!alarmsToDelete) {
 			if (error) {
-				NSLog(@"error fetching alarms to delete (older than %@): %@", lastModified, [error localizedDescription]);
+				NSLog(@"%@: error fetching alarms to delete (older than %@): %@", self, lastModified, [error localizedDescription]);
 				[error release];
 			} else {
-				NSLog(@"error fetching alarms to delete (older than %@)", lastModified);
+				NSLog(@"%@: error fetching alarms to delete (older than %@)", self, lastModified);
 			}
 		} else {
 			for (id alarm in alarmsToDelete) {
@@ -185,9 +186,10 @@
 
 	NSError* error = nil;
 	if (![moc save:&error]) {
-		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
+    [moc unlock];
 
 	[dateFormatter release];
 	[super requestDidFinish:request];

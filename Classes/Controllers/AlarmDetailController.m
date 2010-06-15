@@ -75,7 +75,7 @@
 	[fuzzyDate touch];
     Alarm* a = [[AlarmFactory getInstance] getAlarm:alarmId];
     if (!a) {
-        NSLog(@"no alarm found for alarm ID %@", alarmId);
+        NSLog(@"%@: no alarm found for alarm ID %@", self, alarmId);
         return;
     }
 #if DEBUG
@@ -85,7 +85,7 @@
 	tableView.backgroundColor = [self.severity getDisplayColor];
 	tableView.backgroundView.backgroundColor = [self.severity getDisplayColor];
 #if DEBUG
-	NSLog(@"setting color for severity %@", self.severity);
+	NSLog(@"%@: setting color for severity %@", self, self.severity);
 #endif
 	self.title = [NSString stringWithFormat:@"Alarm #%@", alarmId];
     [self refreshData];
@@ -169,10 +169,6 @@
 
     CGFloat leftWidth = 60;
     CGFloat rightWidth = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - leftWidth;
-    
-#if DEBUG
-	NSLog(@"%@: leftWidth: %f, rightWidth: %f", self, leftWidth, rightWidth);
-#endif
     
 	CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
 	UILabel* leftLabel = [[[UILabel alloc] initWithFrame:CGRectMake(orientationHandler.cellSeparator, 0, leftWidth, height)] autorelease];
@@ -297,7 +293,7 @@
 {
 	[self.spinner startAnimating];
 
-	NSLog(@"performing action %@ on alarm ID %@", action, alarmId);
+	NSLog(@"%@'ing alarm ID %@", action, alarmId);
 	AckUpdater* updater = [[[AckUpdater alloc] initWithAlarmId:alarmId action:action] autorelease];
 	updater.handler = [[[UpdateHandler alloc] initWithMethod:@selector(ackFinished) target:self] autorelease];
 	[updater update];

@@ -86,6 +86,7 @@ static ContextService* contextService = nil;
 -(Event*) getCoreDataEvent:(NSNumber*) eventId
 {
 	NSManagedObjectContext* context = [contextService managedObjectContext];
+    [context lock];
 	NSFetchRequest* eventRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
@@ -94,23 +95,26 @@ static ContextService* contextService = nil;
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", eventId];
 	[eventRequest setPredicate:predicate];
 
+    Event* event = nil;
 	NSError* error = nil;
 	NSArray *results = [context executeFetchRequest:eventRequest error:&error];
 	[eventRequest release];
 	if (!results || [results count] == 0) {
 		if (error) {
-			NSLog(@"error fetching event for ID %@: %@", eventId, [error localizedDescription]);
+			NSLog(@"%@: error fetching event for ID %@: %@", self, eventId, [error localizedDescription]);
 			[error release];
 		}
-		return nil;
 	} else {
-		return (Event*)[results objectAtIndex:0];
+		event = (Event*)[results objectAtIndex:0];
 	}
+    [context unlock];
+    return event;
 }
 
 -(NSArray*) getCoreDataEventsForNode:(NSNumber*) nodeId
 {
 	NSManagedObjectContext* context = [contextService managedObjectContext];
+    [context lock];
 	NSFetchRequest* nodeEventRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
 	[nodeEventRequest setEntity:entity];
@@ -129,15 +133,14 @@ static ContextService* contextService = nil;
 	[nodeEventRequest release];
 	if (!results) {
 		if (error) {
-			NSLog(@"error fetching events for node ID %@: %@", nodeId, [error localizedDescription]);
+			NSLog(@"%@: error fetching events for node ID %@: %@", self, nodeId, [error localizedDescription]);
 			[error release];
 		} else {
-			NSLog(@"error fetching events for node ID %@", nodeId);
+			NSLog(@"%@: error fetching events for node ID %@", self, nodeId);
 		}
-		return nil;
-	} else {
-		return results;
 	}
+    [context unlock];
+    return results;
 }
 
 -(NSArray*) getEventsForNode:(NSNumber*) nodeId
@@ -155,7 +158,7 @@ static ContextService* contextService = nil;
 	}
 	if (refreshEvents) {
 #if DEBUG
-		NSLog(@"event(s) not found, or last modified(s) out of date");
+		NSLog(@"%@: event(s) not found, or last modified(s) out of date", self);
 #endif
 		[factoryLock lock];
 		EventUpdater* eventUpdater = [[EventUpdater alloc] initWithNodeId:nodeId limit:10];
@@ -170,7 +173,7 @@ static ContextService* contextService = nil;
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
 #if DEBUG
-			NSLog(@"waiting for getEventsForNode");
+			NSLog(@"%@: waiting for getEventsForNode", self);
 #endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}

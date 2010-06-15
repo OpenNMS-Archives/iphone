@@ -85,7 +85,9 @@ static ContextService* contextService = nil;
 
 -(IpInterface*) getCoreDataIpInterface:(NSNumber*) ipInterfaceId
 {
+    IpInterface* iface = nil;
 	NSManagedObjectContext* context = [contextService managedObjectContext];
+    [context lock];
 	NSFetchRequest* ipInterfaceRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
@@ -99,18 +101,20 @@ static ContextService* contextService = nil;
 	[ipInterfaceRequest release];
 	if (!results || [results count] == 0) {
 		if (error) {
-			NSLog(@"error fetching ipInterface for ID %@: %@", ipInterfaceId, [error localizedDescription]);
+			NSLog(@"%@: error fetching ipInterface for ID %@: %@", self, ipInterfaceId, [error localizedDescription]);
 			[error release];
 		}
-		return nil;
 	} else {
-		return (IpInterface*)[results objectAtIndex:0];
+		iface = (IpInterface*)[results objectAtIndex:0];
 	}
+    [context unlock];
+    return iface;
 }
 
 -(NSArray*) getCoreDataIpInterfacesForNode:(NSNumber*) nodeId
 {
 	NSManagedObjectContext* context = [contextService managedObjectContext];
+    [context lock];
 	NSFetchRequest* nodeIpInterfaceRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
 	[nodeIpInterfaceRequest setEntity:entity];
@@ -130,15 +134,14 @@ static ContextService* contextService = nil;
 	[nodeIpInterfaceRequest release];
 	if (!results) {
 		if (error) {
-			NSLog(@"error fetching ipInterfaces for node ID %@: %@", nodeId, [error localizedDescription]);
+			NSLog(@"%@: error fetching ipInterfaces for node ID %@: %@", self, nodeId, [error localizedDescription]);
 			[error release];
 		} else {
-			NSLog(@"error fetching ipInterfaces for node ID %@", nodeId);
+			NSLog(@"%@: error fetching ipInterfaces for node ID %@", self, nodeId);
 		}
-		return nil;
-	} else {
-		return results;
 	}
+    [context unlock];
+    return results;
 }
 
 -(NSArray*) getIpInterfacesForNode:(NSNumber*) nodeId
@@ -156,7 +159,7 @@ static ContextService* contextService = nil;
 	}
 	if (refreshIpInterfaces) {
 #if DEBUG
-		NSLog(@"ipInterface(s) not found, or last modified(s) out of date");
+		NSLog(@"%@: ipInterface(s) not found, or last modified(s) out of date", self);
 #endif
 		[factoryLock lock];
 		IpInterfaceUpdater* ipInterfaceUpdater = [[IpInterfaceUpdater alloc] initWithNodeId:nodeId];
@@ -171,7 +174,7 @@ static ContextService* contextService = nil;
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
 #if DEBUG
-			NSLog(@"waiting for getIpInterfacesForNode");
+			NSLog(@"%@: waiting for getIpInterfacesForNode", self);
 #endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}

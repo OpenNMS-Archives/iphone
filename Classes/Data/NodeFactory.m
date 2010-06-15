@@ -147,7 +147,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 {
 	Node* node = nil;
 	NSManagedObjectContext* context = [contextService managedObjectContext];
-	
+	[context lock];
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
@@ -168,6 +168,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 	} else {
 		node = (Node*)[results objectAtIndex:0];
 	}
+    [context unlock];
 	return node;
 }
 

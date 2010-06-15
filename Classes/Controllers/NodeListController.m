@@ -124,7 +124,9 @@
 	if (tableView == self.searchDisplayController.searchResultsTableView)
 	{
 		NSManagedObjectContext* context = [contextService managedObjectContext];
+        [context lock];
 		Node* node = (Node*)[context objectWithID:[self.nodeList objectAtIndex:indexPath.row]];
+        [context unlock];
 		cell.textLabel.text = node.label;
 		cell.textLabel.adjustsFontSizeToFitWidth = YES;
 		cell.textLabel.minimumFontSize = 9.0;
@@ -135,7 +137,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSManagedObjectID* objId = [self.nodeList objectAtIndex:indexPath.row];
+    NSManagedObjectContext* context = [contextService managedObjectContext];
+    [context lock];
 	Node* node = (Node*) [[contextService managedObjectContext] objectWithID:objId];
+    [context unlock];
 	NodeDetailController* ndc = [[NodeDetailController alloc] init];
 	ndc.nodeId = node.nodeId;
 	[self.navigationController pushViewController:ndc animated:YES];

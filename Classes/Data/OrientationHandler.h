@@ -49,5 +49,6 @@
 
 -(id)initWithOrientation:(UIInterfaceOrientation)orientation;
 -(void)updateWithOrientation:(UIInterfaceOrientation)orientation;
+-(CGFloat)iPhoneSize:(CGFloat)size;
 
 @end
