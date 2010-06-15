@@ -62,13 +62,6 @@
 	return self;
 }
 
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[self initializeScreenWidth:toInterfaceOrientation];
-	[self.nodeTable reloadData];
-}
-
 - (void) loadView
 {
 	[super loadView];
@@ -76,6 +69,7 @@
 	nodeTable.delegate = self;
 	nodeTable.dataSource = self;
 	self.view = nodeTable;
+	self.tableView = nodeTable;
 	self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 	self.spinner.hidesWhenStopped = YES;
 	self.spinner.center = self.view.center;
@@ -229,10 +223,8 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		Outage* outage = [self.outages objectAtIndex:indexPath.row];
 
-		CGFloat ipWidth      = round(orientationHandler.tableWidth * 0.275);   // 88
-        CGFloat serviceWidth = round(orientationHandler.tableWidth * 0.225);   // 72
-//		CGFloat upDownWidth  = round(orientationHandler.tableWidth * 0.21875); // 70
-//      CGFloat timeWidth    = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 5) - ipWidth - serviceWidth - upDownWidth;
+		CGFloat ipWidth      = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth * 0.203125)]; // 65
+        CGFloat serviceWidth = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth * 0.225)];    // 72
 		CGFloat upDownWidth  = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 4) - ipWidth - serviceWidth;
 
 		// IP Address
@@ -275,8 +267,8 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		IpInterface* iface = [self.interfaces objectAtIndex:indexPath.row];
 		
-		CGFloat ipWidth               = round(orientationHandler.tableWidth * 0.275);   // 88
-		CGFloat managedUnmanagedWidth = round(orientationHandler.tableWidth * 0.21875); // 70
+		CGFloat ipWidth               = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth * 0.203125)]; // 65
+		CGFloat managedUnmanagedWidth = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth * 0.21875)];  // 70
 		CGFloat hostNameWidth         = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 4) - ipWidth - managedUnmanagedWidth;
 
 		// IP Address
@@ -310,9 +302,9 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		SnmpInterface* iface = [self.snmpInterfaces objectAtIndex:indexPath.row];
 
-        CGFloat ifIndexWidth = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.09375)];
-        CGFloat ifSpeedWidth = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.15625)];
-        CGFloat ipWidth      = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.203125)];
+        CGFloat ifIndexWidth = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.09375)];  // 30
+        CGFloat ifSpeedWidth = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.15625)];  // 50
+        CGFloat ipWidth      = [orientationHandler iPhoneSize:round(orientationHandler.tableWidth*0.203125)]; // 65
         CGFloat ifDescrWidth = orientationHandler.tableWidth - (orientationHandler.cellSeparator * 5) - ifIndexWidth - ifSpeedWidth - ipWidth;
 
 		// IfIndex
