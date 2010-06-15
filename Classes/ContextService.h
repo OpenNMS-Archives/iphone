@@ -34,9 +34,13 @@
 #import <Foundation/Foundation.h>
 
 @interface ContextService : NSObject {
-	NSManagedObjectContext* managedObjectContext;
+	NSManagedObjectContext* _readContext;
+	NSManagedObjectContext* _writeContext;
 }
 
-- (NSManagedObjectContext *) managedObjectContext;
+- (NSManagedObjectContext *) readContext;
+- (NSManagedObjectContext *) writeContext;
+
+- (void) mergeContextChanges:(NSNotification *)notification;
 
 @end

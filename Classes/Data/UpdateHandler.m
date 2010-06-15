@@ -47,7 +47,7 @@
 {
 	if (self = [super init]) {
 		self.spinner = nil;
-		self.contextService = [[ContextService alloc] init];
+		self.contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 		self.clearOldObjects = NO;
 	}
 	return self;
@@ -69,7 +69,7 @@
 		self.method = selector;
 		self.methodTarget = target;
 		self.clearOldObjects = NO;
-		self.context = [self.contextService managedObjectContext];
+		self.context = [self.contextService writeContext];
 	}
 	return self;
 }
@@ -123,9 +123,6 @@
 -(NSString *) cleanUpString:(NSString *)html
 {
 	NSString* cleaned = [[self flattenHTML:html] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-#if DEBUG
-	NSLog(@"%@: cleanUpString:'%@' returning '%@'", self, html, cleaned);
-#endif
 	return cleaned;
 }
 
@@ -177,9 +174,6 @@
 	zoneMinute = [dateString substringFromIndex:[scanner scanLocation]];
 
 	NSString* returnString = [NSString stringWithFormat:@"%@T%@-%@%@", date, time, zoneHour, zoneMinute];
-#if DEBUG
-	NSLog(@"%@: stringForDate:%@ returning '%@'", self, dateString, returnString);
-#endif
 	return returnString;
 }
 
@@ -187,9 +181,6 @@
 -(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request
 {
 	NSString* response = [request responseString];
-#if DEBUG
-	// NSLog(@"response = %@", response);
-#endif
 	if (!response || [response isEqual:@""]) {
 		return nil;
 	}
@@ -224,7 +215,7 @@
 
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
-#if DEBUG
+#if 0
 	NSLog(@"%@: Request finished.", self);
 #endif
 	if (self.methodTarget && self.method) {

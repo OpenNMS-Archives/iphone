@@ -46,6 +46,8 @@
 +(NodeFactory*) getInstance;
 
 -(void) finish;
+-(void) clearData;
+
 -(NSArray*) getCoreDataNodeObjectIDs:(NSString*) searchTerm;
 -(Node*) getCoreDataNode:(NSNumber *)nodeId;
 -(Node*) getRemoteNode:(NSNumber *)nodeId;

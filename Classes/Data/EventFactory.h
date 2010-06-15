@@ -46,6 +46,8 @@
 +(EventFactory*) getInstance;
 
 -(void) finish;
+-(void) clearData;
+
 -(NSArray*) getEventsForNode:(NSNumber*) nodeId;
 
 @end

@@ -40,8 +40,6 @@
 
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
-	NSManagedObjectContext *moc = [contextService managedObjectContext];
-
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
     [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
@@ -64,7 +62,7 @@
 	} else {
 		xmlAlarms = [[document rootElement] elementsForName:@"alarm"];
 	}
-    [moc lock];
+	[context lock];
 	for (id xmlAlarm in xmlAlarms) {
 		Alarm* alarm;
 
@@ -92,20 +90,20 @@
 
 		NSFetchRequest *alarmRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *alarmEntity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:moc];
+		NSEntityDescription *alarmEntity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
 		[alarmRequest setEntity:alarmEntity];
 		
 		NSPredicate *alarmPredicate = [NSPredicate predicateWithFormat:@"alarmId == %@", alarmId];
 		[alarmRequest setPredicate:alarmPredicate];
 		
 		NSError* error = nil;
-		NSArray *alarmArray = [moc executeFetchRequest:alarmRequest error:&error];
+		NSArray *alarmArray = [context executeFetchRequest:alarmRequest error:&error];
 		if (!alarmArray || [alarmArray count] == 0) {
 			if (error) {
 				NSLog(@"%@: error fetching alarm for ID %@: %@", self, alarmId, [error localizedDescription]);
 				[error release];
 			}
-			alarm = (Alarm*)[NSEntityDescription insertNewObjectForEntityForName:@"Alarm" inManagedObjectContext:moc];
+			alarm = (Alarm*)[NSEntityDescription insertNewObjectForEntityForName:@"Alarm" inManagedObjectContext:context];
 		} else {
 			alarm = (Alarm*)[alarmArray objectAtIndex:0];
 		}
@@ -159,14 +157,14 @@
 	if (self.clearOldObjects) {
 		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:moc];
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
 		[request setEntity:entity];
 		
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lastModified < %@", lastModified];
 		[request setPredicate:predicate];
 		
 		NSError* error = nil;
-		NSArray *alarmsToDelete = [moc executeFetchRequest:request error:&error];
+		NSArray *alarmsToDelete = [context executeFetchRequest:request error:&error];
 		if (!alarmsToDelete) {
 			if (error) {
 				NSLog(@"%@: error fetching alarms to delete (older than %@): %@", self, lastModified, [error localizedDescription]);
@@ -179,18 +177,17 @@
 #if DEBUG
 				NSLog(@"deleting %@", alarm);
 #endif
-				[moc deleteObject:alarm];
+				[context deleteObject:alarm];
 			}
 		}
 	}
 
 	NSError* error = nil;
-	if (![moc save:&error]) {
+	if (![context save:&error]) {
 		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-    [moc unlock];
-
+	[context unlock];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];

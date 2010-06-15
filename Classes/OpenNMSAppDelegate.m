@@ -35,6 +35,13 @@
 #import "OpenNMSAppDelegate.h"
 #import "SettingsViewController.h"
 
+#import "AlarmFactory.h"
+#import "NodeFactory.h"
+#import "EventFactory.h"
+#import "OutageFactory.h"
+#import "IpInterfaceFactory.h"
+#import "SnmpInterfaceFactory.h"
+
 @implementation OpenNMSAppDelegate
 
 @synthesize window;
@@ -93,6 +100,16 @@
 
 - (void) closeSettings
 {
+	[[AlarmFactory getInstance] clearData];
+	[[NodeFactory getInstance] clearData];
+	[[EventFactory getInstance] clearData];
+	[[OutageFactory getInstance] clearData];
+	[[IpInterfaceFactory getInstance] clearData];
+	[[SnmpInterfaceFactory getInstance] clearData];
+
+	for (id controller in [navigationController viewControllers]) {
+		NSLog(@"%@: navigation controller = %@", self, controller);
+	}
 	[tabBarController dismissModalViewControllerAnimated:YES];
 	settingsActive = NO;
 }
@@ -100,11 +117,6 @@
 - (ContextService*) contextService
 {
 	return contextService;
-}
-
-- (NSManagedObjectContext *) managedObjectContext
-{
-	return [contextService managedObjectContext];
 }
 
 @end

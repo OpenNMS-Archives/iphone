@@ -38,11 +38,20 @@
 static NSManagedObjectModel* managedObjectModel;
 static NSPersistentStoreCoordinator* persistentStoreCoordinator;
 
-- (NSString *)applicationDocumentsDirectory {
+- (void) dealloc
+{
+	_readContext = nil;
+	_writeContext = nil;
+	[super dealloc];
+}
+
+- (NSString *)applicationDocumentsDirectory
+{
 	return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
 
-- (NSManagedObjectModel *)managedObjectModel {
+- (NSManagedObjectModel *)managedObjectModel
+{
 	
     if (managedObjectModel != nil) {
         return managedObjectModel;
@@ -51,7 +60,8 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
     return managedObjectModel;
 }
 
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
 	
     if (persistentStoreCoordinator != nil) {
         return persistentStoreCoordinator;
@@ -79,18 +89,34 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
     return persistentStoreCoordinator;
 }
 
-- (NSManagedObjectContext *) managedObjectContext {
-	if (managedObjectContext) {
-		return managedObjectContext;
-	}
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil) {
+- (NSManagedObjectContext *) readContext
+{
+	if (!_readContext) {
 		NSManagedObjectContext* moc = [[NSManagedObjectContext alloc] init];
-		[moc setPersistentStoreCoordinator:coordinator];
-		managedObjectContext = moc;
-		return moc;
-    }
-    return nil;
+		[moc setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
+		_readContext = moc;
+	}
+	return _readContext;
+}
+
+- (NSManagedObjectContext *) writeContext
+{
+	if (!_writeContext) {
+		NSManagedObjectContext* moc = [[NSManagedObjectContext alloc] init];
+		[moc setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
+		_writeContext = moc;
+		
+		NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+		[dnc addObserver:self selector:@selector(mergeContextChanges:) name:NSManagedObjectContextDidSaveNotification object:_writeContext];
+
+	}
+	return _writeContext;
+}
+
+- (void) mergeContextChanges:(NSNotification *)notification
+{
+	SEL selector = @selector(mergeChangesFromContextDidSaveNotification:);
+	[[self readContext] performSelectorOnMainThread:selector withObject:notification waitUntilDone:YES];
 }
 
 @end

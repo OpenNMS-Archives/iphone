@@ -40,11 +40,6 @@
 
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
-#if DEBUG
-	NSLog(@"%@: requestDidFinish called", self);
-#endif
-	NSManagedObjectContext *moc = [contextService managedObjectContext];
-	
 	CXMLDocument* document = [self getDocumentForRequest:request];
 
 	if (!document) {
@@ -58,7 +53,7 @@
 	} else {
 		xmlNodes = [[document rootElement] elementsForName:@"node"];
 	}
-    [moc lock];
+	[context lock];
 	for (id xmlNode in xmlNodes) {
 		Node* node;
 
@@ -81,20 +76,20 @@
 
 		NSFetchRequest *nodeRequest = [[[NSFetchRequest alloc] init] autorelease];
 
-		NSEntityDescription *nodeEntity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:moc];
+		NSEntityDescription *nodeEntity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
 		[nodeRequest setEntity:nodeEntity];
 
 		NSPredicate *nodePredicate = [NSPredicate predicateWithFormat:@"nodeId == %@", nodeId];
 		[nodeRequest setPredicate:nodePredicate];
 		
 		NSError* error = nil;
-		NSArray *nodeArray = [moc executeFetchRequest:nodeRequest error:&error];
+		NSArray *nodeArray = [context executeFetchRequest:nodeRequest error:&error];
 		if (!nodeArray || [nodeArray count] == 0) {
 			if (error) {
 				NSLog(@"error fetching node for ID %@: %@", nodeId, [error localizedDescription]);
 				[error release];
 			}
-			node = (Node*)[NSEntityDescription insertNewObjectForEntityForName:@"Node" inManagedObjectContext:moc];
+			node = (Node*)[NSEntityDescription insertNewObjectForEntityForName:@"Node" inManagedObjectContext:context];
 		} else {
 			node = (Node*)[nodeArray objectAtIndex:0];
 		}
@@ -105,11 +100,11 @@
 	}
 
 	NSError* error = nil;
-	if (![moc save:&error]) {
+	if (![context save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
-    [moc unlock];
+	[context unlock];
 	[super requestDidFinish:request];
 	[self autorelease];
 }

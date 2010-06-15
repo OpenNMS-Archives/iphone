@@ -86,9 +86,41 @@ static ContextService* contextService = nil;
 	isFinished = YES;
 }
 
+-(void) clearData
+{
+	NSManagedObjectContext* context = [contextService writeContext];
+	[context lock];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
+	[request setEntity:entity];
+	NSError* error = nil;
+	NSArray *nodesToDelete = [context executeFetchRequest:request error:&error];
+	if (!nodesToDelete) {
+		if (error) {
+			NSLog(@"%@: error fetching nodes to delete (clearData): %@", self, [error localizedDescription]);
+			[error release];
+		} else {
+			NSLog(@"%@: error fetching nodes to delete (clearData)", self);
+		}
+	} else {
+		for (id node in nodesToDelete) {
+#if DEBUG
+			NSLog(@"deleting %@", node);
+#endif
+			[context deleteObject:node];
+		}
+	}
+	error = nil;
+	if (![context save:&error]) {
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
+		[error release];
+	}
+	[context unlock];
+}
+
 NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 {
-	NSManagedObjectContext* context = [contextService managedObjectContext];
+	NSManagedObjectContext* context = [contextService readContext];
 	Node* node1 = (Node*)[context objectWithID:obj1];
 	Node* node2 = (Node*)[context objectWithID:obj2];
 	
@@ -99,7 +131,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 {
 	NSMutableSet* nodes = [NSMutableSet set];
 	
-	NSManagedObjectContext* context = [contextService managedObjectContext];
+	NSManagedObjectContext* context = [contextService readContext];
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
 	[request setEntity:entity];
@@ -146,8 +178,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 -(Node*) getCoreDataNode:(NSNumber*) nodeId
 {
 	Node* node = nil;
-	NSManagedObjectContext* context = [contextService managedObjectContext];
-	[context lock];
+	NSManagedObjectContext* context = [contextService readContext];
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
@@ -168,7 +199,6 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 	} else {
 		node = (Node*)[results objectAtIndex:0];
 	}
-    [context unlock];
 	return node;
 }
 

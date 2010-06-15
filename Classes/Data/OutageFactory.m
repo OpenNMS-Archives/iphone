@@ -60,7 +60,7 @@ static NSManagedObjectContext* context = nil;
 		initialized = YES;
 		outageFactorySingleton = [[OutageFactory alloc] init];
 		contextService         = [[ContextService alloc] init];
-        context                = [contextService managedObjectContext];
+        context                = [contextService readContext];
 	}
 }
 
@@ -92,9 +92,40 @@ static NSManagedObjectContext* context = nil;
 	isFinished = YES;
 }
 
+-(void) clearData
+{
+	NSManagedObjectContext* context = [contextService writeContext];
+	[context lock];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
+	[request setEntity:entity];
+	NSError* error = nil;
+	NSArray *outagesToDelete = [context executeFetchRequest:request error:&error];
+	if (!outagesToDelete) {
+		if (error) {
+			NSLog(@"%@: error fetching outages to delete (clearData): %@", self, [error localizedDescription]);
+			[error release];
+		} else {
+			NSLog(@"%@: error fetching outages to delete (clearData)", self);
+		}
+	} else {
+		for (id outage in outagesToDelete) {
+#if DEBUG
+			NSLog(@"deleting %@", outage);
+#endif
+			[context deleteObject:outage];
+		}
+	}
+	error = nil;
+	if (![context save:&error]) {
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
+		[error release];
+	}
+	[context unlock];
+}
+
 -(Outage*) getCoreDataOutage:(NSNumber*) outageId
 {
-    [context lock];
     Outage* outage = nil;
 	NSFetchRequest* outageRequest = [[NSFetchRequest alloc] init];
 
@@ -115,13 +146,11 @@ static NSManagedObjectContext* context = nil;
 	} else {
 		outage = (Outage*)[results objectAtIndex:0];
 	}
-    [context unlock];
     return outage;
 }
 
 -(NSArray*) getCoreDataOutagesForNode:(NSNumber*) nodeId
 {
-    [context lock];
 	NSFetchRequest* nodeOutageRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
 	[nodeOutageRequest setEntity:entity];
@@ -142,7 +171,6 @@ static NSManagedObjectContext* context = nil;
 			NSLog(@"error fetching outages for node ID %@", nodeId);
 		}
 	}
-    [context unlock];
     return results;
 }
 

@@ -46,6 +46,7 @@
 +(AlarmFactory*) getInstance;
 
 -(void) finish;
+-(void) clearData;
 -(Alarm*) getCoreDataAlarm:(NSNumber *)alarmId;
 -(Alarm*) getRemoteAlarm:(NSNumber *)alarmId;
 -(Alarm*) getAlarm:(NSNumber*) alarmId;

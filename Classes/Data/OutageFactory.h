@@ -46,6 +46,8 @@
 +(OutageFactory*) getInstance;
 
 -(void) finish;
+-(void) clearData;
+
 -(Outage*) getOutage:(NSNumber*) outageId;
 -(NSArray*) getOutagesForNode:(NSNumber*) nodeId;
 

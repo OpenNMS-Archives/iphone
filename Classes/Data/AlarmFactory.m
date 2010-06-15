@@ -84,11 +84,42 @@ static ContextService* contextService = nil;
 	isFinished = YES;
 }
 
+-(void) clearData
+{
+	NSManagedObjectContext* context = [contextService writeContext];
+	[context lock];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
+	[request setEntity:entity];
+	NSError* error = nil;
+	NSArray *alarmsToDelete = [context executeFetchRequest:request error:&error];
+	if (!alarmsToDelete) {
+		if (error) {
+			NSLog(@"%@: error fetching alarms to delete (clearData): %@", self, [error localizedDescription]);
+			[error release];
+		} else {
+			NSLog(@"%@: error fetching alarms to delete (clearData)", self);
+		}
+	} else {
+		for (id alarm in alarmsToDelete) {
+#if DEBUG
+			NSLog(@"deleting %@", alarm);
+#endif
+			[context deleteObject:alarm];
+		}
+	}
+	error = nil;
+	if (![context save:&error]) {
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
+		[error release];
+	}
+	[context unlock];
+}
+
 -(Alarm*) getCoreDataAlarm:(NSNumber*) alarmId
 {
 	Alarm* alarm = nil;
-	NSManagedObjectContext* context = [contextService managedObjectContext];
-	[context lock];
+	NSManagedObjectContext* context = [contextService readContext];
     
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 
@@ -111,7 +142,6 @@ static ContextService* contextService = nil;
 		alarm = (Alarm*)[results objectAtIndex:0];
 		[context refreshObject:alarm mergeChanges:NO];
 	}
-    [context unlock];
 	return alarm;
 }
 

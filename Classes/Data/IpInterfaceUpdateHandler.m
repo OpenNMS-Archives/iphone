@@ -48,7 +48,6 @@
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
 	int count = 0;
-	NSManagedObjectContext *moc = [contextService managedObjectContext];
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
@@ -72,7 +71,7 @@
 	} else {
 		xmlIpInterfaces = [[document rootElement] elementsForName:@"ipInterface"];
 	}
-	[moc lock];
+	[context lock];
 	for (id xmlIpInterface in xmlIpInterfaces) {
 		count++;
 		IpInterface* ipInterface;
@@ -102,20 +101,20 @@
 
 		NSFetchRequest *ipInterfaceRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *ipInterfaceEntity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:moc];
+		NSEntityDescription *ipInterfaceEntity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
 		[ipInterfaceRequest setEntity:ipInterfaceEntity];
 		
 		NSPredicate *ipInterfacePredicate = [NSPredicate predicateWithFormat:@"interfaceId == %@", ipInterfaceId];
 		[ipInterfaceRequest setPredicate:ipInterfacePredicate];
 		
 		NSError* error = nil;
-		NSArray *ipInterfaceArray = [moc executeFetchRequest:ipInterfaceRequest error:&error];
+		NSArray *ipInterfaceArray = [context executeFetchRequest:ipInterfaceRequest error:&error];
 		if (!ipInterfaceArray || [ipInterfaceArray count] == 0) {
 			if (error) {
 				NSLog(@"%@: error fetching ipInterface for ID %@: %@", self, ipInterfaceId, [error localizedDescription]);
 				[error release];
 			}
-			ipInterface = (IpInterface*)[NSEntityDescription insertNewObjectForEntityForName:@"IpInterface" inManagedObjectContext:moc];
+			ipInterface = (IpInterface*)[NSEntityDescription insertNewObjectForEntityForName:@"IpInterface" inManagedObjectContext:context];
 		} else {
 			ipInterface = (IpInterface*)[ipInterfaceArray objectAtIndex:0];
 		}
@@ -157,7 +156,7 @@
 	if (self.clearOldObjects) {
 		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:moc];
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
 		[request setEntity:entity];
 		
 		if (nodeId) {
@@ -169,7 +168,7 @@
 		}
 
 		NSError* error = nil;
-		NSArray *ipInterfacesToDelete = [moc executeFetchRequest:request error:&error];
+		NSArray *ipInterfacesToDelete = [context executeFetchRequest:request error:&error];
 		if (!ipInterfacesToDelete) {
 			if (error) {
 				NSLog(@"error fetching ipInterfaces to delete (older than %@): %@", lastModified, [error localizedDescription]);
@@ -182,17 +181,17 @@
 #if DEBUG
 				NSLog(@"deleting %@", ipInterface);
 #endif
-				[moc deleteObject:ipInterface];
+				[context deleteObject:ipInterface];
 			}
 		}
 	}
 
 	NSError* error = nil;
-	if (![moc save:&error]) {
+	if (![context save:&error]) {
 		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-	[moc unlock];
+	[context unlock];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];

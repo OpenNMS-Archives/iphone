@@ -49,7 +49,6 @@
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
 	int count = 0;
-	NSManagedObjectContext *moc = [contextService managedObjectContext];
 
 	CXMLDocument* document = [self getDocumentForRequest:request];
 
@@ -67,7 +66,7 @@
 	} else {
 		xmlSnmpInterfaces = [[document rootElement] elementsForName:@"snmpInterface"];
 	}
-    [moc lock];
+	[context lock];
 	for (id xmlSnmpInterface in xmlSnmpInterfaces) {
 		count++;
 		SnmpInterface* snmpInterface;
@@ -94,20 +93,20 @@
 
 		NSFetchRequest *snmpInterfaceRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *snmpInterfaceEntity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:moc];
+		NSEntityDescription *snmpInterfaceEntity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:context];
 		[snmpInterfaceRequest setEntity:snmpInterfaceEntity];
 		
 		NSPredicate *snmpInterfacePredicate = [NSPredicate predicateWithFormat:@"interfaceId == %@", snmpInterfaceId];
 		[snmpInterfaceRequest setPredicate:snmpInterfacePredicate];
 		
 		NSError* error = nil;
-		NSArray *snmpInterfaceArray = [moc executeFetchRequest:snmpInterfaceRequest error:&error];
+		NSArray *snmpInterfaceArray = [context executeFetchRequest:snmpInterfaceRequest error:&error];
 		if (!snmpInterfaceArray || [snmpInterfaceArray count] == 0) {
 			if (error) {
 				NSLog(@"%@: error fetching snmpInterface for ID %@: %@", self, snmpInterfaceId, [error localizedDescription]);
 				[error release];
 			}
-			snmpInterface = (SnmpInterface*)[NSEntityDescription insertNewObjectForEntityForName:@"SnmpInterface" inManagedObjectContext:moc];
+			snmpInterface = (SnmpInterface*)[NSEntityDescription insertNewObjectForEntityForName:@"SnmpInterface" inManagedObjectContext:context];
 		} else {
 			snmpInterface = (SnmpInterface*)[snmpInterfaceArray objectAtIndex:0];
 		}
@@ -155,7 +154,7 @@
 	if (self.clearOldObjects) {
 		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:moc];
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:context];
 		[request setEntity:entity];
 		
 		if (nodeId) {
@@ -167,7 +166,7 @@
 		}
 
 		NSError* error = nil;
-		NSArray *snmpInterfacesToDelete = [moc executeFetchRequest:request error:&error];
+		NSArray *snmpInterfacesToDelete = [context executeFetchRequest:request error:&error];
 		if (!snmpInterfacesToDelete) {
 			if (error) {
 				NSLog(@"%@: error fetching snmpInterfaces to delete (older than %@): %@", self, lastModified, [error localizedDescription]);
@@ -180,17 +179,17 @@
 #if DEBUG
 				NSLog(@"%@: deleting %@", self, snmpInterface);
 #endif
-				[moc deleteObject:snmpInterface];
+				[context deleteObject:snmpInterface];
 			}
 		}
 	}
 
 	NSError* error = nil;
-	if (![moc save:&error]) {
+	if (![context save:&error]) {
 		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-    [moc unlock];
+	[context unlock];
 	[super requestDidFinish:request];
 	[self autorelease];
 }

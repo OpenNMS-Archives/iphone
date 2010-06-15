@@ -78,7 +78,7 @@
 #endif
     if (!_fetchedResultsController) {
         NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
-        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:[contextService managedObjectContext]];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:[contextService readContext]];
         [fetchRequest setEntity:entity];
 #if DEBUG
         NSLog(@"%@: fetchRequest = %@", self, fetchRequest);
@@ -97,7 +97,7 @@
 #endif
         NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]
                                                   initWithFetchRequest:fetchRequest
-                                                  managedObjectContext:[contextService managedObjectContext]
+                                                  managedObjectContext:[contextService readContext]
                                                   sectionNameKeyPath:nil
                                                   cacheName:@"outageByIfLostService"];
 #if DEBUG
@@ -114,7 +114,7 @@
     self.navigationItem.rightBarButtonItem = [self getSpinner];
     [super initializeData];
 	OutageListUpdater* updater = [[[OutageListUpdater alloc] init] autorelease];
-	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[contextService managedObjectContext]] autorelease];
+	OutageUpdateHandler* handler = [[[OutageUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
 	handler.clearOldObjects = YES;
 	updater.handler = handler;
 	[updater update];
@@ -139,15 +139,12 @@
 	if (!nodeFactory) {
 		self.nodeFactory = [NodeFactory getInstance];
 	}
-	[self initializeData];
-
 	[super viewDidLoad];
 }
 
 - (void) viewDidUnload
 {
     fuzzyDate = nil;
-	
 	[super viewDidUnload];
 }
 

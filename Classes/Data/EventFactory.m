@@ -83,9 +83,41 @@ static ContextService* contextService = nil;
 	isFinished = YES;
 }
 
+-(void) clearData
+{
+	NSManagedObjectContext* context = [contextService writeContext];
+	[context lock];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
+	[request setEntity:entity];
+	NSError* error = nil;
+	NSArray *eventsToDelete = [context executeFetchRequest:request error:&error];
+	if (!eventsToDelete) {
+		if (error) {
+			NSLog(@"%@: error fetching events to delete (clearData): %@", self, [error localizedDescription]);
+			[error release];
+		} else {
+			NSLog(@"%@: error fetching events to delete (clearData)", self);
+		}
+	} else {
+		for (id event in eventsToDelete) {
+#if DEBUG
+			NSLog(@"deleting %@", event);
+#endif
+			[context deleteObject:event];
+		}
+	}
+	error = nil;
+	if (![context save:&error]) {
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
+		[error release];
+	}
+	[context unlock];
+}
+
 -(Event*) getCoreDataEvent:(NSNumber*) eventId
 {
-	NSManagedObjectContext* context = [contextService managedObjectContext];
+	NSManagedObjectContext* context = [contextService readContext];
     [context lock];
 	NSFetchRequest* eventRequest = [[NSFetchRequest alloc] init];
 
@@ -113,7 +145,7 @@ static ContextService* contextService = nil;
 
 -(NSArray*) getCoreDataEventsForNode:(NSNumber*) nodeId
 {
-	NSManagedObjectContext* context = [contextService managedObjectContext];
+	NSManagedObjectContext* context = [contextService readContext];
     [context lock];
 	NSFetchRequest* nodeEventRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];

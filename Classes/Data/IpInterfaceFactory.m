@@ -83,11 +83,42 @@ static ContextService* contextService = nil;
 	isFinished = YES;
 }
 
+-(void) clearData
+{
+	NSManagedObjectContext* context = [contextService writeContext];
+	[context lock];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
+	[request setEntity:entity];
+	NSError* error = nil;
+	NSArray *ifacesToDelete = [context executeFetchRequest:request error:&error];
+	if (!ifacesToDelete) {
+		if (error) {
+			NSLog(@"%@: error fetching ifaces to delete (clearData): %@", self, [error localizedDescription]);
+			[error release];
+		} else {
+			NSLog(@"%@: error fetching ifaces to delete (clearData)", self);
+		}
+	} else {
+		for (id iface in ifacesToDelete) {
+#if DEBUG
+			NSLog(@"deleting %@", iface);
+#endif
+			[context deleteObject:iface];
+		}
+	}
+	error = nil;
+	if (![context save:&error]) {
+		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
+		[error release];
+	}
+	[context unlock];
+}
+
 -(IpInterface*) getCoreDataIpInterface:(NSNumber*) ipInterfaceId
 {
     IpInterface* iface = nil;
-	NSManagedObjectContext* context = [contextService managedObjectContext];
-    [context lock];
+	NSManagedObjectContext* context = [contextService readContext];
 	NSFetchRequest* ipInterfaceRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
@@ -107,14 +138,12 @@ static ContextService* contextService = nil;
 	} else {
 		iface = (IpInterface*)[results objectAtIndex:0];
 	}
-    [context unlock];
     return iface;
 }
 
 -(NSArray*) getCoreDataIpInterfacesForNode:(NSNumber*) nodeId
 {
-	NSManagedObjectContext* context = [contextService managedObjectContext];
-    [context lock];
+	NSManagedObjectContext* context = [contextService readContext];
 	NSFetchRequest* nodeIpInterfaceRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
 	[nodeIpInterfaceRequest setEntity:entity];
@@ -140,7 +169,6 @@ static ContextService* contextService = nil;
 			NSLog(@"%@: error fetching ipInterfaces for node ID %@", self, nodeId);
 		}
 	}
-    [context unlock];
     return results;
 }
 

@@ -46,6 +46,8 @@
 +(IpInterfaceFactory*) getInstance;
 
 -(void) finish;
+-(void) clearData;
+
 -(NSArray*) getIpInterfacesForNode:(NSNumber*) nodeId;
 
 @end

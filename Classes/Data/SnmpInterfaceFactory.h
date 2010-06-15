@@ -46,6 +46,8 @@
 +(SnmpInterfaceFactory*) getInstance;
 
 -(void) finish;
+-(void) clearData;
+
 -(NSArray*) getSnmpInterfacesForNode:(NSNumber*) nodeId;
 
 @end

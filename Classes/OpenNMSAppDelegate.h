@@ -51,7 +51,6 @@
 @property (retain, readonly) ContextService* contextService;
 
 - (ContextService *) contextService;
-- (NSManagedObjectContext *) managedObjectContext;
 
 - (void) openSettings;
 - (void) closeSettings;

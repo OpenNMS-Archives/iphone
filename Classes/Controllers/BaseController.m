@@ -92,6 +92,9 @@
     [super willRotateToInterfaceOrientation:orientation duration:duration];
     [orientationHandler updateWithOrientation:orientation];
 	if (tableView) {
+#if DEBUG
+		NSLog(@"%@: willRotateToInterfaceOrientation: reloadData called", self);
+#endif
 		[tableView reloadData];
 	}
 }
@@ -123,6 +126,9 @@
             NSLog(@"%@: Caught %@: %@", self, [exception name], [exception reason]);
         }
     }
+#if DEBUG
+	NSLog(@"%@: refreshData: reloadData called", self);
+#endif
     [tableView reloadData];
 	[spinner stopAnimating];
 }

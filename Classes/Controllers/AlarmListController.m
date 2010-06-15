@@ -74,7 +74,7 @@
 {
     if (_fetchedResultsController == nil) {
         NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
-        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:[contextService managedObjectContext]];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:[contextService readContext]];
         [fetchRequest setEntity:entity];
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
         NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
@@ -84,7 +84,7 @@
         
         NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]
                                                   initWithFetchRequest:fetchRequest
-                                                  managedObjectContext:[contextService managedObjectContext]
+                                                  managedObjectContext:[contextService readContext]
                                                   sectionNameKeyPath:nil
                                                   cacheName:@"alarmByLastEventTime"];
         controller.delegate = self;
@@ -98,7 +98,7 @@
     self.navigationItem.rightBarButtonItem = [self getSpinner];
     [super initializeData];
 	AlarmListUpdater* updater = [[[AlarmListUpdater alloc] init] autorelease];
-	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self context:[contextService managedObjectContext]] autorelease];
+	AlarmUpdateHandler* handler = [[[AlarmUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self] autorelease];
 	handler.clearOldObjects = YES;
 	updater.handler = handler;
 	[updater update];

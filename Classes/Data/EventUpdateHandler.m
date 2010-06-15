@@ -49,7 +49,6 @@
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
 	int count = 0;
-	NSManagedObjectContext *moc = [contextService managedObjectContext];
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
@@ -73,7 +72,7 @@
 	} else {
 		xmlEvents = [[document rootElement] elementsForName:@"event"];
 	}
-    [moc lock];
+	[context lock];
 	for (id xmlEvent in xmlEvents) {
 		count++;
 		Event* event;
@@ -101,20 +100,20 @@
 
 		NSFetchRequest *eventRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *eventEntity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:moc];
+		NSEntityDescription *eventEntity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
 		[eventRequest setEntity:eventEntity];
 		
 		NSPredicate *eventPredicate = [NSPredicate predicateWithFormat:@"eventId == %@", eventId];
 		[eventRequest setPredicate:eventPredicate];
 		
 		NSError* error = nil;
-		NSArray *eventArray = [moc executeFetchRequest:eventRequest error:&error];
+		NSArray *eventArray = [context executeFetchRequest:eventRequest error:&error];
 		if (!eventArray || [eventArray count] == 0) {
 			if (error) {
 				NSLog(@"%@: error fetching event for ID %@: %@", self, eventId, [error localizedDescription]);
 				[error release];
 			}
-			event = (Event*)[NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:moc];
+			event = (Event*)[NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:context];
 		} else {
 			event = (Event*)[eventArray objectAtIndex:0];
 		}
@@ -180,7 +179,7 @@
 	if (self.clearOldObjects) {
 		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:moc];
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
 		[request setEntity:entity];
 		
 		if (nodeId) {
@@ -192,7 +191,7 @@
 		}
 
 		NSError* error = nil;
-		NSArray *eventsToDelete = [moc executeFetchRequest:request error:&error];
+		NSArray *eventsToDelete = [context executeFetchRequest:request error:&error];
 		if (!eventsToDelete) {
 			if (error) {
 				NSLog(@"%@: error fetching events to delete (older than %@): %@", self, lastModified, [error localizedDescription]);
@@ -205,17 +204,17 @@
 #if DEBUG
 				NSLog(@"deleting %@", event);
 #endif
-				[moc deleteObject:event];
+				[context deleteObject:event];
 			}
 		}
 	}
 
 	NSError* error = nil;
-	if (![moc save:&error]) {
+	if (![context save:&error]) {
 		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-    [moc unlock];
+	[context unlock];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];
