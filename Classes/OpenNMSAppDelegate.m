@@ -34,6 +34,7 @@
 #import "config.h"
 #import "OpenNMSAppDelegate.h"
 #import "SettingsViewController.h"
+#import "BaseUpdater.h"
 
 #import "AlarmFactory.h"
 #import "NodeFactory.h"
@@ -67,6 +68,30 @@
     [super dealloc];
 }
 
+-(void) clearData
+{
+	[[AlarmFactory getInstance] clearData];
+	[[NodeFactory getInstance] clearData];
+	[[EventFactory getInstance] clearData];
+	[[OutageFactory getInstance] clearData];
+	[[IpInterfaceFactory getInstance] clearData];
+	[[SnmpInterfaceFactory getInstance] clearData];
+}
+
+-(void) checkSettingsState
+{
+	NSString* previousBase = [[NSUserDefaults standardUserDefaults] stringForKey:@"previous_base_url"];
+	NSString* currentBase = [BaseUpdater getBaseUrl];
+	
+	if (![previousBase isEqualToString:currentBase]) {
+#if DEBUG
+		NSLog(@"%@: previous base = %@, current base = %@, clearing data", self, previousBase, currentBase);
+#endif
+		[[NSUserDefaults standardUserDefaults] setObject:[BaseUpdater getBaseUrl] forKey:@"previous_base_url"];
+		[self clearData];
+	}
+}
+
 -(void) applicationDidFinishLaunching:(UIApplication *)application
 {
     // Add the tab bar controller's current view as a subview of the window
@@ -78,6 +103,26 @@
 	}
 }
 
+-(void) applicationDidBecomeActive:(UIApplication *)application
+{
+	[self checkSettingsState];
+}
+
+-(void) applicationDidEnterBackground:(UIApplication *)application
+{
+	[[NSUserDefaults standardUserDefaults] setObject:[BaseUpdater getBaseUrl] forKey:@"previous_base_url"];
+}
+
+-(void) applicationWillResignActive:(UIApplication *)application
+{
+	[[NSUserDefaults standardUserDefaults] setObject:[BaseUpdater getBaseUrl] forKey:@"previous_base_url"];
+}
+
+-(void) applicationWillTerminate:(UIApplication *)application
+{
+	[[NSUserDefaults standardUserDefaults] setObject:[BaseUpdater getBaseUrl] forKey:@"previous_base_url"];
+}
+
 - (void) openSettings
 {
     if (settingsActive) return;
@@ -87,7 +132,7 @@
 #if DEBUG
 	NSLog(@"%@: root bundle path = %@", self, plist);
 #endif
-	SettingsViewController *settingsviewcontroller = [[SettingsViewController alloc] initWithConfigFile:plist];
+	SettingsViewController* settingsviewcontroller = [[SettingsViewController alloc] initWithConfigFile:plist];
 	UINavigationController* unc = [[UINavigationController alloc] initWithRootViewController:settingsviewcontroller];
 	settingsviewcontroller.title = @"Settings";
 	UIBarButtonItem* button = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeSettings)] autorelease];
@@ -100,18 +145,10 @@
 
 - (void) closeSettings
 {
-	[[AlarmFactory getInstance] clearData];
-	[[NodeFactory getInstance] clearData];
-	[[EventFactory getInstance] clearData];
-	[[OutageFactory getInstance] clearData];
-	[[IpInterfaceFactory getInstance] clearData];
-	[[SnmpInterfaceFactory getInstance] clearData];
-
-	for (id controller in [navigationController viewControllers]) {
-		NSLog(@"%@: navigation controller = %@", self, controller);
-	}
 	[tabBarController dismissModalViewControllerAnimated:YES];
 	settingsActive = NO;
+
+	[self checkSettingsState];
 }
 
 - (ContextService*) contextService
