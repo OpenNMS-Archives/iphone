@@ -129,9 +129,6 @@ static ContextService* contextService = nil;
 		
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-#if DEBUG
-			NSLog(@"%@: waiting for getRemoteAlarm", self);
-#endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		alarm = [self getCoreDataAlarm:alarmId];

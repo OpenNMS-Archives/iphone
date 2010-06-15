@@ -175,9 +175,6 @@ static ContextService* contextService = nil;
 		
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-#if DEBUG
-			NSLog(@"%@: waiting for getSnmpInterfacesForNode", self);
-#endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		snmpInterfaces = [self getCoreDataSnmpInterfacesForNode:nodeId];

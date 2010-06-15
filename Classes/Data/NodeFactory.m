@@ -186,9 +186,6 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 		
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-#if DEBUG
-			NSLog(@"waiting for getRemoteNode");
-#endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		node = [self getCoreDataNode:nodeId];

@@ -173,9 +173,6 @@ static NSManagedObjectContext* context = nil;
 		
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-#if DEBUG
-			NSLog(@"waiting for getOutagesForNode");
-#endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		outages = [self getCoreDataOutagesForNode:nodeId];
@@ -204,9 +201,6 @@ static NSManagedObjectContext* context = nil;
 
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-#if DEBUG
-			NSLog(@"waiting for getOutage");
-#endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		

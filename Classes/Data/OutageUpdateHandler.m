@@ -32,7 +32,6 @@
  *******************************************************************************/
 
 #import "config.h"
-#import "RegexKitLite.h"
 
 #import "OutageUpdateHandler.h"
 #import "Outage.h"

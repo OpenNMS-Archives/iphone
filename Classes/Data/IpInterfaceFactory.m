@@ -173,9 +173,6 @@ static ContextService* contextService = nil;
 		
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-#if DEBUG
-			NSLog(@"%@: waiting for getIpInterfacesForNode", self);
-#endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		ipInterfaces = [self getCoreDataIpInterfacesForNode:nodeId];

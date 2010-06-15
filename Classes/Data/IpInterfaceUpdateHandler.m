@@ -72,7 +72,7 @@
 	} else {
 		xmlIpInterfaces = [[document rootElement] elementsForName:@"ipInterface"];
 	}
-    [moc lock];
+	[moc lock];
 	for (id xmlIpInterface in xmlIpInterfaces) {
 		count++;
 		IpInterface* ipInterface;
@@ -192,7 +192,7 @@
 		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-    [moc unlock];
+	[moc unlock];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];

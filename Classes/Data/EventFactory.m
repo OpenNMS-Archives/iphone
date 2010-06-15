@@ -172,9 +172,6 @@ static ContextService* contextService = nil;
 		
 		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-#if DEBUG
-			NSLog(@"%@: waiting for getEventsForNode", self);
-#endif
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
 		}
 		events = [self getCoreDataEventsForNode:nodeId];

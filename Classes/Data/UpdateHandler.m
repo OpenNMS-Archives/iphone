@@ -32,7 +32,6 @@
  *******************************************************************************/
 
 #import "UpdateHandler.h"
-#import "RegexKitLite.h"
 #import "OpenNMSAppDelegate.h"
 
 @implementation UpdateHandler
@@ -98,23 +97,90 @@
 	[super dealloc];
 }
 
+- (NSString *)flattenHTML:(NSString *)html {
+	
+    NSScanner *theScanner;
+    NSString *text = nil;
+	
+    theScanner = [NSScanner scannerWithString:html];
+	
+    while ([theScanner isAtEnd] == NO) {
+		
+        // find start of tag
+        [theScanner scanUpToString:@"<" intoString:NULL] ; 
+		
+        // find end of tag
+        [theScanner scanUpToString:@">" intoString:&text] ;
+		
+        // replace the found tag with a space
+        html = [html stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@>", text] withString:@""];
+		
+    }
+    
+    return html;
+}
 
 -(NSString *) cleanUpString:(NSString *)html
 {
-	NSMutableString* string = [NSMutableString stringWithString:html];
-	
-	[string replaceOccurrencesOfRegex:@"^\\s*(.*?)\\s*$" withString:@"$1"];
-	[string replaceOccurrencesOfRegex:@"<[^>]*>" withString:@""];
-	
-	return [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	NSString* cleaned = [[self flattenHTML:html] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+#if DEBUG
+	NSLog(@"%@: cleanUpString:'%@' returning '%@'", self, html, cleaned);
+#endif
+	return cleaned;
 }
 
--(NSString*) stringForDate:(NSString*)date
+-(NSString*) stringForDate:(NSString*)dateString
 {
-	NSMutableString* string = [NSMutableString stringWithString:date];
-	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
-    [string replaceOccurrencesOfRegex:@"-(\\d\\d):(\\d\\d)$" withString:@"-$1$2"];
-	return string;
+	NSString* date;
+	NSString* time;
+	NSString* zoneHour;
+	NSString* zoneMinute;
+
+	NSScanner *scanner = [NSScanner scannerWithString:dateString];
+	scanner.caseSensitive = YES;
+	if (![scanner scanUpToString:@"T" intoString:&date]) {
+#if DEBUG
+		NSLog(@"%@: unable to scan date portion of %@", self, dateString);
+#endif
+		return dateString;
+	}
+	if (![scanner scanString:@"T" intoString:NULL]) {
+#if DEBUG
+		NSLog(@"%@: unable to scan T separator of %@", self, dateString);
+#endif
+		return dateString;
+	}
+	if (![scanner scanUpToString:@"-" intoString:&time]) {
+#if DEBUG
+		NSLog(@"%@: unable to scan time portion of %@", self, dateString);
+#endif
+		return dateString;
+	}
+	if (![scanner scanString:@"-" intoString:NULL]) {
+#if DEBUG
+		NSLog(@"%@: unable to scan - separator of %@", self, dateString);
+#endif
+		return dateString;
+	}
+	if (![scanner scanUpToString:@":" intoString:&zoneHour]) {
+#if DEBUG
+		NSLog(@"%@: unable to scan time zone hour portion of %@", self, dateString);
+#endif
+		return dateString;
+	}
+	if (![scanner scanString:@":" intoString:NULL]) {
+#if DEBUG
+		NSLog(@"%@: unable to scan : separator of %@", self, dateString);
+#endif
+		return dateString;
+	}
+	zoneMinute = [dateString substringFromIndex:[scanner scanLocation]];
+
+	NSString* returnString = [NSString stringWithFormat:@"%@T%@-%@%@", date, time, zoneHour, zoneMinute];
+#if DEBUG
+	NSLog(@"%@: stringForDate:%@ returning '%@'", self, dateString, returnString);
+#endif
+	return returnString;
 }
 
 

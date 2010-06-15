@@ -79,7 +79,6 @@
 		448AC2C510097B6700C2621C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 448AC2C410097B6700C2621C /* Settings.bundle */; };
 		448D5AF8102BC9F5008416E3 /* AlarmUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 448D5AF7102BC9F5008416E3 /* AlarmUpdater.m */; };
 		448EE92C101E0CF800063B32 /* OnmsSeverity.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EE92B101E0CF800063B32 /* OnmsSeverity.m */; };
-		448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 448EEA98101E3A2600063B32 /* RegexKitLite.m */; };
 		448EEAA4101E3B7400063B32 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 448EEAA3101E3B7400063B32 /* libicucore.dylib */; };
 		44981CCB100EA9C3006BB193 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 44981CCA100EA9C3006BB193 /* Default.png */; };
 		44B8E1A3102DB0A9003DBB9B /* OutageListUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 44B8E1A2102DB0A9003DBB9B /* OutageListUpdater.m */; };
@@ -250,8 +249,6 @@
 		448D5AF7102BC9F5008416E3 /* AlarmUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmUpdater.m; path = Data/AlarmUpdater.m; sourceTree = "<group>"; };
 		448EE92A101E0CF800063B32 /* OnmsSeverity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnmsSeverity.h; path = Objects/OnmsSeverity.h; sourceTree = "<group>"; };
 		448EE92B101E0CF800063B32 /* OnmsSeverity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnmsSeverity.m; path = Objects/OnmsSeverity.m; sourceTree = "<group>"; };
-		448EEA97101E3A2600063B32 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegexKitLite.h; path = "External Classes/RegexKitLite/RegexKitLite.h"; sourceTree = "<group>"; };
-		448EEA98101E3A2600063B32 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegexKitLite.m; path = "External Classes/RegexKitLite/RegexKitLite.m"; sourceTree = "<group>"; };
 		448EEAA3101E3B7400063B32 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		44981CCA100EA9C3006BB193 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Images/Default.png; sourceTree = "<group>"; };
 		44B8E1A1102DB0A9003DBB9B /* OutageListUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutageListUpdater.h; path = Data/OutageListUpdater.h; sourceTree = "<group>"; };
@@ -555,7 +552,6 @@
 			children = (
 				44700FAB1007D5D8006CE665 /* ASIHTTPRequest */,
 				44CAE4C3103B4576001ADEB1 /* mySettings */,
-				448EEA95101E3A1100063B32 /* RegExKitLite */,
 				44F0E640100F98CA000B8A22 /* TouchXML */,
 			);
 			name = "External Classes";
@@ -649,15 +645,6 @@
 				44367B491038E273008E6799 /* SnmpInterfaceUpdateHandler.m */,
 			);
 			name = Data;
-			sourceTree = "<group>";
-		};
-		448EEA95101E3A1100063B32 /* RegExKitLite */ = {
-			isa = PBXGroup;
-			children = (
-				448EEA97101E3A2600063B32 /* RegexKitLite.h */,
-				448EEA98101E3A2600063B32 /* RegexKitLite.m */,
-			);
-			name = RegExKitLite;
 			sourceTree = "<group>";
 		};
 		44CAE4C3103B4576001ADEB1 /* mySettings */ = {
@@ -832,7 +819,6 @@
 				44263D2D1011309700717409 /* AlarmListController.m in Sources */,
 				44EEAFB4101BA7A70023D5BD /* NodeListController.m in Sources */,
 				448EE92C101E0CF800063B32 /* OnmsSeverity.m in Sources */,
-				448EEA99101E3A2600063B32 /* RegexKitLite.m in Sources */,
 				442434611024E7C200658DB1 /* AlarmDetailController.m in Sources */,
 				4481486B1029D25A00083FF9 /* BaseUpdater.m in Sources */,
 				4481488E1029D41400083FF9 /* AlarmListUpdater.m in Sources */,

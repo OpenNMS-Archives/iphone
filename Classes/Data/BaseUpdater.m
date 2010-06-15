@@ -34,7 +34,6 @@
 #import "config.h"
 #import "BaseUpdater.h"
 #import "UpdateHandler.h"
-#import "RegexKitLite.h"
 
 @implementation BaseUpdater
 
@@ -63,13 +62,6 @@
     [queue release];
 	
 	[super dealloc];
-}
-
--(NSString*) filterDate:(NSString*)date
-{
-	NSMutableString* string = [NSMutableString stringWithString:date];
-	[string replaceOccurrencesOfRegex:@"(\\d\\d:\\d\\d:\\d\\d)\\.\\d\\d\\d" withString:@"$1"];
-	return string;
 }
 
 +(NSString*) getBaseUrl
