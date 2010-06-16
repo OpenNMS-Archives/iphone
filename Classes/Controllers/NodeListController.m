@@ -39,6 +39,8 @@
 #import "NodeUpdateHandler.h"
 #import "Node.h"
 
+#import "OpenNMSAppDelegate.h"
+
 @implementation NodeListController
 
 @synthesize savedSearchTerm;
@@ -59,7 +61,7 @@
 		self.nodeList = [NSMutableArray array];
 	}
 	if (!self.contextService) {
-		self.contextService = [[ContextService alloc] init];
+		self.contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 	
 	if (self.savedSearchTerm)

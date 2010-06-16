@@ -34,3 +34,7 @@
 #ifndef DEBUG
 #define DEBUG 0
 #endif
+
+#ifndef REFRESH_INTERVAL
+#define REFRESH_INTERVAL 300
+#endif

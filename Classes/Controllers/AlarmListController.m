@@ -46,11 +46,13 @@
 @synthesize fuzzyDate;
 
 @synthesize _fetchedResultsController;
+@synthesize _refreshTimer;
 
 -(id)init
 {
     if (self = [super init]) {
        [self initializeData];
+		[NSFetchedResultsController deleteCacheWithName:@"alarmByLastEventTime"];
         cellIdentifier = @"alarmList";
     }
     return self;
@@ -60,6 +62,10 @@
 {
     fuzzyDate = nil;
     _fetchedResultsController = nil;
+	if (_refreshTimer) {
+		[_refreshTimer invalidate];
+		_refreshTimer = nil;
+	}
 
     [super dealloc];
 }
@@ -134,11 +140,14 @@
 {
 	[self initializeData];
 	[super viewWillAppear:animated];
+	_refreshTimer = [NSTimer scheduledTimerWithTimeInterval:REFRESH_INTERVAL target:self selector:@selector(initializeData) userInfo:nil repeats:YES];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-//    _fetchedResultsController = nil;
+	[_refreshTimer invalidate];
+	_refreshTimer = nil;
+	[super viewWillDisappear:animated];
 }
 
 #pragma mark UITableView delegates

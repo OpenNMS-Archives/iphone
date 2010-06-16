@@ -35,6 +35,8 @@
 #import "BaseController.h"
 #import "ColumnarTableViewCell.h"
 
+#import "OpenNMSAppDelegate.h"
+
 @implementation BaseController
 
 @synthesize orientationHandler;
@@ -58,7 +60,7 @@
 #endif
 	[self initializeScreenWidth:[[UIApplication sharedApplication] statusBarOrientation]];
     cellIdentifier = nil;
-    contextService = [[ContextService alloc] init];
+    contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 #if DEBUG
     NSLog(@"%@: contextService = %@", self, contextService);
 #endif
@@ -115,6 +117,9 @@
 -(void) refreshData
 {
     if ([self fetchedResultsController]) {
+#if DEBUG
+		NSLog(@"%@: refreshData calling fetchedResultsController:performFetch:", self);
+#endif
         NSError *error;
         @try {
             if (![[self fetchedResultsController] performFetch:&error]) {
@@ -125,11 +130,14 @@
         @catch (NSException* exception) {
             NSLog(@"%@: Caught %@: %@", self, [exception name], [exception reason]);
         }
-    }
+    } else {
+		[tableView reloadData];
+	}
 #if DEBUG
 	NSLog(@"%@: refreshData: reloadData called", self);
 #endif
-    [tableView reloadData];
+//	[tableView performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:YES];
+//	[tableView performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:YES];
 	[spinner stopAnimating];
 }
 

@@ -39,16 +39,18 @@
 
 #define INDICATOR_TAG 1
 
-@interface OutageListController : BaseController <UINavigationBarDelegate> {
+@interface OutageListController : BaseController <UINavigationBarDelegate, NSFetchedResultsControllerDelegate> {
 	FuzzyDate* fuzzyDate;
 	NodeFactory* nodeFactory;
     NSFetchedResultsController* _fetchedResultsController;
+	NSTimer* _refreshTimer;
 }
 
 @property (retain) FuzzyDate* fuzzyDate;
 @property (retain) NodeFactory* nodeFactory;
 
 @property (retain) NSFetchedResultsController* _fetchedResultsController;
+@property (retain) NSTimer* _refreshTimer;
 
 - (IBAction) reload:(id) sender;
 

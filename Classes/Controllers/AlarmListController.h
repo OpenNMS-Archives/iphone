@@ -36,15 +36,17 @@
 #import "ContextService.h"
 #import "BaseController.h"
 
-@interface AlarmListController : BaseController <UINavigationBarDelegate> {
-	@private FuzzyDate* fuzzyDate;
+@interface AlarmListController : BaseController <UINavigationBarDelegate, NSFetchedResultsControllerDelegate> {
+	FuzzyDate* fuzzyDate;
 
-    @private NSFetchedResultsController* _fetchedResultsController;
+    NSFetchedResultsController* _fetchedResultsController;
+	NSTimer* _refreshTimer;
 }
 
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
 
 @property (retain) NSFetchedResultsController* _fetchedResultsController;
+@property (retain) NSTimer* _refreshTimer;
 
 - (void) initializeData;
 - (IBAction) reload:(id) sender;
