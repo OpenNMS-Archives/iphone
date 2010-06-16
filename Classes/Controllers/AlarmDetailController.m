@@ -49,6 +49,10 @@
 @synthesize alarmObjectId;
 @synthesize severity;
 
+@synthesize alarmNeedsUpdate;
+
+@synthesize parentController;
+
 -(void) loadView
 {
 	[super loadView];
@@ -64,6 +68,7 @@
 	[self.navigationController.view addSubview:self.spinner];
 //	[self.view addSubview:self.spinner];
     cellIdentifier = @"alarmDetail";
+	alarmNeedsUpdate = YES;
 }
 
 -(void) initializeData
@@ -73,7 +78,13 @@
 	NSLog(@"%@: initializeData called", self);
 #endif
 	[fuzzyDate touch];
-    Alarm* a = [[AlarmFactory getInstance] getAlarm:alarmId];
+	Alarm* a = nil;
+	if (alarmNeedsUpdate) {
+		a = [[AlarmFactory getInstance] getRemoteAlarm:alarmId];
+		alarmNeedsUpdate = NO;
+	} else {
+		a = [[AlarmFactory getInstance] getAlarm:alarmId];
+	}
     if (!a) {
         NSLog(@"%@: no alarm found for alarm ID %@", self, alarmId);
         return;
@@ -82,12 +93,8 @@
     NSLog(@"%@: alarm = %@", self, a);
 #endif
 	self.severity = [[[OnmsSeverity alloc] initWithSeverity:a.severity] autorelease];
-	tableView.backgroundColor = [self.severity getDisplayColor];
-	tableView.backgroundView.backgroundColor = [self.severity getDisplayColor];
-#if DEBUG
-	NSLog(@"%@: setting color for severity %@", self, self.severity);
-#endif
 	self.title = [NSString stringWithFormat:@"Alarm #%@", alarmId];
+	[tableView setNeedsLayout];
     [self refreshData];
 }
 
@@ -125,11 +132,22 @@
     severity = nil;
 }
 
+-(void) viewWillDisappear:(BOOL)animated
+{
+	if (parentController) {
+#if DEBUG
+//		NSLog(@"%@: reinitializing parent controller data", self);
+#endif
+//		[parentController initializeData];
+	}
+	[super viewWillDisappear:animated];
+}
+
 #pragma mark UITableView delegates
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 7;
+	return 6;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -195,6 +213,7 @@
 		case 1:
 			leftLabel.text = @"Severity";
 			rightLabel.text = a.severity;
+			cell.backgroundColor = [severity getDisplayColor];
 			break;
 		case 2:
 			leftLabel.text = @"# Events";
@@ -301,8 +320,9 @@
 
 -(void) ackFinished
 {
-	// FIXME: need to know when the ack has gone through
-    usleep(4000000);
+	alarmNeedsUpdate = YES;
+	[self.view performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:YES];
+	[self.view performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:YES];
     [self initializeData];
 }
 

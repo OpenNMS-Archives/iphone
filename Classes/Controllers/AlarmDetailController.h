@@ -37,6 +37,7 @@
 #import "OnmsSeverity.h"
 #import "AlarmTableView.h"
 #import "BaseController.h"
+#import "AlarmListController.h"
 
 @interface AlarmDetailController : BaseController <UINavigationBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 	FuzzyDate* fuzzyDate;
@@ -44,6 +45,10 @@
     NSNumber* alarmId;
     NSManagedObjectID* alarmObjectId;
     OnmsSeverity* severity;
+	
+	AlarmListController* parentController;
+	
+	BOOL alarmNeedsUpdate;
 }
 
 @property (nonatomic, retain) FuzzyDate* fuzzyDate;
@@ -51,6 +56,10 @@
 @property (retain) NSNumber* alarmId;
 @property (retain) NSManagedObjectID* alarmObjectId;
 @property (nonatomic, retain) OnmsSeverity* severity;
+
+@property (nonatomic, retain) AlarmListController* parentController;
+
+@property (assign) BOOL alarmNeedsUpdate;
 
 -(void) acknowledgeAlarm;
 -(void) unacknowledgeAlarm;
