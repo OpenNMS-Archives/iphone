@@ -31,12 +31,25 @@
  *
  *******************************************************************************/
 
+#import "config.h"
 #import "ContextService.h"
 
 @implementation ContextService
 
 static NSManagedObjectModel* managedObjectModel;
 static NSPersistentStoreCoordinator* persistentStoreCoordinator;
+
+- (id)init
+{
+	if (self = [super init]) {
+#if DEBUG
+		NSLog(@"%@: initializing ContextService", self);
+#endif
+		NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
+		[dnc addObserver:self selector:@selector(mergeContextChanges:) name:NSManagedObjectContextDidSaveNotification object:nil];
+	}
+	return self;
+}
 
 - (void) dealloc
 {
@@ -105,18 +118,31 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
 		NSManagedObjectContext* moc = [[NSManagedObjectContext alloc] init];
 		[moc setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
 		_writeContext = moc;
-		
-		NSNotificationCenter *dnc = [NSNotificationCenter defaultCenter];
-		[dnc addObserver:self selector:@selector(mergeContextChanges:) name:NSManagedObjectContextDidSaveNotification object:_writeContext];
-
 	}
 	return _writeContext;
 }
 
 - (void) mergeContextChanges:(NSNotification *)notification
 {
-	SEL selector = @selector(mergeChangesFromContextDidSaveNotification:);
-	[[self readContext] performSelectorOnMainThread:selector withObject:notification waitUntilDone:YES];
+	if ([notification object] == [self readContext]) {
+#if DEBUG
+		NSLog(@"%@: received changes from the read context; skipping", self);
+#endif
+		return;
+	}
+
+	if (![NSThread isMainThread]) {
+#if DEBUG
+		NSLog(@"%@: mergeContextChanges called on non-main thread, re-calling", self);
+#endif
+	    [self performSelectorOnMainThread:@selector(mergeContextChanges:) withObject:notification waitUntilDone:YES];
+	    return;
+	}
+
+#if DEBUG
+	NSLog(@"%@: merging context changes to read context: %@", self, notification);
+#endif
+	[[self readContext] mergeChangesFromContextDidSaveNotification:notification];
 }
 
 @end
