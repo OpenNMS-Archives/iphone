@@ -40,6 +40,8 @@
 #import "OutageListUpdater.h"
 #import "OutageUpdateHandler.h"
 
+#import "OpenNMSAppDelegate.h"
+
 @implementation OutageFactory
 
 @synthesize isFinished;
@@ -59,7 +61,7 @@ static NSManagedObjectContext* context = nil;
 	{
 		initialized = YES;
 		outageFactorySingleton = [[OutageFactory alloc] init];
-		contextService         = [[ContextService alloc] init];
+		contextService         = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
         context                = [contextService readContext];
 	}
 }

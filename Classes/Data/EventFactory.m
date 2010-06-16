@@ -39,6 +39,8 @@
 #import "EventUpdater.h"
 #import "EventUpdateHandler.h"
 
+#import "OpenNMSAppDelegate.h"
+
 @implementation EventFactory
 
 @synthesize isFinished;
@@ -57,7 +59,7 @@ static ContextService* contextService = nil;
 	{
 		initialized = YES;
 		eventFactorySingleton = [[EventFactory alloc] init];
-		contextService        = [[ContextService alloc] init];
+		contextService        = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 }
 

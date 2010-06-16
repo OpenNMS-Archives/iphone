@@ -40,6 +40,8 @@
 #import "SnmpInterfaceUpdater.h"
 #import "SnmpInterfaceUpdateHandler.h"
 
+#import "OpenNMSAppDelegate.h"
+
 @implementation SnmpInterfaceFactory
 
 @synthesize isFinished;
@@ -58,7 +60,7 @@ static ContextService* contextService = nil;
 	{
 		initialized = YES;
 		snmpInterfaceFactorySingleton = [[SnmpInterfaceFactory alloc] init];
-		contextService         = [[ContextService alloc] init];
+		contextService         = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 }
 

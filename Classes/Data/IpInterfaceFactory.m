@@ -39,6 +39,8 @@
 #import "IpInterfaceUpdater.h"
 #import "IpInterfaceUpdateHandler.h"
 
+#import "OpenNMSAppDelegate.h"
+
 @implementation IpInterfaceFactory
 
 @synthesize isFinished;
@@ -57,7 +59,7 @@ static ContextService* contextService = nil;
 	{
 		initialized = YES;
 		ipInterfaceFactorySingleton = [[IpInterfaceFactory alloc] init];
-		contextService         = [[ContextService alloc] init];
+		contextService         = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 }
 

@@ -38,7 +38,7 @@
 #import "ALarmUpdater.h"
 #import "AlarmUpdateHandler.h"
 
-#import "ContextService.h"
+#import "OpenNMSAppDelegate.h"
 
 @implementation AlarmFactory
 
@@ -58,7 +58,7 @@ static ContextService* contextService = nil;
 	{
 		initialized = YES;
 		alarmFactorySingleton = [[AlarmFactory alloc] init];
-		contextService = [[ContextService alloc] init];
+		contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 }
 
