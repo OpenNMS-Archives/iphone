@@ -37,7 +37,7 @@
 
 -(id) init
 {
-	self = [super initWithPath:[NSString stringWithFormat:@"/alarms?limit=%d&orderBy=lastEventTime&order=desc", GET_LIMIT]];
+	self = [super initWithPath:[NSString stringWithFormat:@"/alarms?limit=%d&orderBy=lastEventTime&order=desc&alarmAckUser=null", GET_LIMIT]];
 	return self;
 }
 
