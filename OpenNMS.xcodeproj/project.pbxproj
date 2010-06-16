@@ -17,7 +17,6 @@
 		440AD066102F924E00CC63C9 /* NodeUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 440AD065102F924E00CC63C9 /* NodeUpdateHandler.m */; };
 		440B00861008C941005DB69C /* FuzzyDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 440B00851008C941005DB69C /* FuzzyDate.m */; };
 		44227C4F102B6CD200D00033 /* AlarmUpdateHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 44227C4E102B6CD200D00033 /* AlarmUpdateHandler.m */; };
-		44237785102CC73300D49DFA /* AlarmTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 44237784102CC73300D49DFA /* AlarmTableView.m */; };
 		442434611024E7C200658DB1 /* AlarmDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442434601024E7C100658DB1 /* AlarmDetailController.m */; };
 		44263CFC10112F4100717409 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF510112F4100717409 /* AboutViewController.m */; };
 		44263CFE10112F4100717409 /* NodeDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44263CF910112F4100717409 /* NodeDetailController.m */; };
@@ -145,8 +144,6 @@
 		440B00851008C941005DB69C /* FuzzyDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FuzzyDate.m; sourceTree = "<group>"; };
 		44227C4D102B6CD200D00033 /* AlarmUpdateHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmUpdateHandler.h; path = Data/AlarmUpdateHandler.h; sourceTree = "<group>"; };
 		44227C4E102B6CD200D00033 /* AlarmUpdateHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmUpdateHandler.m; path = Data/AlarmUpdateHandler.m; sourceTree = "<group>"; };
-		44237783102CC73300D49DFA /* AlarmTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmTableView.h; path = Views/AlarmTableView.h; sourceTree = "<group>"; };
-		44237784102CC73300D49DFA /* AlarmTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmTableView.m; path = Views/AlarmTableView.m; sourceTree = "<group>"; };
 		4424345F1024E7C100658DB1 /* AlarmDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmDetailController.h; path = Controllers/AlarmDetailController.h; sourceTree = "<group>"; };
 		442434601024E7C100658DB1 /* AlarmDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmDetailController.m; path = Controllers/AlarmDetailController.m; sourceTree = "<group>"; };
 		44263CF410112F4100717409 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = Controllers/AboutViewController.h; sourceTree = "<group>"; };
@@ -441,8 +438,6 @@
 			children = (
 				44E2A2EB100E5EA900DD5A1D /* ColumnarTableViewCell.h */,
 				44E2A2EC100E5EA900DD5A1D /* ColumnarTableViewCell.m */,
-				44237783102CC73300D49DFA /* AlarmTableView.h */,
-				44237784102CC73300D49DFA /* AlarmTableView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -825,7 +820,6 @@
 				44DEAF3C102A32E700634C2F /* UpdateHandler.m in Sources */,
 				44227C4F102B6CD200D00033 /* AlarmUpdateHandler.m in Sources */,
 				448D5AF8102BC9F5008416E3 /* AlarmUpdater.m in Sources */,
-				44237785102CC73300D49DFA /* AlarmTableView.m in Sources */,
 				44B8E1A3102DB0A9003DBB9B /* OutageListUpdater.m in Sources */,
 				44B8E1E2102DB4E6003DBB9B /* OutageUpdateHandler.m in Sources */,
 				44B8E28D102DC168003DBB9B /* OpenNMS.xcdatamodeld in Sources */,

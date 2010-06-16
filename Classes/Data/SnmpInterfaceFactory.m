@@ -176,6 +176,30 @@ static ContextService* contextService = nil;
     return results;
 }
 
+-(NSArray*) getRemoteSnmpInterfacesForNode:(NSNumber*) nodeId
+{
+	NSArray* snmpInterfaces = nil;
+	if (nodeId) {
+		SnmpInterfaceUpdater* snmpInterfaceUpdater = [[SnmpInterfaceUpdater alloc] initWithNodeId:nodeId];
+		SnmpInterfaceUpdateHandler* snmpInterfaceHandler = [[SnmpInterfaceUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
+		snmpInterfaceHandler.nodeId = nodeId;
+		snmpInterfaceHandler.clearOldObjects = YES;
+		snmpInterfaceUpdater.handler = snmpInterfaceHandler;
+		
+		[factoryLock lock];
+		isFinished = NO;
+		[snmpInterfaceUpdater update];
+		[snmpInterfaceUpdater release];
+		
+		while (!isFinished) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+		}
+		snmpInterfaces = [self getCoreDataSnmpInterfacesForNode:nodeId];
+		[factoryLock unlock];
+	}
+	return snmpInterfaces;
+}
+
 -(NSArray*) getSnmpInterfacesForNode:(NSNumber*) nodeId
 {
 	NSArray* snmpInterfaces = [self getCoreDataSnmpInterfacesForNode:nodeId];
@@ -193,25 +217,8 @@ static ContextService* contextService = nil;
 #if DEBUG
 		NSLog(@"%@: snmpInterface(s) not found, or last modified(s) out of date", self);
 #endif
-		[factoryLock lock];
-		SnmpInterfaceUpdater* snmpInterfaceUpdater = [[SnmpInterfaceUpdater alloc] initWithNodeId:nodeId];
-		SnmpInterfaceUpdateHandler* snmpInterfaceHandler = [[SnmpInterfaceUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
-		snmpInterfaceHandler.nodeId = nodeId;
-		snmpInterfaceHandler.clearOldObjects = YES;
-		snmpInterfaceUpdater.handler = snmpInterfaceHandler;
-		
-		[snmpInterfaceUpdater update];
-		[snmpInterfaceUpdater release];
-		
-		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
-		while (!isFinished) {
-			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
-		}
-		snmpInterfaces = [self getCoreDataSnmpInterfacesForNode:nodeId];
-		[factoryLock unlock];
+		return [self getRemoteSnmpInterfacesForNode:nodeId];
 	}
-	
-	isFinished = NO;
 	return snmpInterfaces;
 }
 

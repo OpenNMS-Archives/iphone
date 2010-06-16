@@ -74,7 +74,7 @@ static ContextService* contextService = nil;
 -(id) init
 {
 	if (self = [super init]) {
-		isFinished = NO;
+		isFinished = YES;
 		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
@@ -194,25 +194,23 @@ static ContextService* contextService = nil;
 #if DEBUG
 		NSLog(@"%@: event(s) not found, or last modified(s) out of date", self);
 #endif
-		[factoryLock lock];
 		EventUpdater* eventUpdater = [[EventUpdater alloc] initWithNodeId:nodeId limit:10];
 		EventUpdateHandler* eventHandler = [[EventUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		eventHandler.nodeId = nodeId;
 		eventHandler.clearOldObjects = YES;
 		eventUpdater.handler = eventHandler;
-		
+
+		[factoryLock lock];
+		isFinished = NO;
 		[eventUpdater update];
 		[eventUpdater release];
 		
-		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
 		}
 		events = [self getCoreDataEventsForNode:nodeId];
 		[factoryLock unlock];
 	}
-
-	isFinished = NO;
 	return events;
 }
 

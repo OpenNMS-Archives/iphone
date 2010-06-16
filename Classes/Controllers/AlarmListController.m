@@ -138,16 +138,20 @@
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-    _fetchedResultsController = nil;
+//    _fetchedResultsController = nil;
 }
+
 #pragma mark UITableView delegates
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
+	[[contextService readContext] lock];
     Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+	NSNumber* aId = alarm.alarmId;
+	[[contextService readContext] unlock];
 	if (alarm) {
 		AlarmDetailController* adc = [[AlarmDetailController alloc] init];
-        adc.alarmId = alarm.alarmId;
+        adc.alarmId = aId;
 		UINavigationController* cont = [self navigationController];
 		[cont pushViewController:adc animated:YES];
 		[adc release];
@@ -172,7 +176,8 @@
     
     CGFloat dateWidth = 75; // 75
     CGFloat logWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - dateWidth;
-    
+
+    [[contextService readContext] lock];
     Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
     
 #if DEBUG
@@ -200,13 +205,17 @@
     label.textAlignment = UITextAlignmentRight;
     label.backgroundColor = clear;
     [cell.contentView addSubview:label];
+    [[contextService readContext] unlock];
 
 	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[cell sizeToFit];
 }
 
 -(CGFloat) tableView:(UITableView *)tv heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	[[contextService readContext] lock];
     Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+	NSString* logMessage = alarm.logMessage;
+    [[contextService readContext] unlock];
 
 	CGFloat height = 0;
 	CGSize size;
@@ -214,7 +223,7 @@
     CGFloat dateWidth = 75; // 75
     CGFloat logWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - dateWidth;
 
-	size = [CalculateSize calcLabelSize:alarm.logMessage font:[UIFont boldSystemFontOfSize:12] lines:10 width:logWidth
+	size = [CalculateSize calcLabelSize:logMessage font:[UIFont boldSystemFontOfSize:12] lines:10 width:logWidth
 								   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
 	height = size.height;
 	return MAX(height, tv.rowHeight);

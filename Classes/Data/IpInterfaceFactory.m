@@ -74,7 +74,7 @@ static ContextService* contextService = nil;
 -(id) init
 {
 	if (self = [super init]) {
-		isFinished = NO;
+		isFinished = YES;
 		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
@@ -174,6 +174,30 @@ static ContextService* contextService = nil;
     return results;
 }
 
+-(NSArray*) getRemoteIpInterfacesForNode:(NSNumber*) nodeId
+{
+	NSArray* ipInterfaces = nil;
+	if (nodeId) {
+		IpInterfaceUpdater* ipInterfaceUpdater = [[IpInterfaceUpdater alloc] initWithNodeId:nodeId];
+		IpInterfaceUpdateHandler* ipInterfaceHandler = [[IpInterfaceUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
+		ipInterfaceHandler.nodeId = nodeId;
+		ipInterfaceHandler.clearOldObjects = YES;
+		ipInterfaceUpdater.handler = ipInterfaceHandler;
+		
+		[factoryLock lock];
+		isFinished = NO;
+		[ipInterfaceUpdater update];
+		[ipInterfaceUpdater release];
+		
+		while (!isFinished) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+		}
+		ipInterfaces = [self getCoreDataIpInterfacesForNode:nodeId];
+		[factoryLock unlock];
+	}
+	return ipInterfaces;
+}
+
 -(NSArray*) getIpInterfacesForNode:(NSNumber*) nodeId
 {
 	NSArray* ipInterfaces = [self getCoreDataIpInterfacesForNode:nodeId];
@@ -191,25 +215,8 @@ static ContextService* contextService = nil;
 #if DEBUG
 		NSLog(@"%@: ipInterface(s) not found, or last modified(s) out of date", self);
 #endif
-		[factoryLock lock];
-		IpInterfaceUpdater* ipInterfaceUpdater = [[IpInterfaceUpdater alloc] initWithNodeId:nodeId];
-		IpInterfaceUpdateHandler* ipInterfaceHandler = [[IpInterfaceUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
-		ipInterfaceHandler.nodeId = nodeId;
-		ipInterfaceHandler.clearOldObjects = YES;
-		ipInterfaceUpdater.handler = ipInterfaceHandler;
-		
-		[ipInterfaceUpdater update];
-		[ipInterfaceUpdater release];
-		
-		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
-		while (!isFinished) {
-			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
-		}
-		ipInterfaces = [self getCoreDataIpInterfacesForNode:nodeId];
-		[factoryLock unlock];
+		return [self getRemoteIpInterfacesForNode:nodeId];
 	}
-
-	isFinished = NO;
 	return ipInterfaces;
 }
 

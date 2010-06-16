@@ -78,7 +78,7 @@
 		}
 
 #if DEBUG
-        NSLog(@"%@: got outageId = %d", self, outageId);
+        NSLog(@"%@: got outageId = %@", self, outageId);
 #endif
         
 		NSFetchRequest *outageRequest = [[[NSFetchRequest alloc] init] autorelease];

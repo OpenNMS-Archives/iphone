@@ -77,7 +77,7 @@ static ContextService* contextService = nil;
 -(id) init
 {
 	if (self = [super init]) {
-		isFinished = NO;
+		isFinished = YES;
 		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
@@ -209,16 +209,17 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 	Node* node = nil;
 	
 	if (nodeId) {
-		[factoryLock lock];
 		NodeUpdater* nodeUpdater = [[NodeUpdater alloc] initWithNode:nodeId];
 		NodeUpdateHandler* nodeHandler = [[NodeUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		nodeUpdater.handler = nodeHandler;
+
+		[factoryLock lock];
+		isFinished = NO;
 		[nodeUpdater update];
 		[nodeUpdater release];
 		
-		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
 		}
 		node = [self getCoreDataNode:nodeId];
 		[factoryLock unlock];

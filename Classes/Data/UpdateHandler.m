@@ -46,9 +46,10 @@
 -(id) init
 {
 	if (self = [super init]) {
-		self.spinner = nil;
-		self.contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
-		self.clearOldObjects = NO;
+		spinner = nil;
+		contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
+		context = [contextService writeContext];
+		clearOldObjects = NO;
 	}
 	return self;
 }
@@ -66,7 +67,6 @@
 	if (self = [self init]) {
 		self.method = selector;
 		self.methodTarget = target;
-		self.context = [self.contextService writeContext];
 	}
 	return self;
 }
@@ -167,6 +167,8 @@
 	}
 	zoneMinute = [dateString substringFromIndex:[scanner scanLocation]];
 
+	NSArray* splitTime = [time componentsSeparatedByString:@"."];
+	time = [splitTime objectAtIndex:0];
 	NSString* returnString = [NSString stringWithFormat:@"%@T%@-%@%@", date, time, zoneHour, zoneMinute];
 	return returnString;
 }

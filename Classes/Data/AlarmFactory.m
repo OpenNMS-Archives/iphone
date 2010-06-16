@@ -73,7 +73,7 @@ static ContextService* contextService = nil;
 -(id) init
 {
 	if (self = [super init]) {
-		isFinished = NO;
+		isFinished = YES;
 		factoryLock = [NSRecursiveLock new];
 	}
 	return self;
@@ -142,6 +142,9 @@ static ContextService* contextService = nil;
 		alarm = (Alarm*)[results objectAtIndex:0];
 		[context refreshObject:alarm mergeChanges:NO];
 	}
+#if DEBUG
+	NSLog(@"%@: getCoreDataAlarm:%@ returning %@", self, alarmId, alarm);
+#endif
 	return alarm;
 }
 
@@ -150,21 +153,25 @@ static ContextService* contextService = nil;
 	Alarm* alarm = nil;
 
 	if (alarmId) {
-		[factoryLock lock];
 		AlarmUpdater* alarmUpdater = [[AlarmUpdater alloc] initWithAlarmId:alarmId];
 		AlarmUpdateHandler* alarmHandler = [[AlarmUpdateHandler alloc] initWithMethod:@selector(finish) target:self];
 		alarmUpdater.handler = alarmHandler;
+
+		[factoryLock lock];
+		isFinished = NO;
 		[alarmUpdater update];
 		[alarmUpdater release];
 		
-		NSDate* loopUntil = [NSDate dateWithTimeIntervalSinceNow:0.1];
 		while (!isFinished) {
-			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
 		}
 		alarm = [self getCoreDataAlarm:alarmId];
 		[factoryLock unlock];
 	}
 
+#if DEBUG
+	NSLog(@"%@: getRemoteAlarm:%@ returning %@", self, alarmId, alarm);
+#endif
 	return alarm;
 }
 
@@ -174,15 +181,9 @@ static ContextService* contextService = nil;
 	Alarm* alarm = [self getCoreDataAlarm:alarmId];
 
 	if (!alarm || ([alarm.lastModified timeIntervalSinceNow] > CUTOFF)) {
-#if DEBUG
-		NSLog(@"%@: alarm ID %@ not found, or last modified out of date", self, alarmId);
-#endif
 		alarm = [self getRemoteAlarm:alarmId];
 	}
 
-#if DEBUG
-	NSLog(@"%@: returning alarm: %@", self, alarm);
-#endif
 	return alarm;
 }
 

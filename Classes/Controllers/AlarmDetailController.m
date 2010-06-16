@@ -46,12 +46,20 @@
 @synthesize fuzzyDate;
 
 @synthesize alarmId;
-@synthesize alarmObjectId;
-@synthesize severity;
 
 @synthesize alarmNeedsUpdate;
 
-@synthesize parentController;
+-(Alarm*) getAlarm
+{
+	return [[AlarmFactory getInstance] getAlarm:alarmId];
+}
+
+-(OnmsSeverity*) getSeverity
+{
+	Alarm* a = [self getAlarm];
+	OnmsSeverity* severity = [[[OnmsSeverity alloc] initWithSeverity:a.severity] autorelease];
+	return severity;
+}
 
 -(void) loadView
 {
@@ -64,9 +72,7 @@
 	self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 	self.spinner.hidesWhenStopped = YES;
 	self.spinner.center = self.view.center;
-//	self.spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.navigationController.view addSubview:self.spinner];
-//	[self.view addSubview:self.spinner];
     cellIdentifier = @"alarmDetail";
 	alarmNeedsUpdate = YES;
 }
@@ -78,23 +84,23 @@
 	NSLog(@"%@: initializeData called", self);
 #endif
 	[fuzzyDate touch];
-	Alarm* a = nil;
+	Alarm* alarm = nil;
 	if (alarmNeedsUpdate) {
-		a = [[AlarmFactory getInstance] getRemoteAlarm:alarmId];
+		alarm = [[AlarmFactory getInstance] getRemoteAlarm:alarmId];
 		alarmNeedsUpdate = NO;
 	} else {
-		a = [[AlarmFactory getInstance] getAlarm:alarmId];
+		alarm = [[AlarmFactory getInstance] getAlarm:alarmId];
 	}
-    if (!a) {
+    if (!alarm) {
         NSLog(@"%@: no alarm found for alarm ID %@", self, alarmId);
         return;
     }
 #if DEBUG
-    NSLog(@"%@: alarm = %@", self, a);
+    NSLog(@"%@: alarm = %@", self, alarm);
 #endif
-	self.severity = [[[OnmsSeverity alloc] initWithSeverity:a.severity] autorelease];
 	self.title = [NSString stringWithFormat:@"Alarm #%@", alarmId];
-	[tableView setNeedsLayout];
+	[tableView performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:YES];
+	[tableView performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:YES];
     [self refreshData];
 }
 
@@ -113,7 +119,6 @@
     tableView = nil;
     fuzzyDate = nil;
     alarmId = nil;
-    severity = nil;
 	[super dealloc];
 }
 
@@ -129,25 +134,13 @@
 {
 	[super viewDidUnload];
     fuzzyDate = nil;
-    severity = nil;
-}
-
--(void) viewWillDisappear:(BOOL)animated
-{
-	if (parentController) {
-#if DEBUG
-//		NSLog(@"%@: reinitializing parent controller data", self);
-#endif
-//		[parentController initializeData];
-	}
-	[super viewWillDisappear:animated];
 }
 
 #pragma mark UITableView delegates
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 6;
+	return 7;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -157,16 +150,16 @@
 -(CGFloat) tableView:(UITableView *)tv heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	CGFloat height = 0;
 	CGSize size;
-    Alarm* a = [[AlarmFactory getInstance] getAlarm:alarmId];
     UIFont* defaultFont = [UIFont boldSystemFontOfSize:11];
+	Alarm* alarm = [self getAlarm];
 	switch(indexPath.row) {
 		case 0:
-			size = [CalculateSize calcLabelSize:a.uei font:defaultFont lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 60)
+			size = [CalculateSize calcLabelSize:alarm.uei font:defaultFont lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 60)
 										   mode:(UILineBreakModeCharacterWrap|UILineBreakModeTailTruncation)];
 			height = size.height;
 			break;
 		case 3:
-			size = [CalculateSize calcLabelSize:a.logMessage font:defaultFont lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 60)
+			size = [CalculateSize calcLabelSize:alarm.logMessage font:defaultFont lines:10 width:(orientationHandler.tableWidth - (orientationHandler.cellSeparator * 3) - 60)
 										   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
 			height = size.height;
 			break;
@@ -203,37 +196,37 @@
 	rightLabel.numberOfLines = 10;
 	rightLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
-    Alarm* a = [[AlarmFactory getInstance] getAlarm:alarmId];
+	Alarm* alarm = [self getAlarm];
 	switch(indexPath.row) {
 		case 0:
 			leftLabel.text = @"UEI";
-			rightLabel.text = a.uei;
+			rightLabel.text = alarm.uei;
 			rightLabel.lineBreakMode = (UILineBreakModeCharacterWrap | UILineBreakModeTailTruncation);
 			break;
 		case 1:
 			leftLabel.text = @"Severity";
-			rightLabel.text = a.severity;
-			cell.backgroundColor = [severity getDisplayColor];
+			rightLabel.text = alarm.severity;
+			cell.backgroundColor = [[self getSeverity] getDisplayColor];
 			break;
 		case 2:
 			leftLabel.text = @"# Events";
-			rightLabel.text = [a.count stringValue];
+			rightLabel.text = [alarm.count stringValue];
 			break;
 		case 3:
 			leftLabel.text = @"Message";
-			rightLabel.text = a.logMessage;
+			rightLabel.text = alarm.logMessage;
 			break;
 		case 4:
 			leftLabel.text = @"First Event";
-			rightLabel.text = [fuzzyDate format:a.firstEventTime];
+			rightLabel.text = [fuzzyDate format:alarm.firstEventTime];
 			break;
 		case 5:
 			leftLabel.text = @"Last Event";
-			rightLabel.text = [fuzzyDate format:a.lastEventTime];
+			rightLabel.text = [fuzzyDate format:alarm.lastEventTime];
 			break;
 		case 6:
 			leftLabel.text = @"Ack'd";
-			rightLabel.text = [fuzzyDate format:a.ackTime];
+			rightLabel.text = [fuzzyDate format:alarm.ackTime];
 			break;
 	}
     
@@ -256,6 +249,8 @@
 	NSLog(@"%@: tableView: %@ viewForFooterInSection: %@", self, tv, section);
 #endif
 	
+	Alarm* alarm = [self getAlarm];
+
     UIView* footerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, orientationHandler.screenWidth, 44.0)] autorelease];
 	footerView.autoresizesSubviews = YES;
 	footerView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin);
@@ -271,9 +266,7 @@
 	UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	button.titleLabel.font = [button.titleLabel.font fontWithSize:10];
 	[button setFrame:CGRectMake(orientationHandler.cellBorder, orientationHandler.cellSeparator, buttonWidth, 40)];
-    AlarmFactory* af = [AlarmFactory getInstance];
-    Alarm* a = [af getAlarm:alarmId];
-	if (a.ackTime == nil) {
+	if (alarm.ackTime == nil) {
 		[button addTarget:self action:@selector(acknowledgeAlarm) forControlEvents:UIControlEventTouchUpInside];
 		[button setTitle:@"Acknowledge" forState:UIControlStateNormal];
 		[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -321,8 +314,6 @@
 -(void) ackFinished
 {
 	alarmNeedsUpdate = YES;
-	[self.view performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:YES];
-	[self.view performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:YES];
     [self initializeData];
 }
 
