@@ -63,12 +63,9 @@
 
 -(id) initWithMethod:(SEL)selector target:(NSObject*)target
 {
-	if (self = [super init]) {
-		self.spinner = nil;
-		self.contextService = [[ContextService alloc] init];
+	if (self = [self init]) {
 		self.method = selector;
 		self.methodTarget = target;
-		self.clearOldObjects = NO;
 		self.context = [self.contextService writeContext];
 	}
 	return self;
@@ -76,12 +73,9 @@
 
 -(id) initWithMethod:(SEL)selector target:(NSObject*)target context:(NSManagedObjectContext*)c
 {
-	if (self = [super init]) {
-		self.spinner = nil;
-		self.contextService = [[ContextService alloc] init];
+	if (self = [self init]) {
 		self.method = selector;
 		self.methodTarget = target;
-		self.clearOldObjects = NO;
 		self.context = c;
 	}
 	return self;
@@ -89,10 +83,10 @@
 
 -(void) dealloc
 {
-	[self.spinner release];
-	[self.contextService release];
-	[self.context release];
-	[self.methodTarget release];
+	spinner = nil;
+	contextService = nil;
+	context = nil;
+	methodTarget = nil;
 
 	[super dealloc];
 }
@@ -218,10 +212,10 @@
 #if 0
 	NSLog(@"%@: Request finished.", self);
 #endif
-	if (self.methodTarget && self.method) {
-		[self.methodTarget performSelector:self.method];
+	if (methodTarget && method) {
+		[methodTarget performSelectorOnMainThread:method withObject:nil waitUntilDone:YES];
 	}
-	[self.spinner stopAnimating];
+	[spinner stopAnimating];
 }
 
 -(void) requestFailed:(ASIHTTPRequest*) request
@@ -229,9 +223,9 @@
 	NSError* error = [request error];
 	NSLog(@"%@: Request failed: %@", self, [error localizedDescription]);
 	if (methodTarget && method) {
-		[methodTarget performSelector:method];
+		[methodTarget performSelectorOnMainThread:method withObject:nil waitUntilDone:YES];
 	}
-	[self.spinner stopAnimating];
+	[spinner stopAnimating];
 
 	BOOL settingsActive = ((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate).settingsActive;
 	if (!settingsActive) {
