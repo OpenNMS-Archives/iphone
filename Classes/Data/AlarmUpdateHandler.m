@@ -150,10 +150,8 @@
 		if (ackElement) {
 			NSString* ackString = [self stringForDate:[[ackElement childAtIndex:0] stringValue]];
 			NSDate* ackDate = [dateFormatter dateFromString:ackString];
-			NSLog(@"yes acktime for ID %@: %@ = %@", alarm.alarmId, ackString, ackDate);
 			alarm.ackTime = ackDate;
 		} else {
-			NSLog(@"no acktime for ID %@", alarm.alarmId);
 			alarm.ackTime = nil;
 		}
 	}
