@@ -126,6 +126,18 @@
 		44F0E6AB100F9B8C000B8A22 /* CXMLElement_ElementTreeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0E64D100F9901000B8A22 /* CXMLElement_ElementTreeExtensions.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		44F6675411CFCC76006792C7 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = "com.apple.build-tasks.copy-plist-file";
+			filePatterns = Entitlements.plist;
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* OpenNMSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNMSAppDelegate.h; sourceTree = "<group>"; };
@@ -330,6 +342,7 @@
 		44F0E6A3100F9B1F000B8A22 /* CXMLDocument_CreationExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLDocument_CreationExtensions.m; path = "External Classes/TouchXML/Creation/CXMLDocument_CreationExtensions.m"; sourceTree = "<group>"; };
 		44F0E6A4100F9B1F000B8A22 /* CXMLNode_CreationExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CXMLNode_CreationExtensions.h; path = "External Classes/TouchXML/Creation/CXMLNode_CreationExtensions.h"; sourceTree = "<group>"; };
 		44F0E6A5100F9B1F000B8A22 /* CXMLNode_CreationExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CXMLNode_CreationExtensions.m; path = "External Classes/TouchXML/Creation/CXMLNode_CreationExtensions.m"; sourceTree = "<group>"; };
+		44F6675A11CFD021006792C7 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Entitlements.plist; path = Resources/Entitlements.plist; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* OpenNMS_Client-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "OpenNMS_Client-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -419,6 +432,7 @@
 				443DB6E01028F4B300785DE6 /* Images */,
 				443DB6DF1028F4A900785DE6 /* Interfaces */,
 				448AC2C410097B6700C2621C /* Settings.bundle */,
+				44F6675A11CFD021006792C7 /* Entitlements.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -723,6 +737,7 @@
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
 			);
 			buildRules = (
+				44F6675411CFCC76006792C7 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -881,6 +896,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = "~/rcs/opennms-iphone/Resources/Entitlements.plist";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -907,6 +923,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = "~/rcs/opennms-iphone/Resources/Entitlements.plist";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -955,22 +972,24 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_ENTITLEMENTS = dist.plist;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: The OpenNMS Group, Inc.";
+				CODE_SIGN_ENTITLEMENTS = Resources/Entitlements.plist;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
-				GCC_VERSION = "";
-				"GCC_VERSION[sdk=iphoneos3.0][arch=*]" = "";
-				"GCC_VERSION[sdk=iphoneos3.1][arch=*]" = "";
-				"GCC_VERSION[sdk=iphonesimulator3.0][arch=*]" = "";
-				"GCC_VERSION[sdk=iphonesimulator3.1][arch=*]" = "";
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				"GCC_VERSION[sdk=iphoneos3.0][arch=*]" = com.apple.compilers.llvmgcc42;
+				"GCC_VERSION[sdk=iphoneos3.1][arch=*]" = com.apple.compilers.llvmgcc42;
+				"GCC_VERSION[sdk=iphonesimulator3.0][arch=*]" = com.apple.compilers.llvmgcc42;
+				"GCC_VERSION[sdk=iphonesimulator3.1][arch=*]" = com.apple.compilers.llvmgcc42;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "OpenNMS_Client-Info.plist";
 				INSTALL_PATH = "$(HOME)/Local Applications";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = "OpenNMS Client";
-				PROVISIONING_PROFILE = "6CEEC0FF-0BD1-4E60-97A0-C37D696E9518";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1004,6 +1023,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = "~/rcs/opennms-iphone/Resources/Entitlements.plist";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Benjamin Reed (LS84AJQXH5)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
