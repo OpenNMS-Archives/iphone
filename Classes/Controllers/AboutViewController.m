@@ -50,9 +50,10 @@
     NSString *finalPath = [path stringByAppendingPathComponent:@"Info.plist"];
     NSDictionary *plistData = [[NSDictionary dictionaryWithContentsOfFile:finalPath] retain];
     
-    NSString *versionString = [NSString stringWithFormat:@"v%@", [plistData objectForKey:@"CFBundleVersion"]];
+    NSString *buildString   = [NSString stringWithFormat:@"%@", [plistData objectForKey:@"CFBundleVersion"]];
+	NSString *versionString = [NSString stringWithFormat:@"%@", [plistData objectForKey:@"CFBundleShortVersionString"]];
     
-	textView.text = [NSString stringWithFormat:@"OpenNMS %@\n\n%@", versionString, textView.text];
+	textView.text = [NSString stringWithFormat:@"OpenNMS %@, build %@\n\n%@", versionString, buildString, textView.text];
     [plistData release];
 }
 
