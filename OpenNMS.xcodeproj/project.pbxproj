@@ -194,6 +194,7 @@
 		4444794511C2C0E5003348D5 /* green-button-hilighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green-button-hilighted.png"; path = "Resources/Images/green-button-hilighted.png"; sourceTree = "<group>"; };
 		4448642911C2FD9400D54649 /* DiscoverIPAddressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DiscoverIPAddressView.xib; path = Resources/Interfaces/DiscoverIPAddressView.xib; sourceTree = "<group>"; };
 		4448646111C304CA00D54649 /* DiscoverIPAddressView-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "DiscoverIPAddressView-iPad.xib"; path = "Resources-iPad/Resources/Interfaces/DiscoverIPAddressView-iPad.xib"; sourceTree = "<group>"; };
+		4451693D11D670B100EDCA54 /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASICacheDelegate.h; sourceTree = "<group>"; };
 		445221EB1030848500F77B2C /* Alarm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alarm.h; path = Objects/Alarm.h; sourceTree = "<group>"; };
 		445221EC1030848500F77B2C /* Alarm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Alarm.m; path = Objects/Alarm.m; sourceTree = "<group>"; };
 		445221ED1030848500F77B2C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Objects/Event.h; sourceTree = "<group>"; };
@@ -557,6 +558,7 @@
 		44700FAB1007D5D8006CE665 /* ASIHTTPRequest */ = {
 			isa = PBXGroup;
 			children = (
+				4451693D11D670B100EDCA54 /* ASICacheDelegate.h */,
 				4458310D11BD900200CAC95E /* ASIAuthenticationDialog.h */,
 				4458310E11BD900200CAC95E /* ASIAuthenticationDialog.m */,
 				4458310F11BD900200CAC95E /* ASIHTTPRequestConfig.h */,
