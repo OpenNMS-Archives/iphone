@@ -61,19 +61,13 @@
 -(void) dealloc
 {
     fuzzyDate = nil;
-    _fetchedResultsController = nil;
 	if (_refreshTimer) {
 		[_refreshTimer invalidate];
 		_refreshTimer = nil;
 	}
+    _fetchedResultsController = nil;
 
     [super dealloc];
-}
-
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self initializeData];
 }
 
 -(NSFetchedResultsController*)fetchedResultsController
@@ -224,9 +218,7 @@
 	[[contextService readContext] lock];
     Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
 	NSString* logMessage = alarm.logMessage;
-    [[contextService readContext] unlock];
 
-	CGFloat height = 0;
 	CGSize size;
 
     CGFloat dateWidth = 75; // 75
@@ -234,8 +226,8 @@
 
 	size = [CalculateSize calcLabelSize:logMessage font:[UIFont boldSystemFontOfSize:12] lines:10 width:logWidth
 								   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
-	height = size.height;
-	return MAX(height, tv.rowHeight);
+    [[contextService readContext] unlock];
+	return MAX(size.height, tv.rowHeight);
 }
 
 @end

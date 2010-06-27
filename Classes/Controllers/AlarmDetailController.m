@@ -104,13 +104,6 @@
     [self refreshData];
 }
 
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-	[self initializeScreenWidth:toInterfaceOrientation];
-	[tableView reloadData];
-}
-
 #pragma mark -
 #pragma mark Lifecycle methods
 

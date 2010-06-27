@@ -58,21 +58,15 @@
     return self;
 }
 
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self initializeData];
-}
-
 -(void) dealloc
 {
-    fuzzyDate = nil;
-    spinner = nil;
-    _fetchedResultsController = nil;
 	if (_refreshTimer) {
 		[_refreshTimer invalidate];
 		_refreshTimer = nil;
 	}
+    fuzzyDate = nil;
+    spinner = nil;
+    _fetchedResultsController = nil;
     
     [super dealloc];
 }
