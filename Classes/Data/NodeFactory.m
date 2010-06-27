@@ -137,7 +137,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
 	[request setEntity:entity];
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label CONTAINS[cd] %@", searchTerm];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"label BEGINSWITH[cd] %@", searchTerm];
 	[request setPredicate:predicate];
 	NSError* error = nil;
 	NSArray* results = [context executeFetchRequest:request error:&error];
@@ -156,7 +156,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 	NSFetchRequest* interfaceRequest = [[NSFetchRequest alloc] init];
 	entity = [NSEntityDescription entityForName:@"IpInterface" inManagedObjectContext:context];
 	[interfaceRequest setEntity:entity];
-	predicate = [NSPredicate predicateWithFormat:@"(ipAddress CONTAINS[cd] %@) OR (hostName CONTAINS[cd] %@)", searchTerm, searchTerm];
+	predicate = [NSPredicate predicateWithFormat:@"(ipAddress BEGINSWITH[cd] %@) OR (hostName CONTAINS[cd] %@)", searchTerm, searchTerm];
 	[interfaceRequest setPredicate:predicate];
 	error = nil;
 	NSArray* interfaceResults = [context executeFetchRequest:interfaceRequest error:&error];

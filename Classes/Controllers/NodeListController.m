@@ -162,28 +162,32 @@
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
-	/*
-    [self filterContentForSearchText:searchString scope:
-	 [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
-	 */
-
+#if DEBUG
+	NSLog(@"%@: shouldReloadTableForSearchString: %@", self, searchString);
+#endif
+	self.nodeList = [[NodeFactory getInstance] getCoreDataNodeObjectIDs:[self.searchDisplayController.searchBar text]];
 	NodeSearchUpdater* updater = [[[NodeSearchUpdater alloc] initWithSearchString:searchString] autorelease];
 	NodeUpdateHandler* handler = [[NodeUpdateHandler alloc] initWithMethod:@selector(refreshData) target:self];
 	// FIXME: spinner!
 //	handler.spinner = spinner;
 	updater.handler = handler;
 	[updater update];
-	
-	return NO;
+
+	return YES;
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
 {
+#if DEBUG
+	NSLog(@"%@: shouldReloadTableForSearchScope: %@", self, searchOption);
+#endif
+	/*
     [self filterContentForSearchText:[self.searchDisplayController.searchBar text] scope:
 	 [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:searchOption]];
-    
+	 */
+
     // Return YES to cause the search result table view to be reloaded.
-    return YES;
+    return NO;
 }
 
 - (IBAction) addInterface:(id) sender

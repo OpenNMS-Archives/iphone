@@ -37,11 +37,11 @@
 #import "IPAddressInputController.h"
 
 @interface NodeListController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate> {
-	@private NSString* savedSearchTerm;
-	@private NSInteger savedScopeButtonIndex;
-	@private BOOL searchWasActive;
-	@private NSArray* nodeList;
-	@private ContextService* contextService;
+	NSString* savedSearchTerm;
+	NSInteger savedScopeButtonIndex;
+	BOOL searchWasActive;
+	NSArray* nodeList;
+	ContextService* contextService;
 }
 
 @property (nonatomic, copy) NSString* savedSearchTerm;

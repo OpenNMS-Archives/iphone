@@ -38,7 +38,7 @@
 -(id) initWithSearchString:(NSString*) searchString
 {
 	NSString* escaped = [searchString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	NSString* path = [NSString stringWithFormat:@"/nodes?comparator=contains&match=any&label=%@&ipInterface.ipAddress=%@&ipInterface.ipHostName=%@", escaped, escaped, escaped];
+	NSString* path = [NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@%%25&ipInterface.ipAddress=%@%%25&ipInterface.ipHostName=%@%%25", escaped, escaped, escaped];
 	self = [super initWithPath:path];
 	return self;
 }
