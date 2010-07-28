@@ -885,7 +885,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_ENTITLEMENTS = "~/rcs/opennms-iphone/Resources/Entitlements.plist";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -915,7 +915,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_ENTITLEMENTS = "~/rcs/opennms-iphone/Resources/Entitlements.plist";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
@@ -1018,7 +1018,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_ENTITLEMENTS = "~/rcs/opennms-iphone/Resources/Entitlements.plist";
+				CODE_SIGN_ENTITLEMENTS = Resources/Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
@@ -1054,7 +1054,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
-				OTHER_TEST_FLAGS = "-DDEBUG=1";
+				OTHER_CFLAGS = "-DDEBUG=1";
+				OTHER_TEST_FLAGS = "";
 				PREBINDING = NO;
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				SDKROOT = iphonesimulator3.2;
