@@ -40,7 +40,9 @@
 
 - (NSManagedObjectContext *) readContext;
 - (NSManagedObjectContext *) writeContext;
+- (NSManagedObjectContext *) newContext;
 
 - (void) mergeContextChanges:(NSNotification *)notification;
+- (void) mergeContextChanges:(NSNotification *)notification inContext:(NSManagedObjectContext*)mergeContext;
 
 @end

@@ -66,6 +66,7 @@
 	}
     fuzzyDate = nil;
     spinner = nil;
+
     _fetchedResultsController = nil;
     
     [super dealloc];
@@ -78,7 +79,7 @@
 #endif
     if (!_fetchedResultsController) {
         NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
-        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:[contextService readContext]];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:[self context]];
         [fetchRequest setEntity:entity];
 #if DEBUG
         NSLog(@"%@: fetchRequest = %@", self, fetchRequest);
@@ -97,7 +98,7 @@
 #endif
         NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]
                                                   initWithFetchRequest:fetchRequest
-                                                  managedObjectContext:[contextService readContext]
+                                                  managedObjectContext:[self context]
                                                   sectionNameKeyPath:nil
                                                   cacheName:@"outageByIfLostService"];
 #if DEBUG
@@ -165,9 +166,10 @@
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     Outage* outage = (Outage*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
+	NSNumber* nId = outage.nodeId;
 	if (outage) {
 		NodeDetailController* ndc = [[NodeDetailController alloc] init];
-		ndc.nodeId = outage.nodeId;
+		ndc.nodeId = nId;
 		UINavigationController* cont = [self navigationController];
 		[cont pushViewController:ndc animated:YES];
 		[ndc release];

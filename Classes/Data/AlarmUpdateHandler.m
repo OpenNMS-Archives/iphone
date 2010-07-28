@@ -62,14 +62,16 @@
 	} else {
 		xmlAlarms = [[document rootElement] elementsForName:@"alarm"];
 	}
-	[context lock];
+
+	NSMutableArray* alarms = [NSMutableArray arrayWithCapacity:[xmlAlarms count]];
+
 	for (id xmlAlarm in xmlAlarms) {
-		Alarm* alarm;
+		NSMutableDictionary* alarm = [NSMutableDictionary dictionary];
 
 		NSNumber* alarmId = nil;
 		NSString* severity = nil;
 		NSNumber* count = nil;
-		
+
 		for (id attr in [xmlAlarm attributes]) {
 			if ([[attr name] isEqual:@"id"]) {
 				alarmId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
@@ -88,61 +90,32 @@
 			}
 		}
 
-		NSFetchRequest *alarmRequest = [[[NSFetchRequest alloc] init] autorelease];
-		
-		NSEntityDescription *alarmEntity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
-		[alarmRequest setEntity:alarmEntity];
-		
-		NSPredicate *alarmPredicate = [NSPredicate predicateWithFormat:@"alarmId == %@", alarmId];
-		[alarmRequest setPredicate:alarmPredicate];
-		
-		NSError* error = nil;
-		NSArray *alarmArray = [context executeFetchRequest:alarmRequest error:&error];
-		if (!alarmArray || [alarmArray count] == 0) {
-			if (error) {
-				NSLog(@"%@: error fetching alarm for ID %@: %@", self, alarmId, [error localizedDescription]);
-				[error release];
-			}
-			alarm = (Alarm*)[NSEntityDescription insertNewObjectForEntityForName:@"Alarm" inManagedObjectContext:context];
-		} else {
-			alarm = (Alarm*)[alarmArray objectAtIndex:0];
-		}
-
-		alarm.alarmId = alarmId;
-		alarm.severity = severity;
-		alarm.count = count;
-		alarm.lastModified = lastModified;
+		[alarm setValue:alarmId forKey:@"alarmId"];
+		[alarm setValue:severity forKey:@"severity"];
+		[alarm setValue:count forKey:@"count"];
 
 		// UEI
 		CXMLElement *ueiElement = [xmlAlarm elementForName:@"uei"];
 		if (ueiElement) {
-			alarm.uei = [[ueiElement childAtIndex:0] stringValue];
-		} else {
-			alarm.uei = nil;
+			[alarm setValue:[[ueiElement childAtIndex:0] stringValue] forKey:@"uei"];
 		}
 		
 		// Log Message
 		CXMLElement *lmElement = [xmlAlarm elementForName:@"logMessage"];
 		if (lmElement) {
-			alarm.logMessage = [self cleanUpString:[[lmElement childAtIndex:0] stringValue]];
-		} else {
-			alarm.logMessage = nil;
+			[alarm setValue:[self cleanUpString:[[lmElement childAtIndex:0] stringValue]] forKey:@"logMessage"];
 		}
 		
 		// First Event Time
 		CXMLElement *ftElement = [xmlAlarm elementForName:@"firstEventTime"];
 		if (ftElement) {
-			alarm.firstEventTime = [dateFormatter dateFromString:[self stringForDate:[[ftElement childAtIndex:0] stringValue]]];
-		} else {
-			alarm.firstEventTime = nil;
+			[alarm setValue:[dateFormatter dateFromString:[self stringForDate:[[ftElement childAtIndex:0] stringValue]]] forKey:@"firstEventTime"];
 		}
 		
 		// Last Event Time
 		CXMLElement *ltElement = [xmlAlarm elementForName:@"lastEventTime"];
 		if (ltElement) {
-			alarm.lastEventTime = [dateFormatter dateFromString:[self stringForDate:[[ltElement childAtIndex:0] stringValue]]];
-		} else {
-			alarm.lastEventTime = nil;
+			[alarm setValue:[dateFormatter dateFromString:[self stringForDate:[[ltElement childAtIndex:0] stringValue]]] forKey:@"lastEventTime"];
 		}
 		
 		// Ack Time
@@ -150,10 +123,56 @@
 		if (ackElement) {
 			NSString* ackString = [self stringForDate:[[ackElement childAtIndex:0] stringValue]];
 			NSDate* ackDate = [dateFormatter dateFromString:ackString];
-			alarm.ackTime = ackDate;
-		} else {
-			alarm.ackTime = nil;
+			[alarm setValue:ackDate forKey:@"ackTime"];
 		}
+		[alarms addObject:alarm];
+	}
+
+	NSError* error = nil;
+	Alarm* dbAlarm = nil;
+
+	context = [contextService newContext];
+	[context lock];
+	for (id a in alarms) {
+		NSDictionary* alarm = (NSDictionary*)a;
+		NSNumber* alarmId = [alarm valueForKey:@"alarmId"];
+
+		NSFetchRequest *alarmRequest = [[[NSFetchRequest alloc] init] autorelease];
+		
+		NSEntityDescription *alarmEntity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
+		[alarmRequest setEntity:alarmEntity];
+		
+		NSPredicate *alarmPredicate = [NSPredicate predicateWithFormat:@"alarmId == %@", alarmId];
+		[alarmRequest setPredicate:alarmPredicate];
+	
+		error = nil;
+		dbAlarm = nil;
+
+		NSArray *alarmArray = [context executeFetchRequest:alarmRequest error:&error];
+		if (!alarmArray || [alarmArray count] == 0) {
+			if (error) {
+				NSLog(@"%@: error fetching alarm for ID %@: %@", self, alarmId, [error localizedDescription]);
+				error = nil;
+			}
+			dbAlarm = (Alarm*)[NSEntityDescription insertNewObjectForEntityForName:@"Alarm" inManagedObjectContext:context];
+		} else {
+			dbAlarm = (Alarm*)[alarmArray objectAtIndex:0];
+		}
+		dbAlarm.alarmId = alarmId;
+		dbAlarm.lastModified = lastModified;
+
+		dbAlarm.severity = [alarm valueForKey:@"severity"];
+		dbAlarm.lastEventTime = [alarm valueForKey:@"lastEventTime"];
+		dbAlarm.firstEventTime = [alarm valueForKey:@"firstEventTime"];
+		dbAlarm.ackTime = [alarm valueForKey:@"ackTime"];
+		dbAlarm.count = [alarm valueForKey:@"count"];
+		dbAlarm.logMessage = [alarm valueForKey:@"logMessage"];
+		dbAlarm.ifIndex = [alarm valueForKey:@"ifIndex"];
+		dbAlarm.uei = [alarm valueForKey:@"uei"];
+
+#if DEBUG
+		NSLog(@"%@: dbAlarm = %@", self, dbAlarm);
+#endif
 	}
 
 	if (self.clearOldObjects) {
@@ -183,13 +202,14 @@
 			}
 		}
 	}
+	[context unlock];
 
-	NSError* error = nil;
 	if (![context save:&error]) {
 		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
-	[context unlock];
+
+	[context release];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];

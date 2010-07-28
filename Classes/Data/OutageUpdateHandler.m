@@ -42,6 +42,7 @@
 
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
+	NSError* error = nil;
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
     [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
@@ -64,11 +65,14 @@
 	} else {
 		xmlOutages = [[document rootElement] elementsForName:@"outage"];
 	}
-	[context lock];
+	
+	NSMutableArray* outages = [NSMutableArray arrayWithCapacity:[xmlOutages count]];
+
 	for (id xmlOutage in xmlOutages) {
-		Outage* outage;
-		
+		NSMutableDictionary* outage = [NSMutableDictionary dictionary];
+
 		NSNumber* outageId = nil;
+		NSNumber* nodeId = nil;
 
 		// ID
 		for (id attr in [xmlOutage attributes]) {
@@ -80,7 +84,89 @@
 #if DEBUG
         NSLog(@"%@: got outageId = %@", self, outageId);
 #endif
-        
+
+        [outage setValue:outageId forKey:@"outageId"];
+		[outage setValue:lastModified forKey:@"lastModified"];
+
+		// Service Name
+		CXMLElement* msElement = [xmlOutage elementForName:@"monitoredService"];
+		if (msElement) {
+			CXMLElement* stElement = [msElement elementForName:@"serviceType"];
+			if (stElement) {
+				CXMLElement* snElement = [stElement elementForName:@"name"];
+				if (snElement) {
+					[outage setValue:[[snElement childAtIndex:0] stringValue] forKey:@"serviceName"];
+				}
+			}
+		}
+		
+		// IP Address
+		CXMLElement* ipElement = [xmlOutage elementForName:@"ipAddress"];
+		if (ipElement) {
+			[outage setValue:[[ipElement childAtIndex:0] stringValue] forKey:@"ipAddress"];
+		}
+
+		// Service Lost Date
+		CXMLElement* slElement = [xmlOutage elementForName:@"ifLostService"];
+		if (slElement) {
+			[outage setValue:[dateFormatter dateFromString:[self stringForDate:[[slElement childAtIndex:0] stringValue]]] forKey:@"ifLostService"];
+		}
+		
+		// Service Regained Date
+		CXMLElement* srElement = [xmlOutage elementForName:@"ifRegainedService"];
+		if (srElement) {
+			[outage setValue:[dateFormatter dateFromString:[self stringForDate:[[srElement childAtIndex:0] stringValue]]] forKey:@"ifRegainedService"];
+		}
+		
+		// Service Lost Event
+		CXMLElement* sleElement = [xmlOutage elementForName:@"serviceLostEvent"];
+		if (sleElement) {
+			for (id attr in [sleElement attributes]) {
+				if ([[attr name] isEqual:@"id"]) {
+					[outage setValue:[NSNumber numberWithInt:[[attr stringValue] intValue]] forKey:@"serviceLostEventId"];
+					break;
+				}
+			}
+			CXMLElement* nodeElement = [sleElement elementForName:@"nodeId"];
+			if (nodeElement) {
+				nodeId = [NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]];
+				[outage setValue:nodeId forKey:@"nodeId"];
+				if (nodeId != nil) {
+					[[NodeFactory getInstance] getNode:nodeId];
+				}
+			}
+		}
+		
+		// Service Regained Event
+		CXMLElement* sreElement = [xmlOutage elementForName:@"serviceRegainedEvent"];
+		if (sreElement) {
+			for (id attr in [sreElement attributes]) {
+				if ([[attr name] isEqual:@"id"]) {
+					[outage setValue:[NSNumber numberWithInt:[[attr stringValue] intValue]] forKey:@"serviceRegainedEventId"];
+					break;
+				}
+			}
+		}
+		
+		if (nodeId) {
+			// only add if we haven't already seen an outage with the same node ID
+			if (![nodeIds containsObject:nodeId]) {
+				[nodeIds addObject:nodeId];
+				[outages addObject:outage];
+			}
+		}
+	}
+
+	Outage* dbOutage = nil;
+
+	context = [contextService newContext];
+	[context lock];
+	for (id o in outages) {
+		NSDictionary* outage = (NSDictionary*)o;
+		NSNumber* outageId = [outage valueForKey:@"outageId"];
+		error = nil;
+		dbOutage = nil;
+
 		NSFetchRequest *outageRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
 		NSEntityDescription *outageEntity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
@@ -88,97 +174,32 @@
 		
 		NSPredicate *outagePredicate = [NSPredicate predicateWithFormat:@"outageId == %@", outageId];
 		[outageRequest setPredicate:outagePredicate];
-		
-		NSError* error = nil;
+	
 		NSArray *outageArray = [context executeFetchRequest:outageRequest error:&error];
 		if (!outageArray || [outageArray count] == 0) {
 			if (error) {
 				NSLog(@"error fetching outage for ID %@: %@", outageId, [error localizedDescription]);
 				[error release];
 			}
-			outage = (Outage*)[NSEntityDescription insertNewObjectForEntityForName:@"Outage" inManagedObjectContext:context];
+			dbOutage = (Outage*)[NSEntityDescription insertNewObjectForEntityForName:@"Outage" inManagedObjectContext:context];
 		} else {
-			outage = (Outage*)[outageArray objectAtIndex:0];
+			dbOutage = (Outage*)[outageArray objectAtIndex:0];
 		}
 		
-		outage.outageId = outageId;
-		outage.lastModified = lastModified;
-
-		// Service Name
-		outage.serviceName = nil;
-		CXMLElement* msElement = [xmlOutage elementForName:@"monitoredService"];
-		if (msElement) {
-			CXMLElement* stElement = [msElement elementForName:@"serviceType"];
-			if (stElement) {
-				CXMLElement* snElement = [stElement elementForName:@"name"];
-				if (snElement) {
-					outage.serviceName = [[snElement childAtIndex:0] stringValue];
-				}
-			}
-		}
-		
-		// IP Address
-		outage.ipAddress = nil;
-		CXMLElement* ipElement = [xmlOutage elementForName:@"ipAddress"];
-		if (ipElement) {
-			outage.ipAddress = [[ipElement childAtIndex:0] stringValue];
-		}
-		
-		// Service Lost Date
-		outage.ifLostService = nil;
-		CXMLElement* slElement = [xmlOutage elementForName:@"ifLostService"];
-		if (slElement) {
-            outage.ifLostService = [dateFormatter dateFromString:[self stringForDate:[[slElement childAtIndex:0] stringValue]]];
-		}
-		
-		// Service Regained Date
-		outage.ifRegainedService = nil;
-		CXMLElement* srElement = [xmlOutage elementForName:@"ifRegainedService"];
-		if (srElement) {
-            outage.ifRegainedService = [dateFormatter dateFromString:[self stringForDate:[[srElement childAtIndex:0] stringValue]]];
-		}
-		
-		// Service Lost Event
-		outage.serviceLostEventId = nil;
-		CXMLElement* sleElement = [xmlOutage elementForName:@"serviceLostEvent"];
-		if (sleElement) {
-			for (id attr in [sleElement attributes]) {
-				if ([[attr name] isEqual:@"id"]) {
-					outage.serviceLostEventId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
-					break;
-				}
-			}
-			CXMLElement* nodeElement = [sleElement elementForName:@"nodeId"];
-			if (nodeElement) {
-				outage.nodeId = [NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]];
-				if (outage.nodeId != nil) {
-					[[NodeFactory getInstance] getNode:outage.nodeId];
-				}
-			}
-		}
-		
-		// Service Regained Event
-		outage.serviceRegainedEventId = nil;
-		CXMLElement* sreElement = [xmlOutage elementForName:@"serviceRegainedEvent"];
-		if (sreElement) {
-			for (id attr in [sreElement attributes]) {
-				if ([[attr name] isEqual:@"id"]) {
-					outage.serviceRegainedEventId = [NSNumber numberWithInt:[[attr stringValue] intValue]];
-					break;
-				}
-			}
-		}
-		
-		if (outage.nodeId) {
-			if ([nodeIds containsObject:outage.nodeId]) {
-				// another outage for the same node; ignore
-				[context deleteObject:outage];
-			} else {
-				[nodeIds addObject:outage.nodeId];
-			}
-		}
+		dbOutage.nodeId                 = [outage valueForKey:@"nodeId"];
+		dbOutage.lastModified           = [outage valueForKey:@"lastModified"];
+		dbOutage.outageId               = [outage valueForKey:@"outageId"];
+		dbOutage.ifLostService          = [outage valueForKey:@"ifLostService"];
+		dbOutage.ipAddress              = [outage valueForKey:@"ipAddress"];
+		dbOutage.ifRegainedService      = [outage valueForKey:@"ifRegainedService"];
+		dbOutage.serviceRegainedEventId = [outage valueForKey:@"serviceRegainedEventId"];
+		dbOutage.serviceName            = [outage valueForKey:@"serviceName"];
+		dbOutage.serviceLostEventId     = [outage valueForKey:@"serviceLostEventId"];
+#if DEBUG
+		NSLog(@"%@: dbOutage = %@", self, dbOutage);
+#endif
 	}
-
+	
 	if (self.clearOldObjects) {
 		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 		
@@ -206,13 +227,13 @@
 			}
 		}
 	}
+	[context unlock];
 
-	NSError* error = nil;
 	if (![context save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@ (%@)", [error localizedDescription], [error localizedFailureReason]);
 	}
 	
-	[context unlock];
+	[context release];
 	[dateFormatter release];
 	[super requestDidFinish:request];
 	[self autorelease];
