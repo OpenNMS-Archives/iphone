@@ -38,6 +38,7 @@
 @interface BaseController : UIViewController <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate> {
     OrientationHandler* orientationHandler;
     ContextService* contextService;
+	NSManagedObjectContext* _context;
     IBOutlet UIActivityIndicatorView* spinner;
     IBOutlet UITableView* tableView;
     NSString* cellIdentifier;
@@ -45,11 +46,14 @@
 
 @property (nonatomic, retain) OrientationHandler* orientationHandler;
 @property (retain) ContextService* contextService;
+@property (retain) NSManagedObjectContext* _context;
 @property (retain) UIActivityIndicatorView* spinner;
 @property (retain) UITableView* tableView;
 @property (nonatomic, retain) NSString* cellIdentifier;
 
 -(void) initializeScreenWidth:(UIInterfaceOrientation)interfaceOrientation;
+-(void) mergeContextChanges:(NSNotification *)notification;
+-(NSManagedObjectContext*) context;
 -(NSFetchedResultsController*) fetchedResultsController;
 -(void) initializeData;
 -(void) refreshData;

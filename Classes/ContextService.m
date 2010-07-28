@@ -122,7 +122,19 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
 	return _writeContext;
 }
 
+- (NSManagedObjectContext *) newContext
+{
+	NSManagedObjectContext* moc = [[NSManagedObjectContext alloc] init];
+	[moc setPersistentStoreCoordinator:[self persistentStoreCoordinator]];
+	return moc;
+}
+
 - (void) mergeContextChanges:(NSNotification *)notification
+{
+	[self mergeContextChanges:notification inContext:[self readContext]];
+}
+
+- (void) mergeContextChanges:(NSNotification *)notification inContext:(NSManagedObjectContext*)mergeContext;
 {
 	if ([notification object] == [self readContext]) {
 #if DEBUG
@@ -140,9 +152,9 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
 	}
 
 #if DEBUG
-	NSLog(@"%@: merging context changes to read context: %@", self, notification);
+	NSLog(@"%@: merging context changes to %@: %@", self, mergeContext, notification);
 #endif
-	[[self readContext] mergeChangesFromContextDidSaveNotification:notification];
+	[mergeContext mergeChangesFromContextDidSaveNotification:notification];
 }
 
 @end

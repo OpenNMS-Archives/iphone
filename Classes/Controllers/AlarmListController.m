@@ -74,7 +74,7 @@
 {
     if (_fetchedResultsController == nil) {
         NSFetchRequest* fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
-        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:[contextService readContext]];
+        NSEntityDescription* entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:[self context]];
         [fetchRequest setEntity:entity];
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastEventTime" ascending:NO];
         NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
@@ -84,7 +84,7 @@
         
         NSFetchedResultsController* controller = [[NSFetchedResultsController alloc]
                                                   initWithFetchRequest:fetchRequest
-                                                  managedObjectContext:[contextService readContext]
+                                                  managedObjectContext:[self context]
                                                   sectionNameKeyPath:nil
                                                   cacheName:@"alarmByLastEventTime"];
         controller.delegate = self;
@@ -148,10 +148,8 @@
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-	[[contextService readContext] lock];
     Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
 	NSNumber* aId = alarm.alarmId;
-	[[contextService readContext] unlock];
 	if (alarm) {
 		AlarmDetailController* adc = [[AlarmDetailController alloc] init];
         adc.alarmId = aId;
@@ -180,7 +178,6 @@
     CGFloat dateWidth = 75; // 75
     CGFloat logWidth = orientationHandler.screenWidth - (orientationHandler.cellSeparator * 3) - dateWidth;
 
-    [[contextService readContext] lock];
     Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
     
 #if DEBUG
@@ -208,14 +205,12 @@
     label.textAlignment = UITextAlignmentRight;
     label.backgroundColor = clear;
     [cell.contentView addSubview:label];
-    [[contextService readContext] unlock];
 
 	cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[cell sizeToFit];
 }
 
 -(CGFloat) tableView:(UITableView *)tv heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	[[contextService readContext] lock];
     Alarm* alarm = (Alarm*)[[self fetchedResultsController] objectAtIndexPath:indexPath];
 	NSString* logMessage = alarm.logMessage;
 
@@ -226,7 +221,6 @@
 
 	size = [CalculateSize calcLabelSize:logMessage font:[UIFont boldSystemFontOfSize:12] lines:10 width:logWidth
 								   mode:(UILineBreakModeWordWrap|UILineBreakModeTailTruncation)];
-    [[contextService readContext] unlock];
 	return MAX(size.height, tv.rowHeight);
 }
 

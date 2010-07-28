@@ -90,6 +90,14 @@
 #if DEBUG
 	NSLog(@"%@: Update called.", self);
 #endif
+	NSString* host = [[NSUserDefaults standardUserDefaults] stringForKey:@"host_preference"];
+	if (host == nil || host == @"localhost") {
+#if DEBUG
+		NSLog(@"%@: Host is unconfigured or set to localhost, skipping update.", self);
+#endif
+		return;
+	}
+
 	NSURL* requestUrl = [url copy];
 	ASIHTTPRequest *request = [[[ASIHTTPRequest alloc] initWithURL:requestUrl] autorelease];
     [request setUsername:[[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"]];

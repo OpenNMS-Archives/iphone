@@ -41,9 +41,18 @@
 
 @synthesize orientationHandler;
 @synthesize contextService;
+@synthesize _context;
 @synthesize spinner;
 @synthesize tableView;
 @synthesize cellIdentifier;
+
+-(void) dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	_context = nil;
+
+	[super dealloc];
+}
 
 -(void)initializeScreenWidth:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -101,6 +110,20 @@
 	}
 }
 
+- (void) mergeContextChanges:(NSNotification *)notification
+{
+	[contextService mergeContextChanges:notification inContext:_context];
+}
+
+- (NSManagedObjectContext*) context
+{
+	if (!_context) {
+		_context = [contextService newContext];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeContextChanges:) name:NSManagedObjectContextDidSaveNotification object:nil];
+	}
+	return _context;
+}
+
 -(NSFetchedResultsController*) fetchedResultsController
 {
     return nil;
@@ -131,6 +154,8 @@
             NSLog(@"%@: Caught %@: %@", self, [exception name], [exception reason]);
         }
     } else {
+//		[tableView setNeedsLayout];
+//		[tableView setNeedsDisplay];
 		[tableView reloadData];
 	}
 #if DEBUG
@@ -141,6 +166,7 @@
 	[spinner stopAnimating];
 }
 
+/*
 #pragma mark NSFetchedResultsController delegates
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
@@ -200,6 +226,14 @@
 	NSLog(@"%@: controllerDidChangeContent:%@", self, controller);
 #endif
     [tableView endUpdates];
+}
+*/
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+#if DEBUG
+	NSLog(@"%@: controllerDidChangeContent:%@", self, controller);
+#endif
+    [tableView reloadData];
 }
 
 #pragma mark UITableView delegates
