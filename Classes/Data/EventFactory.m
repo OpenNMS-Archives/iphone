@@ -43,11 +43,7 @@
 
 @implementation EventFactory
 
-@synthesize isFinished;
-@synthesize factoryLock;
-
 static EventFactory* eventFactorySingleton = nil;
-static ContextService* contextService = nil;
 
 // 2 weeks
 #define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
@@ -59,7 +55,6 @@ static ContextService* contextService = nil;
 	{
 		initialized = YES;
 		eventFactorySingleton = [[EventFactory alloc] init];
-		contextService        = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 }
 
@@ -71,24 +66,11 @@ static ContextService* contextService = nil;
 	return eventFactorySingleton;
 }
 
--(id) init
-{
-	if (self = [super init]) {
-		isFinished = YES;
-		factoryLock = [NSRecursiveLock new];
-	}
-	return self;
-}
-
--(void) finish
-{
-	isFinished = YES;
-}
-
 -(void) clearData
 {
-	NSManagedObjectContext* context = [contextService writeContext];
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
+
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
 	[request setEntity:entity];
@@ -115,12 +97,12 @@ static ContextService* contextService = nil;
 		[error release];
 	}
 	[context unlock];
+	[context release];
 }
 
 -(Event*) getCoreDataEvent:(NSNumber*) eventId
 {
 	NSManagedObjectContext* context = [contextService readContext];
-    [context lock];
 	NSFetchRequest* eventRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
@@ -141,14 +123,12 @@ static ContextService* contextService = nil;
 	} else {
 		event = (Event*)[results objectAtIndex:0];
 	}
-    [context unlock];
     return event;
 }
 
 -(NSArray*) getCoreDataEventsForNode:(NSNumber*) nodeId
 {
 	NSManagedObjectContext* context = [contextService readContext];
-    [context lock];
 	NSFetchRequest* nodeEventRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
 	[nodeEventRequest setEntity:entity];
@@ -173,7 +153,6 @@ static ContextService* contextService = nil;
 			NSLog(@"%@: error fetching events for node ID %@", self, nodeId);
 		}
 	}
-    [context unlock];
     return results;
 }
 

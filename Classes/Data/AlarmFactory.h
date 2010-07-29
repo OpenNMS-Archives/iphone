@@ -32,20 +32,16 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "BaseFactory.h"
 #import "Alarm.h"
+#import "ContextService.h"
 
-@interface AlarmFactory : NSObject {
-	BOOL isFinished;
-	NSRecursiveLock* factoryLock;
+@interface AlarmFactory : BaseFactory {
 }
-
-@property (assign) BOOL isFinished;
-@property (retain) NSRecursiveLock* factoryLock;
 
 +(void) initialize;
 +(AlarmFactory*) getInstance;
 
--(void) finish;
 -(void) clearData;
 -(Alarm*) getCoreDataAlarm:(NSNumber *)alarmId;
 -(Alarm*) getRemoteAlarm:(NSNumber *)alarmId;

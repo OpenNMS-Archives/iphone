@@ -44,12 +44,7 @@
 
 @implementation OutageFactory
 
-@synthesize isFinished;
-@synthesize factoryLock;
-
 static OutageFactory* outageFactorySingleton = nil;
-static ContextService* contextService = nil;
-static NSManagedObjectContext* context = nil;
 
 // 2 weeks
 #define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
@@ -61,8 +56,6 @@ static NSManagedObjectContext* context = nil;
 	{
 		initialized = YES;
 		outageFactorySingleton = [[OutageFactory alloc] init];
-		contextService         = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
-        context                = [contextService readContext];
 	}
 }
 
@@ -74,29 +67,9 @@ static NSManagedObjectContext* context = nil;
 	return outageFactorySingleton;
 }
 
--(id) init
-{
-	if (self = [super init]) {
-		isFinished = YES;
-		factoryLock = [NSRecursiveLock new];
-	}
-	return self;
-}
-
--(void) dealloc
-{
-    [context release];
-    [super dealloc];
-}
-
--(void) finish
-{
-	isFinished = YES;
-}
-
 -(void) clearData
 {
-	NSManagedObjectContext* context = [contextService writeContext];
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
@@ -124,11 +97,15 @@ static NSManagedObjectContext* context = nil;
 		[error release];
 	}
 	[context unlock];
+	[context release];
 }
 
 -(Outage*) getCoreDataOutage:(NSNumber*) outageId
 {
     Outage* outage = nil;
+	NSManagedObjectContext* context = [contextService readContext];
+	
+	[context lock];
 	NSFetchRequest* outageRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Outage" inManagedObjectContext:context];
@@ -148,6 +125,7 @@ static NSManagedObjectContext* context = nil;
 	} else {
 		outage = (Outage*)[results objectAtIndex:0];
 	}
+	[context unlock];
     return outage;
 }
 
@@ -179,6 +157,8 @@ static NSManagedObjectContext* context = nil;
 
 -(NSArray*) getCoreDataOutagesForNode:(NSNumber*) nodeId
 {
+	NSManagedObjectContext* context = [contextService readContext];
+	[context lock];
 	NSArray* results = nil;
 	if (nodeId) {
 		NSFetchRequest* nodeOutageRequest = [[NSFetchRequest alloc] init];
@@ -200,6 +180,7 @@ static NSManagedObjectContext* context = nil;
 			}
 		}
 	}
+	[context unlock];
     return results;
 }
 

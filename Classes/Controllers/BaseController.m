@@ -50,6 +50,7 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	_context = nil;
+	contextService = nil;
 
 	[super dealloc];
 }
@@ -69,7 +70,7 @@
 #endif
 	[self initializeScreenWidth:[[UIApplication sharedApplication] statusBarOrientation]];
     cellIdentifier = nil;
-    contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
+	contextService = [[ContextService alloc] init];
 #if DEBUG
     NSLog(@"%@: contextService = %@", self, contextService);
 #endif

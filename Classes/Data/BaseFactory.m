@@ -2,7 +2,7 @@
  * This file is part of the OpenNMS(R) iPhone Application.
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
- * Copyright (C) 2009 The OpenNMS Group, Inc.  All rights reserved.
+ * Copyright (C) 2010 The OpenNMS Group, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,35 +31,35 @@
  *
  *******************************************************************************/
 
-#import "config.h"
-#import "ContextService.h"
+#import "BaseFactory.h"
 
-#import <Foundation/Foundation.h>
-#import "ASIHTTPRequest.h"
-#import "CXMLDocument.h"
 
-@interface UpdateHandler : NSObject {
-	UIActivityIndicatorView* spinner;
-	ContextService* contextService;
-	SEL method;
-	NSObject* methodTarget;
-	BOOL clearOldObjects;
+@implementation BaseFactory
+
+@synthesize isFinished;
+@synthesize factoryLock;
+@synthesize contextService;
+
+-(id) init
+{
+	if (self = [super init]) {
+		isFinished = YES;
+		factoryLock = [NSRecursiveLock new];
+		contextService = [[ContextService alloc] init];
+	}
+	return self;
 }
 
-@property (retain) UIActivityIndicatorView* spinner;
-@property (retain) ContextService* contextService;
-@property (assign) SEL method;
-@property (retain) NSObject* methodTarget;
-@property (assign) BOOL clearOldObjects;
+-(void) dealloc
+{
+	factoryLock = nil;
+	contextService = nil;
+	[super dealloc];
+}
 
--(id) initWithMethod:(SEL)selector target:(NSObject*)target;
-
--(NSString*)     cleanUpString:(NSString *)html;
--(NSString*)     stringForDate:(NSString*)date;
--(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
--(void)          handleRequest:(ASIHTTPRequest*) request;
--(void)          finished;
--(void)          requestDidFinish:(ASIHTTPRequest*) request;
--(void)          requestFailed:(ASIHTTPRequest*) request;
+-(void) finish
+{
+	isFinished = YES;
+}
 
 @end

@@ -32,20 +32,15 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "BaseFactory.h"
 #import "IpInterface.h"
 
-@interface IpInterfaceFactory : NSObject {
-	BOOL isFinished;
-	NSRecursiveLock* factoryLock;
+@interface IpInterfaceFactory : BaseFactory {
 }
-
-@property (assign) BOOL isFinished;
-@property (retain) NSRecursiveLock* factoryLock;
 
 +(void) initialize;
 +(IpInterfaceFactory*) getInstance;
 
--(void) finish;
 -(void) clearData;
 
 -(NSArray*) getIpInterfacesForNode:(NSNumber*) nodeId;

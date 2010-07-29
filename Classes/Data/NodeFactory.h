@@ -32,20 +32,15 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "BaseFactory.h"
 #import "Node.h"
 
-@interface NodeFactory : NSObject {
-	BOOL isFinished;
-	NSRecursiveLock* factoryLock;
+@interface NodeFactory : BaseFactory {
 }
-
-@property (assign) BOOL isFinished;
-@property (retain) NSRecursiveLock* factoryLock;
 
 +(void) initialize;
 +(NodeFactory*) getInstance;
 
--(void) finish;
 -(void) clearData;
 
 -(NSArray*) getCoreDataNodeObjectIDs:(NSString*) searchTerm;

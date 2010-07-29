@@ -32,20 +32,15 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "BaseFactory.h"
 #import "SnmpInterface.h"
 
-@interface SnmpInterfaceFactory : NSObject {
-	BOOL isFinished;
-	NSRecursiveLock* factoryLock;
+@interface SnmpInterfaceFactory : BaseFactory {
 }
-
-@property (assign) BOOL isFinished;
-@property (retain) NSRecursiveLock* factoryLock;
 
 +(void) initialize;
 +(SnmpInterfaceFactory*) getInstance;
 
--(void) finish;
 -(void) clearData;
 
 -(NSArray*) getSnmpInterfacesForNode:(NSNumber*) nodeId;

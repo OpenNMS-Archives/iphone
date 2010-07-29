@@ -40,8 +40,10 @@
 
 @implementation OutageUpdateHandler
 
--(void) requestDidFinish:(ASIHTTPRequest*) request
+-(void) handleRequest:(ASIHTTPRequest*) request
 {
+	[super handleRequest:request];
+
 	NSError* error = nil;
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
@@ -159,7 +161,7 @@
 
 	Outage* dbOutage = nil;
 
-	context = [contextService newContext];
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
 	for (id o in outages) {
 		NSDictionary* outage = (NSDictionary*)o;
@@ -227,16 +229,17 @@
 			}
 		}
 	}
-	[context unlock];
 
 	if (![context save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@ (%@)", [error localizedDescription], [error localizedFailureReason]);
 	}
 	
+	[context unlock];
 	[context release];
 	[dateFormatter release];
-	[super requestDidFinish:request];
 	[self autorelease];
+	
+	[super finished];
 }
 
 @end

@@ -42,6 +42,7 @@
 		4437965711C07FDF00D36464 /* iPhoneAppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437965411C07FDF00D36464 /* iPhoneAppIcon.png */; };
 		4437966511C0845100D36464 /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 4437966411C0845100D36464 /* Default-Portrait.png */; };
 		4437974B11C0B72300D36464 /* BaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4437974A11C0B72300D36464 /* BaseController.m */; };
+		4441DB8512022789005C7C12 /* BaseFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4441DB8412022789005C7C12 /* BaseFactory.m */; };
 		4444793411C2BCD2003348D5 /* ip-dialog-box.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444793311C2BCD2003348D5 /* ip-dialog-box.png */; };
 		4444794611C2C0E5003348D5 /* green-button-default.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444794411C2C0E5003348D5 /* green-button-default.png */; };
 		4444794711C2C0E5003348D5 /* green-button-hilighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 4444794511C2C0E5003348D5 /* green-button-hilighted.png */; };
@@ -189,6 +190,8 @@
 		4437966411C0845100D36464 /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait.png"; path = "Resources/Images/Default-Portrait.png"; sourceTree = "<group>"; };
 		4437974911C0B72300D36464 /* BaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseController.h; path = Controllers/BaseController.h; sourceTree = "<group>"; };
 		4437974A11C0B72300D36464 /* BaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseController.m; path = Controllers/BaseController.m; sourceTree = "<group>"; };
+		4441DB8312022789005C7C12 /* BaseFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseFactory.h; path = Data/BaseFactory.h; sourceTree = "<group>"; };
+		4441DB8412022789005C7C12 /* BaseFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseFactory.m; path = Data/BaseFactory.m; sourceTree = "<group>"; };
 		4444793311C2BCD2003348D5 /* ip-dialog-box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ip-dialog-box.png"; path = "Resources/Images/ip-dialog-box.png"; sourceTree = "<group>"; };
 		4444794411C2C0E5003348D5 /* green-button-default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green-button-default.png"; path = "Resources/Images/green-button-default.png"; sourceTree = "<group>"; };
 		4444794511C2C0E5003348D5 /* green-button-hilighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "green-button-hilighted.png"; path = "Resources/Images/green-button-hilighted.png"; sourceTree = "<group>"; };
@@ -592,6 +595,8 @@
 		448148651029D00000083FF9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				4441DB8312022789005C7C12 /* BaseFactory.h */,
+				4441DB8412022789005C7C12 /* BaseFactory.m */,
 				44303A3D11C2DB5E00D50F73 /* OrientationHandler.h */,
 				44303A3E11C2DB5E00D50F73 /* OrientationHandler.m */,
 				443665341032597400F0B7B6 /* ContextService.h */,
@@ -874,6 +879,7 @@
 				4437974B11C0B72300D36464 /* BaseController.m in Sources */,
 				4434F9DC11C1B6BF009189BD /* IPAddressInputController.m in Sources */,
 				44303A3F11C2DB5E00D50F73 /* OrientationHandler.m in Sources */,
+				4441DB8512022789005C7C12 /* BaseFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

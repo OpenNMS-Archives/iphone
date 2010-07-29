@@ -143,18 +143,20 @@ static NSPersistentStoreCoordinator* persistentStoreCoordinator;
 		return;
 	}
 
-	if (![NSThread isMainThread]) {
-#if DEBUG
-		NSLog(@"%@: mergeContextChanges called on non-main thread, re-calling", self);
-#endif
-	    [self performSelectorOnMainThread:@selector(mergeContextChanges:) withObject:notification waitUntilDone:YES];
-	    return;
-	}
-
 #if DEBUG
 	NSLog(@"%@: merging context changes to %@: %@", self, mergeContext, notification);
 #endif
-	[mergeContext mergeChangesFromContextDidSaveNotification:notification];
+	if (![NSThread isMainThread]) {
+#if DEBUG
+		NSLog(@"%@: mergeContextChanges called on non-main thread", self);
+#endif
+	    [mergeContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:) withObject:notification waitUntilDone:YES];
+	} else {
+#if DEBUG
+		NSLog(@"%@: mergeContextChanges called on main thread", self);
+#endif
+		[mergeContext mergeChangesFromContextDidSaveNotification:notification];
+	}
 }
 
 @end

@@ -32,20 +32,16 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "BaseFactory.h"
 #import "Event.h"
+#import "ContextService.h"
 
-@interface EventFactory : NSObject {
-	BOOL isFinished;
-	NSRecursiveLock* factoryLock;
+@interface EventFactory : BaseFactory {
 }
-
-@property (assign) BOOL isFinished;
-@property (retain) NSRecursiveLock* factoryLock;
 
 +(void) initialize;
 +(EventFactory*) getInstance;
 
--(void) finish;
 -(void) clearData;
 
 -(NSArray*) getEventsForNode:(NSNumber*) nodeId;

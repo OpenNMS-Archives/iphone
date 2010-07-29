@@ -38,28 +38,25 @@
 
 @synthesize spinner;
 @synthesize contextService;
-@synthesize context;
 @synthesize method;
 @synthesize methodTarget;
 @synthesize clearOldObjects;
+
+static NSOperationQueue* operationQueue;
 
 -(id) init
 {
 	if (self = [super init]) {
 		spinner = nil;
-		contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
-		context = [contextService writeContext];
+		contextService = [[ContextService alloc] init];
 		clearOldObjects = NO;
+		
+		if (!operationQueue) {
+			operationQueue = [[NSOperationQueue alloc] init];
+			[operationQueue setMaxConcurrentOperationCount:1];
+		}
 	}
 	return self;
-}
-
--(id) initWithContext:(NSManagedObjectContext*)c
-{
-    if (self = [super init]) {
-        self.context = c;
-    }
-    return self;
 }
 
 -(id) initWithMethod:(SEL)selector target:(NSObject*)target
@@ -71,21 +68,10 @@
 	return self;
 }
 
--(id) initWithMethod:(SEL)selector target:(NSObject*)target context:(NSManagedObjectContext*)c
-{
-	if (self = [self init]) {
-		self.method = selector;
-		self.methodTarget = target;
-		self.context = c;
-	}
-	return self;
-}
-
 -(void) dealloc
 {
 	spinner = nil;
 	contextService = nil;
-	context = nil;
 	methodTarget = nil;
 
 	[super dealloc];
@@ -209,15 +195,31 @@
 	return document;
 }
 
--(void) requestDidFinish:(ASIHTTPRequest*) request
+-(void) handleRequest:(ASIHTTPRequest*) request
 {
-#if 0
-	NSLog(@"%@: Request finished.", self);
+#if DEBUG
+	NSLog(@"%@: Handling completed request: %@", self, request);
 #endif
+}
+
+-(void) finished
+{
 	if (methodTarget && method) {
 		[methodTarget performSelectorOnMainThread:method withObject:nil waitUntilDone:YES];
 	}
 	[spinner stopAnimating];
+}
+
+#define USE_QUEUES 1
+
+-(void) requestDidFinish:(ASIHTTPRequest*) request
+{
+#if USE_QUEUES
+	NSInvocationOperation* operation = [[[NSInvocationOperation alloc] initWithTarget:self selector:@selector(handleRequest:) object:request] autorelease];
+	[operationQueue addOperation:operation];
+#else
+	[self handleRequest:request];
+#endif
 }
 
 -(void) requestFailed:(ASIHTTPRequest*) request

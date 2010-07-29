@@ -42,11 +42,7 @@
 
 @implementation AlarmFactory
 
-@synthesize isFinished;
-@synthesize factoryLock;
-
 static AlarmFactory* alarmFactorySingleton = nil;
-static ContextService* contextService = nil;
 
 // 2 weeks
 #define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
@@ -58,7 +54,6 @@ static ContextService* contextService = nil;
 	{
 		initialized = YES;
 		alarmFactorySingleton = [[AlarmFactory alloc] init];
-		contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 }
 
@@ -70,23 +65,9 @@ static ContextService* contextService = nil;
 	return alarmFactorySingleton;
 }
 
--(id) init
-{
-	if (self = [super init]) {
-		isFinished = YES;
-		factoryLock = [NSRecursiveLock new];
-	}
-	return self;
-}
-
--(void) finish
-{
-	isFinished = YES;
-}
-
 -(void) clearData
 {
-	NSManagedObjectContext* context = [contextService writeContext];
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
@@ -114,13 +95,15 @@ static ContextService* contextService = nil;
 		[error release];
 	}
 	[context unlock];
+	[context release];
 }
 
 -(Alarm*) getCoreDataAlarm:(NSNumber*) alarmId
 {
 	Alarm* alarm = nil;
 	NSManagedObjectContext* context = [contextService readContext];
-    
+
+	[context lock];
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Alarm" inManagedObjectContext:context];
@@ -142,6 +125,7 @@ static ContextService* contextService = nil;
 		alarm = (Alarm*)[results objectAtIndex:0];
 		[context refreshObject:alarm mergeChanges:NO];
 	}
+	[context unlock];
 #if DEBUG
 	NSLog(@"%@: getCoreDataAlarm:%@ returning %@", self, alarmId, alarm);
 #endif

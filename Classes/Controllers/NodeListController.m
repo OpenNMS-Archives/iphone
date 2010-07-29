@@ -61,7 +61,7 @@
 		self.nodeList = [NSMutableArray array];
 	}
 	if (!self.contextService) {
-		self.contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
+		self.contextService = [[ContextService alloc] init];
 	}
 	
 	if (self.savedSearchTerm)
@@ -83,7 +83,6 @@
 	self.savedSearchTerm = [self.searchDisplayController.searchBar text];
 	self.savedScopeButtonIndex = [self.searchDisplayController.searchBar selectedScopeButtonIndex];
 	self.nodeList = nil;
-	[self.contextService release];
 	self.contextService = nil;
 }
 

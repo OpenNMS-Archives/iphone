@@ -45,9 +45,9 @@
 	[super dealloc];
 }
 
--(void) requestDidFinish:(ASIHTTPRequest*) request
+-(void) handleRequest:(ASIHTTPRequest*) request
 {
-	int count = 0;
+	[super handleRequest:request];
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
@@ -71,9 +71,11 @@
 	} else {
 		xmlIpInterfaces = [[document rootElement] elementsForName:@"ipInterface"];
 	}
+	
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
+
 	for (id xmlIpInterface in xmlIpInterfaces) {
-		count++;
 		IpInterface* ipInterface;
 
 		NSNumber* ipInterfaceId = nil;
@@ -150,7 +152,7 @@
 	}
 
 #if DEBUG
-	NSLog(@"%@: found %d IP interfaces", self, count);
+	NSLog(@"%@: found %d IP interfaces", self, [xmlIpInterfaces count]);
 #endif
 
 	if (self.clearOldObjects) {
@@ -192,9 +194,11 @@
 		[error release];
 	}
 	[context unlock];
+	[context release];
 	[dateFormatter release];
-	[super requestDidFinish:request];
 	[self autorelease];
+	
+	[super finished];
 }
 
 @end

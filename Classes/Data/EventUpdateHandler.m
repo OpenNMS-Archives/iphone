@@ -46,9 +46,9 @@
 	[super dealloc];
 }
 
--(void) requestDidFinish:(ASIHTTPRequest*) request
+-(void) handleRequest:(ASIHTTPRequest*) request
 {
-	int count = 0;
+	[super handleRequest:request];
 
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
@@ -72,10 +72,11 @@
 	} else {
 		xmlEvents = [[document rootElement] elementsForName:@"event"];
 	}
-	[context lock];
+
+	NSMutableArray* events = [NSMutableArray arrayWithCapacity:[xmlEvents count]];
+
 	for (id xmlEvent in xmlEvents) {
-		count++;
-		Event* event;
+		NSMutableDictionary* event = [NSMutableDictionary dictionary];
 
 		NSNumber* eventId = nil;
 		BOOL eventDisplay = YES;
@@ -98,6 +99,74 @@
 			}
 		}
 
+		[event setValue:eventId forKey:@"eventId"];
+		[event setValue:[NSNumber numberWithBool:eventDisplay] forKey:@"distplay"];
+		[event setValue:[NSNumber numberWithBool:eventLog] forKey:@"log"];
+		[event setValue:eventSeverity forKey:@"severity"];
+		
+		CXMLElement* nodeElement = [xmlEvent elementForName:@"nodeId"];
+		if (nodeElement) {
+			[event setValue:[NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]] forKey:@"nodeId"];
+		}
+		
+		// Time
+		CXMLElement *timeElement = [xmlEvent elementForName:@"time"];
+		if (timeElement) {
+			[event setValue:[dateFormatter dateFromString:[self stringForDate:[[timeElement childAtIndex:0] stringValue]]] forKey:@"time"];
+		}
+		
+		// CreateTime
+		CXMLElement *ctElement = [xmlEvent elementForName:@"createTime"];
+		if (ctElement) {
+			[event setValue:[dateFormatter dateFromString:[self stringForDate:[[ctElement childAtIndex:0] stringValue]]] forKey:@"createTime"];
+		}
+		
+		// Description
+		CXMLElement *descrElement = [xmlEvent elementForName:@"description"];
+		if (descrElement) {
+			[event setValue:[self cleanUpString:[[descrElement childAtIndex:0] stringValue]] forKey:@"eventDescription"];
+		}
+		
+		// Host
+		CXMLElement *hostElement = [xmlEvent elementForName:@"host"];
+		if (hostElement) {
+			[event setValue:[[hostElement childAtIndex:0] stringValue] forKey:@"eventHost"];
+		}
+		
+		// Log Message
+		CXMLElement *lmElement = [xmlEvent elementForName:@"logMessage"];
+		if (lmElement) {
+			[event setValue:[self cleanUpString:[[lmElement childAtIndex:0] stringValue]] forKey:@"logMessage"];
+		}
+		
+		// Source
+		CXMLElement *sourceElement = [xmlEvent elementForName:@"source"];
+		if (sourceElement) {
+			[event setValue:[[sourceElement childAtIndex:0] stringValue] forKey:@"source"];
+		}
+
+		// UEI
+		CXMLElement *ueiElement = [xmlEvent elementForName:@"uei"];
+		if (ueiElement) {
+			[event setValue:[[ueiElement childAtIndex:0] stringValue] forKey:@"uei"];
+		}
+		
+		[events addObject:event];
+	}
+
+#if DEBUG
+	NSLog(@"found %d Events", [events count]);
+#endif
+
+	NSError* error = nil;
+	Event* dbEvent = nil;
+
+	NSManagedObjectContext* context = [contextService newContext];
+	[context lock];
+	
+	for (id event in events) {
+		NSNumber* eventId = [event valueForKey:@"eventId"];
+		
 		NSFetchRequest *eventRequest = [[[NSFetchRequest alloc] init] autorelease];
 		
 		NSEntityDescription *eventEntity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
@@ -113,68 +182,29 @@
 				NSLog(@"%@: error fetching event for ID %@: %@", self, eventId, [error localizedDescription]);
 				[error release];
 			}
-			event = (Event*)[NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:context];
+			dbEvent = (Event*)[NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:context];
 		} else {
-			event = (Event*)[eventArray objectAtIndex:0];
-		}
-
-		event.eventId = eventId;
-		event.display = [NSNumber numberWithBool:eventDisplay];
-		event.log = [NSNumber numberWithBool:eventLog];
-		event.severity = eventSeverity;
-		event.lastModified = lastModified;
-		
-		CXMLElement* nodeElement = [xmlEvent elementForName:@"nodeId"];
-		if (nodeElement) {
-			event.nodeId = [NSNumber numberWithInt:[[[nodeElement childAtIndex:0] stringValue] intValue]];
+			dbEvent = (Event*)[eventArray objectAtIndex:0];
 		}
 		
-		// Time
-		CXMLElement *timeElement = [xmlEvent elementForName:@"time"];
-		if (timeElement) {
-			event.time = [dateFormatter dateFromString:[self stringForDate:[[timeElement childAtIndex:0] stringValue]]];
-		}
+		dbEvent.createTime = [event valueForKey:@"createTime"];
+		dbEvent.display = [event valueForKey:@"display"];
+		dbEvent.eventDescription = [event valueForKey:@"eventDescription"];
+		dbEvent.eventHost = [event valueForKey:@"eventHost"];
+		dbEvent.eventId = eventId;
+		dbEvent.lastModified = lastModified;
+		dbEvent.log = [event valueForKey:@"log"];
+		dbEvent.logMessage = [event valueForKey:@"logMessage"];
+		dbEvent.nodeId = [event valueForKey:@"nodeId"];
+		dbEvent.severity = [event valueForKey:@"severity"];
+		dbEvent.source = [event valueForKey:@"source"];
+		dbEvent.time = [event valueForKey:@"time"];
+		dbEvent.uei = [event valueForKey:@"uei"];
 		
-		// CreateTime
-		CXMLElement *ctElement = [xmlEvent elementForName:@"createTime"];
-		if (ctElement) {
-			event.createTime = [dateFormatter dateFromString:[self stringForDate:[[ctElement childAtIndex:0] stringValue]]];
-		}
-		
-		// Description
-		CXMLElement *descrElement = [xmlEvent elementForName:@"description"];
-		if (descrElement) {
-			event.eventDescription = [self cleanUpString:[[descrElement childAtIndex:0] stringValue]];
-		}
-		
-		// Host
-		CXMLElement *hostElement = [xmlEvent elementForName:@"host"];
-		if (hostElement) {
-			event.eventHost = [[hostElement childAtIndex:0] stringValue];
-		}
-		
-		// Log Message
-		CXMLElement *lmElement = [xmlEvent elementForName:@"logMessage"];
-		if (lmElement) {
-			event.logMessage = [self cleanUpString:[[lmElement childAtIndex:0] stringValue]];
-		}
-		
-		// Source
-		CXMLElement *sourceElement = [xmlEvent elementForName:@"source"];
-		if (sourceElement) {
-			event.source = [[sourceElement childAtIndex:0] stringValue];
-		}
-
-		// UEI
-		CXMLElement *ueiElement = [xmlEvent elementForName:@"uei"];
-		if (ueiElement) {
-			event.uei = [[ueiElement childAtIndex:0] stringValue];
-		}
-	}
-
 #if DEBUG
-	NSLog(@"found %d Events", count);
+		NSLog(@"%@: event = %@", self, dbEvent);
 #endif
+	}
 
 	if (self.clearOldObjects) {
 		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
@@ -209,15 +239,16 @@
 		}
 	}
 
-	NSError* error = nil;
 	if (![context save:&error]) {
 		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
 	[context unlock];
+	[context release];
 	[dateFormatter release];
-	[super requestDidFinish:request];
 	[self autorelease];
+	
+	[super finished];
 }
 
 @end

@@ -32,20 +32,15 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "BaseFactory.h"
 #import "Outage.h"
 
-@interface OutageFactory : NSObject {
-	BOOL isFinished;
-	NSRecursiveLock* factoryLock;
+@interface OutageFactory : BaseFactory {
 }
-
-@property (assign) BOOL isFinished;
-@property (retain) NSRecursiveLock* factoryLock;
 
 +(void) initialize;
 +(OutageFactory*) getInstance;
 
--(void) finish;
 -(void) clearData;
 
 -(Outage*) getOutage:(NSNumber*) outageId;

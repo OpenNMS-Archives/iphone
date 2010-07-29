@@ -38,8 +38,10 @@
 
 @implementation AlarmUpdateHandler
 
--(void) requestDidFinish:(ASIHTTPRequest*) request
+-(void) handleRequest:(ASIHTTPRequest*) request
 {
+	[super handleRequest:request];
+
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setLenient:true];
     [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
@@ -131,7 +133,7 @@
 	NSError* error = nil;
 	Alarm* dbAlarm = nil;
 
-	context = [contextService newContext];
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
 	for (id a in alarms) {
 		NSDictionary* alarm = (NSDictionary*)a;
@@ -202,17 +204,18 @@
 			}
 		}
 	}
-	[context unlock];
 
 	if (![context save:&error]) {
 		NSLog(@"%@: an error occurred saving the managed object context: %@", self, [error localizedDescription]);
 		[error release];
 	}
 
+	[context unlock];
 	[context release];
 	[dateFormatter release];
-	[super requestDidFinish:request];
 	[self autorelease];
+	
+	[super finished];
 }
 
 @end

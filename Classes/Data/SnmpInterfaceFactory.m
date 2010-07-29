@@ -44,11 +44,7 @@
 
 @implementation SnmpInterfaceFactory
 
-@synthesize isFinished;
-@synthesize factoryLock;
-
 static SnmpInterfaceFactory* snmpInterfaceFactorySingleton = nil;
-static ContextService* contextService = nil;
 
 // 2 weeks
 #define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
@@ -60,7 +56,6 @@ static ContextService* contextService = nil;
 	{
 		initialized = YES;
 		snmpInterfaceFactorySingleton = [[SnmpInterfaceFactory alloc] init];
-		contextService         = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 }
 
@@ -72,23 +67,9 @@ static ContextService* contextService = nil;
 	return snmpInterfaceFactorySingleton;
 }
 
--(id) init
-{
-	if (self = [super init]) {
-		isFinished = NO;
-		factoryLock = [NSRecursiveLock new];
-	}
-	return self;
-}
-
--(void) finish
-{
-	isFinished = YES;
-}
-
 -(void) clearData
 {
-	NSManagedObjectContext* context = [contextService writeContext];
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:context];
@@ -116,12 +97,14 @@ static ContextService* contextService = nil;
 		[error release];
 	}
 	[context unlock];
+	[context release];
 }
 
 -(SnmpInterface*) getCoreDataSnmpInterface:(NSNumber*) snmpInterfaceId
 {
     SnmpInterface* iface = nil;
 	NSManagedObjectContext* context = [contextService readContext];
+
 	NSFetchRequest* snmpInterfaceRequest = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"SnmpInterface" inManagedObjectContext:context];

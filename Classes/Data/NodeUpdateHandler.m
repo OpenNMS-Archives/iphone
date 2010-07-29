@@ -38,9 +38,12 @@
 
 @implementation NodeUpdateHandler
 
--(void) requestDidFinish:(ASIHTTPRequest*) request
+-(void) handleRequest:(ASIHTTPRequest*) request
 {
+	[super handleRequest:request];
+
 	CXMLDocument* document = [self getDocumentForRequest:request];
+	NSDate* lastModified = [NSDate date];
 
 	if (!document) {
 		[super requestDidFinish:request];
@@ -53,9 +56,11 @@
 	} else {
 		xmlNodes = [[document rootElement] elementsForName:@"node"];
 	}
-	[context lock];
+	
+	NSMutableArray* nodes = [NSMutableArray arrayWithCapacity:[xmlNodes count]];
+
 	for (id xmlNode in xmlNodes) {
-		Node* node;
+		NSMutableDictionary* node = [NSMutableDictionary dictionary];
 
 		NSNumber* nodeId = nil;
 		NSString* label = nil;
@@ -74,39 +79,55 @@
 			}
 		}
 
-		NSFetchRequest *nodeRequest = [[[NSFetchRequest alloc] init] autorelease];
+		[node setValue:nodeId forKey:@"nodeId"];
+		[node setValue:label forKey:@"label"];
+		
+		[nodes addObject:node];
+	}
+	
+	NSError* error = nil;
+	Node* dbNode = nil;
 
+	NSManagedObjectContext* context = [contextService newContext];
+	[context lock];
+	
+	for (id node in nodes) {
+		NSNumber* nodeId = [node valueForKey:@"nodeId"];
+		
+		NSFetchRequest *nodeRequest = [[[NSFetchRequest alloc] init] autorelease];
+		
 		NSEntityDescription *nodeEntity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
 		[nodeRequest setEntity:nodeEntity];
-
+		
 		NSPredicate *nodePredicate = [NSPredicate predicateWithFormat:@"nodeId == %@", nodeId];
 		[nodeRequest setPredicate:nodePredicate];
 		
-		NSError* error = nil;
 		NSArray *nodeArray = [context executeFetchRequest:nodeRequest error:&error];
 		if (!nodeArray || [nodeArray count] == 0) {
 			if (error) {
 				NSLog(@"error fetching node for ID %@: %@", nodeId, [error localizedDescription]);
 				[error release];
 			}
-			node = (Node*)[NSEntityDescription insertNewObjectForEntityForName:@"Node" inManagedObjectContext:context];
+			dbNode = (Node*)[NSEntityDescription insertNewObjectForEntityForName:@"Node" inManagedObjectContext:context];
 		} else {
-			node = (Node*)[nodeArray objectAtIndex:0];
+			dbNode = (Node*)[nodeArray objectAtIndex:0];
 		}
 
-		node.nodeId = nodeId;
-		node.label = label;
-		node.lastModified = [NSDate date];
+		dbNode.nodeId = nodeId;
+		dbNode.label = [node valueForKey:@"label" ];
+		dbNode.lastModified = lastModified;
 	}
-
-	NSError* error = nil;
+	
 	if (![context save:&error]) {
 		NSLog(@"an error occurred saving the managed object context: %@", [error localizedDescription]);
 		[error release];
 	}
+
 	[context unlock];
-	[super requestDidFinish:request];
+	[context release];
 	[self autorelease];
+	
+	[super finished];
 }
 
 @end

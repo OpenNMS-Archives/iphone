@@ -46,14 +46,13 @@
 	[super dealloc];
 }
 
--(void) requestDidFinish:(ASIHTTPRequest*) request
+-(void) handleRequest:(ASIHTTPRequest*) request
 {
-	int count = 0;
+	[super handleRequest:request];
 
 	CXMLDocument* document = [self getDocumentForRequest:request];
 
 	if (!document) {
-		[super requestDidFinish:request];
 		[self autorelease];
 		return;
 	}
@@ -66,9 +65,10 @@
 	} else {
 		xmlSnmpInterfaces = [[document rootElement] elementsForName:@"snmpInterface"];
 	}
+	
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
 	for (id xmlSnmpInterface in xmlSnmpInterfaces) {
-		count++;
 		SnmpInterface* snmpInterface;
 
 		NSNumber* snmpInterfaceId = nil;
@@ -148,7 +148,7 @@
 	}
 
 #if DEBUG
-	NSLog(@"%@: found %d SNMP interfaces", self, count);
+	NSLog(@"%@: found %d SNMP interfaces", self, [xmlSnmpInterfaces count]);
 #endif
 
 	if (self.clearOldObjects) {
@@ -190,8 +190,9 @@
 		[error release];
 	}
 	[context unlock];
-	[super requestDidFinish:request];
+	[context release];
 	[self autorelease];
+	[super finished];
 }
 
 @end

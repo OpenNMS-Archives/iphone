@@ -2,7 +2,7 @@
  * This file is part of the OpenNMS(R) iPhone Application.
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
- * Copyright (C) 2009 The OpenNMS Group, Inc.  All rights reserved.
+ * Copyright (C) 2010 The OpenNMS Group, Inc.  All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,35 +31,19 @@
  *
  *******************************************************************************/
 
-#import "config.h"
+#import <Foundation/Foundation.h>
 #import "ContextService.h"
 
-#import <Foundation/Foundation.h>
-#import "ASIHTTPRequest.h"
-#import "CXMLDocument.h"
-
-@interface UpdateHandler : NSObject {
-	UIActivityIndicatorView* spinner;
+@interface BaseFactory : NSObject {
+	BOOL isFinished;
+	NSRecursiveLock* factoryLock;
 	ContextService* contextService;
-	SEL method;
-	NSObject* methodTarget;
-	BOOL clearOldObjects;
 }
 
-@property (retain) UIActivityIndicatorView* spinner;
+@property (assign) BOOL isFinished;
+@property (retain) NSRecursiveLock* factoryLock;
 @property (retain) ContextService* contextService;
-@property (assign) SEL method;
-@property (retain) NSObject* methodTarget;
-@property (assign) BOOL clearOldObjects;
 
--(id) initWithMethod:(SEL)selector target:(NSObject*)target;
-
--(NSString*)     cleanUpString:(NSString *)html;
--(NSString*)     stringForDate:(NSString*)date;
--(CXMLDocument*) getDocumentForRequest:(ASIHTTPRequest*) request;
--(void)          handleRequest:(ASIHTTPRequest*) request;
--(void)          finished;
--(void)          requestDidFinish:(ASIHTTPRequest*) request;
--(void)          requestFailed:(ASIHTTPRequest*) request;
+-(void) finish;
 
 @end

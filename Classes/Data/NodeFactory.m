@@ -46,11 +46,7 @@
 
 @implementation NodeFactory
 
-@synthesize isFinished;
-@synthesize factoryLock;
-
 static NodeFactory* nodeFactorySingleton = nil;
-static ContextService* contextService = nil;
 
 // 2 weeks
 #define CUTOFF (60.0 * 60.0 * 24.0 * 14.0)
@@ -62,7 +58,6 @@ static ContextService* contextService = nil;
 	{
 		initialized = YES;
 		nodeFactorySingleton = [[NodeFactory alloc] init];
-		contextService = [((OpenNMSAppDelegate*)[UIApplication sharedApplication].delegate) contextService];
 	}
 }
 
@@ -74,23 +69,9 @@ static ContextService* contextService = nil;
 	return nodeFactorySingleton;
 }
 
--(id) init
-{
-	if (self = [super init]) {
-		isFinished = YES;
-		factoryLock = [NSRecursiveLock new];
-	}
-	return self;
-}
-
--(void) finish
-{
-	isFinished = YES;
-}
-
 -(void) clearData
 {
-	NSManagedObjectContext* context = [contextService writeContext];
+	NSManagedObjectContext* context = [contextService newContext];
 	[context lock];
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
@@ -118,11 +99,12 @@ static ContextService* contextService = nil;
 		[error release];
 	}
 	[context unlock];
+	[context release];
 }
 
-NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
+NSInteger sortNodeObjectId(id obj1, id obj2, void* con)
 {
-	NSManagedObjectContext* context = [contextService readContext];
+	NSManagedObjectContext* context = (NSManagedObjectContext*)con;
 	Node* node1 = (Node*)[context objectWithID:obj1];
 	Node* node2 = (Node*)[context objectWithID:obj2];
 	
@@ -134,6 +116,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 	NSMutableSet* nodes = [NSMutableSet set];
 	
 	NSManagedObjectContext* context = [contextService readContext];
+
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
 	[request setEntity:entity];
@@ -173,7 +156,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 			[nodes addObject:[n objectID]];
 		}
 	}
-	
+
 	return [[nodes allObjects] sortedArrayUsingFunction:sortNodeObjectId context:nil];
 }
 
@@ -181,6 +164,7 @@ NSInteger sortNodeObjectId(id obj1, id obj2, void* nothing)
 {
 	Node* node = nil;
 	NSManagedObjectContext* context = [contextService readContext];
+
 	NSFetchRequest* request = [[NSFetchRequest alloc] init];
 
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Node" inManagedObjectContext:context];
