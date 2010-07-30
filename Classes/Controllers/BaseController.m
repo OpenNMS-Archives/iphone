@@ -155,8 +155,8 @@
             NSLog(@"%@: Caught %@: %@", self, [exception name], [exception reason]);
         }
     } else {
-//		[tableView setNeedsLayout];
-//		[tableView setNeedsDisplay];
+		[tableView setNeedsLayout];
+		[tableView setNeedsDisplay];
 		[tableView reloadData];
 	}
 #if DEBUG

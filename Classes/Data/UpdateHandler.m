@@ -202,15 +202,21 @@ static NSOperationQueue* operationQueue;
 #endif
 }
 
+#define ALWAYS_ON_MAIN_THREAD 0
+
 -(void) finished
 {
 	if (methodTarget && method) {
+#if ALWAYS_ON_MAIN_THREAD
 		[methodTarget performSelectorOnMainThread:method withObject:nil waitUntilDone:YES];
+#else
+		[methodTarget performSelector:method withObject:nil];
+#endif
 	}
 	[spinner stopAnimating];
 }
 
-#define USE_QUEUES 1
+#define USE_QUEUES 0
 
 -(void) requestDidFinish:(ASIHTTPRequest*) request
 {
@@ -227,7 +233,11 @@ static NSOperationQueue* operationQueue;
 	NSError* error = [request error];
 	NSLog(@"%@: Request failed: %@", self, [error localizedDescription]);
 	if (methodTarget && method) {
+#if ALWAYS_ON_MAIN_THREAD
 		[methodTarget performSelectorOnMainThread:method withObject:nil waitUntilDone:YES];
+#else
+		[methodTarget performSelector:method withObject:nil];
+#endif
 	}
 	[spinner stopAnimating];
 

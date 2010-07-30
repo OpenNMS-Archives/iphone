@@ -58,7 +58,7 @@
 
 	if (!document) {
 		[dateFormatter release];
-		[super requestDidFinish:request];
+		[super handleRequest:request];
 		[self autorelease];
 		return;
 	}

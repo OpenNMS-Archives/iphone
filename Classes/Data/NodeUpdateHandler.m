@@ -46,7 +46,7 @@
 	NSDate* lastModified = [NSDate date];
 
 	if (!document) {
-		[super requestDidFinish:request];
+		[super handleRequest:request];
 		[self autorelease];
 	}
 

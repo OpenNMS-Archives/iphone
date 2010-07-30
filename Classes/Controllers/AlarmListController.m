@@ -132,8 +132,8 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-	[self initializeData];
-	[super viewWillAppear:animated];
+//	[self initializeData];
+//	[super viewWillAppear:animated];
 	_refreshTimer = [NSTimer scheduledTimerWithTimeInterval:REFRESH_INTERVAL target:self selector:@selector(initializeData) userInfo:nil repeats:YES];
 }
 
