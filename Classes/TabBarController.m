@@ -18,9 +18,9 @@
 
 - (void)viewDidLoad {
 	[self setTabURLs:[NSArray arrayWithObjects:
-					  @"onms://outages",
-					  @"onms://about",
-					  nil]
+                    @"onms://outages",
+                    @"onms://about",
+                    nil]
 	 ];
 }
 

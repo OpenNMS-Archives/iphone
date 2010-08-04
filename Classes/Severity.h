@@ -34,7 +34,7 @@
 #import <Foundation/Foundation.h>
 
 @interface Severity : NSObject {
-	@private NSString* _severity;
+@private NSString* _severity;
 }
 
 @property (nonatomic, copy) NSString* severity;

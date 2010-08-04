@@ -46,17 +46,15 @@
 	 */
 
 	TT_RELEASE_SAFELY(_outages);
-	_outages = [OutageListModel outagesFromXML:response.data];
-
-	TTDINFO(@"finished loading");
+	_outages = [OutageListModel outagesFromXML:response.data withDuplicates:NO];
 
 	[super requestDidFinishLoad:request];
 }
 
-+(NSArray*)outagesFromXML:(NSData *)data
++(NSArray*)outagesFromXML:(NSData *)data withDuplicates:(BOOL)duplicates
 {
-	NSMutableArray* nodeIds = [NSMutableArray array];
-	
+  NSMutableArray* nodeIds = [NSMutableArray array];
+  
 	TTXMLParser* parser = [[TTXMLParser alloc] initWithData:data];
 	parser.treatDuplicateKeysAsArrayItems = YES;
 	[parser parse];
@@ -99,8 +97,10 @@
 
       NSString* nodeId = [[serviceLostEvent valueForKey:@"nodeId"] valueForKey:@"___Entity_Value___"];
       outage.nodeId = nodeId;
-      
-      if (![nodeIds containsObject:nodeId]) {
+
+      if (duplicates) {
+        [outages addObject:outage];
+      } else if (![nodeIds containsObject:nodeId]) {
         [nodeIds addObject:nodeId];
         [outages addObject:outage];
       }

@@ -34,10 +34,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation ONMSOutageItemCell
 
+@synthesize severity = _severity;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-  TTDINFO(@"initWithStyle");
   if (self = [super initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier]) {
 
     self.titleLabel.font = TTSTYLEVAR(tableFont);
@@ -66,8 +66,18 @@
 - (void)dealloc {
   TT_RELEASE_SAFELY(_titleLabel);
   TT_RELEASE_SAFELY(_timestampLabel);
+  TT_RELEASE_SAFELY(_severity);
   
   [super dealloc];
+}
+
+- (void)setSeverity:(NSString*)severity onLabel:(UILabel*)label {
+  if (severity != nil && label != nil) {
+    Severity* sev = [[Severity alloc] initWithSeverity:severity];
+    TTDINFO(@"severity %@ found, using color %@", sev, [sev getTextColor]);
+    label.textColor = [sev getTextColor];
+    [sev release];
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,17 +115,20 @@
   [super prepareForReuse];
   _titleLabel.text = nil;
   _timestampLabel.text = nil;
+  _severity = nil;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)layoutSubviews {
   [super layoutSubviews];
   
+  TTDINFO(@"layoutSubviews");
   CGFloat width = self.contentView.width - kTableCellSmallMargin;
   CGFloat top = kTableCellSmallMargin;
   
   if (_titleLabel.text.length) {
     _titleLabel.frame = CGRectMake(kTableCellSmallMargin, top, width, _titleLabel.font.ttLineHeight);
+    [self setSeverity:_severity onLabel:_titleLabel];
   } else {
     _titleLabel.frame = CGRectZero;
   }
@@ -162,25 +175,20 @@
     [super setObject:object];
 
     ONMSOutageItem* item = object;
-    if (item.title.length) {
-      self.titleLabel.text = item.title;
-    }
-    if (item.text.length) {
-      self.detailTextLabel.text = item.text;
-    }
-    if (item.timestamp) {
-      self.timestampLabel.text = [item.timestamp formatShortTime];
-    }
-    if (item.severity) {
-      Severity* sev = [[Severity alloc] initWithSeverity:item.severity];
-      TTDINFO(@"severity %@ found, using color %@", sev, [sev getDisplayColor]);
-//      self.backgroundColor = [sev getDisplayColor];
-//      self.backgroundView.backgroundColor = [sev getDisplayColor];
-      self.titleLabel.textColor = [sev getTextColor];
-      
-      [sev release];
-    }
     
+    if (item) {
+      if (item.title.length) {
+        self.titleLabel.text = item.title;
+      }
+      if (item.text.length) {
+        self.detailTextLabel.text = item.text;
+      }
+      if (item.timestamp) {
+        self.timestampLabel.text = [item.timestamp formatShortTime];
+      }
+
+      self.severity = item.severity;
+    }
   }
 }
 
@@ -201,7 +209,6 @@
 - (UILabel*)titleLabel {
   if (!_titleLabel) {
     _titleLabel = [[UILabel alloc] init];
-    _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.highlightedTextColor = [UIColor whiteColor];
     _titleLabel.font = TTSTYLEVAR(tableFont);
     _titleLabel.contentMode = UIViewContentModeLeft;
@@ -213,6 +220,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UILabel*)captionLabel {
+  TTDINFO(@"captionLabel");
   return self.textLabel;
 }
 

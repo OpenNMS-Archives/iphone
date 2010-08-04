@@ -15,6 +15,6 @@
 
 @property (nonatomic, copy) NSArray* outages;
 
-+(NSArray*)outagesFromXML:(NSData*)data;
++(NSArray*)outagesFromXML:(NSData*)data withDuplicates:(BOOL)duplicates;
 
 @end

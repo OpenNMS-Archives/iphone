@@ -33,7 +33,6 @@
 	TTDINFO(@"loadView called");
 	self.tableViewStyle = UITableViewStyleGrouped;
 	self.variableHeightRows = YES;
-  self.navigationBarTintColor = [UIColor colorWithRed:(54.0/255.0) green:(105.0/255.0) blue:(3.0/255.0) alpha:1.0];
 	[super loadView];
 }
 

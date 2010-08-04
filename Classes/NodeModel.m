@@ -149,7 +149,7 @@
 			_label  = [[parser.rootObject valueForKey:@"label"] copy];
 		} else if ([modelName isEqualToString:@"outages"]) {
 			TT_RELEASE_SAFELY(_outages);
-			_outages = [OutageListModel outagesFromXML:response.data];
+			_outages = [OutageListModel outagesFromXML:response.data withDuplicates:YES];
     } else if ([modelName isEqualToString:@"ipinterfaces"]) {
       TT_RELEASE_SAFELY(_ipInterfaces);
       _ipInterfaces = [IPInterfaceModel interfacesFromXML:response.data];

@@ -73,7 +73,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
-  TTDINFO("cellClassForObject: %@", object);
   if ([object isKindOfClass:[ONMSOutageItem class]]) {
     return [ONMSOutageItemCell class];
   } else {
@@ -102,10 +101,6 @@
 	
 	_label = _nodeModel.label;
 
-  TTDINFO(@"foo");
-  TTDINFO(@"outages = %@", _nodeModel.outages);
-  TTDINFO(@"bar");
-  TTDINFO(@"baz");
 	if (_nodeModel.outages && [_nodeModel.outages count] > 0) {
 		[sections addObject:@"Outages"];
 
@@ -121,6 +116,7 @@
 			item.title = [host stringByAppendingFormat:@"/%@", outage.serviceName];
 			item.text = outage.logMessage;
 			item.timestamp = outage.ifLostService;
+      item.severity = outage.severity;
 			[outageItems addObject:item];
 		}
 		[items addObject:outageItems];
