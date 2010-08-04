@@ -20,25 +20,23 @@
 	return self;
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+  return YES;
+}
+
 - (void)loadView
 {
 	[super loadView];
 	TTDINFO(@"init called");
 	self.tableViewStyle = UITableViewStylePlain;
 	self.variableHeightRows = YES;
-    self.navigationBarTintColor = [UIColor colorWithRed:(54.0/255.0) green:(105.0/255.0) blue:(3.0/255.0) alpha:1.0];
+//  self.navigationBarTintColor = [UIColor colorWithRed:(54.0/255.0) green:(105.0/255.0) blue:(3.0/255.0) alpha:1.0];
 }
 
 - (void)createModel
 {
 	self.dataSource = [[[OutageListDataSource alloc] init] autorelease];
 }
-
-/*
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:(BOOL)animated];
-    [self invalidateModel];
-}
- */
 
 @end

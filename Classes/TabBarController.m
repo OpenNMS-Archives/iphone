@@ -11,6 +11,11 @@
 
 @implementation TabBarController
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+  return YES;
+}
+
 - (void)viewDidLoad {
 	[self setTabURLs:[NSArray arrayWithObjects:
 					  @"onms://outages",

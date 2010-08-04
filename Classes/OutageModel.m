@@ -23,18 +23,9 @@
 @synthesize desc              = _desc;
 @synthesize uei               = _uei;
 
-- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more {
-	if (!self.isLoading && TTIsStringWithAnyText(_outageId)) {
-		NSString* url = [@"http://admin:admin@sin.local:8980/opennms/rest/outages/" stringByAppendingString:_outageId];
-
-		TTURLRequest* request = [TTURLRequest requestWithURL: url delegate: self];
-
-		id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
-		request.response = response;
-		TT_RELEASE_SAFELY(response);
-		
-		[request send];
-	}
+- (NSString*)description
+{
+  return [NSString stringWithFormat:@"OutageModel[%@/%@/%@/%@/%@]", _outageId, _ifLostService, _ipAddress, _serviceName, _severity];
 }
 
 @end

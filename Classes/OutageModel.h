@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "Severity.h"
 
 @interface OutageModel : TTURLRequestModel {
 	NSString* _outageId;

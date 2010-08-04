@@ -10,6 +10,9 @@
 #import "OutageListModel.h"
 #import "OutageModel.h"
 
+#import "ONMSOutageItem.h"
+#import "ONMSOutageItemCell.h"
+
 @implementation OutageListDataSource
 
 - (id)init
@@ -32,6 +35,28 @@
 	return _outageListModel;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
+  if ([object isKindOfClass:[ONMSOutageItem class]]) {
+    return [ONMSOutageItemCell class];
+  } else {
+    return [super tableView:tableView cellClassForObject:object];
+  }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+ - (void)        tableView: (UITableView*)tableView
+ cell: (UITableViewCell*)cell
+ willAppearAtIndexPath: (NSIndexPath*)indexPath {
+ if ([cell isKindOfClass:[ONMSOutageItemCell class]]) {
+ ONMSOutageItemCell* outageCell = (ONMSOutageItemCell*)cell;
+ outageCell.delegate = _delegate;
+ }
+ }
+ */
+
 - (void)tableViewDidLoadModel:(UITableView*)tableView {
 	NSMutableArray* items = [[NSMutableArray alloc] init];
 	NSArray* outages = _outageListModel.outages;
@@ -43,10 +68,11 @@
 		if (!host) {
 			host = outage.ipAddress;
 		}
-		TTTableMessageItem* item = [[[TTTableMessageItem alloc] init] autorelease];
-		item.title = host;
+		ONMSOutageItem* item = [[[ONMSOutageItem alloc] init] autorelease];
+		item.title = [host stringByAppendingFormat:@"/%@", outage.serviceName];
 		item.text = outage.logMessage;
 		item.timestamp = outage.ifLostService;
+    item.severity = outage.severity;
 		item.URL = [@"onms://nodes/" stringByAppendingString:outage.nodeId];
 		[items addObject:item];
 	}

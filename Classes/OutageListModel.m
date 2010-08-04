@@ -8,6 +8,7 @@
 
 #import "OutageListModel.h"
 #import "OutageModel.h"
+#import "Severity.h"
 #import "extThree20XML/extThree20XML.h"
 
 @implementation OutageListModel
@@ -67,44 +68,44 @@
 	int count = [[parser.rootObject valueForKey:@"count"] intValue];
 	TTDINFO(@"outage count = %d", count);
 	
-	NSMutableArray* outages = [[[NSMutableArray alloc] initWithCapacity:count] autorelease];
+	NSMutableArray* outages = [[[NSMutableArray alloc] init] autorelease];
 
-	TTDINFO(@"outage = %@", [[parser.rootObject valueForKey:@"outage"] class]);
 	NSArray* xmlOutages;
-	if ([[parser.rootObject valueForKey:@"outage"] isKindOfClass:[NSArray class]]) {
-		xmlOutages = [parser.rootObject valueForKey:@"outage"];
-	} else {
-		xmlOutages = [NSArray arrayWithObject:[parser.rootObject valueForKey:@"outage"]];
-	}
-	for (id o in xmlOutages) {
-		OutageModel* outage = [[[OutageModel alloc] init] autorelease];
+  if ([parser.rootObject valueForKey:@"outage"]) {
+    if ([[parser.rootObject valueForKey:@"outage"] isKindOfClass:[NSArray class]]) {
+      xmlOutages = [parser.rootObject valueForKey:@"outage"];
+    } else {
+      xmlOutages = [NSArray arrayWithObject:[parser.rootObject valueForKey:@"outage"]];
+    }
+    for (id o in xmlOutages) {
+      OutageModel* outage = [[[OutageModel alloc] init] autorelease];
 
-		TTDINFO(@"o = %@", o);
-		outage.outageId = [o valueForKey:@"id"];
-		outage.ipAddress = [[o valueForKey:@"ipAddress"] valueForKey:@"___Entity_Value___"];
-		outage.serviceName = [[[[o valueForKey:@"monitoredService"] valueForKey:@"serviceType"] valueForKey:@"name"] valueForKey:@"___Entity_Value___"];
-		
-		outage.ifLostService = [dateFormatter dateFromString:[[o valueForKey:@"ifLostService"] valueForKey:@"___Entity_Value___"]];
-		NSString* ifRegainedService = [[o valueForKey:@"ifRegainedService"] valueForKey:@"___Entity_Value___"];
-		if (ifRegainedService) {
-			outage.ifRegainedService = [dateFormatter dateFromString:ifRegainedService];
-		}
-		
-		NSDictionary* serviceLostEvent = [o valueForKey:@"serviceLostEvent"];
-		outage.desc = [[serviceLostEvent valueForKey:@"description"] valueForKey:@"___Entity_Value___"];
-		outage.host = [[serviceLostEvent valueForKey:@"host"] valueForKey:@"___Entity_Value___"];
-		outage.logMessage = [[serviceLostEvent valueForKey:@"logMessage"] valueForKey:@"___Entity_Value___"];
-		outage.severity = [serviceLostEvent valueForKey:@"severity"];
-		outage.uei = [[serviceLostEvent valueForKey:@"uei"] valueForKey:@"___Entity_Value___"];
+      outage.outageId = [o valueForKey:@"id"];
+      outage.ipAddress = [[o valueForKey:@"ipAddress"] valueForKey:@"___Entity_Value___"];
+      outage.serviceName = [[[[o valueForKey:@"monitoredService"] valueForKey:@"serviceType"] valueForKey:@"name"] valueForKey:@"___Entity_Value___"];
+      
+      outage.ifLostService = [dateFormatter dateFromString:[[o valueForKey:@"ifLostService"] valueForKey:@"___Entity_Value___"]];
+      NSString* ifRegainedService = [[o valueForKey:@"ifRegainedService"] valueForKey:@"___Entity_Value___"];
+      if (ifRegainedService) {
+        outage.ifRegainedService = [dateFormatter dateFromString:ifRegainedService];
+      }
+      
+      NSDictionary* serviceLostEvent = [o valueForKey:@"serviceLostEvent"];
+      outage.desc = [[serviceLostEvent valueForKey:@"description"] valueForKey:@"___Entity_Value___"];
+      outage.host = [[serviceLostEvent valueForKey:@"host"] valueForKey:@"___Entity_Value___"];
+      outage.logMessage = [[serviceLostEvent valueForKey:@"logMessage"] valueForKey:@"___Entity_Value___"];
+      outage.uei = [[serviceLostEvent valueForKey:@"uei"] valueForKey:@"___Entity_Value___"];
+      outage.severity = [serviceLostEvent valueForKey:@"severity"];
 
-		NSString* nodeId = [[serviceLostEvent valueForKey:@"nodeId"] valueForKey:@"___Entity_Value___"];
-		outage.nodeId = nodeId;
-		
-		if (![nodeIds containsObject:nodeId]) {
-			[nodeIds addObject:nodeId];
-			[outages addObject:outage];
-		}
-	}
+      NSString* nodeId = [[serviceLostEvent valueForKey:@"nodeId"] valueForKey:@"___Entity_Value___"];
+      outage.nodeId = nodeId;
+      
+      if (![nodeIds containsObject:nodeId]) {
+        [nodeIds addObject:nodeId];
+        [outages addObject:outage];
+      }
+    }
+  }
 
 	TT_RELEASE_SAFELY(dateFormatter);
 	TT_RELEASE_SAFELY(parser);

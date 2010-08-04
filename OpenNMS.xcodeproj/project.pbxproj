@@ -38,6 +38,13 @@
 		4452FCF012074C5F00AEEFEC /* OutageListDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452FCEF12074C5F00AEEFEC /* OutageListDataSource.m */; };
 		4452FCF312074CCE00AEEFEC /* OutageListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452FCF212074CCE00AEEFEC /* OutageListModel.m */; };
 		4452FDB6120754EA00AEEFEC /* libextThree20XML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4452FDB3120754E100AEEFEC /* libextThree20XML.a */; };
+		447EE5211208DD3800F3E535 /* IPInterfaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 447EE5201208DD3800F3E535 /* IPInterfaceModel.m */; };
+		447EE5A41209A92F00F3E535 /* SNMPInterfaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 447EE5A31209A92F00F3E535 /* SNMPInterfaceModel.m */; };
+		447EE6031209C51100F3E535 /* ONMSOutageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 447EE6001209C51100F3E535 /* ONMSOutageItem.m */; };
+		447EE6041209C51100F3E535 /* ONMSOutageItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 447EE6021209C51100F3E535 /* ONMSOutageItemCell.m */; };
+		447EE6921209D50900F3E535 /* EventModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 447EE6911209D50900F3E535 /* EventModel.m */; };
+		447EE8131209FE0A00F3E535 /* ONMSDefaultStyleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 447EE8121209FE0A00F3E535 /* ONMSDefaultStyleSheet.m */; };
+		44F0686C1209F13B0037512A /* Severity.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F0686B1209F13B0037512A /* Severity.m */; };
 		6E3175FB1126577100F4DDEC /* Three20.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6E3175FA1126577100F4DDEC /* Three20.bundle */; };
 		6E3176191126579100F4DDEC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3176181126579100F4DDEC /* QuartzCore.framework */; };
 		6E3797BA11B9BE030011C497 /* libThree20Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E37979911B9BE010011C497 /* libThree20Core.a */; };
@@ -264,6 +271,20 @@
 		4452FCF112074CCE00AEEFEC /* OutageListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutageListModel.h; sourceTree = "<group>"; };
 		4452FCF212074CCE00AEEFEC /* OutageListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutageListModel.m; sourceTree = "<group>"; };
 		4452FDA8120754E100AEEFEC /* extThree20XML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = extThree20XML.xcodeproj; path = "../opennms-iphone/three20/src/extThree20XML/extThree20XML.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		447EE51F1208DD3800F3E535 /* IPInterfaceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPInterfaceModel.h; sourceTree = "<group>"; };
+		447EE5201208DD3800F3E535 /* IPInterfaceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPInterfaceModel.m; sourceTree = "<group>"; };
+		447EE5A21209A92F00F3E535 /* SNMPInterfaceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SNMPInterfaceModel.h; sourceTree = "<group>"; };
+		447EE5A31209A92F00F3E535 /* SNMPInterfaceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SNMPInterfaceModel.m; sourceTree = "<group>"; };
+		447EE5FF1209C51100F3E535 /* ONMSOutageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSOutageItem.h; sourceTree = "<group>"; };
+		447EE6001209C51100F3E535 /* ONMSOutageItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONMSOutageItem.m; sourceTree = "<group>"; };
+		447EE6011209C51100F3E535 /* ONMSOutageItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSOutageItemCell.h; sourceTree = "<group>"; };
+		447EE6021209C51100F3E535 /* ONMSOutageItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONMSOutageItemCell.m; sourceTree = "<group>"; };
+		447EE6901209D50900F3E535 /* EventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventModel.h; sourceTree = "<group>"; };
+		447EE6911209D50900F3E535 /* EventModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventModel.m; sourceTree = "<group>"; };
+		447EE8111209FE0A00F3E535 /* ONMSDefaultStyleSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSDefaultStyleSheet.h; sourceTree = "<group>"; };
+		447EE8121209FE0A00F3E535 /* ONMSDefaultStyleSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONMSDefaultStyleSheet.m; sourceTree = "<group>"; };
+		44F0686A1209F13B0037512A /* Severity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Severity.h; sourceTree = "<group>"; };
+		44F0686B1209F13B0037512A /* Severity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Severity.m; sourceTree = "<group>"; };
 		6E3175FA1126577100F4DDEC /* Three20.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Three20.bundle; path = ../three20/src/Three20.bundle; sourceTree = SOURCE_ROOT; };
 		6E3176181126579100F4DDEC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		6E37978411B9BE010011C497 /* Three20Core.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Three20Core.xcodeproj; path = ../three20/src/Three20Core/Three20Core.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -301,16 +322,14 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				447EE4641208A82100F3E535 /* Miscellaneous */,
+				447EE6931209D51200F3E535 /* Events */,
 				4452000712084CBC00AEEFEC /* Nodes */,
 				4452FCE9120749A900AEEFEC /* Outages */,
+				447EE5191208DC6800F3E535 /* IPInterfaces */,
+				447EE59E1209A90900F3E535 /* SNMPInterfaces */,
 				1D3623240D0F684500981E51 /* AppDelegate.h */,
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
-				445200BF120857B600AEEFEC /* RESTURLRequest.h */,
-				445200C0120857B600AEEFEC /* RESTURLRequest.m */,
-				4452016312086CBE00AEEFEC /* TabBarController.h */,
-				4452016412086CBE00AEEFEC /* TabBarController.m */,
-				4452017612086F1C00AEEFEC /* AboutViewController.h */,
-				4452017712086F1C00AEEFEC /* AboutViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -406,6 +425,10 @@
 			children = (
 				4452FC8F1207476A00AEEFEC /* OutageListViewController.h */,
 				4452FC901207476B00AEEFEC /* OutageListViewController.m */,
+				447EE5FF1209C51100F3E535 /* ONMSOutageItem.h */,
+				447EE6001209C51100F3E535 /* ONMSOutageItem.m */,
+				447EE6011209C51100F3E535 /* ONMSOutageItemCell.h */,
+				447EE6021209C51100F3E535 /* ONMSOutageItemCell.m */,
 				4452FCEE12074C5F00AEEFEC /* OutageListDataSource.h */,
 				4452FCEF12074C5F00AEEFEC /* OutageListDataSource.m */,
 				4452FCF112074CCE00AEEFEC /* OutageListModel.h */,
@@ -423,6 +446,50 @@
 				4452FDB5120754E100AEEFEC /* extJSONUnitTests.octest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		447EE4641208A82100F3E535 /* Miscellaneous */ = {
+			isa = PBXGroup;
+			children = (
+				4452017612086F1C00AEEFEC /* AboutViewController.h */,
+				4452017712086F1C00AEEFEC /* AboutViewController.m */,
+				4452016312086CBE00AEEFEC /* TabBarController.h */,
+				4452016412086CBE00AEEFEC /* TabBarController.m */,
+				445200BF120857B600AEEFEC /* RESTURLRequest.h */,
+				445200C0120857B600AEEFEC /* RESTURLRequest.m */,
+				44F0686A1209F13B0037512A /* Severity.h */,
+				44F0686B1209F13B0037512A /* Severity.m */,
+				447EE8111209FE0A00F3E535 /* ONMSDefaultStyleSheet.h */,
+				447EE8121209FE0A00F3E535 /* ONMSDefaultStyleSheet.m */,
+			);
+			name = Miscellaneous;
+			sourceTree = "<group>";
+		};
+		447EE5191208DC6800F3E535 /* IPInterfaces */ = {
+			isa = PBXGroup;
+			children = (
+				447EE51F1208DD3800F3E535 /* IPInterfaceModel.h */,
+				447EE5201208DD3800F3E535 /* IPInterfaceModel.m */,
+			);
+			name = IPInterfaces;
+			sourceTree = "<group>";
+		};
+		447EE59E1209A90900F3E535 /* SNMPInterfaces */ = {
+			isa = PBXGroup;
+			children = (
+				447EE5A21209A92F00F3E535 /* SNMPInterfaceModel.h */,
+				447EE5A31209A92F00F3E535 /* SNMPInterfaceModel.m */,
+			);
+			name = SNMPInterfaces;
+			sourceTree = "<group>";
+		};
+		447EE6931209D51200F3E535 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				447EE6901209D50900F3E535 /* EventModel.h */,
+				447EE6911209D50900F3E535 /* EventModel.m */,
+			);
+			name = Events;
 			sourceTree = "<group>";
 		};
 		6E37978511B9BE010011C497 /* Products */ = {
@@ -763,6 +830,13 @@
 				445200C1120857B600AEEFEC /* RESTURLRequest.m in Sources */,
 				4452016512086CBE00AEEFEC /* TabBarController.m in Sources */,
 				4452017812086F1C00AEEFEC /* AboutViewController.m in Sources */,
+				447EE5211208DD3800F3E535 /* IPInterfaceModel.m in Sources */,
+				447EE5A41209A92F00F3E535 /* SNMPInterfaceModel.m in Sources */,
+				447EE6031209C51100F3E535 /* ONMSOutageItem.m in Sources */,
+				447EE6041209C51100F3E535 /* ONMSOutageItemCell.m in Sources */,
+				447EE6921209D50900F3E535 /* EventModel.m in Sources */,
+				44F0686C1209F13B0037512A /* Severity.m in Sources */,
+				447EE8131209FE0A00F3E535 /* ONMSDefaultStyleSheet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,6 +890,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -828,6 +903,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenNMS;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -835,6 +911,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
@@ -845,6 +922,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenNMS;
+				PROVISIONING_PROFILE = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -855,11 +933,14 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				OTHER_CFLAGS = "-DDEBUG";
 				PREBINDING = NO;
 				PRODUCT_NAME = OpenNMS;
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -871,10 +952,13 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

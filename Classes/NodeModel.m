@@ -8,6 +8,9 @@
 
 #import "NodeModel.h"
 #import "OutageListModel.h"
+#import "IPInterfaceModel.h"
+#import "SNMPInterfaceModel.h"
+#import "EventModel.h"
 #import "extThree20XML/extThree20XML.h"
 #import "RESTURLRequest.h"
 
@@ -18,6 +21,9 @@
 @synthesize nodeId  = _nodeId;
 @synthesize label   = _label;
 @synthesize outages = _outages;
+@synthesize ipInterfaces = _ipInterfaces;
+@synthesize snmpInterfaces = _snmpInterfaces;
+@synthesize events = _events;
 
 - (id)initWithNodeId:(NSString*)nodeId
 {
@@ -36,39 +42,88 @@
 - (void)dealloc
 {
 	TT_RELEASE_SAFELY(_dateFormatter);
+	TT_RELEASE_SAFELY(_events);
+	TT_RELEASE_SAFELY(_snmpInterfaces);
+	TT_RELEASE_SAFELY(_ipInterfaces);
 	TT_RELEASE_SAFELY(_outages);
 	TT_RELEASE_SAFELY(_nodeId);
 	TT_RELEASE_SAFELY(_label);
 	[super dealloc];
 }
 
-- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more {
-	TTDINFO(@"load called");
+- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
+{
+  TTDINFO(@"load called");
 	if (!self.isLoading && _nodeId != nil) {
-		TTDINFO(@"sending requests for node %@", _nodeId);
-		_inProgressCount = 2;
+    TTDINFO(@"sending requests for node %@", _nodeId);
+    _inProgressCount = 5;
 
-		RESTURLRequest* request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingString:_nodeId] delegate:self];
-		request.modelName = @"nodes";
+    // Node
+    RESTURLRequest* request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingString:_nodeId] delegate:self];
+    request.modelName = @"nodes";
 
-		id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
-		request.response = response;
-		TT_RELEASE_SAFELY(response);
+    id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
+    request.response = response;
+    TT_RELEASE_SAFELY(response);
 
-		[request send];
+    [request send];
 
-		request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/outages/forNode/" stringByAppendingFormat:@"%@?limit=%d&orderBy=ifLostService&order=desc", _nodeId, 50] delegate:self];
-		request.modelName = @"outages";
+    // Outages
+    request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/outages/forNode/" stringByAppendingFormat:@"%@?limit=%d&orderBy=ifLostService&order=desc", _nodeId, 50] delegate:self];
+    request.modelName = @"outages";
 
-		response = [[TTURLDataResponse alloc] init];
-		request.response = response;
-		TT_RELEASE_SAFELY(response);
+    response = [[TTURLDataResponse alloc] init];
+    request.response = response;
+    TT_RELEASE_SAFELY(response);
 
-		[request send];
-	}
+    [request send];
+
+    // IPInterface
+    request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingFormat:@"%@/ipinterfaces", _nodeId] delegate:self];
+    request.modelName = @"ipinterfaces";
+    
+    response = [[TTURLDataResponse alloc] init];
+    request.response = response;
+    TT_RELEASE_SAFELY(response);
+    
+    [request send];
+    
+    // SNMPInterface
+    request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingFormat:@"%@/snmpinterfaces", _nodeId] delegate:self];
+    request.modelName = @"snmpinterfaces";
+    
+    response = [[TTURLDataResponse alloc] init];
+    request.response = response;
+    TT_RELEASE_SAFELY(response);
+    
+    [request send];
+    
+    // Events
+    request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/events" stringByAppendingFormat:@"?limit=%d&node.id=%@", 10, _nodeId] delegate:self];
+    request.modelName = @"events";
+    
+    response = [[TTURLDataResponse alloc] init];
+    request.response = response;
+    TT_RELEASE_SAFELY(response);
+    
+    [request send];
+  }
 }
 
-- (void)requestDidFinishLoad:(TTURLRequest*)request {
+- (void)request:(TTURLRequest*)request didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge*)challenge
+{
+  [super request:request didReceiveAuthenticationChallenge:challenge];
+}
+
+- (void)request:(TTURLRequest*)request didFailLoadWithError:(NSError*)error
+{
+  TTDWARNING(@"Failed request for model %@", ((RESTURLRequest*)request).modelName);
+  _inProgressCount--;
+  [super request:request didFailLoadWithError:error];
+}
+
+- (void)requestDidFinishLoad:(TTURLRequest*)request
+{
 	TTURLDataResponse* response = request.response;
 	NSString* modelName = ((RESTURLRequest*)request).modelName;
 
@@ -77,14 +132,14 @@
 	TTDINFO(@"Got response for model %@", modelName);
 
 	NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
-	TTDINFO(@"URL response: %@", string);
+//	TTDINFO(@"URL response: %@", string);
 
 	if (TTIsStringWithAnyText(string)) {
 		TTXMLParser* parser = [[TTXMLParser alloc] initWithData:response.data];
 		parser.treatDuplicateKeysAsArrayItems = YES;
 		[parser parse];
 
-		TTDINFO(@"parsed xml: %@", parser.rootObject);
+//		TTDINFO(@"parsed xml: %@", parser.rootObject);
 
 		if ([modelName isEqualToString:@"nodes"]) {
 			TT_RELEASE_SAFELY(_nodeId);
@@ -95,6 +150,15 @@
 		} else if ([modelName isEqualToString:@"outages"]) {
 			TT_RELEASE_SAFELY(_outages);
 			_outages = [OutageListModel outagesFromXML:response.data];
+    } else if ([modelName isEqualToString:@"ipinterfaces"]) {
+      TT_RELEASE_SAFELY(_ipInterfaces);
+      _ipInterfaces = [IPInterfaceModel interfacesFromXML:response.data];
+    } else if ([modelName isEqualToString:@"snmpinterfaces"]) {
+      TT_RELEASE_SAFELY(_snmpInterfaces);
+      _snmpInterfaces = [SNMPInterfaceModel interfacesFromXML:response.data];
+    } else if ([modelName isEqualToString:@"events"]) {
+      TT_RELEASE_SAFELY(_events);
+      _events = [EventModel eventsFromXML:response.data];
 		} else {
 			TTDWARNING(@"unmatched model name: %@", modelName);
 		}
@@ -109,6 +173,11 @@
 	if (_inProgressCount == 0) {
 		[super requestDidFinishLoad:request];
 	}
+}
+
+- (NSString*)description
+{
+  return [NSString stringWithFormat:@"NodeModel[%@/%@]", _nodeId, _label];
 }
 
 @end
