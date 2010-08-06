@@ -1,25 +1,25 @@
 //
-//  OutageDataSource.m
+//  AlarmDataSource.m
 //  OpenNMS
 //
 //  Created by Benjamin Reed on 8/2/10.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "OutageListDataSource.h"
-#import "OutageListModel.h"
-#import "OutageModel.h"
+#import "AlarmListDataSource.h"
+#import "AlarmListModel.h"
+#import "AlarmModel.h"
 
 #import "ONMSSeverityItem.h"
 #import "ONMSSeverityItemCell.h"
 
-@implementation OutageListDataSource
+@implementation AlarmListDataSource
 
 - (id)init
 {
 	TTDINFO(@"init called");
 	if (self = [super init]) {
-		_outageListModel = [[OutageListModel alloc] init];
+		_alarmListModel = [[AlarmListModel alloc] init];
 	}
 	return self;
 }
@@ -27,12 +27,12 @@
 - (void)dealloc
 {
 	// Don't do this!  It's done for us.
-	// TT_RELEASE_SAFELY(_outageListModel);
+	// TT_RELEASE_SAFELY(_alarmListModel);
 	[super dealloc];
 }
 
 - (id<TTModel>)model {
-	return _outageListModel;
+	return _alarmListModel;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,21 +46,21 @@
 
 - (void)tableViewDidLoadModel:(UITableView*)tableView {
 	NSMutableArray* items = [[NSMutableArray alloc] init];
-	NSArray* outages = _outageListModel.outages;
+	NSArray* alarms = _alarmListModel.alarms;
 
-	for (id o in outages) {
-		OutageModel* outage = (OutageModel*)o;
-//		NSString* host = outage.host;
+	for (id o in alarms) {
+		AlarmModel* alarm = (AlarmModel*)o;
+//		NSString* host = alarm.host;
 		NSString* host = nil;
 		if (!host) {
-			host = outage.ipAddress;
+			host = alarm.ipAddress;
 		}
 		ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-		item.title = [host stringByAppendingFormat:@"/%@", outage.serviceName];
-		item.text = outage.logMessage;
-		item.timestamp = outage.ifLostService;
-    item.severity = outage.severity;
-		item.URL = [@"onms://nodes/" stringByAppendingString:outage.nodeId];
+		item.title = host;
+		item.text = alarm.logMessage;
+		item.timestamp = alarm.ifLostService;
+    item.severity = alarm.severity;
+//		item.URL = [@"onms://nodes/" stringByAppendingString:alarm.nodeId];
 		[items addObject:item];
 	}
 	

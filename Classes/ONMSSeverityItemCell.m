@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-#import "ONMSOutageItemCell.h"
-#import "ONMSOutageItem.h"
+#import "ONMSSeverityItemCell.h"
+#import "ONMSSeverityItem.h"
 
 // Core
 #import "Three20Core/Three20Core+Additions.h"
@@ -32,7 +32,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-@implementation ONMSOutageItemCell
+@implementation ONMSSeverityItemCell
 
 @synthesize severity = _severity;
 
@@ -88,7 +88,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
-  ONMSOutageItem* item = object;
+  ONMSSeverityItem* item = object;
 
   CGFloat width = tableView.width - kTableCellHPadding*2;
 
@@ -174,7 +174,7 @@
   if (_item != object) {
     [super setObject:object];
 
-    ONMSOutageItem* item = object;
+    ONMSSeverityItem* item = object;
     
     if (item) {
       if (item.title.length) {

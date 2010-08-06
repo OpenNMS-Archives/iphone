@@ -15,17 +15,16 @@
 //
 
 // UI
-#import "Three20UI/TTTableCaptionItem.h"
-#import "Severity.h"
+#import "Three20UI/TTTableLinkedItemCell.h"
 
-@interface ONMSOutageItem : TTTableCaptionItem  {
-  NSString* _title;
-  NSDate*   _timestamp;
+@interface ONMSSeverityItemCell : TTTableLinkedItemCell {
+  UILabel* _titleLabel;
+  UILabel* _timestampLabel;
   NSString* _severity;
 }
 
-@property (nonatomic, copy)   NSString* title;
-@property (nonatomic, retain) NSDate*   timestamp;
-@property (nonatomic, copy)   NSString* severity;
+@property (nonatomic, readonly, retain) UILabel* titleLabel;
+@property (nonatomic, readonly, retain) UILabel* timestampLabel;
+@property (nonatomic, retain) NSString* severity;
 
 @end

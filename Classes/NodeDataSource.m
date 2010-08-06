@@ -13,8 +13,8 @@
 #import "SNMPInterfaceModel.h"
 #import "EventModel.h"
 
-#import "ONMSOutageItem.h"
-#import "ONMSOutageItemCell.h"
+#import "ONMSSeverityItem.h"
+#import "ONMSSeverityItemCell.h"
 
 #import "Three20Core/Three20Core+Additions.h"
 
@@ -73,8 +73,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
-  if ([object isKindOfClass:[ONMSOutageItem class]]) {
-    return [ONMSOutageItemCell class];
+  if ([object isKindOfClass:[ONMSSeverityItem class]]) {
+    return [ONMSSeverityItemCell class];
   } else {
     return [super tableView:tableView cellClassForObject:object];
   }
@@ -86,8 +86,8 @@
 - (void)        tableView: (UITableView*)tableView
                      cell: (UITableViewCell*)cell
     willAppearAtIndexPath: (NSIndexPath*)indexPath {
-  if ([cell isKindOfClass:[ONMSOutageItemCell class]]) {
-    ONMSOutageItemCell* outageCell = (ONMSOutageItemCell*)cell;
+  if ([cell isKindOfClass:[ONMSSeverityItemCell class]]) {
+    ONMSSeverityItemCell* outageCell = (ONMSSeverityItemCell*)cell;
     outageCell.delegate = _delegate;
   }
 }
@@ -112,7 +112,7 @@
 			if (!host) {
 				host = outage.ipAddress;
 			}
-      ONMSOutageItem* item = [[[ONMSOutageItem alloc] init] autorelease];
+      ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
 			item.title = [host stringByAppendingFormat:@"/%@", outage.serviceName];
 			item.text = outage.logMessage;
 			item.timestamp = outage.ifLostService;

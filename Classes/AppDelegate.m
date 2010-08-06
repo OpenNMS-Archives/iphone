@@ -10,6 +10,7 @@
 #import "TabBarController.h"
 #import "OutageListViewController.h"
 #import "NodeViewController.h"
+#import "AlarmListViewController.h"
 #import "AboutViewController.h"
 
 #import "ONMSDefaultStyleSheet.h"
@@ -27,7 +28,8 @@
   [styleSheet release];
 
 	TTNavigator* navigator = [TTNavigator navigator];
-	navigator.persistenceMode = TTNavigatorPersistenceModeAll;
+//	navigator.persistenceMode = TTNavigatorPersistenceModeAll;
+  navigator.persistenceMode = TTNavigatorPersistenceModeNone;
 
 	TTURLMap* map = navigator.URLMap;
 
@@ -36,6 +38,8 @@
 	[map from:@"onms://tabbar" toSharedViewController:[TabBarController class]];
 	[map from:@"onms://about" toSharedViewController:[AboutViewController class]];
 	[map from:@"onms://outages" toViewController:[OutageListViewController class]];
+	[map from:@"onms://alarms" toViewController:[AlarmListViewController class]];
+//	[map from:@"onms://alarm/(initWithAlarmId:)" toViewController:[AlarmViewController class]];
 	[map from:@"onms://nodes/(initWithNodeId:)" toViewController:[NodeViewController class]];
 
 //	if (![navigator restoreViewControllers]) {
