@@ -16,68 +16,52 @@
 
 #import "ONMSSeverityItemCell.h"
 #import "ONMSSeverityItem.h"
+#import "Severity.h"
 
-// Core
-#import "Three20Core/Three20Core+Additions.h"
+#import "Three20Core/NSDateAdditions.h"
 
 // UI
 #import "Three20UI/TTTableCaptionItem.h"
 #import "Three20UI/UIViewAdditions.h"
+#import "Three20UI/UITableViewAdditions.h"
 
 // Style
 #import "Three20Style/TTGlobalStyle.h"
 #import "Three20Style/TTDefaultStyleSheet.h"
-#import "Three20Style/UIFontAdditions.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation ONMSSeverityItemCell
 
-@synthesize severity = _severity;
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
   if (self = [super initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier]) {
-
-    self.titleLabel.font = TTSTYLEVAR(tableFont);
-    self.titleLabel.textColor = TTSTYLEVAR(tableSubTextColor);
-    self.titleLabel.highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
-    self.titleLabel.textAlignment = UITextAlignmentLeft;
-    self.titleLabel.contentMode = UIViewContentModeTop;
-    self.titleLabel.lineBreakMode = UILineBreakModeWordWrap;
-    self.titleLabel.numberOfLines = 0;
-    self.titleLabel.backgroundColor = [UIColor clearColor];
-
-    self.detailTextLabel.font = TTSTYLEVAR(font);
+    self.detailTextLabel.font = TTSTYLEVAR(tableFont);
+    self.detailTextLabel.contentMode = UIViewContentModeTop;
     self.detailTextLabel.textColor = TTSTYLEVAR(textColor);
     self.detailTextLabel.highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
-    self.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
-    self.detailTextLabel.numberOfLines = 0;
+    self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
     self.detailTextLabel.backgroundColor = [UIColor clearColor];
-    
-    self.timestampLabel.backgroundColor = [UIColor clearColor];
+
+    self.textLabel.font = TTSTYLEVAR(font);
+    self.textLabel.textColor = TTSTYLEVAR(tableSubTextColor);
+    self.textLabel.highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
+    self.textLabel.textAlignment = UITextAlignmentLeft;
+    self.textLabel.contentMode = UIViewContentModeTop;
+    self.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+    self.textLabel.numberOfLines = 0;
+    self.textLabel.backgroundColor = [UIColor clearColor];
   }
 
   return self;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
-  TT_RELEASE_SAFELY(_titleLabel);
   TT_RELEASE_SAFELY(_timestampLabel);
-  TT_RELEASE_SAFELY(_severity);
-  
-  [super dealloc];
-}
 
-- (void)setSeverity:(NSString*)severity onLabel:(UILabel*)label {
-  if (severity != nil && label != nil) {
-    Severity* sev = [[Severity alloc] initWithSeverity:severity];
-    TTDINFO(@"severity %@ found, using color %@", sev, [sev getTextColor]);
-    label.textColor = [sev getTextColor];
-    [sev release];
-  }
+  [super dealloc];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,15 +72,25 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
-  ONMSSeverityItem* item = object;
+  TTTableCaptionItem* item = object;
 
-  CGFloat width = tableView.width - kTableCellHPadding*2;
+  CGFloat accessorySize = 0.0;
+  
+  if (item.URL) {
+    if (item.accessoryURL) {
+      accessorySize = 20.0;
+    } else {
+      accessorySize = 20.0;
+    }
+  }
+  
+  CGFloat width = tableView.width - kTableCellHPadding*2 - [tableView tableCellMargin]*2 - accessorySize;
 
   CGSize detailTextSize = [item.text sizeWithFont:TTSTYLEVAR(tableFont)
                                 constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)
-                                    lineBreakMode:UILineBreakModeWordWrap];
+                                    lineBreakMode:UILineBreakModeTailTruncation];
 
-  CGSize textSize = [item.title sizeWithFont:TTSTYLEVAR(font)
+  CGSize textSize = [item.caption sizeWithFont:TTSTYLEVAR(font)
                              constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)
                                  lineBreakMode:UILineBreakModeWordWrap];
 
@@ -113,51 +107,53 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)prepareForReuse {
   [super prepareForReuse];
-  _titleLabel.text = nil;
   _timestampLabel.text = nil;
-  _severity = nil;
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)layoutSubviews {
   [super layoutSubviews];
-  
-  TTDINFO(@"layoutSubviews");
-  CGFloat width = self.contentView.width - kTableCellSmallMargin;
-  CGFloat top = kTableCellSmallMargin;
-  
-  if (_titleLabel.text.length) {
-    _titleLabel.frame = CGRectMake(kTableCellSmallMargin, top, width, _titleLabel.font.ttLineHeight);
-    [self setSeverity:_severity onLabel:_titleLabel];
+
+  CGFloat maxWidth = self.contentView.width - kTableCellHPadding*2;
+  if (!self.textLabel.text.length) {
+    CGFloat titleHeight = self.textLabel.height + self.detailTextLabel.height;
+
+    [self.detailTextLabel sizeToFit];
+    self.detailTextLabel.width = maxWidth;
+    self.detailTextLabel.top = floor(self.contentView.height/2 - titleHeight/2);
+    self.detailTextLabel.left = self.detailTextLabel.top*2;
+
   } else {
-    _titleLabel.frame = CGRectZero;
-  }
-  
-  if (self.detailTextLabel.text.length) {
     [self.detailTextLabel sizeToFit];
     self.detailTextLabel.left = kTableCellHPadding;
-    self.detailTextLabel.top = kTableCellVPadding + _titleLabel.height;
-  } else {
-    self.detailTextLabel.frame = CGRectZero;
-  }
-  
-  if (_timestampLabel.text.length) {
-    _timestampLabel.alpha = !self.showingDeleteConfirmation;
-    [_timestampLabel sizeToFit];
-    _timestampLabel.left = self.contentView.width - (_timestampLabel.width + kTableCellSmallMargin);
-    _timestampLabel.top = _titleLabel.top;
-    _titleLabel.width -= _timestampLabel.width + kTableCellSmallMargin*2;
-  } else {
-    _titleLabel.frame = CGRectZero;
+    self.detailTextLabel.top = kTableCellVPadding;
+
+    CGSize captionSize =
+    [self.textLabel.text sizeWithFont:self.textLabel.font
+                    constrainedToSize:CGSizeMake(maxWidth, CGFLOAT_MAX)
+                        lineBreakMode:self.textLabel.lineBreakMode];
+    self.textLabel.frame = CGRectMake(kTableCellHPadding, self.detailTextLabel.bottom,
+                                      captionSize.width, captionSize.height);
+
+    if (_timestampLabel.text.length) {
+      _timestampLabel.alpha = !self.showingDeleteConfirmation;
+      [_timestampLabel sizeToFit];
+      self.detailTextLabel.width = maxWidth - _timestampLabel.width;
+      _timestampLabel.left = self.contentView.width - (_timestampLabel.width + kTableCellSmallMargin);
+      _timestampLabel.top = self.detailTextLabel.top;
+      _timestampLabel.backgroundColor = [UIColor clearColor];
+    }
+    
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
 - (void)didMoveToSuperview {
   [super didMoveToSuperview];
   
   if (self.superview) {
-    _titleLabel.backgroundColor = self.backgroundColor;
     _timestampLabel.backgroundColor = self.backgroundColor;
   }
 }
@@ -175,20 +171,13 @@
     [super setObject:object];
 
     ONMSSeverityItem* item = object;
-    
-    if (item) {
-      if (item.title.length) {
-        self.titleLabel.text = item.title;
-      }
-      if (item.text.length) {
-        self.detailTextLabel.text = item.text;
-      }
-      if (item.timestamp) {
-        self.timestampLabel.text = [item.timestamp formatShortTime];
-      }
+    self.textLabel.text = item.caption;
+    self.detailTextLabel.text = item.text;
+    self.timestampLabel.text = [item.timestamp formatShortTime];
 
-      self.severity = item.severity;
-    }
+    Severity* sev = [[Severity alloc] initWithSeverity:item.severity];
+    self.detailTextLabel.textColor = [sev getTextColor];
+    [sev release];
   }
 }
 
@@ -197,33 +186,12 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Public
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Public
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (UILabel*)titleLabel {
-  if (!_titleLabel) {
-    _titleLabel = [[UILabel alloc] init];
-    _titleLabel.highlightedTextColor = [UIColor whiteColor];
-    _titleLabel.font = TTSTYLEVAR(tableFont);
-    _titleLabel.contentMode = UIViewContentModeLeft;
-    [self.contentView addSubview:_titleLabel];
-  }
-  return _titleLabel;
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UILabel*)captionLabel {
-  TTDINFO(@"captionLabel");
   return self.textLabel;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UILabel*)timestampLabel {
@@ -233,6 +201,7 @@
     _timestampLabel.textColor = TTSTYLEVAR(timestampTextColor);
     _timestampLabel.highlightedTextColor = [UIColor whiteColor];
     _timestampLabel.contentMode = UIViewContentModeLeft;
+    _timestampLabel.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:_timestampLabel];
   }
   return _timestampLabel;

@@ -11,12 +11,14 @@
 
 @interface EventModel : TTURLRequestModel {
   NSString* _eventId;
+  NSString* _uei;
   NSString* _severity;
   NSString* _logMessage;
   NSDate*   _timestamp;
 }
 
 @property (nonatomic, copy) NSString* eventId;
+@property (nonatomic, copy) NSString* uei;
 @property (nonatomic, copy) NSString* severity;
 @property (nonatomic, copy) NSString* logMessage;
 @property (nonatomic, copy) NSDate* timestamp;

@@ -46,7 +46,7 @@
 	 */
 
 	TT_RELEASE_SAFELY(_outages);
-	_outages = [OutageListModel outagesFromXML:response.data withDuplicates:NO];
+	_outages = [[OutageListModel outagesFromXML:response.data withDuplicates:NO] retain];
 
 	[super requestDidFinishLoad:request];
 }

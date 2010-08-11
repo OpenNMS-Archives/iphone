@@ -30,6 +30,7 @@
 	TTNavigator* navigator = [TTNavigator navigator];
 //	navigator.persistenceMode = TTNavigatorPersistenceModeAll;
   navigator.persistenceMode = TTNavigatorPersistenceModeNone;
+  navigator.supportsShakeToReload = YES;
 
 	TTURLMap* map = navigator.URLMap;
 

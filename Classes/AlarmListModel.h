@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AlarmModel.h"
 
-@interface AlarmListModel : TTURLRequestModel {
+@interface AlarmListModel : TTURLRequestModel <NSXMLParserDelegate> {
 	NSMutableArray* _alarms;
   AlarmModel* _currentAlarm;
   NSString* _currentElement;
@@ -18,7 +18,5 @@
 }
 
 @property (nonatomic, copy) NSArray* alarms;
-
-- (NSArray*)alarmsFromXML:(NSData*)data;
 
 @end

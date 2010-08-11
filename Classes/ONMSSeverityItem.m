@@ -22,15 +22,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation ONMSSeverityItem
 
-
-@synthesize title     = _title;
 @synthesize timestamp = _timestamp;
-@synthesize severity  = _severity;
+@synthesize severity = _severity;
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
-  TT_RELEASE_SAFELY(_title);
   TT_RELEASE_SAFELY(_timestamp);
   TT_RELEASE_SAFELY(_severity);
   
@@ -46,7 +41,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithCoder:(NSCoder*)decoder {
   if (self = [super initWithCoder:decoder]) {
-    self.title = [decoder decodeObjectForKey:@"title"];
     self.timestamp = [decoder decodeObjectForKey:@"timestamp"];
     self.severity = [decoder decodeObjectForKey:@"severity"];
   }
@@ -57,9 +51,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)encodeWithCoder:(NSCoder*)encoder {
   [super encodeWithCoder:encoder];
-  if (self.title) {
-    [encoder encodeObject:self.title forKey:@"title"];
-  }
   if (self.timestamp) {
     [encoder encodeObject:self.timestamp forKey:@"timestamp"];
   }
@@ -67,7 +58,6 @@
     [encoder encodeObject:self.severity forKey:@"severity"];
   }
 }
-
 
 @end
 

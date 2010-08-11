@@ -13,6 +13,8 @@
 #import "ONMSSeverityItem.h"
 #import "ONMSSeverityItemCell.h"
 
+#import "Three20Core/NSStringAdditions.h"
+
 @implementation OutageListDataSource
 
 - (id)init
@@ -55,10 +57,10 @@
 		if (!host) {
 			host = outage.ipAddress;
 		}
-		ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-		item.title = [host stringByAppendingFormat:@"/%@", outage.serviceName];
-		item.text = outage.logMessage;
-		item.timestamp = outage.ifLostService;
+    ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
+    item.text = [host stringByAppendingFormat:@"/%@", outage.serviceName];
+    item.caption = [outage.logMessage stringByRemovingHTMLTags];
+    item.timestamp = outage.ifLostService;
     item.severity = outage.severity;
 		item.URL = [@"onms://nodes/" stringByAppendingString:outage.nodeId];
 		[items addObject:item];

@@ -47,11 +47,12 @@
 	TT_RELEASE_SAFELY(string);
 
 	TT_RELEASE_SAFELY(_alarms);
-  _alarms = [[[NSMutableArray alloc] init] autorelease];
+  _alarms = [[NSMutableArray alloc] init];
 
   NSXMLParser* parser = [[NSXMLParser alloc] initWithData:response.data];
   parser.delegate = self;
   [parser parse];
+  TT_RELEASE_SAFELY(parser);
   
 	[super requestDidFinishLoad:request];
 }
@@ -111,9 +112,46 @@ didStartElement: (NSString*)elementName
     if (_currentValue) {
       _currentValue = [_currentValue stringByAppendingString:string];
     } else {
-      _currentValue = string;
+      _currentValue = [string retain];
     }
   }
 }
+
+- (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock
+{
+  NSString* string = [[NSString alloc] initWithData:CDATABlock encoding:NSUTF8StringEncoding];
+  if (_currentElement) {
+    if (_currentValue) {
+      _currentValue = [_currentValue stringByAppendingString:string];
+    } else {
+      _currentValue = [string retain];
+    }
+  }
+  [string release];
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+{
+  TTDINFO(@"parse error in parser %@: %@: %@", parser, [parseError localizedDescription], [parseError localizedFailureReason]);
+}
+
+- (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validError
+{
+  TTDINFO(@"validation error in parser %@: %@: %@", parser, [validError localizedDescription], [validError localizedFailureReason]);
+}
+
+- (void)parser:(NSXMLParser *)parser didEndMappingPrefix:(NSString *)prefix {}
+- (void)parser:(NSXMLParser *)parser didStartMappingPrefix:(NSString *)prefix toURI:(NSString *)namespaceURI {}
+- (void)parser:(NSXMLParser *)parser foundAttributeDeclarationWithName:(NSString *)attributeName forElement:(NSString *)elementName type:(NSString *)type defaultValue:(NSString *)defaultValue {}
+- (void)parser:(NSXMLParser *)parser foundElementDeclarationWithName:(NSString *)elementName model:(NSString *)model {}
+- (void)parser:(NSXMLParser *)parser foundExternalEntityDeclarationWithName:(NSString *)entityName publicID:(NSString *)publicID systemID:(NSString *)systemID {}
+- (void)parser:(NSXMLParser *)parser foundIgnorableWhitespace:(NSString *)whitespaceString {}
+- (void)parser:(NSXMLParser *)parser foundInternalEntityDeclarationWithName:(NSString *)name value:(NSString *)value {}
+- (void)parser:(NSXMLParser *)parser foundNotationDeclarationWithName:(NSString *)name publicID:(NSString *)publicID systemID:(NSString *)systemID {}
+- (void)parser:(NSXMLParser *)parser foundProcessingInstructionWithTarget:(NSString *)target data:(NSString *)data {}
+- (void)parser:(NSXMLParser *)parser foundUnparsedEntityDeclarationWithName:(NSString *)name publicID:(NSString *)publicID systemID:(NSString *)systemID notationName:(NSString *)notationName {}
+- (NSData *)parser:(NSXMLParser *)parser resolveExternalEntityName:(NSString *)entityName systemID:(NSString *)systemID { return nil; }
+- (void)parserDidEndDocument:(NSXMLParser *)parser {}
+- (void)parserDidStartDocument:(NSXMLParser *)parser {}
 
 @end

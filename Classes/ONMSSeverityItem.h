@@ -16,16 +16,13 @@
 
 // UI
 #import "Three20UI/TTTableCaptionItem.h"
-#import "Severity.h"
 
-@interface ONMSSeverityItem : TTTableCaptionItem  {
-  NSString* _title;
+@interface ONMSSeverityItem : TTTableCaptionItem {
   NSDate*   _timestamp;
   NSString* _severity;
 }
 
-@property (nonatomic, copy)   NSString* title;
 @property (nonatomic, retain) NSDate*   timestamp;
-@property (nonatomic, copy)   NSString* severity;
+@property (nonatomic, retain) NSString* severity;
 
 @end

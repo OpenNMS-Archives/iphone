@@ -13,6 +13,8 @@
 #import "ONMSSeverityItem.h"
 #import "ONMSSeverityItemCell.h"
 
+#import "Three20Core/NSStringAdditions.h"
+
 @implementation AlarmListDataSource
 
 - (id)init
@@ -56,8 +58,8 @@
 			host = alarm.ipAddress;
 		}
 		ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-		item.title = host;
-		item.text = alarm.logMessage;
+		item.text = host;
+		item.caption = [alarm.logMessage stringByRemovingHTMLTags];
 		item.timestamp = alarm.ifLostService;
     item.severity = alarm.severity;
 //		item.URL = [@"onms://nodes/" stringByAppendingString:alarm.nodeId];

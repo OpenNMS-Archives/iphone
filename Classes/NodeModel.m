@@ -149,16 +149,16 @@
 			_label  = [[parser.rootObject valueForKey:@"label"] copy];
 		} else if ([modelName isEqualToString:@"outages"]) {
 			TT_RELEASE_SAFELY(_outages);
-			_outages = [OutageListModel outagesFromXML:response.data withDuplicates:YES];
+			_outages = [[OutageListModel outagesFromXML:response.data withDuplicates:YES] retain];
     } else if ([modelName isEqualToString:@"ipinterfaces"]) {
       TT_RELEASE_SAFELY(_ipInterfaces);
-      _ipInterfaces = [IPInterfaceModel interfacesFromXML:response.data];
+      _ipInterfaces = [[IPInterfaceModel interfacesFromXML:response.data] retain];
     } else if ([modelName isEqualToString:@"snmpinterfaces"]) {
       TT_RELEASE_SAFELY(_snmpInterfaces);
-      _snmpInterfaces = [SNMPInterfaceModel interfacesFromXML:response.data];
+      _snmpInterfaces = [[SNMPInterfaceModel interfacesFromXML:response.data] retain];
     } else if ([modelName isEqualToString:@"events"]) {
       TT_RELEASE_SAFELY(_events);
-      _events = [EventModel eventsFromXML:response.data];
+      _events = [[EventModel eventsFromXML:response.data] retain];
 		} else {
 			TTDWARNING(@"unmatched model name: %@", modelName);
 		}

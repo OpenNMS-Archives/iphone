@@ -16,7 +16,8 @@
 #import "ONMSSeverityItem.h"
 #import "ONMSSeverityItemCell.h"
 
-#import "Three20Core/Three20Core+Additions.h"
+#import "Three20Core/NSDateAdditions.h"
+#import "Three20Core/NSStringAdditions.h"
 
 @implementation NodeDataSource
 
@@ -26,7 +27,7 @@
 {
 	TTDINFO(@"init called");
 	if (self = [super init]) {
-		_nodeModel = [[NodeModel alloc] initWithNodeId:nodeId];
+		_nodeModel = [[[NodeModel alloc] initWithNodeId:nodeId] retain];
 	}
 	return self;
 }
@@ -97,7 +98,7 @@
 	NSMutableArray* items = [[NSMutableArray alloc] init];
 	NSMutableArray* sections = [[NSMutableArray alloc] init];
 
-	TTDINFO(@"model loaded");
+	TTDINFO(@"model loaded: %@", _nodeModel);
 	
 	_label = _nodeModel.label;
 
@@ -113,8 +114,8 @@
 				host = outage.ipAddress;
 			}
       ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-			item.title = [host stringByAppendingFormat:@"/%@", outage.serviceName];
-			item.text = outage.logMessage;
+			item.text = [host stringByAppendingFormat:@"/%@", outage.serviceName];
+      item.caption = [outage.logMessage stringByRemovingHTMLTags];
 			item.timestamp = outage.ifLostService;
       item.severity = outage.severity;
 			[outageItems addObject:item];
@@ -164,10 +165,17 @@
 		NSMutableArray* eventItems = [NSMutableArray arrayWithCapacity:[_nodeModel.events count]];
 		for (id e in _nodeModel.events) {
 			EventModel* event = e;
+      /*
       TTTableCaptionItem* item = [[[TTTableCaptionItem alloc] init] autorelease];
       item.caption = [event.timestamp formatShortTime];
       item.text = [self cleanUpString:event.logMessage];
-
+       */
+      ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
+			item.text = [event.uei stringByReplacingOccurrencesOfString:@"uei.opennms.org/" withString:@""];
+      item.caption = [event.logMessage stringByRemovingHTMLTags];
+			item.timestamp = event.timestamp;
+      item.severity = event.severity;
+      
       [eventItems addObject:item];
 		}
 		[items addObject:eventItems];

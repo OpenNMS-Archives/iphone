@@ -18,13 +18,10 @@
 #import "Three20UI/TTTableLinkedItemCell.h"
 
 @interface ONMSSeverityItemCell : TTTableLinkedItemCell {
-  UILabel* _titleLabel;
   UILabel* _timestampLabel;
-  NSString* _severity;
 }
 
-@property (nonatomic, readonly, retain) UILabel* titleLabel;
 @property (nonatomic, readonly, retain) UILabel* timestampLabel;
-@property (nonatomic, retain) NSString* severity;
+@property (nonatomic, readonly) UILabel* captionLabel;
 
 @end

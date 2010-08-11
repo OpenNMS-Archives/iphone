@@ -12,6 +12,7 @@
 @implementation EventModel
 
 @synthesize eventId = _eventId;
+@synthesize uei = _uei;
 @synthesize severity = _severity;
 @synthesize logMessage = _logMessage;
 @synthesize timestamp = _timestamp;
@@ -19,9 +20,11 @@
 - (void)dealloc
 {
   TT_RELEASE_SAFELY(_eventId);
+  TT_RELEASE_SAFELY(_uei);
   TT_RELEASE_SAFELY(_severity);
   TT_RELEASE_SAFELY(_logMessage);
   TT_RELEASE_SAFELY(_timestamp);
+  [super dealloc];
 }
 
 - (id)init
@@ -55,6 +58,7 @@
       EventModel* event = [[[EventModel alloc] init] autorelease];
       
       event.eventId = [e valueForKey:@"id"];
+      event.uei = [[e valueForKey:@"uei"] valueForKey:@"___Entity_Value___"];
       event.severity = [e valueForKey:@"severity"];
       event.logMessage = [[e valueForKey:@"logMessage"] valueForKey:@"___Entity_Value___"];
       event.timestamp = [dateFormatter dateFromString:[[e valueForKey:@"time"] valueForKey:@"___Entity_Value___"]];
