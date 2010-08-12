@@ -19,6 +19,8 @@
 		440DBDA1120C3A8C007CDF51 /* libThree20UI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 440DBD46120C3999007CDF51 /* libThree20UI.a */; };
 		440DBDA2120C3A8C007CDF51 /* libThree20UICommon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 440DBD29120C397C007CDF51 /* libThree20UICommon.a */; };
 		440DBDA3120C3A8C007CDF51 /* libThree20UINavigator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 440DBD36120C398A007CDF51 /* libThree20UINavigator.a */; };
+		442C9FB112148A3100147B53 /* AlarmDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 442C9FAE12148A3100147B53 /* AlarmDataSource.m */; };
+		442C9FB212148A3100147B53 /* AlarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442C9FB012148A3100147B53 /* AlarmViewController.m */; };
 		4452000512084BCE00AEEFEC /* NodeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000212084BCE00AEEFEC /* NodeDataSource.m */; };
 		4452000612084BCE00AEEFEC /* NodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000412084BCE00AEEFEC /* NodeViewController.m */; };
 		4452000A12084CE500AEEFEC /* NodeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000912084CE500AEEFEC /* NodeModel.m */; };
@@ -240,6 +242,10 @@
 		28A0AAE50D9B0CCF005BE974 /* OpenNMS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNMS_Prefix.pch; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		440DBCFB120C393D007CDF51 /* Three20Core.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Three20Core.xcodeproj; path = three20/src/Three20Core/Three20Core.xcodeproj; sourceTree = "<group>"; };
+		442C9FAD12148A3100147B53 /* AlarmDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmDataSource.h; sourceTree = "<group>"; };
+		442C9FAE12148A3100147B53 /* AlarmDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmDataSource.m; sourceTree = "<group>"; };
+		442C9FAF12148A3100147B53 /* AlarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmViewController.h; sourceTree = "<group>"; };
+		442C9FB012148A3100147B53 /* AlarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmViewController.m; sourceTree = "<group>"; };
 		4452000112084BCE00AEEFEC /* NodeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeDataSource.h; sourceTree = "<group>"; };
 		4452000212084BCE00AEEFEC /* NodeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeDataSource.m; sourceTree = "<group>"; };
 		4452000312084BCE00AEEFEC /* NodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeViewController.h; sourceTree = "<group>"; };
@@ -577,6 +583,10 @@
 				44855121120A1870000173CD /* AlarmListDataSource.m */,
 				44855122120A1870000173CD /* AlarmListModel.h */,
 				44855123120A1870000173CD /* AlarmListModel.m */,
+				442C9FAF12148A3100147B53 /* AlarmViewController.h */,
+				442C9FB012148A3100147B53 /* AlarmViewController.m */,
+				442C9FAD12148A3100147B53 /* AlarmDataSource.h */,
+				442C9FAE12148A3100147B53 /* AlarmDataSource.m */,
 				44855126120A1870000173CD /* AlarmModel.h */,
 				44855127120A1870000173CD /* AlarmModel.m */,
 			);
@@ -869,6 +879,8 @@
 				4485512B120A1870000173CD /* AlarmModel.m in Sources */,
 				44855136120A18CA000173CD /* ONMSSeverityItem.m in Sources */,
 				44855137120A18CA000173CD /* ONMSSeverityItemCell.m in Sources */,
+				442C9FB112148A3100147B53 /* AlarmDataSource.m in Sources */,
+				442C9FB212148A3100147B53 /* AlarmViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -922,6 +934,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -936,6 +949,7 @@
 				);
 				PRODUCT_NAME = OpenNMS;
 				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos4.0;
 			};
 			name = Debug;
 		};
@@ -943,6 +957,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -955,6 +970,7 @@
 				);
 				PRODUCT_NAME = OpenNMS;
 				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos4.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -965,7 +981,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -992,7 +1008,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
 				RUN_CLANG_STATIC_ANALYZER = NO;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -22,7 +22,8 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
+- (void)applicationDidFinishLaunching:(UIApplication *)application
+{
   ONMSDefaultStyleSheet* styleSheet = [[ONMSDefaultStyleSheet alloc] init];
   [TTStyleSheet setGlobalStyleSheet:styleSheet];
   [styleSheet release];
@@ -51,13 +52,15 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)navigator:(TTNavigator*)navigator shouldOpenURL:(NSURL*)URL {
+- (BOOL)navigator:(TTNavigator*)navigator shouldOpenURL:(NSURL*)URL
+{
   return YES;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)application:(UIApplication*)application handleOpenURL:(NSURL*)URL {
+- (BOOL)application:(UIApplication*)application handleOpenURL:(NSURL*)URL
+{
   [[TTNavigator navigator] openURLAction:[TTURLAction actionWithURLPath:URL.absoluteString]];
   return YES;
 }

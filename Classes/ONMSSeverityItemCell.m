@@ -36,7 +36,8 @@
 @implementation ONMSSeverityItemCell
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier
+{
   if (self = [super initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier]) {
     self.detailTextLabel.font = TTSTYLEVAR(tableFont);
     self.detailTextLabel.contentMode = UIViewContentModeTop;
@@ -58,7 +59,8 @@
   return self;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
   TT_RELEASE_SAFELY(_timestampLabel);
 
   [super dealloc];
@@ -71,7 +73,8 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+ (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
++ (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object
+{
   TTTableCaptionItem* item = object;
 
   CGFloat accessorySize = 0.0;
@@ -105,14 +108,16 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)prepareForReuse {
+- (void)prepareForReuse
+{
   [super prepareForReuse];
   _timestampLabel.text = nil;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)layoutSubviews {
+- (void)layoutSubviews
+{
   [super layoutSubviews];
 
   CGFloat maxWidth = self.contentView.width - kTableCellHPadding*2;
@@ -150,7 +155,8 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////
-- (void)didMoveToSuperview {
+- (void)didMoveToSuperview
+{
   [super didMoveToSuperview];
   
   if (self.superview) {
@@ -166,7 +172,8 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setObject:(id)object {
+- (void)setObject:(id)object
+{
   if (_item != object) {
     [super setObject:object];
 
@@ -189,12 +196,14 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (UILabel*)captionLabel {
+- (UILabel*)captionLabel
+{
   return self.textLabel;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (UILabel*)timestampLabel {
+- (UILabel*)timestampLabel
+{
   if (!_timestampLabel) {
     _timestampLabel = [[UILabel alloc] init];
     _timestampLabel.font = TTSTYLEVAR(tableTimestampFont);

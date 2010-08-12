@@ -1,23 +1,38 @@
 //
-//  AlarmListViewController.m
+//  AlarmViewController.m
 //  OpenNMS
 //
-//  Created by Benjamin Reed on 8/2/10.
+//  Created by Benjamin Reed on 8/3/10.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "AlarmListViewController.h"
-#import "AlarmListDataSource.h"
+#import "AlarmViewController.h"
+#import "AlarmDataSource.h"
 
-@implementation AlarmListViewController
+#import "Three20UI/UIViewAdditions.h"
+#import "Three20UI/UITableViewAdditions.h"
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+@implementation AlarmViewController
+
+@synthesize alarmId = _alarmId;
+
+- (id)initWithAlarmId:(NSString*)aid
 {
-	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		self.title = @"Alarms";
-		self.tabBarItem = [[[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"clock.png"] tag:0] autorelease];
+	if (self = [self init]) {
+		TTDINFO(@"initialized with alarm ID %@", aid);
+		self.alarmId = [aid retain];
+		self.title = [@"Alarm #" stringByAppendingString:aid];
 	}
 	return self;
+}
+
+- (void)dealloc
+{
+  TT_RELEASE_SAFELY(_alarmId);
+  TT_RELEASE_SAFELY(_activityItem);
+  TT_RELEASE_SAFELY(_refreshButton);
+  
+  [super dealloc];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -39,7 +54,7 @@
 
 - (void)loadView
 {
-	self.tableViewStyle = UITableViewStylePlain;
+	self.tableViewStyle = UITableViewStyleGrouped;
 	self.variableHeightRows = YES;
 	[super loadView];
 
@@ -54,7 +69,7 @@
 
 - (void)createModel
 {
-  self.dataSource = [[[AlarmListDataSource alloc] init] autorelease];
+  self.dataSource = [[[AlarmDataSource alloc] initWithAlarmId:_alarmId] autorelease];
 }
 
 @end

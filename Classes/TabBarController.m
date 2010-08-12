@@ -16,7 +16,8 @@
   return YES;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
 	[self setTabURLs:[NSArray arrayWithObjects:
                     @"onms://outages",
                     @"onms://alarms",

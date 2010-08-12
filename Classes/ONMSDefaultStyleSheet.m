@@ -11,7 +11,8 @@
 
 @implementation ONMSDefaultStyleSheet
 
-- (UIColor*)navigationBarTintColor {
+- (UIColor*)navigationBarTintColor
+{
   return RGBCOLOR(54, 105, 3);
 }
 

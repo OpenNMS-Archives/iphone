@@ -9,6 +9,9 @@
 #import "OutageListViewController.h"
 #import "OutageListDataSource.h"
 
+#import "Three20UI/UIViewAdditions.h"
+#import "Three20UI/UITableViewAdditions.h"
+
 @implementation OutageListViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -20,22 +23,49 @@
 	return self;
 }
 
+- (void)dealloc
+{
+  TT_RELEASE_SAFELY(_activityItem);
+  TT_RELEASE_SAFELY(_refreshButton);
+  
+  [super dealloc];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
   return YES;
 }
 
+- (void)refreshAction
+{
+  [self.navigationItem setRightBarButtonItem:_activityItem animated:YES];
+  [self reload];
+}
+
+- (void)modelDidFinishLoad:(id <TTModel>)model
+{
+  [self.navigationItem setRightBarButtonItem:nil animated:YES];
+  [super modelDidFinishLoad:model];
+}
+
 - (void)loadView
 {
-	[super loadView];
-	TTDINFO(@"init called");
 	self.tableViewStyle = UITableViewStylePlain;
 	self.variableHeightRows = YES;
+	[super loadView];
+
+  UIActivityIndicatorView* spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+  [spinner startAnimating];
+  _activityItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+  _refreshButton =  [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshAction)];
+  
+  [self.navigationItem setLeftBarButtonItem:_refreshButton animated:YES];
+  [self.navigationItem setRightBarButtonItem:_activityItem animated:YES];
 }
 
 - (void)createModel
 {
-	self.dataSource = [[[OutageListDataSource alloc] init] autorelease];
+  self.dataSource = [[[OutageListDataSource alloc] init] autorelease];
 }
 
 @end

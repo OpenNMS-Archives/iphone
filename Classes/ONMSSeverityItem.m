@@ -25,7 +25,8 @@
 @synthesize timestamp = _timestamp;
 @synthesize severity = _severity;
 
-- (void)dealloc {
+- (void)dealloc
+{
   TT_RELEASE_SAFELY(_timestamp);
   TT_RELEASE_SAFELY(_severity);
   
@@ -39,7 +40,8 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithCoder:(NSCoder*)decoder {
+- (id)initWithCoder:(NSCoder*)decoder
+{
   if (self = [super initWithCoder:decoder]) {
     self.timestamp = [decoder decodeObjectForKey:@"timestamp"];
     self.severity = [decoder decodeObjectForKey:@"severity"];
@@ -49,7 +51,8 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)encodeWithCoder:(NSCoder*)encoder {
+- (void)encodeWithCoder:(NSCoder*)encoder
+{
   [super encodeWithCoder:encoder];
   if (self.timestamp) {
     [encoder encodeObject:self.timestamp forKey:@"timestamp"];

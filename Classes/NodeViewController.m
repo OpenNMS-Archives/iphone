@@ -17,10 +17,17 @@
 {
 	if (self = [self init]) {
 		TTDINFO(@"initialized with node ID %@", nid);
-		self.nodeId = nid;
+		self.nodeId = [nid retain];
 		self.title = [@"Node #" stringByAppendingString:nid];
 	}
 	return self;
+}
+
+- (void)dealloc
+{
+  TT_RELEASE_SAFELY(_nodeId);
+
+  [super dealloc];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -30,7 +37,6 @@
 
 - (void)loadView
 {
-	TTDINFO(@"loadView called");
 	self.tableViewStyle = UITableViewStyleGrouped;
 	self.variableHeightRows = YES;
 	[super loadView];
@@ -38,7 +44,6 @@
 
 - (void)createModel
 {
-	TTDINFO(@"createModel called");
 	self.dataSource = [[[NodeDataSource alloc] initWithNodeId:_nodeId] autorelease];
 }
 

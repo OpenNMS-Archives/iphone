@@ -1,5 +1,5 @@
 //
-//  AlarmListViewController.h
+//  AlarmDataSource.h
 //  OpenNMS
 //
 //  Created by Benjamin Reed on 8/2/10.
@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AlarmListViewController : TTTableViewController {
-  UIBarButtonItem* _activityItem;
-  UIBarButtonItem* _refreshButton;
+@class AlarmModel;
+
+@interface AlarmDataSource : TTSectionedDataSource {
+	AlarmModel* _alarmModel;
 }
+
+- (id)initWithAlarmId:(NSString*)alarmId;
 
 @end

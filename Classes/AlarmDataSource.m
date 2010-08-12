@@ -6,8 +6,8 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "NodeDataSource.h"
-#import "NodeModel.h"
+#import "AlarmDataSource.h"
+#import "AlarmModel.h"
 #import "OutageModel.h"
 #import "IPInterfaceModel.h"
 #import "SNMPInterfaceModel.h"
@@ -19,15 +19,13 @@
 #import "Three20Core/NSDateAdditions.h"
 #import "Three20Core/NSStringAdditions.h"
 
-@implementation NodeDataSource
+@implementation AlarmDataSource
 
-@synthesize label = _label;
-
-- (id)initWithNodeId:(NSString*)nodeId
+- (id)initWithAlarmId:(NSString*)alarmId
 {
 	TTDINFO(@"init called");
 	if (self = [super init]) {
-		_nodeModel = [[[NodeModel alloc] initWithNodeId:nodeId] retain];
+		_alarmModel = [[[AlarmModel alloc] initWithAlarmId:alarmId] retain];
 	}
 	return self;
 }
@@ -35,18 +33,17 @@
 - (void)dealloc
 {
 	// Don't do this!  It's done for us.
-	// TT_RELEASE_SAFELY(_nodeModel);
+	// TT_RELEASE_SAFELY(_alarmModel);
 	[super dealloc];
 }
 
 - (id<TTModel>)model
 {
-	return _nodeModel;
+	return _alarmModel;
 }
 
 - (NSString *)flattenHTML:(NSString *)html
 {
-  
   NSScanner *theScanner;
   NSString *text = nil;
   
@@ -102,15 +99,16 @@
 	NSMutableArray* items = [[NSMutableArray alloc] init];
 	NSMutableArray* sections = [[NSMutableArray alloc] init];
 
-	TTDINFO(@"model loaded: %@", _nodeModel);
-	
-	_label = _nodeModel.label;
+	TTDINFO(@"model loaded: %@", _alarmModel);
 
-	if (_nodeModel.outages && [_nodeModel.outages count] > 0) {
+	/*
+	_label = _alarmModel.label;
+
+	if (_alarmModel.outages && [_alarmModel.outages count] > 0) {
 		[sections addObject:@"Outages"];
 
-		NSMutableArray* outageItems = [NSMutableArray arrayWithCapacity:[_nodeModel.outages count]];
-		for (id o in _nodeModel.outages) {
+		NSMutableArray* outageItems = [NSMutableArray arrayWithCapacity:[_alarmModel.outages count]];
+		for (id o in _alarmModel.outages) {
 			OutageModel* outage = (OutageModel*)o;
 //		NSString* host = outage.host;
 			NSString* host = nil;
@@ -127,11 +125,11 @@
 		[items addObject:outageItems];
 	}
 	
-	if (_nodeModel.ipInterfaces && [_nodeModel.ipInterfaces count] > 0) {
+	if (_alarmModel.ipInterfaces && [_alarmModel.ipInterfaces count] > 0) {
 		[sections addObject:@"IP Interfaces"];
 
-		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_nodeModel.ipInterfaces count]];
-		for (id i in _nodeModel.ipInterfaces) {
+		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_alarmModel.ipInterfaces count]];
+		for (id i in _alarmModel.ipInterfaces) {
 			IPInterfaceModel* interface = (IPInterfaceModel*)i;
       TTDINFO(@"IP interface = %@", interface);
       TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
@@ -142,11 +140,11 @@
 		[items addObject:interfaceItems];
 	}
 	
-	if (_nodeModel.snmpInterfaces && [_nodeModel.snmpInterfaces count] > 0) {
+	if (_alarmModel.snmpInterfaces && [_alarmModel.snmpInterfaces count] > 0) {
 		[sections addObject:@"SNMP Interfaces"];
     
-		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_nodeModel.snmpInterfaces count]];
-		for (id s in _nodeModel.snmpInterfaces) {
+		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_alarmModel.snmpInterfaces count]];
+		for (id s in _alarmModel.snmpInterfaces) {
 			SNMPInterfaceModel* interface = s;
       TTDINFO(@"SNMP interface = %@", interface);
       TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
@@ -163,17 +161,12 @@
 		[items addObject:interfaceItems];
 	}
 	
-	if (_nodeModel.events && [_nodeModel.events count] > 0) {
+	if (_alarmModel.events && [_alarmModel.events count] > 0) {
 		[sections addObject:@"Events"];
     
-		NSMutableArray* eventItems = [NSMutableArray arrayWithCapacity:[_nodeModel.events count]];
-		for (id e in _nodeModel.events) {
+		NSMutableArray* eventItems = [NSMutableArray arrayWithCapacity:[_alarmModel.events count]];
+		for (id e in _alarmModel.events) {
 			EventModel* event = e;
-      /*
-      TTTableCaptionItem* item = [[[TTTableCaptionItem alloc] init] autorelease];
-      item.caption = [event.timestamp formatShortTime];
-      item.text = [self cleanUpString:event.logMessage];
-       */
       ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
 			item.text = [event.uei stringByReplacingOccurrencesOfString:@"uei.opennms.org/" withString:@""];
       item.caption = [event.logMessage stringByRemovingHTMLTags];
@@ -184,6 +177,7 @@
 		}
 		[items addObject:eventItems];
 	}
+   */
 	
 	self.items = items;
 	self.sections = sections;

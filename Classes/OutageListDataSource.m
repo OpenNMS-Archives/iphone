@@ -19,7 +19,6 @@
 
 - (id)init
 {
-	TTDINFO(@"init called");
 	if (self = [super init]) {
 		_outageListModel = [[OutageListModel alloc] init];
 	}
@@ -33,12 +32,14 @@
 	[super dealloc];
 }
 
-- (id<TTModel>)model {
+- (id<TTModel>)model
+{
 	return _outageListModel;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
+- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object
+{
   if ([object isKindOfClass:[ONMSSeverityItem class]]) {
     return [ONMSSeverityItemCell class];
   } else {
@@ -46,7 +47,8 @@
   }
 }
 
-- (void)tableViewDidLoadModel:(UITableView*)tableView {
+- (void)tableViewDidLoadModel:(UITableView*)tableView
+{
 	NSMutableArray* items = [[NSMutableArray alloc] init];
 	NSArray* outages = _outageListModel.outages;
 

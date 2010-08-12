@@ -21,12 +21,13 @@
 	[super dealloc];
 }
 
-- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more {
-	TTDINFO(@"load called");
+- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
+{
 	if (!self.isLoading) {
 		NSString* url = @"http://admin:admin@sin.local:8980/opennms/rest/outages?limit=50&orderBy=ifLostService&order=desc&ifRegainedService=null";
 		
 		TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
+    request.cachePolicy = cachePolicy;
 
 		id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
 		request.response = response;
@@ -36,15 +37,10 @@
 	}
 }
 
-- (void)requestDidFinishLoad:(TTURLRequest*)request {
+- (void)requestDidFinishLoad:(TTURLRequest*)request
+{
 	TTURLDataResponse* response = request.response;
 	
-	/*
-	NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
-	TTDINFO(@"URL response: %@", string);
-	TT_RELEASE_SAFELY(string);
-	 */
-
 	TT_RELEASE_SAFELY(_outages);
 	_outages = [[OutageListModel outagesFromXML:response.data withDuplicates:NO] retain];
 

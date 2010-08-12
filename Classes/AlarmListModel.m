@@ -25,8 +25,8 @@
 	[super dealloc];
 }
 
-- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more {
-	TTDINFO(@"load called");
+- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
+{
 	if (!self.isLoading) {
 		NSString* url = @"http://admin:admin@sin.local:8980/opennms/rest/alarms?limit=50&orderBy=lastEventTime&order=desc&alarmAckUser=null";
 		
@@ -40,7 +40,8 @@
 	}
 }
 
-- (void)requestDidFinishLoad:(TTURLRequest*)request {
+- (void)requestDidFinishLoad:(TTURLRequest*)request
+{
 	TTURLDataResponse* response = request.response;
 
 	NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
@@ -74,7 +75,6 @@ didStartElement: (NSString*)elementName
     attributes: (NSDictionary*)attributeDict
 {
   if ([elementName isEqualToString:@"alarm"]) {
-    TTDINFO(@"creating new alarm");
     _currentAlarm = [[[AlarmModel alloc] init] autorelease];
     _currentAlarm.alarmId = [attributeDict valueForKey:@"id"];
     _currentAlarm.severity = [attributeDict valueForKey:@"severity"];
@@ -92,7 +92,8 @@ didStartElement: (NSString*)elementName
     TTDINFO(@"saving alarm: %@", _currentAlarm);
     [_alarms addObject:_currentAlarm];
     _currentAlarm = nil;
-  } else if ([elementName isEqualToString:@"lastEventTime"]) {
+  } else if ([elementName isEqualToString:@"firstEventTime"]) {
+    _currentValue = [[_currentValue substringToIndex:[_currentValue length] - 3] stringByAppendingString:@"00"];
     NSDate* date = [[self dateFormatter] dateFromString:_currentValue];
     _currentAlarm.ifLostService = date;
   } else if ([elementName isEqualToString:@"ipAddress"]) {

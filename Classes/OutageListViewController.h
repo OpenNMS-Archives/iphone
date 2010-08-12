@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface OutageListViewController : TTTableViewController {
-
+  UIBarButtonItem* _activityItem;
+  UIBarButtonItem* _refreshButton;
 }
 
 @end

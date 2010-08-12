@@ -25,7 +25,8 @@
   return YES;
 }
 
-- (void)loadView {
+- (void)loadView
+{
   self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
   UITextView* view = [[[UITextView alloc] init] autorelease];
 	view.autoresizesSubviews = YES;
