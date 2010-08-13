@@ -58,9 +58,6 @@
 	
 	NSDateFormatter* dateFormatter = [[ONMSDateFormatter alloc] init];
 	
-	int count = [[parser.rootObject valueForKey:@"count"] intValue];
-	TTDINFO(@"outage count = %d", count);
-	
 	NSMutableArray* outages = [[[NSMutableArray alloc] init] autorelease];
 
 	NSArray* xmlOutages;
