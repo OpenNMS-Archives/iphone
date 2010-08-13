@@ -8,6 +8,7 @@
 
 #import "EventModel.h"
 #import "extThree20XML/extThree20XML.h"
+#import "ONMSDateFormatter.h"
 
 @implementation EventModel
 
@@ -41,9 +42,7 @@
 	parser.treatDuplicateKeysAsArrayItems = YES;
 	[parser parse];
 
-  NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-  [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
-  [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
+  NSDateFormatter* dateFormatter = [[ONMSDateFormatter alloc] init];
 
 	NSMutableArray* events = [[[NSMutableArray alloc] init] autorelease];
   

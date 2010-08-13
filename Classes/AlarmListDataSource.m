@@ -63,7 +63,7 @@
 		ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
 		item.text = host;
 		item.caption = [alarm.logMessage stringByRemovingHTMLTags];
-		item.timestamp = alarm.ifLostService;
+		item.timestamp = alarm.firstEventTime;
     item.severity = alarm.severity;
 //		item.URL = [@"onms://nodes/" stringByAppendingString:alarm.nodeId];
 		[items addObject:item];

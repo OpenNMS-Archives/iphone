@@ -31,17 +31,12 @@
 		TTDINFO(@"init called");
 		self.nodeId = nodeId;
 		_inProgressCount = 0;
-
-		_dateFormatter = [[NSDateFormatter alloc] init];
-		[_dateFormatter setTimeStyle:NSDateFormatterFullStyle];
-		[_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
 	}
 	return self;
 }
 
 - (void)dealloc
 {
-	TT_RELEASE_SAFELY(_dateFormatter);
 	TT_RELEASE_SAFELY(_events);
 	TT_RELEASE_SAFELY(_snmpInterfaces);
 	TT_RELEASE_SAFELY(_ipInterfaces);

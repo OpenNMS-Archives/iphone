@@ -18,8 +18,6 @@
   NSArray* _events;
 
 	int _inProgressCount;
-	
-	NSDateFormatter* _dateFormatter;
 }
 
 @property (nonatomic, copy) NSString* nodeId;

@@ -21,6 +21,8 @@
 		440DBDA3120C3A8C007CDF51 /* libThree20UINavigator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 440DBD36120C398A007CDF51 /* libThree20UINavigator.a */; };
 		442C9FB112148A3100147B53 /* AlarmDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 442C9FAE12148A3100147B53 /* AlarmDataSource.m */; };
 		442C9FB212148A3100147B53 /* AlarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442C9FB012148A3100147B53 /* AlarmViewController.m */; };
+		442CA1EF12158B1800147B53 /* AlarmXMLParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 442CA1EE12158B1800147B53 /* AlarmXMLParserDelegate.m */; };
+		442CA24D1215920B00147B53 /* ONMSDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 442CA24C1215920B00147B53 /* ONMSDateFormatter.m */; };
 		4452000512084BCE00AEEFEC /* NodeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000212084BCE00AEEFEC /* NodeDataSource.m */; };
 		4452000612084BCE00AEEFEC /* NodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000412084BCE00AEEFEC /* NodeViewController.m */; };
 		4452000A12084CE500AEEFEC /* NodeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000912084CE500AEEFEC /* NodeModel.m */; };
@@ -246,6 +248,10 @@
 		442C9FAE12148A3100147B53 /* AlarmDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmDataSource.m; sourceTree = "<group>"; };
 		442C9FAF12148A3100147B53 /* AlarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmViewController.h; sourceTree = "<group>"; };
 		442C9FB012148A3100147B53 /* AlarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmViewController.m; sourceTree = "<group>"; };
+		442CA1ED12158B1800147B53 /* AlarmXMLParserDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmXMLParserDelegate.h; sourceTree = "<group>"; };
+		442CA1EE12158B1800147B53 /* AlarmXMLParserDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmXMLParserDelegate.m; sourceTree = "<group>"; };
+		442CA24B1215920B00147B53 /* ONMSDateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSDateFormatter.h; sourceTree = "<group>"; };
+		442CA24C1215920B00147B53 /* ONMSDateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONMSDateFormatter.m; sourceTree = "<group>"; };
 		4452000112084BCE00AEEFEC /* NodeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeDataSource.h; sourceTree = "<group>"; };
 		4452000212084BCE00AEEFEC /* NodeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeDataSource.m; sourceTree = "<group>"; };
 		4452000312084BCE00AEEFEC /* NodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeViewController.h; sourceTree = "<group>"; };
@@ -543,6 +549,8 @@
 				44855133120A18CA000173CD /* ONMSSeverityItem.m */,
 				44855134120A18CA000173CD /* ONMSSeverityItemCell.h */,
 				44855135120A18CA000173CD /* ONMSSeverityItemCell.m */,
+				442CA24B1215920B00147B53 /* ONMSDateFormatter.h */,
+				442CA24C1215920B00147B53 /* ONMSDateFormatter.m */,
 			);
 			name = Miscellaneous;
 			sourceTree = "<group>";
@@ -589,6 +597,8 @@
 				442C9FAE12148A3100147B53 /* AlarmDataSource.m */,
 				44855126120A1870000173CD /* AlarmModel.h */,
 				44855127120A1870000173CD /* AlarmModel.m */,
+				442CA1ED12158B1800147B53 /* AlarmXMLParserDelegate.h */,
+				442CA1EE12158B1800147B53 /* AlarmXMLParserDelegate.m */,
 			);
 			name = Alarms;
 			sourceTree = "<group>";
@@ -881,6 +891,8 @@
 				44855137120A18CA000173CD /* ONMSSeverityItemCell.m in Sources */,
 				442C9FB112148A3100147B53 /* AlarmDataSource.m in Sources */,
 				442C9FB212148A3100147B53 /* AlarmViewController.m in Sources */,
+				442CA1EF12158B1800147B53 /* AlarmXMLParserDelegate.m in Sources */,
+				442CA24D1215920B00147B53 /* ONMSDateFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

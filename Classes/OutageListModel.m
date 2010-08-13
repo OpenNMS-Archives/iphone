@@ -10,6 +10,7 @@
 #import "OutageModel.h"
 #import "Severity.h"
 #import "extThree20XML/extThree20XML.h"
+#import "ONMSDateFormatter.h"
 
 @implementation OutageListModel
 
@@ -55,9 +56,7 @@
 	parser.treatDuplicateKeysAsArrayItems = YES;
 	[parser parse];
 	
-	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setTimeStyle:NSDateFormatterFullStyle];
-	[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
+	NSDateFormatter* dateFormatter = [[ONMSDateFormatter alloc] init];
 	
 	int count = [[parser.rootObject valueForKey:@"count"] intValue];
 	TTDINFO(@"outage count = %d", count);
@@ -77,7 +76,6 @@
       outage.outageId = [o valueForKey:@"id"];
       outage.ipAddress = [[o valueForKey:@"ipAddress"] valueForKey:@"___Entity_Value___"];
       outage.serviceName = [[[[o valueForKey:@"monitoredService"] valueForKey:@"serviceType"] valueForKey:@"name"] valueForKey:@"___Entity_Value___"];
-      
       outage.ifLostService = [dateFormatter dateFromString:[[o valueForKey:@"ifLostService"] valueForKey:@"___Entity_Value___"]];
       NSString* ifRegainedService = [[o valueForKey:@"ifRegainedService"] valueForKey:@"___Entity_Value___"];
       if (ifRegainedService) {
