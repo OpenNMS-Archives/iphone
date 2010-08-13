@@ -543,14 +543,14 @@
 				445200C0120857B600AEEFEC /* RESTURLRequest.m */,
 				44F0686A1209F13B0037512A /* Severity.h */,
 				44F0686B1209F13B0037512A /* Severity.m */,
+				442CA24B1215920B00147B53 /* ONMSDateFormatter.h */,
+				442CA24C1215920B00147B53 /* ONMSDateFormatter.m */,
 				447EE8111209FE0A00F3E535 /* ONMSDefaultStyleSheet.h */,
 				447EE8121209FE0A00F3E535 /* ONMSDefaultStyleSheet.m */,
 				44855132120A18CA000173CD /* ONMSSeverityItem.h */,
 				44855133120A18CA000173CD /* ONMSSeverityItem.m */,
 				44855134120A18CA000173CD /* ONMSSeverityItemCell.h */,
 				44855135120A18CA000173CD /* ONMSSeverityItemCell.m */,
-				442CA24B1215920B00147B53 /* ONMSDateFormatter.h */,
-				442CA24C1215920B00147B53 /* ONMSDateFormatter.m */,
 			);
 			name = Miscellaneous;
 			sourceTree = "<group>";
@@ -667,6 +667,10 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				ORGANIZATIONNAME = "The OpenNMS Group, Inc.";
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "OpenNMS" */;
 			compatibilityVersion = "Xcode 3.2";
 			hasScannedForEncodings = 1;

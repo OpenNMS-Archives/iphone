@@ -50,6 +50,7 @@ didStartElement: (NSString*)elementName
     _currentAlarm = [[[AlarmModel alloc] init] autorelease];
     _currentAlarm.alarmId = [attributeDict valueForKey:@"id"];
     _currentAlarm.severity = [attributeDict valueForKey:@"severity"];
+    _currentAlarm.eventCount = [attributeDict valueForKey:@"count"];
   } else {
     _currentElement = elementName;
   }
@@ -61,7 +62,6 @@ didStartElement: (NSString*)elementName
  qualifiedName: (NSString *)qName
 {
   if ([elementName isEqualToString:@"alarm"]) {
-    TTDINFO(@"saving alarm: %@", _currentAlarm);
     [_alarms addObject:_currentAlarm];
     _currentAlarm = nil;
   } else if ([elementName isEqualToString:@"uei"]) {
@@ -111,12 +111,12 @@ didStartElement: (NSString*)elementName
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
-  TTDINFO(@"parse error in parser %@: %@: %@", parser, [parseError localizedDescription], [parseError localizedFailureReason]);
+  TTDERROR(@"parse error in parser %@: %@: %@", parser, [parseError localizedDescription], [parseError localizedFailureReason]);
 }
 
 - (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validError
 {
-  TTDINFO(@"validation error in parser %@: %@: %@", parser, [validError localizedDescription], [validError localizedFailureReason]);
+  TTDERROR(@"validation error in parser %@: %@: %@", parser, [validError localizedDescription], [validError localizedFailureReason]);
 }
 
 - (void)parser:(NSXMLParser *)parser didEndMappingPrefix:(NSString *)prefix {}

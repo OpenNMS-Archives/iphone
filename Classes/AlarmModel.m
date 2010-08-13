@@ -8,6 +8,7 @@
 
 #import "AlarmModel.h"
 #import "AlarmXMLParserDelegate.h"
+#import "RESTURLRequest.h"
 
 @implementation AlarmModel
 
@@ -15,6 +16,7 @@
 @synthesize uei            = _uei;
 @synthesize firstEventTime = _firstEventTime;
 @synthesize lastEventTime  = _lastEventTime;
+@synthesize eventCount     = _eventCount;
 @synthesize ipAddress      = _ipAddress;
 @synthesize host           = _host;
 @synthesize severity       = _severity;
@@ -22,12 +24,19 @@
 @synthesize ackTime        = _ackTime;
 @synthesize ackUser        = _ackUser;
 
+- (id)initWithAlarmId:(NSString*)alarmId {
+  if (self = [super init]) {
+    self.alarmId = alarmId;
+  }
+  return self;
+}
+
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
-	if (!self.isLoading) {
-		NSString* url = @"http://admin:admin@sin.local:8980/opennms/rest/alarms?limit=50&orderBy=lastEventTime&order=desc&alarmAckUser=null";
+	if (!self.isLoading && _alarmId != nil) {
+		NSString* url = [@"http://admin:admin@sin.local:8980/opennms/rest/alarms/" stringByAppendingString:_alarmId];
 		
-		TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
+		RESTURLRequest* request = [RESTURLRequest requestWithURL:url delegate:self];
     
 		id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
 		request.response = response;
@@ -54,13 +63,13 @@
     _uei = model.uei;
     _firstEventTime = model.firstEventTime;
     _lastEventTime = model.lastEventTime;
+    _eventCount = model.eventCount;
     _ipAddress = model.ipAddress;
     _host = model.host;
     _severity = model.severity;
     _logMessage = model.logMessage;
     _ackTime = model.ackTime;
     _ackUser = model.ackUser;
-    [model release];
   }
   TT_RELEASE_SAFELY(apd);
   TT_RELEASE_SAFELY(parser);

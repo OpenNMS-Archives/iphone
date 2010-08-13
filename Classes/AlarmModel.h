@@ -14,6 +14,7 @@
   NSString* _uei;
 	NSDate*   _firstEventTime;
   NSDate*   _lastEventTime;
+  NSString* _eventCount;
 	NSString* _ipAddress;
 	NSString* _host;
 	NSString* _severity;
@@ -26,11 +27,14 @@
 @property (nonatomic, copy) NSString* uei;
 @property (nonatomic, copy) NSDate*   firstEventTime;
 @property (nonatomic, copy) NSDate*   lastEventTime;
+@property (nonatomic, copy) NSString* eventCount;
 @property (nonatomic, copy) NSString* ipAddress;
 @property (nonatomic, copy) NSString* host;
 @property (nonatomic, copy) NSString* severity;
 @property (nonatomic, copy) NSString* logMessage;
 @property (nonatomic, copy) NSDate*   ackTime;
 @property (nonatomic, copy) NSString* ackUser;
+
+- (id)initWithAlarmId:(NSString*)alarmId;
 
 @end

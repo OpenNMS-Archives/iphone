@@ -28,7 +28,6 @@
 - (id)initWithNodeId:(NSString*)nodeId
 {
 	if (self = [super init]) {
-		TTDINFO(@"init called");
 		self.nodeId = nodeId;
 		_inProgressCount = 0;
 	}
@@ -48,7 +47,6 @@
 
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
-  TTDINFO(@"load called");
 	if (!self.isLoading && _nodeId != nil) {
     TTDINFO(@"sending requests for node %@", _nodeId);
     _inProgressCount = 5;
@@ -127,14 +125,11 @@
 	TTDINFO(@"Got response for model %@", modelName);
 
 	NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
-//	TTDINFO(@"URL response: %@", string);
 
 	if (TTIsStringWithAnyText(string)) {
 		TTXMLParser* parser = [[TTXMLParser alloc] initWithData:response.data];
 		parser.treatDuplicateKeysAsArrayItems = YES;
 		[parser parse];
-
-//		TTDINFO(@"parsed xml: %@", parser.rootObject);
 
 		if ([modelName isEqualToString:@"nodes"]) {
 			TT_RELEASE_SAFELY(_nodeId);
@@ -159,11 +154,8 @@
 		}
 
 		TT_RELEASE_SAFELY(parser);
-		TTDINFO(@"finished parsing xml");
 	}
 	TT_RELEASE_SAFELY(string);
-
-	TTDINFO(@"finished loading");
 
 	if (_inProgressCount == 0) {
 		[super requestDidFinishLoad:request];

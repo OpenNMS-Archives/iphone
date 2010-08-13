@@ -21,9 +21,10 @@
 
 @implementation AlarmDataSource
 
+@synthesize severity = _severity;
+
 - (id)initWithAlarmId:(NSString*)alarmId
 {
-	TTDINFO(@"init called");
 	if (self = [super init]) {
 		_alarmModel = [[[AlarmModel alloc] initWithAlarmId:alarmId] retain];
 	}
@@ -34,41 +35,13 @@
 {
 	// Don't do this!  It's done for us.
 	// TT_RELEASE_SAFELY(_alarmModel);
+  TT_RELEASE_SAFELY(_severity);
 	[super dealloc];
 }
 
 - (id<TTModel>)model
 {
 	return _alarmModel;
-}
-
-- (NSString *)flattenHTML:(NSString *)html
-{
-  NSScanner *theScanner;
-  NSString *text = nil;
-  
-  theScanner = [NSScanner scannerWithString:html];
-  
-  while ([theScanner isAtEnd] == NO) {
-    
-    // find start of tag
-    [theScanner scanUpToString:@"<" intoString:NULL] ; 
-    
-    // find end of tag
-    [theScanner scanUpToString:@">" intoString:&text] ;
-    
-    // replace the found tag with a space
-    html = [html stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@>", text] withString:@""];
-    
-  }
-  
-  return html;
-}
-
--(NSString *) cleanUpString:(NSString *)html
-{
-  NSString* cleaned = [[self flattenHTML:html] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  return cleaned;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,105 +54,51 @@
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-- (void)        tableView: (UITableView*)tableView
-                     cell: (UITableViewCell*)cell
-    willAppearAtIndexPath: (NSIndexPath*)indexPath {
-  if ([cell isKindOfClass:[ONMSSeverityItemCell class]]) {
-    ONMSSeverityItemCell* outageCell = (ONMSSeverityItemCell*)cell;
-    outageCell.delegate = _delegate;
-  }
-}
- */
-
 - (void)tableViewDidLoadModel:(UITableView*)tableView
 {
 	NSMutableArray* items = [[NSMutableArray alloc] init];
 	NSMutableArray* sections = [[NSMutableArray alloc] init];
 
-	TTDINFO(@"model loaded: %@", _alarmModel);
+  _severity = _alarmModel.severity;
 
-	/*
-	_label = _alarmModel.label;
+  [sections addObject:@""];
+  
+  NSMutableArray* alarmItems = [NSMutableArray array];
+  
+  TTTableSubtextItem* item = [[[TTTableSubtextItem alloc] init] autorelease];
+  item.text = @"UEI";
+  item.caption = [_alarmModel.uei stringByReplacingOccurrencesOfString:@"uei.opennms.org/" withString:@""];
+  [alarmItems addObject:item];
+  
+  [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Severity" caption:_alarmModel.severity]];
+  [alarmItems addObject:[TTTableSubtextItem itemWithText:@"# Events" caption:_alarmModel.eventCount]];
+  [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Log Message" caption:_alarmModel.logMessage]];
+  [alarmItems addObject:[TTTableSubtextItem itemWithText:@"First Event" caption:[_alarmModel.firstEventTime description]]];
+  if (![_alarmModel.lastEventTime isEqualToDate:_alarmModel.firstEventTime]) {
+    [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Last Event" caption:[_alarmModel.lastEventTime description]]];
+  }
+  if (_alarmModel.ackTime) {
+    [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Acknowledged" caption:[_alarmModel.ackTime description]]];
+  } else {
+    [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Acknowledged" caption:@"never"]];
+  }
 
-	if (_alarmModel.outages && [_alarmModel.outages count] > 0) {
-		[sections addObject:@"Outages"];
+  [items addObject:alarmItems];
 
-		NSMutableArray* outageItems = [NSMutableArray arrayWithCapacity:[_alarmModel.outages count]];
-		for (id o in _alarmModel.outages) {
-			OutageModel* outage = (OutageModel*)o;
-//		NSString* host = outage.host;
-			NSString* host = nil;
-			if (!host) {
-				host = outage.ipAddress;
-			}
-      ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-			item.text = [host stringByAppendingFormat:@"/%@", outage.serviceName];
-      item.caption = [outage.logMessage stringByRemovingHTMLTags];
-			item.timestamp = outage.ifLostService;
-      item.severity = outage.severity;
-			[outageItems addObject:item];
-		}
-		[items addObject:outageItems];
-	}
-	
-	if (_alarmModel.ipInterfaces && [_alarmModel.ipInterfaces count] > 0) {
-		[sections addObject:@"IP Interfaces"];
-
-		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_alarmModel.ipInterfaces count]];
-		for (id i in _alarmModel.ipInterfaces) {
-			IPInterfaceModel* interface = (IPInterfaceModel*)i;
-      TTDINFO(@"IP interface = %@", interface);
-      TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
-      item.text = interface.hostName;
-      item.subtitle = [NSString stringWithFormat:@"%@ (%@)", interface.ipAddress, [interface.managed isEqual:@"M"]? @"Managed" : @"Unmanaged"];
-      [interfaceItems addObject:item];
-		}
-		[items addObject:interfaceItems];
-	}
-	
-	if (_alarmModel.snmpInterfaces && [_alarmModel.snmpInterfaces count] > 0) {
-		[sections addObject:@"SNMP Interfaces"];
+  [sections addObject:@""];
+  if (_alarmModel.ackTime) {
+    [items addObject:[NSArray arrayWithObject:[TTTableButton itemWithText:@"Unacknowledge" URL:@"onms://alarms/1/unack"]]];
+  } else {
+    [items addObject:[NSArray arrayWithObject:[TTTableButton itemWithText:@"Acknowledge" URL:@"onms://alarms/1/ack"]]];
+  }
+   
+  [sections addObject:@""];
+  [items addObject:[NSArray arrayWithObject:[TTTableButton itemWithText:@"Escalate" URL:@"onms://alarms/1/escalate"]]];
     
-		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_alarmModel.snmpInterfaces count]];
-		for (id s in _alarmModel.snmpInterfaces) {
-			SNMPInterfaceModel* interface = s;
-      TTDINFO(@"SNMP interface = %@", interface);
-      TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
-      NSString* text;
-      if (TTIsStringWithAnyText(interface.ifDescr)) {
-        text = [NSString stringWithFormat:@"%@: %@", interface.ifIndex, interface.ifDescr];
-      } else {
-        text = interface.ifIndex;
-      }
-      item.text = text;
-      item.subtitle = [NSString stringWithFormat:@"%@ (%@)", interface.ipAddress, interface.ifSpeed];
-      [interfaceItems addObject:item];
-		}
-		[items addObject:interfaceItems];
-	}
-	
-	if (_alarmModel.events && [_alarmModel.events count] > 0) {
-		[sections addObject:@"Events"];
-    
-		NSMutableArray* eventItems = [NSMutableArray arrayWithCapacity:[_alarmModel.events count]];
-		for (id e in _alarmModel.events) {
-			EventModel* event = e;
-      ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-			item.text = [event.uei stringByReplacingOccurrencesOfString:@"uei.opennms.org/" withString:@""];
-      item.caption = [event.logMessage stringByRemovingHTMLTags];
-			item.timestamp = event.timestamp;
-      item.severity = event.severity;
-      
-      [eventItems addObject:item];
-		}
-		[items addObject:eventItems];
-	}
-   */
-	
-	self.items = items;
+  [sections addObject:@""];
+  [items addObject:[NSArray arrayWithObject:[TTTableButton itemWithText:@"Clear" URL:@"onms://alarms/1/clear"]]];
+
+  self.items = items;
 	self.sections = sections;
 	
 	TT_RELEASE_SAFELY(items);

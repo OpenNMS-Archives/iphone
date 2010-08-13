@@ -25,7 +25,6 @@
 
 - (id)initWithNodeId:(NSString*)nodeId
 {
-	TTDINFO(@"init called");
 	if (self = [super init]) {
 		_nodeModel = [[[NodeModel alloc] initWithNodeId:nodeId] retain];
 	}
@@ -44,36 +43,6 @@
 	return _nodeModel;
 }
 
-- (NSString *)flattenHTML:(NSString *)html
-{
-  
-  NSScanner *theScanner;
-  NSString *text = nil;
-  
-  theScanner = [NSScanner scannerWithString:html];
-  
-  while ([theScanner isAtEnd] == NO) {
-    
-    // find start of tag
-    [theScanner scanUpToString:@"<" intoString:NULL] ; 
-    
-    // find end of tag
-    [theScanner scanUpToString:@">" intoString:&text] ;
-    
-    // replace the found tag with a space
-    html = [html stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@>", text] withString:@""];
-    
-  }
-  
-  return html;
-}
-
--(NSString *) cleanUpString:(NSString *)html
-{
-  NSString* cleaned = [[self flattenHTML:html] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  return cleaned;
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object
 {
@@ -85,26 +54,17 @@
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-- (void)        tableView: (UITableView*)tableView
-                     cell: (UITableViewCell*)cell
-    willAppearAtIndexPath: (NSIndexPath*)indexPath {
-  if ([cell isKindOfClass:[ONMSSeverityItemCell class]]) {
-    ONMSSeverityItemCell* outageCell = (ONMSSeverityItemCell*)cell;
-    outageCell.delegate = _delegate;
-  }
-}
- */
-
 - (void)tableViewDidLoadModel:(UITableView*)tableView
 {
 	NSMutableArray* items = [[NSMutableArray alloc] init];
 	NSMutableArray* sections = [[NSMutableArray alloc] init];
 
-	TTDINFO(@"model loaded: %@", _nodeModel);
-	
 	_label = _nodeModel.label;
+
+//  [sections addObject:_label];
+//  [items addObject:[NSArray array]];
+  [sections addObject:@""];
+  [items addObject:[NSArray arrayWithObject:[TTTableSummaryItem itemWithText:_label]]];
 
 	if (_nodeModel.outages && [_nodeModel.outages count] > 0) {
 		[sections addObject:@"Outages"];
@@ -133,7 +93,6 @@
 		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_nodeModel.ipInterfaces count]];
 		for (id i in _nodeModel.ipInterfaces) {
 			IPInterfaceModel* interface = (IPInterfaceModel*)i;
-      TTDINFO(@"IP interface = %@", interface);
       TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
       item.text = interface.hostName;
       item.subtitle = [NSString stringWithFormat:@"%@ (%@)", interface.ipAddress, [interface.managed isEqual:@"M"]? @"Managed" : @"Unmanaged"];
@@ -148,7 +107,6 @@
 		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_nodeModel.snmpInterfaces count]];
 		for (id s in _nodeModel.snmpInterfaces) {
 			SNMPInterfaceModel* interface = s;
-      TTDINFO(@"SNMP interface = %@", interface);
       TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
       NSString* text;
       if (TTIsStringWithAnyText(interface.ifDescr)) {
@@ -169,11 +127,6 @@
 		NSMutableArray* eventItems = [NSMutableArray arrayWithCapacity:[_nodeModel.events count]];
 		for (id e in _nodeModel.events) {
 			EventModel* event = e;
-      /*
-      TTTableCaptionItem* item = [[[TTTableCaptionItem alloc] init] autorelease];
-      item.caption = [event.timestamp formatShortTime];
-      item.text = [self cleanUpString:event.logMessage];
-       */
       ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
 			item.text = [event.uei stringByReplacingOccurrencesOfString:@"uei.opennms.org/" withString:@""];
       item.caption = [event.logMessage stringByRemovingHTMLTags];

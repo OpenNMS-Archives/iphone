@@ -8,6 +8,7 @@
 
 #import "AlarmViewController.h"
 #import "AlarmDataSource.h"
+#import "Severity.h"
 
 #import "Three20UI/UIViewAdditions.h"
 #import "Three20UI/UITableViewAdditions.h"
@@ -40,16 +41,13 @@
   return YES;
 }
 
-- (void)refreshAction
+- (void)didLoadModel:(BOOL)firstTime
 {
-  [self.navigationItem setRightBarButtonItem:_activityItem animated:YES];
-  [(TTNavigator*)[TTNavigator navigator] reload];
-}
-
-- (void)modelDidFinishLoad:(id <TTModel>)model
-{
-  [self.navigationItem setRightBarButtonItem:nil animated:YES];
-  [super modelDidFinishLoad:model];
+  [super didLoadModel:firstTime];
+  AlarmDataSource* ads = self.dataSource;
+  Severity* sev = [[Severity alloc] initWithSeverity:ads.severity];
+  self.tableView.backgroundColor = [sev getDisplayColor];
+  [sev release];
 }
 
 - (void)loadView
@@ -62,9 +60,6 @@
   [spinner startAnimating];
   _activityItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
   _refreshButton =  [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshAction)];
-
-  [self.navigationItem setLeftBarButtonItem:_refreshButton animated:YES];
-  [self.navigationItem setRightBarButtonItem:_activityItem animated:YES];
 }
 
 - (void)createModel

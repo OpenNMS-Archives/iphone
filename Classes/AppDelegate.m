@@ -11,6 +11,7 @@
 #import "OutageListViewController.h"
 #import "NodeViewController.h"
 #import "AlarmListViewController.h"
+#import "AlarmViewController.h"
 #import "AboutViewController.h"
 
 #import "ONMSDefaultStyleSheet.h"
@@ -39,10 +40,10 @@
 
 	[map from:@"onms://tabbar" toSharedViewController:[TabBarController class]];
 	[map from:@"onms://about" toSharedViewController:[AboutViewController class]];
-	[map from:@"onms://outages" toViewController:[OutageListViewController class]];
-	[map from:@"onms://alarms" toViewController:[AlarmListViewController class]];
-//	[map from:@"onms://alarm/(initWithAlarmId:)" toViewController:[AlarmViewController class]];
-	[map from:@"onms://nodes/(initWithNodeId:)" toViewController:[NodeViewController class]];
+	[map from:@"onms://outages" toSharedViewController:[OutageListViewController class]];
+	[map from:@"onms://alarms" toSharedViewController:[AlarmListViewController class]];
+	[map from:@"onms://alarms/(initWithAlarmId:)" toSharedViewController:[AlarmViewController class]];
+	[map from:@"onms://nodes/(initWithNodeId:)" toSharedViewController:[NodeViewController class]];
 
 //	if (![navigator restoreViewControllers]) {
 //		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://outages"]];

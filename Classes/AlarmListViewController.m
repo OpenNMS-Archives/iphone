@@ -31,10 +31,10 @@
   [(TTNavigator*)[TTNavigator navigator] reload];
 }
 
-- (void)modelDidFinishLoad:(id <TTModel>)model
+- (void)didLoadModel:(BOOL)firstTime
 {
+  [super didLoadModel:firstTime];
   [self.navigationItem setRightBarButtonItem:nil animated:YES];
-  [super modelDidFinishLoad:model];
 }
 
 - (void)loadView

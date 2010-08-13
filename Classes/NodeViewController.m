@@ -35,6 +35,20 @@
   return YES;
 }
 
+// Hmm, no good with large node labels
+/*
+- (void)modelDidFinishLoad:(id <TTModel>)model
+{
+  if (_model == model) {
+    NSString* label = ((NodeDataSource*)self.dataSource).label;
+    if (label) {
+      self.title = [label stringByAppendingFormat:@" (%@)", _nodeId];
+    }
+  }
+  [super modelDidFinishLoad:model];
+}
+*/
+
 - (void)loadView
 {
 	self.tableViewStyle = UITableViewStyleGrouped;

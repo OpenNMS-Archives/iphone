@@ -65,7 +65,7 @@
 		item.caption = [alarm.logMessage stringByRemovingHTMLTags];
 		item.timestamp = alarm.firstEventTime;
     item.severity = alarm.severity;
-//		item.URL = [@"onms://nodes/" stringByAppendingString:alarm.nodeId];
+		item.URL = [@"onms://alarms/" stringByAppendingString:alarm.alarmId];
 		[items addObject:item];
 	}
 	
