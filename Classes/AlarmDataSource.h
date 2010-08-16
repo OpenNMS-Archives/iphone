@@ -13,9 +13,11 @@
 @interface AlarmDataSource : TTSectionedDataSource {
 	AlarmModel* _alarmModel;
   NSString* _severity;
+  id<NSObject> _ackDelegate;
 }
 
 @property (nonatomic, copy) NSString* severity;
+@property (nonatomic, retain) id<NSObject> ackDelegate;
 
 - (id)initWithAlarmId:(NSString*)alarmId;
 

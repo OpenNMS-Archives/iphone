@@ -22,6 +22,7 @@
 @implementation AlarmDataSource
 
 @synthesize severity = _severity;
+@synthesize ackDelegate = _ackDelegate;
 
 - (id)initWithAlarmId:(NSString*)alarmId
 {
@@ -35,6 +36,7 @@
 {
 	// Don't do this!  It's done for us.
 	// TT_RELEASE_SAFELY(_alarmModel);
+  TT_RELEASE_SAFELY(_ackDelegate);
   TT_RELEASE_SAFELY(_severity);
 	[super dealloc];
 }
@@ -86,18 +88,29 @@
   [items addObject:alarmItems];
 
   [sections addObject:@""];
+  TTTableButton* button = [[[TTTableButton alloc] init] autorelease];
+  button.delegate = _ackDelegate;
   if (_alarmModel.ackTime) {
-    [items addObject:[NSArray arrayWithObject:[TTTableButton itemWithText:@"Unacknowledge" URL:@"onms://alarms/1/unack"]]];
+    button.text = @"Unacknowledge";
+    button.selector = @selector(unacknowledge);
   } else {
-    [items addObject:[NSArray arrayWithObject:[TTTableButton itemWithText:@"Acknowledge" URL:@"onms://alarms/1/ack"]]];
+    button.text = @"Acknowledge";
+    button.selector = @selector(acknowledge);
   }
+  [items addObject:[NSArray arrayWithObject:button]];
    
   [sections addObject:@""];
-  [items addObject:[NSArray arrayWithObject:[TTTableButton itemWithText:@"Escalate" URL:@"onms://alarms/1/escalate"]]];
+  button = [TTTableButton itemWithText:@"Escalate"];
+  button.delegate = _ackDelegate;
+  button.selector = @selector(escalate);
+  [items addObject:[NSArray arrayWithObject:button]];
     
   [sections addObject:@""];
-  [items addObject:[NSArray arrayWithObject:[TTTableButton itemWithText:@"Clear" URL:@"onms://alarms/1/clear"]]];
-
+  button = [TTTableButton itemWithText:@"Clear"];
+  button.delegate = _ackDelegate;
+  button.selector = @selector(clear);
+  [items addObject:[NSArray arrayWithObject:button]];
+  
   self.items = items;
 	self.sections = sections;
 	

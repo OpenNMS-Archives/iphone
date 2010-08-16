@@ -61,25 +61,25 @@
   if (_severity) {
     if ([_severity isEqual:@"INDETERMINATE"]) {
       // #EBEBCD
-      return [UIColor colorWithRed:0.92157 green:0.92157 blue:0.80392 alpha:1.0];
+      return RGBCOLOR(235,235,205);
     } else if ([_severity isEqual:@"CLEARED"]) {
       // #EEEEEE
-      return [UIColor colorWithWhite:0.93333 alpha:1.0];
+      return RGBCOLOR(238,238,238);
     } else if ([_severity isEqual:@"NORMAL"]) {
-      // #D7E1CD
-      return [UIColor colorWithRed:0.843134 green:0.88235 blue:0.80392 alpha:1.0];
+      // #BFE19E
+      return RGBCOLOR(191,225,158);
     } else if ([_severity isEqual:@"WARNING"]) {
-      // #FFF5CD
-      return [UIColor colorWithRed:1.0 green:0.96078 blue:0.80392 alpha:1.0];
+      // #FFECA0
+      return RGBCOLOR(255,236,160);
     } else if ([_severity isEqual:@"MINOR"]) {
-      // #FFEBCD
-      return [UIColor colorWithRed:1.0 green:0.92157 blue:0.80392 alpha:1.0];
+      // #FFB57A
+      return RGBCOLOR(255,181,122);
     } else if ([_severity isEqual:@"MAJOR"]) {
-      // #FFD7CD
-      return [UIColor colorWithRed:1.0 green:0.843134 blue:0.80392 alpha:1.0];
+      // #FFAD98
+      return RGBCOLOR(255,173,152);
     } else if ([_severity isEqual:@"CRITICAL"]) {
-      // #F5CDCD
-      return [UIColor colorWithRed:0.96078 green:0.80392 blue:0.80392 alpha:1.0];
+      // #FF6C6C
+      return RGBCOLOR(255,180,180);
     }
   }
   // #FFFFFF

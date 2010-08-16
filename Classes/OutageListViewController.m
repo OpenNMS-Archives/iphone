@@ -42,10 +42,22 @@
   [self reload];
 }
 
-- (void)didLoadModel:(BOOL)firstTime
+- (void)showModel:(BOOL)show
 {
-  [super didLoadModel:firstTime];
   [self.navigationItem setRightBarButtonItem:nil animated:YES];
+  [super showModel:show];
+}
+
+- (void)showError:(BOOL)show
+{
+  [self.navigationItem setRightBarButtonItem:nil animated:YES];
+  [super showError:show];
+}
+
+- (void)showEmpty:(BOOL)show
+{
+  [self.navigationItem setRightBarButtonItem:nil animated:YES];
+  [super showEmpty:show];
 }
 
 - (void)loadView
@@ -61,6 +73,12 @@
   
   [self.navigationItem setLeftBarButtonItem:_refreshButton animated:YES];
   [self.navigationItem setRightBarButtonItem:_activityItem animated:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+  [self reload];
+  [super viewWillAppear:animated];
 }
 
 - (void)createModel

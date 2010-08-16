@@ -19,7 +19,6 @@
 
 - (id)init
 {
-	TTDINFO(@"init called");
 	if (self = [super init]) {
 		_alarmListModel = [[AlarmListModel alloc] init];
 	}

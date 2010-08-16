@@ -37,7 +37,8 @@
 		NSString* url = [@"http://admin:admin@sin.local:8980/opennms/rest/alarms/" stringByAppendingString:_alarmId];
 		
 		RESTURLRequest* request = [RESTURLRequest requestWithURL:url delegate:self];
-    
+//    request.cachePolicy = cachePolicy;
+    request.cachePolicy = TTURLRequestCachePolicyNone;
 		id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
 		request.response = response;
 		TT_RELEASE_SAFELY(response);

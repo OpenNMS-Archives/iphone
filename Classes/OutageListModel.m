@@ -25,7 +25,7 @@
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
 	if (!self.isLoading) {
-		NSString* url = @"http://admin:admin@sin.local:8980/opennms/rest/outages?limit=50&orderBy=ifLostService&order=desc&ifRegainedService=null";
+		NSString* url = @"http://sin.local:8980/opennms/rest/outages?limit=50&orderBy=ifLostService&order=desc&ifRegainedService=null";
 		
 		TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
     request.cachePolicy = cachePolicy;
@@ -37,6 +37,13 @@
 		[request send];
 	}
 }
+
+- (void)request:(TTURLRequest*)request didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+  NSURLCredential *cred = [NSURLCredential credentialWithUser:@"admin" 
+                                                     password:@"admin" persistence:NSURLCredentialPersistenceForSession]; 
+  [[challenge sender] useCredential:cred forAuthenticationChallenge:challenge]; 
+} 
 
 - (void)requestDidFinishLoad:(TTURLRequest*)request
 {

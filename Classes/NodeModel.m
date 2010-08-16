@@ -53,6 +53,7 @@
 
     // Node
     RESTURLRequest* request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingString:_nodeId] delegate:self];
+    request.cachePolicy = cachePolicy;
     request.modelName = @"nodes";
 
     id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
@@ -63,6 +64,7 @@
 
     // Outages
     request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/outages/forNode/" stringByAppendingFormat:@"%@?limit=%d&orderBy=ifLostService&order=desc", _nodeId, 50] delegate:self];
+    request.cachePolicy = cachePolicy;
     request.modelName = @"outages";
 
     response = [[TTURLDataResponse alloc] init];
@@ -73,6 +75,7 @@
 
     // IPInterface
     request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingFormat:@"%@/ipinterfaces", _nodeId] delegate:self];
+    request.cachePolicy = cachePolicy;
     request.modelName = @"ipinterfaces";
     
     response = [[TTURLDataResponse alloc] init];
@@ -83,6 +86,7 @@
     
     // SNMPInterface
     request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingFormat:@"%@/snmpinterfaces", _nodeId] delegate:self];
+    request.cachePolicy = cachePolicy;
     request.modelName = @"snmpinterfaces";
     
     response = [[TTURLDataResponse alloc] init];
@@ -93,6 +97,7 @@
     
     // Events
     request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/events" stringByAppendingFormat:@"?limit=%d&node.id=%@", 10, _nodeId] delegate:self];
+    request.cachePolicy = cachePolicy;
     request.modelName = @"events";
     
     response = [[TTURLDataResponse alloc] init];

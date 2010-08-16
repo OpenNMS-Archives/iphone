@@ -23,10 +23,45 @@
 
 - (NSDate*)dateFromString:(NSString*)string
 {
-  if ([[string substringWithRange:NSMakeRange([string length] - 3, 1)] isEqualToString:@":"]) {
-    string = [[string substringToIndex:[string length] - 3] stringByAppendingString:@"00"];
+  NSString* date;
+  NSString* time;
+  NSString* zoneHour;
+  NSString* zoneMinute;
+  
+  NSScanner *scanner = [NSScanner scannerWithString:string];
+  scanner.caseSensitive = YES;
+  if (![scanner scanUpToString:@"T" intoString:&date]) {
+    TTDINFO(@"unable to scan date portion of %@", string);
+    return [super dateFromString:string];
   }
-  return [super dateFromString:string];
+  if (![scanner scanString:@"T" intoString:NULL]) {
+    TTDINFO(@"unable to scan T separator of %@", string);
+    return [super dateFromString:string];
+  }
+  if (![scanner scanUpToString:@"-" intoString:&time]) {
+    TTDINFO(@"unable to scan time portion of %@", string);
+    return [super dateFromString:string];
+  }
+  if (![scanner scanString:@"-" intoString:NULL]) {
+    TTDINFO(@"unable to scan - separator of %@", string);
+    return [super dateFromString:string];
+  }
+  if (![scanner scanUpToString:@":" intoString:&zoneHour]) {
+    TTDINFO(@"unable to scan time zone hour portion of %@", string);
+    return [super dateFromString:string];
+  }
+  if (![scanner scanString:@":" intoString:NULL]) {
+    TTDINFO(@"unable to scan : separator of %@", string);
+    return [super dateFromString:string];
+  }
+  zoneMinute = [string substringFromIndex:[scanner scanLocation]];
+  
+  NSArray* splitTime = [time componentsSeparatedByString:@"."];
+  time = [splitTime objectAtIndex:0];
+  NSString* returnString = [NSString stringWithFormat:@"%@T%@-%@%@", date, time, zoneHour, zoneMinute];
+
+  TTDINFO(@"converted %@ into %@", string, returnString);
+  return [super dateFromString:returnString];
 }
 
 @end

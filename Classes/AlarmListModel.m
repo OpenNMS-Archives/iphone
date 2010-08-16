@@ -28,6 +28,7 @@
 		NSString* url = @"http://admin:admin@sin.local:8980/opennms/rest/alarms?limit=50&orderBy=lastEventTime&order=desc&alarmAckUser=null";
 		
 		TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
+    request.cachePolicy = cachePolicy;
 
 		id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
 		request.response = response;
@@ -40,9 +41,6 @@
 - (void)requestDidFinishLoad:(TTURLRequest*)request
 {
 	TTURLDataResponse* response = request.response;
-
-	NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
-	TT_RELEASE_SAFELY(string);
 
 	TT_RELEASE_SAFELY(_alarms);
 
