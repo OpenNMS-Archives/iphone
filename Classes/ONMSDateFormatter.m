@@ -60,7 +60,7 @@
   time = [splitTime objectAtIndex:0];
   NSString* returnString = [NSString stringWithFormat:@"%@T%@-%@%@", date, time, zoneHour, zoneMinute];
 
-  TTDINFO(@"converted %@ into %@", string, returnString);
+//  TTDINFO(@"converted %@ into %@", string, returnString);
   return [super dateFromString:returnString];
 }
 

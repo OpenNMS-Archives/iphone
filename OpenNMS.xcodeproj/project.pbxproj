@@ -48,6 +48,23 @@
 		4452FCEC120749BE00AEEFEC /* OutageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452FCEB120749BE00AEEFEC /* OutageModel.m */; };
 		4452FCF012074C5F00AEEFEC /* OutageListDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452FCEF12074C5F00AEEFEC /* OutageListDataSource.m */; };
 		4452FCF312074CCE00AEEFEC /* OutageListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452FCF212074CCE00AEEFEC /* OutageListModel.m */; };
+		4457FDDB1219E1CD005DD85D /* ToggleSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDBF1219E1CD005DD85D /* ToggleSwitchCell.m */; };
+		4457FDDC1219E1CD005DD85D /* TimeIntervalCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDC11219E1CD005DD85D /* TimeIntervalCell.m */; };
+		4457FDDD1219E1CD005DD85D /* TextfieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDC31219E1CD005DD85D /* TextfieldCell.m */; };
+		4457FDDE1219E1CD005DD85D /* SliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDC51219E1CD005DD85D /* SliderCell.m */; };
+		4457FDDF1219E1CD005DD85D /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDC71219E1CD005DD85D /* SettingsViewController.m */; };
+		4457FDE01219E1CD005DD85D /* SettingsMetadataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDC91219E1CD005DD85D /* SettingsMetadataSource.m */; };
+		4457FDE11219E1CD005DD85D /* SettingsEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDCB1219E1CD005DD85D /* SettingsEditorViewController.m */; };
+		4457FDE21219E1CD005DD85D /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDCF1219E1CD005DD85D /* SettingsCell.m */; };
+		4457FDE31219E1CD005DD85D /* NumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDD11219E1CD005DD85D /* NumberCell.m */; };
+		4457FDE41219E1CD005DD85D /* MutableMetadataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDD31219E1CD005DD85D /* MutableMetadataSource.m */; };
+		4457FDE51219E1CD005DD85D /* MultiValueEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDD51219E1CD005DD85D /* MultiValueEditorViewController.m */; };
+		4457FDE61219E1CD005DD85D /* MultiValueCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDD71219E1CD005DD85D /* MultiValueCell.m */; };
+		4457FDE71219E1CD005DD85D /* ChildPaneCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDD91219E1CD005DD85D /* ChildPaneCell.m */; };
+		4457FDF31219E1F6005DD85D /* LabeledPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDED1219E1F6005DD85D /* LabeledPickerView.m */; };
+		4457FDF41219E1F6005DD85D /* KMTimeIntervalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDEF1219E1F6005DD85D /* KMTimeIntervalFormatter.m */; };
+		4457FDF51219E1F6005DD85D /* IntegerPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FDF11219E1F6005DD85D /* IntegerPickerView.m */; };
+		4457FE151219E5B9005DD85D /* ONMSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457FE131219E5B9005DD85D /* ONMSSettingsViewController.m */; };
 		4475D72A120C38CF000F1550 /* Three20.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4475D729120C38CF000F1550 /* Three20.bundle */; };
 		447EE5211208DD3800F3E535 /* IPInterfaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 447EE5201208DD3800F3E535 /* IPInterfaceModel.m */; };
 		447EE5A41209A92F00F3E535 /* SNMPInterfaceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 447EE5A31209A92F00F3E535 /* SNMPInterfaceModel.m */; };
@@ -288,6 +305,42 @@
 		4452FCF112074CCE00AEEFEC /* OutageListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutageListModel.h; sourceTree = "<group>"; };
 		4452FCF212074CCE00AEEFEC /* OutageListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutageListModel.m; sourceTree = "<group>"; };
 		4452FDA8120754E100AEEFEC /* extThree20XML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = extThree20XML.xcodeproj; path = three20/src/extThree20XML/extThree20XML.xcodeproj; sourceTree = "<group>"; };
+		4457FDBF1219E1CD005DD85D /* ToggleSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToggleSwitchCell.m; path = "External Classes/mySettings/Code/Classes/ToggleSwitchCell.m"; sourceTree = "<group>"; };
+		4457FDC01219E1CD005DD85D /* ToggleSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToggleSwitchCell.h; path = "External Classes/mySettings/Code/Classes/ToggleSwitchCell.h"; sourceTree = "<group>"; };
+		4457FDC11219E1CD005DD85D /* TimeIntervalCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeIntervalCell.m; path = "External Classes/mySettings/Code/Classes/TimeIntervalCell.m"; sourceTree = "<group>"; };
+		4457FDC21219E1CD005DD85D /* TimeIntervalCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeIntervalCell.h; path = "External Classes/mySettings/Code/Classes/TimeIntervalCell.h"; sourceTree = "<group>"; };
+		4457FDC31219E1CD005DD85D /* TextfieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextfieldCell.m; path = "External Classes/mySettings/Code/Classes/TextfieldCell.m"; sourceTree = "<group>"; };
+		4457FDC41219E1CD005DD85D /* TextfieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextfieldCell.h; path = "External Classes/mySettings/Code/Classes/TextfieldCell.h"; sourceTree = "<group>"; };
+		4457FDC51219E1CD005DD85D /* SliderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SliderCell.m; path = "External Classes/mySettings/Code/Classes/SliderCell.m"; sourceTree = "<group>"; };
+		4457FDC61219E1CD005DD85D /* SliderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SliderCell.h; path = "External Classes/mySettings/Code/Classes/SliderCell.h"; sourceTree = "<group>"; };
+		4457FDC71219E1CD005DD85D /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = "External Classes/mySettings/Code/Classes/SettingsViewController.m"; sourceTree = "<group>"; };
+		4457FDC81219E1CD005DD85D /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = "External Classes/mySettings/Code/Classes/SettingsViewController.h"; sourceTree = "<group>"; };
+		4457FDC91219E1CD005DD85D /* SettingsMetadataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsMetadataSource.m; path = "External Classes/mySettings/Code/Classes/SettingsMetadataSource.m"; sourceTree = "<group>"; };
+		4457FDCA1219E1CD005DD85D /* SettingsMetadataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsMetadataSource.h; path = "External Classes/mySettings/Code/Classes/SettingsMetadataSource.h"; sourceTree = "<group>"; };
+		4457FDCB1219E1CD005DD85D /* SettingsEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsEditorViewController.m; path = "External Classes/mySettings/Code/Classes/SettingsEditorViewController.m"; sourceTree = "<group>"; };
+		4457FDCC1219E1CD005DD85D /* SettingsEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsEditorViewController.h; path = "External Classes/mySettings/Code/Classes/SettingsEditorViewController.h"; sourceTree = "<group>"; };
+		4457FDCD1219E1CD005DD85D /* SettingsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsDelegate.h; path = "External Classes/mySettings/Code/Classes/SettingsDelegate.h"; sourceTree = "<group>"; };
+		4457FDCE1219E1CD005DD85D /* SettingsCellProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsCellProtocol.h; path = "External Classes/mySettings/Code/Classes/SettingsCellProtocol.h"; sourceTree = "<group>"; };
+		4457FDCF1219E1CD005DD85D /* SettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsCell.m; path = "External Classes/mySettings/Code/Classes/SettingsCell.m"; sourceTree = "<group>"; };
+		4457FDD01219E1CD005DD85D /* SettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsCell.h; path = "External Classes/mySettings/Code/Classes/SettingsCell.h"; sourceTree = "<group>"; };
+		4457FDD11219E1CD005DD85D /* NumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NumberCell.m; path = "External Classes/mySettings/Code/Classes/NumberCell.m"; sourceTree = "<group>"; };
+		4457FDD21219E1CD005DD85D /* NumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NumberCell.h; path = "External Classes/mySettings/Code/Classes/NumberCell.h"; sourceTree = "<group>"; };
+		4457FDD31219E1CD005DD85D /* MutableMetadataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MutableMetadataSource.m; path = "External Classes/mySettings/Code/Classes/MutableMetadataSource.m"; sourceTree = "<group>"; };
+		4457FDD41219E1CD005DD85D /* MutableMetadataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MutableMetadataSource.h; path = "External Classes/mySettings/Code/Classes/MutableMetadataSource.h"; sourceTree = "<group>"; };
+		4457FDD51219E1CD005DD85D /* MultiValueEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MultiValueEditorViewController.m; path = "External Classes/mySettings/Code/Classes/MultiValueEditorViewController.m"; sourceTree = "<group>"; };
+		4457FDD61219E1CD005DD85D /* MultiValueEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiValueEditorViewController.h; path = "External Classes/mySettings/Code/Classes/MultiValueEditorViewController.h"; sourceTree = "<group>"; };
+		4457FDD71219E1CD005DD85D /* MultiValueCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MultiValueCell.m; path = "External Classes/mySettings/Code/Classes/MultiValueCell.m"; sourceTree = "<group>"; };
+		4457FDD81219E1CD005DD85D /* MultiValueCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiValueCell.h; path = "External Classes/mySettings/Code/Classes/MultiValueCell.h"; sourceTree = "<group>"; };
+		4457FDD91219E1CD005DD85D /* ChildPaneCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChildPaneCell.m; path = "External Classes/mySettings/Code/Classes/ChildPaneCell.m"; sourceTree = "<group>"; };
+		4457FDDA1219E1CD005DD85D /* ChildPaneCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChildPaneCell.h; path = "External Classes/mySettings/Code/Classes/ChildPaneCell.h"; sourceTree = "<group>"; };
+		4457FDED1219E1F6005DD85D /* LabeledPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LabeledPickerView.m; path = "External Classes/mySettings/Code/Generic classes/LabeledPickerView.m"; sourceTree = "<group>"; };
+		4457FDEE1219E1F6005DD85D /* LabeledPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabeledPickerView.h; path = "External Classes/mySettings/Code/Generic classes/LabeledPickerView.h"; sourceTree = "<group>"; };
+		4457FDEF1219E1F6005DD85D /* KMTimeIntervalFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMTimeIntervalFormatter.m; path = "External Classes/mySettings/Code/Generic classes/KMTimeIntervalFormatter.m"; sourceTree = "<group>"; };
+		4457FDF01219E1F6005DD85D /* KMTimeIntervalFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMTimeIntervalFormatter.h; path = "External Classes/mySettings/Code/Generic classes/KMTimeIntervalFormatter.h"; sourceTree = "<group>"; };
+		4457FDF11219E1F6005DD85D /* IntegerPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegerPickerView.m; path = "External Classes/mySettings/Code/Generic classes/IntegerPickerView.m"; sourceTree = "<group>"; };
+		4457FDF21219E1F6005DD85D /* IntegerPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegerPickerView.h; path = "External Classes/mySettings/Code/Generic classes/IntegerPickerView.h"; sourceTree = "<group>"; };
+		4457FE131219E5B9005DD85D /* ONMSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONMSSettingsViewController.m; sourceTree = "<group>"; };
+		4457FE141219E5B9005DD85D /* ONMSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSSettingsViewController.h; sourceTree = "<group>"; };
 		4475D729120C38CF000F1550 /* Three20.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Three20.bundle; path = three20/src/Three20.bundle; sourceTree = "<group>"; };
 		447EE51F1208DD3800F3E535 /* IPInterfaceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPInterfaceModel.h; sourceTree = "<group>"; };
 		447EE5201208DD3800F3E535 /* IPInterfaceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPInterfaceModel.m; sourceTree = "<group>"; };
@@ -371,6 +424,7 @@
 			isa = PBXGroup;
 			children = (
 				445202061208808500AEEFEC /* Resources */,
+				4457FDBE1219E1B3005DD85D /* External Classes */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources-iPad */,
@@ -532,6 +586,47 @@
 			name = Outages;
 			sourceTree = "<group>";
 		};
+		4457FDBE1219E1B3005DD85D /* External Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4457FDED1219E1F6005DD85D /* LabeledPickerView.m */,
+				4457FDEE1219E1F6005DD85D /* LabeledPickerView.h */,
+				4457FDEF1219E1F6005DD85D /* KMTimeIntervalFormatter.m */,
+				4457FDF01219E1F6005DD85D /* KMTimeIntervalFormatter.h */,
+				4457FDF11219E1F6005DD85D /* IntegerPickerView.m */,
+				4457FDF21219E1F6005DD85D /* IntegerPickerView.h */,
+				4457FDBF1219E1CD005DD85D /* ToggleSwitchCell.m */,
+				4457FDC01219E1CD005DD85D /* ToggleSwitchCell.h */,
+				4457FDC11219E1CD005DD85D /* TimeIntervalCell.m */,
+				4457FDC21219E1CD005DD85D /* TimeIntervalCell.h */,
+				4457FDC31219E1CD005DD85D /* TextfieldCell.m */,
+				4457FDC41219E1CD005DD85D /* TextfieldCell.h */,
+				4457FDC51219E1CD005DD85D /* SliderCell.m */,
+				4457FDC61219E1CD005DD85D /* SliderCell.h */,
+				4457FDC71219E1CD005DD85D /* SettingsViewController.m */,
+				4457FDC81219E1CD005DD85D /* SettingsViewController.h */,
+				4457FDC91219E1CD005DD85D /* SettingsMetadataSource.m */,
+				4457FDCA1219E1CD005DD85D /* SettingsMetadataSource.h */,
+				4457FDCB1219E1CD005DD85D /* SettingsEditorViewController.m */,
+				4457FDCC1219E1CD005DD85D /* SettingsEditorViewController.h */,
+				4457FDCD1219E1CD005DD85D /* SettingsDelegate.h */,
+				4457FDCE1219E1CD005DD85D /* SettingsCellProtocol.h */,
+				4457FDCF1219E1CD005DD85D /* SettingsCell.m */,
+				4457FDD01219E1CD005DD85D /* SettingsCell.h */,
+				4457FDD11219E1CD005DD85D /* NumberCell.m */,
+				4457FDD21219E1CD005DD85D /* NumberCell.h */,
+				4457FDD31219E1CD005DD85D /* MutableMetadataSource.m */,
+				4457FDD41219E1CD005DD85D /* MutableMetadataSource.h */,
+				4457FDD51219E1CD005DD85D /* MultiValueEditorViewController.m */,
+				4457FDD61219E1CD005DD85D /* MultiValueEditorViewController.h */,
+				4457FDD71219E1CD005DD85D /* MultiValueCell.m */,
+				4457FDD81219E1CD005DD85D /* MultiValueCell.h */,
+				4457FDD91219E1CD005DD85D /* ChildPaneCell.m */,
+				4457FDDA1219E1CD005DD85D /* ChildPaneCell.h */,
+			);
+			name = "External Classes";
+			sourceTree = "<group>";
+		};
 		447EE4641208A82100F3E535 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
@@ -551,6 +646,8 @@
 				44855133120A18CA000173CD /* ONMSSeverityItem.m */,
 				44855134120A18CA000173CD /* ONMSSeverityItemCell.h */,
 				44855135120A18CA000173CD /* ONMSSeverityItemCell.m */,
+				4457FE141219E5B9005DD85D /* ONMSSettingsViewController.h */,
+				4457FE131219E5B9005DD85D /* ONMSSettingsViewController.m */,
 			);
 			name = Miscellaneous;
 			sourceTree = "<group>";
@@ -897,6 +994,23 @@
 				442C9FB212148A3100147B53 /* AlarmViewController.m in Sources */,
 				442CA1EF12158B1800147B53 /* AlarmXMLParserDelegate.m in Sources */,
 				442CA24D1215920B00147B53 /* ONMSDateFormatter.m in Sources */,
+				4457FDDB1219E1CD005DD85D /* ToggleSwitchCell.m in Sources */,
+				4457FDDC1219E1CD005DD85D /* TimeIntervalCell.m in Sources */,
+				4457FDDD1219E1CD005DD85D /* TextfieldCell.m in Sources */,
+				4457FDDE1219E1CD005DD85D /* SliderCell.m in Sources */,
+				4457FDDF1219E1CD005DD85D /* SettingsViewController.m in Sources */,
+				4457FDE01219E1CD005DD85D /* SettingsMetadataSource.m in Sources */,
+				4457FDE11219E1CD005DD85D /* SettingsEditorViewController.m in Sources */,
+				4457FDE21219E1CD005DD85D /* SettingsCell.m in Sources */,
+				4457FDE31219E1CD005DD85D /* NumberCell.m in Sources */,
+				4457FDE41219E1CD005DD85D /* MutableMetadataSource.m in Sources */,
+				4457FDE51219E1CD005DD85D /* MultiValueEditorViewController.m in Sources */,
+				4457FDE61219E1CD005DD85D /* MultiValueCell.m in Sources */,
+				4457FDE71219E1CD005DD85D /* ChildPaneCell.m in Sources */,
+				4457FDF31219E1F6005DD85D /* LabeledPickerView.m in Sources */,
+				4457FDF41219E1F6005DD85D /* KMTimeIntervalFormatter.m in Sources */,
+				4457FDF51219E1F6005DD85D /* IntegerPickerView.m in Sources */,
+				4457FE151219E5B9005DD85D /* ONMSSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

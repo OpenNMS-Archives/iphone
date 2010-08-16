@@ -13,6 +13,7 @@
 #import "AlarmListViewController.h"
 #import "AlarmViewController.h"
 #import "AboutViewController.h"
+#import "ONMSSettingsViewController.h"
 
 #import "ONMSDefaultStyleSheet.h"
 
@@ -25,6 +26,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
+  _settingsActive = NO;
+
   ONMSDefaultStyleSheet* styleSheet = [[ONMSDefaultStyleSheet alloc] init];
   [TTStyleSheet setGlobalStyleSheet:styleSheet];
   [styleSheet release];
@@ -44,10 +47,11 @@
 	[map from:@"onms://alarms" toSharedViewController:[AlarmListViewController class]];
 	[map from:@"onms://alarms/(initWithAlarmId:)" toSharedViewController:[AlarmViewController class]];
 	[map from:@"onms://nodes/(initWithNodeId:)" toSharedViewController:[NodeViewController class]];
+  [map from:@"onms://settings" toSharedViewController:[ONMSSettingsViewController class]];
 
 //	if (![navigator restoreViewControllers]) {
-//		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://outages"]];
-		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://tabbar"]];
+		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://outages"]];
+		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://settings"]];
 //	}
 }
 
@@ -66,5 +70,34 @@
   return YES;
 }
 
+/*
+- (void) openSettings
+{
+  if (_settingsActive) return;
+  
+	TTNavigator* navigator = [TTNavigator navigator];
+  _settingsActive = YES;
+  NSString* plist = [[NSBundle mainBundle] pathForResource:@"Root" ofType:@"plist" inDirectory:@"Settings.bundle"];
+  TTDINFO(@"root bundle path = %@", plist);
+  SettingsViewController* settingsviewcontroller = [[SettingsViewController alloc] initWithConfigFile:plist];
+  UINavigationController* unc = [[UINavigationController alloc] initWithRootViewController:settingsviewcontroller];
+  settingsviewcontroller.title = @"Settings";
+  UIBarButtonItem* button = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeSettings)] autorelease];
+  [button setEnabled:YES];
+  settingsviewcontroller.navigationItem.rightBarButtonItem = button;
+  [[navigator visibleViewController] presentModalViewController:unc animated:YES];
+  [settingsviewcontroller release];
+  [unc release];
+}
+
+- (void) closeSettings
+{
+	TTNavigator* navigator = [TTNavigator navigator];
+  [[navigator visibleViewController] dismissModalViewControllerAnimated:YES];
+  _settingsActive = NO;
+  
+//  [self checkSettingsState];
+}
+*/
 
 @end
