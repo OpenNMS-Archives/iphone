@@ -31,26 +31,35 @@
  *
  *******************************************************************************/
 
-#import "OutageModel.h"
+#import <Foundation/Foundation.h>
 
 
-@implementation OutageModel
-
-@synthesize outageId          = _outageId;
-@synthesize nodeId            = _nodeId;
-@synthesize ifLostService     = _ifLostService;
-@synthesize ifRegainedService = _ifRegainedService;
-@synthesize ipAddress         = _ipAddress;
-@synthesize host              = _host;
-@synthesize serviceName       = _serviceName;
-@synthesize severity          = _severity;
-@synthesize logMessage        = _logMessage;
-@synthesize desc              = _desc;
-@synthesize uei               = _uei;
-
-- (NSString*)description
-{
-  return [NSString stringWithFormat:@"OutageModel[%@/%@/%@/%@/%@]", _outageId, _ifLostService, _ipAddress, _serviceName, _severity];
+@interface SettingsModel : TTModel {
+  BOOL      _https;
+  NSString* _host;
+  NSString* _port;
+  NSString* _path;
+  NSString* _user;
+  NSString* _password;
+  
+  BOOL _isLoaded;
+  BOOL _isLoading;
+  BOOL _isOutdated;
 }
+
+@property (assign)          BOOL      https;
+@property (nonatomic, copy) NSString* host;
+@property (nonatomic, copy) NSString* port;
+@property (nonatomic, copy) NSString* path;
+@property (nonatomic, copy) NSString* user;
+@property (nonatomic, copy) NSString* password;
+
+@property (assign) BOOL isLoaded;
+@property (assign) BOOL isLoading;
+@property (assign) BOOL isOutdated;
+
+- (void)save;
+- (void)load;
+- (NSString*)url;
 
 @end

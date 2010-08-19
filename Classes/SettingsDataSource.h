@@ -31,26 +31,20 @@
  *
  *******************************************************************************/
 
-#import "OutageModel.h"
+#import <Foundation/Foundation.h>
+#import "SettingsModel.h"
 
-
-@implementation OutageModel
-
-@synthesize outageId          = _outageId;
-@synthesize nodeId            = _nodeId;
-@synthesize ifLostService     = _ifLostService;
-@synthesize ifRegainedService = _ifRegainedService;
-@synthesize ipAddress         = _ipAddress;
-@synthesize host              = _host;
-@synthesize serviceName       = _serviceName;
-@synthesize severity          = _severity;
-@synthesize logMessage        = _logMessage;
-@synthesize desc              = _desc;
-@synthesize uei               = _uei;
-
-- (NSString*)description
-{
-  return [NSString stringWithFormat:@"OutageModel[%@/%@/%@/%@/%@]", _outageId, _ifLostService, _ipAddress, _serviceName, _severity];
+@interface SettingsDataSource : TTSectionedDataSource {
+  SettingsModel* _settingsModel;
+  
+  UISwitch* _https;
+  UITextField* _host;
+  UITextField* _port;
+  UITextField* _path;
+  UITextField* _username;
+  UITextField* _password;
 }
+
+- (void)saveChanges;
 
 @end

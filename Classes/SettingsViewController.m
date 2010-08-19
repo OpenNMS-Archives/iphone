@@ -31,26 +31,55 @@
  *
  *******************************************************************************/
 
-#import "OutageModel.h"
+#import "SettingsViewController.h"
+#import "SettingsDataSource.h"
 
+#import "Three20UI/UIViewAdditions.h"
+#import "Three20UI/UITableViewAdditions.h"
 
-@implementation OutageModel
+@implementation SettingsViewController
 
-@synthesize outageId          = _outageId;
-@synthesize nodeId            = _nodeId;
-@synthesize ifLostService     = _ifLostService;
-@synthesize ifRegainedService = _ifRegainedService;
-@synthesize ipAddress         = _ipAddress;
-@synthesize host              = _host;
-@synthesize serviceName       = _serviceName;
-@synthesize severity          = _severity;
-@synthesize logMessage        = _logMessage;
-@synthesize desc              = _desc;
-@synthesize uei               = _uei;
-
-- (NSString*)description
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-  return [NSString stringWithFormat:@"OutageModel[%@/%@/%@/%@/%@]", _outageId, _ifLostService, _ipAddress, _serviceName, _severity];
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    self.title = @"Settings";
+    self.autoresizesForKeyboard = YES;
+    self.variableHeightRows = NO;
+  }
+  return self;
+}
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+  SettingsDataSource* ds = self.dataSource;
+  [ds saveChanges];
+  [super viewWillDisappear:animated];
+}
+
+- (void)closeView
+{
+  [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)loadView
+{
+	self.tableViewStyle = UITableViewStyleGrouped;
+  self.autoresizesForKeyboard = YES;
+  self.variableHeightRows = NO;
+  [super loadView];
+  
+  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(closeView)] autorelease] animated:YES];
+}
+
+- (void)createModel
+{
+  self.dataSource = [[[SettingsDataSource alloc] init] autorelease];
 }
 
 @end
+

@@ -1,10 +1,35 @@
-//
-//  OpenNMSAppDelegate.m
-//  OpenNMS
-//
-//  Created by Benjamin Reed on 8/2/10.
-//  Copyright __MyCompanyName__ 2010. All rights reserved.
-//
+/*******************************************************************************
+ * This file is part of the OpenNMS(R) iPhone Application.
+ * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
+ *
+ * Copyright (C) 2010 The OpenNMS Group, Inc.  All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc.:
+ *
+ *      51 Franklin Street
+ *      5th Floor
+ *      Boston, MA 02110-1301
+ *      USA
+ *
+ * For more information contact:
+ *
+ *      OpenNMS Licensing <license@opennms.org>
+ *      http://www.opennms.org/
+ *      http://www.opennms.com/
+ *
+ *******************************************************************************/
 
 #import "AppDelegate.h"
 #import "TabBarController.h"
@@ -13,7 +38,7 @@
 #import "AlarmListViewController.h"
 #import "AlarmViewController.h"
 #import "AboutViewController.h"
-#import "ONMSSettingsViewController.h"
+#import "SettingsViewController.h"
 
 #import "ONMSDefaultStyleSheet.h"
 
@@ -47,12 +72,14 @@
 	[map from:@"onms://alarms" toSharedViewController:[AlarmListViewController class]];
 	[map from:@"onms://alarms/(initWithAlarmId:)" toSharedViewController:[AlarmViewController class]];
 	[map from:@"onms://nodes/(initWithNodeId:)" toSharedViewController:[NodeViewController class]];
-  [map from:@"onms://settings" toSharedViewController:[ONMSSettingsViewController class]];
+  [map from:@"onms://settings" toModalViewController:[SettingsViewController class]];
 
-//	if (![navigator restoreViewControllers]) {
-		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://outages"]];
+	if (![navigator restoreViewControllers]) {
+    [navigator beginDelay];
+		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://tabbar"]];
 		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://settings"]];
-//	}
+    [navigator endDelay];
+	}
 }
 
 
@@ -69,35 +96,5 @@
   [[TTNavigator navigator] openURLAction:[TTURLAction actionWithURLPath:URL.absoluteString]];
   return YES;
 }
-
-/*
-- (void) openSettings
-{
-  if (_settingsActive) return;
-  
-	TTNavigator* navigator = [TTNavigator navigator];
-  _settingsActive = YES;
-  NSString* plist = [[NSBundle mainBundle] pathForResource:@"Root" ofType:@"plist" inDirectory:@"Settings.bundle"];
-  TTDINFO(@"root bundle path = %@", plist);
-  SettingsViewController* settingsviewcontroller = [[SettingsViewController alloc] initWithConfigFile:plist];
-  UINavigationController* unc = [[UINavigationController alloc] initWithRootViewController:settingsviewcontroller];
-  settingsviewcontroller.title = @"Settings";
-  UIBarButtonItem* button = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(closeSettings)] autorelease];
-  [button setEnabled:YES];
-  settingsviewcontroller.navigationItem.rightBarButtonItem = button;
-  [[navigator visibleViewController] presentModalViewController:unc animated:YES];
-  [settingsviewcontroller release];
-  [unc release];
-}
-
-- (void) closeSettings
-{
-	TTNavigator* navigator = [TTNavigator navigator];
-  [[navigator visibleViewController] dismissModalViewControllerAnimated:YES];
-  _settingsActive = NO;
-  
-//  [self checkSettingsState];
-}
-*/
 
 @end
