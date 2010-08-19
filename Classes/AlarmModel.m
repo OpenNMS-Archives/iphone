@@ -44,6 +44,7 @@
 @synthesize eventCount     = _eventCount;
 @synthesize ipAddress      = _ipAddress;
 @synthesize host           = _host;
+@synthesize label          = _label;
 @synthesize severity       = _severity;
 @synthesize logMessage     = _logMessage;
 @synthesize ackTime        = _ackTime;
@@ -92,6 +93,7 @@
     _eventCount = model.eventCount;
     _ipAddress = model.ipAddress;
     _host = model.host;
+    _label = model.label;
     _severity = model.severity;
     _logMessage = model.logMessage;
     _ackTime = model.ackTime;

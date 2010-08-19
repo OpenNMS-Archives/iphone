@@ -41,4 +41,8 @@
   return RGBCOLOR(54, 105, 3);
 }
 
+- (UIColor*)searchTableSeparatorColor {
+  return RGBCOLOR(54, 105, 3);
+}
+
 @end

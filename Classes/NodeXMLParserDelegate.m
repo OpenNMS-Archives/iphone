@@ -31,25 +31,25 @@
  *
  *******************************************************************************/
 
-#import "AlarmXMLParserDelegate.h"
+#import "NodeXMLParserDelegate.h"
 #import "ONMSDateFormatter.h"
 
-@implementation AlarmXMLParserDelegate
+@implementation NodeXMLParserDelegate
 
-@synthesize alarms = _alarms;
+@synthesize nodes = _nodes;
 
 - (id)init
 {
   if (self = [super init]) {
-    _alarms = [[NSMutableArray alloc] init];
+    _nodes = [[NSMutableArray alloc] init];
   }
   return self;
 }
 
 - (void)dealloc
 {
-  TT_RELEASE_SAFELY(_alarms);
-  TT_RELEASE_SAFELY(_currentAlarm);
+  TT_RELEASE_SAFELY(_nodes);
+  TT_RELEASE_SAFELY(_currentNode);
   TT_RELEASE_SAFELY(_currentElement);
   TT_RELEASE_SAFELY(_currentValue);
   TT_RELEASE_SAFELY(_dateFormatter);
@@ -71,11 +71,14 @@ didStartElement: (NSString*)elementName
  qualifiedName: (NSString*)qName
     attributes: (NSDictionary*)attributeDict
 {
-  if ([elementName isEqualToString:@"alarm"]) {
-    _currentAlarm = [[[AlarmModel alloc] init] autorelease];
-    _currentAlarm.alarmId = [attributeDict valueForKey:@"id"];
-    _currentAlarm.severity = [attributeDict valueForKey:@"severity"];
-    _currentAlarm.eventCount = [attributeDict valueForKey:@"count"];
+  if ([elementName isEqualToString:@"node"]) {
+    NSString* nodeId = [attributeDict valueForKey:@"id"];
+    if (nodeId) {
+      _currentNode = [[[NodeModel alloc] init] autorelease];
+      _currentNode.nodeId = [attributeDict valueForKey:@"id"];
+      _currentNode.label = [attributeDict valueForKey:@"label"];
+      TTDINFO(@"found a node: %@", _currentNode);
+    }
   } else {
     _currentElement = elementName;
   }
@@ -86,36 +89,11 @@ didStartElement: (NSString*)elementName
   namespaceURI: (NSString *)namespaceURI
  qualifiedName: (NSString *)qName
 {
-  if ([elementName isEqualToString:@"alarm"]) {
-    [_alarms addObject:_currentAlarm];
-    _currentAlarm = nil;
-  } else if ([elementName isEqualToString:@"uei"]) {
-    _currentAlarm.uei = _currentValue;
-  } else if ([elementName isEqualToString:@"firstEventTime"]) {
-    _currentAlarm.firstEventTime = [[self dateFormatter] dateFromString:_currentValue];
-  } else if ([elementName isEqualToString:@"lastEventTime"]) {
-    _currentAlarm.lastEventTime = [[self dateFormatter] dateFromString:_currentValue];
-  } else if ([elementName isEqualToString:@"ipAddress"]) {
-    _currentAlarm.ipAddress = _currentValue;
-  } else if ([elementName isEqualToString:@"host"]) {
-    _currentAlarm.host = _currentValue;
-  } else if ([elementName isEqualToString:@"logMessage"]) {
-    _currentAlarm.logMessage = _currentValue;
-  } else if ([elementName isEqualToString:@"ackTime"]) {
-    _currentAlarm.ackTime = [[self dateFormatter] dateFromString:_currentValue];
-  } else if ([elementName isEqualToString:@"ackUser"]) {
-    _currentAlarm.ackUser = _currentValue;
-  } else if ([elementName isEqualToString:@"parms"]) {
-    NSScanner* scanner = [NSScanner scannerWithString:_currentValue];
-    scanner.caseSensitive = YES;
-    NSString* label;
-    if ([scanner scanUpToString:@"=" intoString:&label]) {
-      if ([label isEqualToString:@"nodelabel"]) {
-        [scanner scanString:@"=" intoString:NULL];
-        if ([scanner scanUpToString:@"(" intoString:&label]) {
-          _currentAlarm.label = label;
-        }
-      }
+  if ([elementName isEqualToString:@"node"]) {
+    if (_currentNode) {
+      TTDINFO(@"current node = %@", _currentNode);
+      [_nodes addObject:_currentNode];
+      _currentNode = nil;
     }
   }
   _currentElement = nil;

@@ -79,13 +79,12 @@
 
 	for (id o in alarms) {
 		AlarmModel* alarm = (AlarmModel*)o;
-//		NSString* host = alarm.host;
-		NSString* host = nil;
-		if (!host) {
-			host = alarm.ipAddress;
+		NSString* label = alarm.label;
+		if (!label) {
+			label = alarm.ipAddress;
 		}
 		ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-		item.text = host;
+		item.text = label;
 		item.caption = [alarm.logMessage stringByRemovingHTMLTags];
 		item.timestamp = alarm.firstEventTime;
     item.severity = alarm.severity;

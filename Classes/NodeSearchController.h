@@ -36,7 +36,7 @@
 @protocol NodeSearchControllerDelegate;
 @class NodeListDataSource;
 
-@interface NodeSearchController : TTTableViewController <TTSearchTextFieldDelegate> {
+@interface NodeSearchController : TTTableViewController <TTSearchTextFieldDelegate, UITableViewDelegate> {
   id<NodeSearchControllerDelegate> _delegate;
 }
 

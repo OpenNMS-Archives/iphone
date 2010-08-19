@@ -32,20 +32,13 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "ONMSURLRequestModel.h"
 
-
-@interface NodeListModel : TTModel
+@interface NodeListModel : ONMSURLRequestModel
 {
-  BOOL _isLoaded;
-  BOOL _isLoading;
-  BOOL _isOutdated;
-  
   NSMutableDictionary* _nodes;
+  NSString* _search;
 }
-
-@property (assign) BOOL isLoaded;
-@property (assign) BOOL isLoading;
-@property (assign) BOOL isOutdated;
 
 @property (nonatomic, copy) NSDictionary* nodes;
 

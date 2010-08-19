@@ -31,28 +31,19 @@
  *
  *******************************************************************************/
 
-#import <Foundation/Foundation.h>
+#import "ONMSTableTextItemCell.h"
 
 
-@interface NodeModel : TTURLRequestModel
-{
-	NSString* _nodeId;
-	NSString* _label;
-	NSArray* _outages;
-  NSArray* _ipInterfaces;
-  NSArray* _snmpInterfaces;
-  NSArray* _events;
+@implementation ONMSTableTextItemCell
 
-	int _inProgressCount;
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
+    self.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
+    self.textLabel.adjustsFontSizeToFitWidth = YES;
+    self.textLabel.numberOfLines = 1;
+  }
+  
+  return self;
 }
-
-@property (nonatomic, copy) NSString* nodeId;
-@property (nonatomic, copy) NSString* label;
-@property (nonatomic, copy) NSArray* outages;
-@property (nonatomic, copy) NSArray* ipInterfaces;
-@property (nonatomic, copy) NSArray* snmpInterfaces;
-@property (nonatomic, copy) NSArray* events;
-
-- (id)initWithNodeId:(NSString*)nodeId;
 
 @end

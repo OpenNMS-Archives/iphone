@@ -48,7 +48,6 @@
 
     self.title = @"Nodes";
     self.tabBarItem = [[[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"display.png"] tag:0] autorelease];
-    self.dataSource = [[[NodeListDataSource alloc] init] autorelease];
   }
   return self;
 }
@@ -62,13 +61,20 @@
 {
   [super loadView];
 
-  self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
-
   TTTableViewController* searchController = [[[TTTableViewController alloc] init] autorelease];
   searchController.dataSource = [[[NodeSearchDataSource alloc] init] autorelease];
   self.searchViewController = searchController;
   self.tableView.tableHeaderView = _searchController.searchBar;
-  TTDINFO(@"searchBar = %@", _searchController.searchBar);
+  
+  self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
+  _searchController.searchBar.tintColor = TTSTYLEVAR(navigationBarTintColor);
+//  _searchController.searchResultsTableView.separatorColor = TTSTYLEVAR(searchTableSeparatorColor);
+//  self.tableView. = TTSTYLEVAR(searchTableSeparatorColor);
+}
+
+- (void)createModel
+{
+  self.dataSource = [TTSectionedDataSource dataSourceWithObjects:nil];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

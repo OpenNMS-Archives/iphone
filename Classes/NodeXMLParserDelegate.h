@@ -32,27 +32,16 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "NodeModel.h"
 
-
-@interface NodeModel : TTURLRequestModel
-{
-	NSString* _nodeId;
-	NSString* _label;
-	NSArray* _outages;
-  NSArray* _ipInterfaces;
-  NSArray* _snmpInterfaces;
-  NSArray* _events;
-
-	int _inProgressCount;
+@interface NodeXMLParserDelegate : NSObject <NSXMLParserDelegate> {
+  NSMutableArray* _nodes;
+  NodeModel* _currentNode;
+  NSString* _currentElement;
+  NSString* _currentValue;
+  NSDateFormatter* _dateFormatter;
 }
 
-@property (nonatomic, copy) NSString* nodeId;
-@property (nonatomic, copy) NSString* label;
-@property (nonatomic, copy) NSArray* outages;
-@property (nonatomic, copy) NSArray* ipInterfaces;
-@property (nonatomic, copy) NSArray* snmpInterfaces;
-@property (nonatomic, copy) NSArray* events;
-
-- (id)initWithNodeId:(NSString*)nodeId;
+@property (nonatomic, copy) NSMutableArray* nodes;
 
 @end

@@ -32,33 +32,21 @@
  *******************************************************************************/
 
 #import "NodeSearchDataSource.h"
+#import "Three20Core/NSArrayAdditions.h"
 
 @implementation NodeSearchDataSource
 
 - (id)init
 {
   if (self = [super init]) {
-    _loading = NO;
-    _loaded = NO;
   }
   return self;
 }
 
-- (void)tableViewDidLoadModel:(UITableView*)tableView
-{
-	NSMutableArray* items = [[NSMutableArray alloc] init];
-	NSMutableArray* sections = [[NSMutableArray alloc] init];
-
-	
-	self.items = items;
-	self.sections = sections;
-	
-	TT_RELEASE_SAFELY(items);
-	TT_RELEASE_SAFELY(sections);
-}
-
 - (void)search:(NSString*)text {
+  [self.delegates perform:@selector(modelDidStartLoad:) withObject:self];
   [_nodeListModel search:text];
+  [self.delegates perform:@selector(modelDidFinishLoad:) withObject:self];
 }
 
 - (NSString*)titleForLoading:(BOOL)reloading {

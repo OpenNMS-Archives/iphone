@@ -37,8 +37,6 @@
 @class NodeModel;
 
 @interface NodeSearchDataSource : NodeListDataSource <TTURLRequestDelegate> {
-  BOOL _loading;
-  BOOL _loaded;
 }
 
 @end

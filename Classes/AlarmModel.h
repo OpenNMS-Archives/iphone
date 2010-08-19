@@ -42,6 +42,7 @@
   NSString* _eventCount;
 	NSString* _ipAddress;
 	NSString* _host;
+  NSString* _label;
 	NSString* _severity;
 	NSString* _logMessage;
   NSDate*   _ackTime;
@@ -55,6 +56,7 @@
 @property (nonatomic, copy) NSString* eventCount;
 @property (nonatomic, copy) NSString* ipAddress;
 @property (nonatomic, copy) NSString* host;
+@property (nonatomic, copy) NSString* label;
 @property (nonatomic, copy) NSString* severity;
 @property (nonatomic, copy) NSString* logMessage;
 @property (nonatomic, copy) NSDate*   ackTime;

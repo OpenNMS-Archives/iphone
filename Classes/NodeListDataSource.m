@@ -35,8 +35,7 @@
 #import "NodeListModel.h"
 #import "NodeModel.h"
 
-#import "ONMSSeverityItem.h"
-#import "ONMSSeverityItemCell.h"
+#import "ONMSTableTextItemCell.h"
 
 #import "Three20Core/NSStringAdditions.h"
 
@@ -67,25 +66,34 @@
   return [TTTableViewDataSource lettersForSectionsWithSearch:YES summary:NO];
 }
 
+- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object
+{
+  if ([object isKindOfClass:[TTTableTextItem class]]) {
+    return [ONMSTableTextItemCell class];
+  } else {
+    return [super tableView:tableView cellClassForObject:object];
+  }
+}
+
 - (void)tableViewDidLoadModel:(UITableView*)tableView
 {
   self.items = [NSMutableArray array];
   self.sections = [NSMutableArray array];
 
   NSMutableDictionary* groups = [NSMutableDictionary dictionary];
-  
-  id key;
-  NSEnumerator* en = [_nodeListModel.nodes keyEnumerator];
-  while (key = [en nextObject]) {
-    NSString* name = [_nodeListModel.nodes valueForKey:key];
-    NSString* letter = [NSString stringWithFormat:@"%c", [name characterAtIndex:0]];
+
+  NSArray* keys = [[_nodeListModel.nodes allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+  for (id name in keys) {
+    NSString* key = [_nodeListModel.nodes valueForKey:name];
+    TTDINFO(@"%@ = %@", key, name);
+    NSString* letter = [[NSString stringWithFormat:@"%c", [name characterAtIndex:0]] lowercaseString];
     NSMutableArray* section = [groups objectForKey:letter];
     if (!section) {
       section = [NSMutableArray array];
       [groups setObject:section forKey:letter];
     }
     
-    TTTableItem* item = [TTTableTextItem itemWithText:name URL:nil];
+    TTTableTextItem* item = [TTTableTextItem itemWithText:name URL:[@"onms://nodes/" stringByAppendingString:key]];
     [section addObject:item];
   }
 

@@ -83,7 +83,7 @@
   UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:[@"An error occurred making the request: " stringByAppendingString:[error localizedDescription]]
                                                   delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
   [alert show];
-  [super requestDidFinishLoad:request];
+  [super request:request didFailLoadWithError:error];
 }
 
 @end

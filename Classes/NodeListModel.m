@@ -32,71 +32,68 @@
  *******************************************************************************/
 
 #import "NodeListModel.h"
+#import "NodeXMLParserDelegate.h"
 #import "Three20Core/NSArrayAdditions.h"
 
 @implementation NodeListModel
-
-@synthesize isLoaded = _isLoaded;
-@synthesize isLoading = _isLoading;
-@synthesize isOutdated = _isOutdated;
 
 @synthesize nodes = _nodes;
 
 - (id)init
 {
   if (self = [super init]) {
-    _isLoaded = NO;
-    _isLoading = NO;
-    _isOutdated = NO;
+    _nodes = [[NSMutableDictionary alloc] init];
   }
   return self;
 }
 
-- (BOOL)isLoaded
-{
-  return _isLoaded;
-}
-
-- (BOOL)isLoading
-{
-  return _isLoading;
-}
-
-- (BOOL)isLoadingMore
-{
-  return NO;
-}
-
-- (BOOL)isOutdated
-{
-  return _isOutdated;
-}
-
 - (void)search:(NSString*)text
 {
-  TTDINFO(@"searching");
+  _search = text;
   [self load:TTURLRequestCachePolicyNone more:NO];
 }
 
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
-  TTDINFO(@"load:more");
-  [self didStartLoad];
-  _isLoading = YES;
-
-  [_nodes setValue:@"google" forKey:@"1"];
-  [_nodes setValue:@"yahoo" forKey:@"2"];
-  [_nodes setValue:@"opennms" forKey:@"3"];
-  
-  _isLoaded = YES;
-  _isLoading = NO;
-  _isOutdated = NO;
-  [self didFinishLoad];
+	if (!self.isLoading) {
+    if (_search && [_search length] > 0) {
+      NSString* escaped = [_search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+      NSString* url = [self getURL:[NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@%%25&ipInterface.ipAddress=%@%%25&ipInterface.ipHostName=%@%%25", escaped, escaped, escaped]];
+      TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
+      request.cachePolicy = cachePolicy;
+      
+      id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
+      request.response = response;
+      TT_RELEASE_SAFELY(response);
+      
+      [request send];
+    } else {
+      [_nodes removeAllObjects];
+      [self didFinishLoad];
+    }
+	}
 }
 
-- (void)invalidate:(BOOL)erase
+- (void)requestDidFinishLoad:(TTURLRequest*)request
 {
-  _isOutdated = YES;
+	TTURLDataResponse* response = request.response;
+  
+  NSXMLParser* parser = [[NSXMLParser alloc] initWithData:response.data];
+  NodeXMLParserDelegate* npd = [[NodeXMLParserDelegate alloc] init];
+  parser.delegate = npd;
+  [parser parse];
+
+  TTDINFO(@"nodes = %@", npd.nodes);
+  [_nodes removeAllObjects];
+  for (id n in npd.nodes) {
+    NodeModel* node = n;
+    [_nodes setValue:node.nodeId forKey:node.label];
+  }
+  
+  TT_RELEASE_SAFELY(npd);
+  TT_RELEASE_SAFELY(parser);
+
+	[super requestDidFinishLoad:request];
 }
 
 @end
