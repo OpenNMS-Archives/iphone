@@ -31,25 +31,42 @@
  *
  *******************************************************************************/
 
-#import "TabBarController.h"
-#import "Three20UI/Three20UI+Additions.h"
+#import "NodeSearchDataSource.h"
 
-@implementation TabBarController
+@implementation NodeSearchDataSource
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (id)init
 {
-  return YES;
+  if (self = [super init]) {
+    _loading = NO;
+    _loaded = NO;
+  }
+  return self;
 }
 
-- (void)viewDidLoad
+- (void)tableViewDidLoadModel:(UITableView*)tableView
 {
-	[self setTabURLs:[NSArray arrayWithObjects:
-                    @"onms://outages",
-                    @"onms://alarms",
-                    @"onms://nodes",
-                    @"onms://about",
-                    nil]
-	 ];
+	NSMutableArray* items = [[NSMutableArray alloc] init];
+	NSMutableArray* sections = [[NSMutableArray alloc] init];
+
+	
+	self.items = items;
+	self.sections = sections;
+	
+	TT_RELEASE_SAFELY(items);
+	TT_RELEASE_SAFELY(sections);
+}
+
+- (void)search:(NSString*)text {
+  [_nodeListModel search:text];
+}
+
+- (NSString*)titleForLoading:(BOOL)reloading {
+  return @"Searching...";
+}
+
+- (NSString*)titleForNoData {
+  return @"No nodes found.";
 }
 
 @end

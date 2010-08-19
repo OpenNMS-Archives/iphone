@@ -31,25 +31,13 @@
  *
  *******************************************************************************/
 
-#import "TabBarController.h"
-#import "Three20UI/Three20UI+Additions.h"
+#import <Foundation/Foundation.h>
+#import "NodeListModel.h"
 
-@implementation TabBarController
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-  return YES;
+@interface NodeListDataSource : TTSectionedDataSource {
+  NodeListModel* _nodeListModel;
 }
 
-- (void)viewDidLoad
-{
-	[self setTabURLs:[NSArray arrayWithObjects:
-                    @"onms://outages",
-                    @"onms://alarms",
-                    @"onms://nodes",
-                    @"onms://about",
-                    nil]
-	 ];
-}
+@property (nonatomic, readonly) NodeListModel* nodeListModel;
 
 @end

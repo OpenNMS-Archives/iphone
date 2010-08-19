@@ -34,6 +34,7 @@
 #import "AppDelegate.h"
 #import "TabBarController.h"
 #import "OutageListViewController.h"
+#import "NodeSearchController.h"
 #import "NodeViewController.h"
 #import "AlarmListViewController.h"
 #import "AlarmViewController.h"
@@ -71,13 +72,17 @@
 	[map from:@"onms://outages" toSharedViewController:[OutageListViewController class]];
 	[map from:@"onms://alarms" toSharedViewController:[AlarmListViewController class]];
 	[map from:@"onms://alarms/(initWithAlarmId:)" toSharedViewController:[AlarmViewController class]];
+  [map from:@"onms://nodes" toSharedViewController:[NodeSearchController class]];
 	[map from:@"onms://nodes/(initWithNodeId:)" toSharedViewController:[NodeViewController class]];
   [map from:@"onms://settings" toModalViewController:[SettingsViewController class]];
 
 	if (![navigator restoreViewControllers]) {
     [navigator beginDelay];
 		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://tabbar"]];
-		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://settings"]];
+    NSString* user = [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"];
+    if (user == nil) {
+      [navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://settings"]];
+    }
     [navigator endDelay];
 	}
 }

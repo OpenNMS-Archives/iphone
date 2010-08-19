@@ -27,6 +27,11 @@
 		442C9FB212148A3100147B53 /* AlarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 442C9FB012148A3100147B53 /* AlarmViewController.m */; };
 		442CA1EF12158B1800147B53 /* AlarmXMLParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 442CA1EE12158B1800147B53 /* AlarmXMLParserDelegate.m */; };
 		442CA24D1215920B00147B53 /* ONMSDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 442CA24C1215920B00147B53 /* ONMSDateFormatter.m */; };
+		44397428121D775200CE638D /* NodeSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44397426121D775200CE638D /* NodeSearchController.m */; };
+		4439744C121D786D00CE638D /* NodeSearchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4439744A121D786D00CE638D /* NodeSearchDataSource.m */; };
+		443974B8121D86D300CE638D /* NodeListDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 443974B7121D86D300CE638D /* NodeListDataSource.m */; };
+		443974BB121D87DB00CE638D /* NodeListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 443974BA121D87DB00CE638D /* NodeListModel.m */; };
+		4439762C121DB0B300CE638D /* MockDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4439762B121DB0B300CE638D /* MockDataSource.m */; };
 		4452000512084BCE00AEEFEC /* NodeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000212084BCE00AEEFEC /* NodeDataSource.m */; };
 		4452000612084BCE00AEEFEC /* NodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000412084BCE00AEEFEC /* NodeViewController.m */; };
 		4452000A12084CE500AEEFEC /* NodeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000912084CE500AEEFEC /* NodeModel.m */; };
@@ -264,6 +269,16 @@
 		442CA1EE12158B1800147B53 /* AlarmXMLParserDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmXMLParserDelegate.m; sourceTree = "<group>"; };
 		442CA24B1215920B00147B53 /* ONMSDateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSDateFormatter.h; sourceTree = "<group>"; };
 		442CA24C1215920B00147B53 /* ONMSDateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONMSDateFormatter.m; sourceTree = "<group>"; };
+		44397426121D775200CE638D /* NodeSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeSearchController.m; sourceTree = "<group>"; };
+		44397427121D775200CE638D /* NodeSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeSearchController.h; sourceTree = "<group>"; };
+		4439744A121D786D00CE638D /* NodeSearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeSearchDataSource.m; sourceTree = "<group>"; };
+		4439744B121D786D00CE638D /* NodeSearchDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeSearchDataSource.h; sourceTree = "<group>"; };
+		443974B6121D86D300CE638D /* NodeListDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeListDataSource.h; sourceTree = "<group>"; };
+		443974B7121D86D300CE638D /* NodeListDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeListDataSource.m; sourceTree = "<group>"; };
+		443974B9121D87DB00CE638D /* NodeListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeListModel.h; sourceTree = "<group>"; };
+		443974BA121D87DB00CE638D /* NodeListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeListModel.m; sourceTree = "<group>"; };
+		4439762A121DB0B300CE638D /* MockDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDataSource.h; path = three20/samples/TTCatalog/Classes/MockDataSource.h; sourceTree = SOURCE_ROOT; };
+		4439762B121DB0B300CE638D /* MockDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockDataSource.m; path = three20/samples/TTCatalog/Classes/MockDataSource.m; sourceTree = SOURCE_ROOT; };
 		4452000112084BCE00AEEFEC /* NodeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeDataSource.h; sourceTree = "<group>"; };
 		4452000212084BCE00AEEFEC /* NodeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeDataSource.m; sourceTree = "<group>"; };
 		4452000312084BCE00AEEFEC /* NodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeViewController.h; sourceTree = "<group>"; };
@@ -360,6 +375,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				443974A0121D7EBB00CE638D /* Search */,
 				447EE4641208A82100F3E535 /* Miscellaneous */,
 				44289DC3121C3212006FC906 /* Settings */,
 				4485511D120A17FD000173CD /* Alarms */,
@@ -511,9 +527,26 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
+		443974A0121D7EBB00CE638D /* Search */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
 		4452000712084CBC00AEEFEC /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
+				4439762A121DB0B300CE638D /* MockDataSource.h */,
+				4439762B121DB0B300CE638D /* MockDataSource.m */,
+				44397427121D775200CE638D /* NodeSearchController.h */,
+				44397426121D775200CE638D /* NodeSearchController.m */,
+				4439744B121D786D00CE638D /* NodeSearchDataSource.h */,
+				4439744A121D786D00CE638D /* NodeSearchDataSource.m */,
+				443974B6121D86D300CE638D /* NodeListDataSource.h */,
+				443974B7121D86D300CE638D /* NodeListDataSource.m */,
+				443974B9121D87DB00CE638D /* NodeListModel.h */,
+				443974BA121D87DB00CE638D /* NodeListModel.m */,
 				4452000312084BCE00AEEFEC /* NodeViewController.h */,
 				4452000412084BCE00AEEFEC /* NodeViewController.m */,
 				4452000112084BCE00AEEFEC /* NodeDataSource.h */,
@@ -933,6 +966,11 @@
 				44289DC7121C325D006FC906 /* SettingsDataSource.m in Sources */,
 				44289DCA121C32D6006FC906 /* SettingsModel.m in Sources */,
 				4428A10A121CDD79006FC906 /* ONMSURLRequestModel.m in Sources */,
+				44397428121D775200CE638D /* NodeSearchController.m in Sources */,
+				4439744C121D786D00CE638D /* NodeSearchDataSource.m in Sources */,
+				443974B8121D86D300CE638D /* NodeListDataSource.m in Sources */,
+				443974BB121D87DB00CE638D /* NodeListModel.m in Sources */,
+				4439762C121DB0B300CE638D /* MockDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

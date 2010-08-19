@@ -31,25 +31,72 @@
  *
  *******************************************************************************/
 
-#import "TabBarController.h"
-#import "Three20UI/Three20UI+Additions.h"
+#import "NodeListModel.h"
+#import "Three20Core/NSArrayAdditions.h"
 
-@implementation TabBarController
+@implementation NodeListModel
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+@synthesize isLoaded = _isLoaded;
+@synthesize isLoading = _isLoading;
+@synthesize isOutdated = _isOutdated;
+
+@synthesize nodes = _nodes;
+
+- (id)init
 {
-  return YES;
+  if (self = [super init]) {
+    _isLoaded = NO;
+    _isLoading = NO;
+    _isOutdated = NO;
+  }
+  return self;
 }
 
-- (void)viewDidLoad
+- (BOOL)isLoaded
 {
-	[self setTabURLs:[NSArray arrayWithObjects:
-                    @"onms://outages",
-                    @"onms://alarms",
-                    @"onms://nodes",
-                    @"onms://about",
-                    nil]
-	 ];
+  return _isLoaded;
+}
+
+- (BOOL)isLoading
+{
+  return _isLoading;
+}
+
+- (BOOL)isLoadingMore
+{
+  return NO;
+}
+
+- (BOOL)isOutdated
+{
+  return _isOutdated;
+}
+
+- (void)search:(NSString*)text
+{
+  TTDINFO(@"searching");
+  [self load:TTURLRequestCachePolicyNone more:NO];
+}
+
+- (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
+{
+  TTDINFO(@"load:more");
+  [self didStartLoad];
+  _isLoading = YES;
+
+  [_nodes setValue:@"google" forKey:@"1"];
+  [_nodes setValue:@"yahoo" forKey:@"2"];
+  [_nodes setValue:@"opennms" forKey:@"3"];
+  
+  _isLoaded = YES;
+  _isLoading = NO;
+  _isOutdated = NO;
+  [self didFinishLoad];
+}
+
+- (void)invalidate:(BOOL)erase
+{
+  _isOutdated = YES;
 }
 
 @end

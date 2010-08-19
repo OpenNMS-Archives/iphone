@@ -31,25 +31,21 @@
  *
  *******************************************************************************/
 
-#import "TabBarController.h"
-#import "Three20UI/Three20UI+Additions.h"
+#import <UIKit/UIKit.h>
 
-@implementation TabBarController
+@protocol NodeSearchControllerDelegate;
+@class NodeListDataSource;
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-  return YES;
+@interface NodeSearchController : TTTableViewController <TTSearchTextFieldDelegate> {
+  id<NodeSearchControllerDelegate> _delegate;
 }
 
-- (void)viewDidLoad
-{
-	[self setTabURLs:[NSArray arrayWithObjects:
-                    @"onms://outages",
-                    @"onms://alarms",
-                    @"onms://nodes",
-                    @"onms://about",
-                    nil]
-	 ];
-}
+@property(nonatomic,assign) id<NodeSearchControllerDelegate> delegate;
+
+@end
+
+@protocol NodeSearchControllerDelegate <NSObject>
+
+- (void)nodeSearchController:(NodeSearchController*)controller didSelectObject:(id)object;
 
 @end
