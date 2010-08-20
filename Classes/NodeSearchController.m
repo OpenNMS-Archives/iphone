@@ -75,7 +75,7 @@
 
   self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
   _searchController.searchBar.tintColor = TTSTYLEVAR(navigationBarTintColor);
-  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNode)] autorelease] animated:YES];
+//  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNode)] autorelease] animated:YES];
 }
 
 - (void)createModel
