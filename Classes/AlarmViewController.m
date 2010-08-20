@@ -35,6 +35,8 @@
 #import "AlarmDataSource.h"
 #import "Severity.h"
 #import "RESTURLRequest.h"
+#import "ONMSURLRequestModel.h"
+#import "SettingsModel.h"
 
 #import "Three20UI/UIViewAdditions.h"
 #import "Three20UI/UITableViewAdditions.h"
@@ -45,11 +47,11 @@
 
 - (id)initWithAlarmId:(NSString*)aid
 {
-	if (self = [self init]) {
-		self.alarmId = [aid retain];
-		self.title = [@"Alarm #" stringByAppendingString:aid];
-	}
-	return self;
+  if (self = [self init]) {
+    self.alarmId = [aid retain];
+    self.title = [@"Alarm #" stringByAppendingString:aid];
+  }
+  return self;
 }
 
 - (void)dealloc
@@ -92,9 +94,9 @@
 
 - (void)loadView
 {
-	self.tableViewStyle = UITableViewStyleGrouped;
-	self.variableHeightRows = YES;
-	[super loadView];
+  self.tableViewStyle = UITableViewStyleGrouped;
+  self.variableHeightRows = YES;
+  [super loadView];
 
   UIActivityIndicatorView* spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
   [spinner startAnimating];
@@ -113,7 +115,8 @@
 {
   [self.navigationItem setRightBarButtonItem:_activityItem animated:YES];
 
-  NSString* url = [@"http://admin:admin@sin.local:8980/opennms/rest/acks" stringByAppendingFormat:@"?alarmId=%@&action=%@", _alarmId, action];
+  NSString* url = [[ONMSURLRequestModel getURL:@"/acks"] stringByAppendingFormat:@"?alarmId=%@&action=%@", _alarmId, action];
+
   RESTURLRequest* request = [RESTURLRequest requestWithURL:url delegate:self];
   request.cachePolicy = TTURLRequestCachePolicyNone;
   request.httpMethod = @"POST";
@@ -127,25 +130,40 @@
   [request send];
 }
 
+- (void)request:(TTURLRequest*)request didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+  if (_inProgress) {
+    TTDINFO(@"got a 2nd auth challenge, password is wrong");
+    [[challenge sender] cancelAuthenticationChallenge:challenge];
+  } else {
+    _inProgress = YES;
+    SettingsModel* settings = [[SettingsModel alloc] init];
+    [settings load];
+    NSURLCredential *cred = [NSURLCredential credentialWithUser:settings.user
+                                                       password:settings.password persistence:NSURLCredentialPersistenceForSession];
+    [settings release];
+    [[challenge sender] useCredential:cred forAuthenticationChallenge:challenge];
+  }
+} 
+
 - (void)request:(TTURLRequest*)request didFailLoadWithError:(NSError*)error
 {
+  _inProgress = NO;
   [self.navigationItem setRightBarButtonItem:nil animated:YES];
-  TTDWARNING(@"failed ack event %@: %@", request.urlPath, [error description]);
+  TTDWARNING(@"failed ack event %@: %@", request.urlPath, [error localizedDescription]);
+  UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:[@"An error occurred making the request: " stringByAppendingString:[error localizedDescription]]
+                                                  delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+  [alert show];
 }
 
 - (void)requestDidFinishLoad:(TTURLRequest*)request
 {
-  TTDINFO(@"requestDidFinishLoad:%@ responded from cache: %@", request, request.respondedFromCache? @"YES":@"NO");
-
-//  TTURLDataResponse* response = request.response;
-//	NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
-//  TTDINFO(@"response = %@", string);
-
+  _inProgress = NO;
   [self.navigationItem setRightBarButtonItem:nil animated:YES];
   [self invalidateModel];
   [self invalidateView];
   [self.model invalidate:YES];
-  [[TTNavigator navigator] openURLAction:[TTURLAction actionWithURLPath:[@"onms://alarms/" stringByAppendingString:_alarmId]]];
+  [[TTNavigator navigator] openURLAction:[TTURLAction actionWithURLPath:[@"onms://alarms/get/" stringByAppendingString:_alarmId]]];
 }
 
 - (void)acknowledge

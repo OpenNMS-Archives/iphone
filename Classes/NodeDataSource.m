@@ -50,22 +50,22 @@
 
 - (id)initWithNodeId:(NSString*)nodeId
 {
-	if (self = [super init]) {
-		_nodeModel = [[[NodeModel alloc] initWithNodeId:nodeId] retain];
-	}
-	return self;
+  if (self = [super init]) {
+    _nodeModel = [[[NodeModel alloc] initWithNodeId:nodeId] retain];
+  }
+  return self;
 }
 
 - (void)dealloc
 {
-	// Don't do this!  It's done for us.
-	// TT_RELEASE_SAFELY(_nodeModel);
-	[super dealloc];
+  // Don't do this!  It's done for us.
+  // TT_RELEASE_SAFELY(_nodeModel);
+  [super dealloc];
 }
 
 - (id<TTModel>)model
 {
-	return _nodeModel;
+  return _nodeModel;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,57 +81,57 @@
 
 - (void)tableViewDidLoadModel:(UITableView*)tableView
 {
-	NSMutableArray* items = [[NSMutableArray alloc] init];
-	NSMutableArray* sections = [[NSMutableArray alloc] init];
+  NSMutableArray* items = [[NSMutableArray alloc] init];
+  NSMutableArray* sections = [[NSMutableArray alloc] init];
 
-	_label = _nodeModel.label;
+  _label = _nodeModel.label;
 
 //  [sections addObject:_label];
 //  [items addObject:[NSArray array]];
   [sections addObject:@""];
   [items addObject:[NSArray arrayWithObject:[TTTableSummaryItem itemWithText:_label]]];
 
-	if (_nodeModel.outages && [_nodeModel.outages count] > 0) {
-		[sections addObject:@"Outages"];
+  if (_nodeModel.outages && [_nodeModel.outages count] > 0) {
+    [sections addObject:@"Outages"];
 
-		NSMutableArray* outageItems = [NSMutableArray arrayWithCapacity:[_nodeModel.outages count]];
-		for (id o in _nodeModel.outages) {
-			OutageModel* outage = (OutageModel*)o;
-//		NSString* host = outage.host;
-			NSString* host = nil;
-			if (!host) {
-				host = outage.ipAddress;
-			}
+    NSMutableArray* outageItems = [NSMutableArray arrayWithCapacity:[_nodeModel.outages count]];
+    for (id o in _nodeModel.outages) {
+      OutageModel* outage = (OutageModel*)o;
+//    NSString* host = outage.host;
+      NSString* host = nil;
+      if (!host) {
+        host = outage.ipAddress;
+      }
       ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-			item.text = [host stringByAppendingFormat:@"/%@", outage.serviceName];
+      item.text = [host stringByAppendingFormat:@"/%@", outage.serviceName];
       item.caption = [outage.logMessage stringByRemovingHTMLTags];
-			item.timestamp = outage.ifLostService;
+      item.timestamp = outage.ifLostService;
       item.severity = outage.severity;
-			[outageItems addObject:item];
-		}
-		[items addObject:outageItems];
-	}
-	
-	if (_nodeModel.ipInterfaces && [_nodeModel.ipInterfaces count] > 0) {
-		[sections addObject:@"IP Interfaces"];
+      [outageItems addObject:item];
+    }
+    [items addObject:outageItems];
+  }
+  
+  if (_nodeModel.ipInterfaces && [_nodeModel.ipInterfaces count] > 0) {
+    [sections addObject:@"IP Interfaces"];
 
-		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_nodeModel.ipInterfaces count]];
-		for (id i in _nodeModel.ipInterfaces) {
-			IPInterfaceModel* interface = (IPInterfaceModel*)i;
+    NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_nodeModel.ipInterfaces count]];
+    for (id i in _nodeModel.ipInterfaces) {
+      IPInterfaceModel* interface = (IPInterfaceModel*)i;
       TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
       item.text = interface.hostName;
       item.subtitle = [NSString stringWithFormat:@"%@ (%@)", interface.ipAddress, [interface.managed isEqual:@"M"]? @"Managed" : @"Unmanaged"];
       [interfaceItems addObject:item];
-		}
-		[items addObject:interfaceItems];
-	}
-	
-	if (_nodeModel.snmpInterfaces && [_nodeModel.snmpInterfaces count] > 0) {
-		[sections addObject:@"SNMP Interfaces"];
+    }
+    [items addObject:interfaceItems];
+  }
+  
+  if (_nodeModel.snmpInterfaces && [_nodeModel.snmpInterfaces count] > 0) {
+    [sections addObject:@"SNMP Interfaces"];
     
-		NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_nodeModel.snmpInterfaces count]];
-		for (id s in _nodeModel.snmpInterfaces) {
-			SNMPInterfaceModel* interface = s;
+    NSMutableArray* interfaceItems = [NSMutableArray arrayWithCapacity:[_nodeModel.snmpInterfaces count]];
+    for (id s in _nodeModel.snmpInterfaces) {
+      SNMPInterfaceModel* interface = s;
       TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
       NSString* text;
       if (TTIsStringWithAnyText(interface.ifDescr)) {
@@ -142,32 +142,32 @@
       item.text = text;
       item.subtitle = [NSString stringWithFormat:@"%@ (%@)", interface.ipAddress, interface.ifSpeed];
       [interfaceItems addObject:item];
-		}
-		[items addObject:interfaceItems];
-	}
-	
-	if (_nodeModel.events && [_nodeModel.events count] > 0) {
-		[sections addObject:@"Events"];
+    }
+    [items addObject:interfaceItems];
+  }
+  
+  if (_nodeModel.events && [_nodeModel.events count] > 0) {
+    [sections addObject:@"Events"];
     
-		NSMutableArray* eventItems = [NSMutableArray arrayWithCapacity:[_nodeModel.events count]];
-		for (id e in _nodeModel.events) {
-			EventModel* event = e;
+    NSMutableArray* eventItems = [NSMutableArray arrayWithCapacity:[_nodeModel.events count]];
+    for (id e in _nodeModel.events) {
+      EventModel* event = e;
       ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-			item.text = [event.uei stringByReplacingOccurrencesOfString:@"uei.opennms.org/" withString:@""];
+      item.text = [event.uei stringByReplacingOccurrencesOfString:@"uei.opennms.org/" withString:@""];
       item.caption = [event.logMessage stringByRemovingHTMLTags];
-			item.timestamp = event.timestamp;
+      item.timestamp = event.timestamp;
       item.severity = event.severity;
       
       [eventItems addObject:item];
-		}
-		[items addObject:eventItems];
-	}
-	
-	self.items = items;
-	self.sections = sections;
-	
-	TT_RELEASE_SAFELY(items);
-	TT_RELEASE_SAFELY(sections);
+    }
+    [items addObject:eventItems];
+  }
+  
+  self.items = items;
+  self.sections = sections;
+  
+  TT_RELEASE_SAFELY(items);
+  TT_RELEASE_SAFELY(sections);
 }
 
 @end

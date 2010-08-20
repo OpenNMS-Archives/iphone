@@ -44,22 +44,22 @@
 
 - (id)init
 {
-	if (self = [super init]) {
-		_outageListModel = [[OutageListModel alloc] init];
-	}
-	return self;
+  if (self = [super init]) {
+    _outageListModel = [[OutageListModel alloc] init];
+  }
+  return self;
 }
 
 - (void)dealloc
 {
-	// Don't do this!  It's done for us.
-	// TT_RELEASE_SAFELY(_outageListModel);
-	[super dealloc];
+  // Don't do this!  It's done for us.
+  // TT_RELEASE_SAFELY(_outageListModel);
+  [super dealloc];
 }
 
 - (id<TTModel>)model
 {
-	return _outageListModel;
+  return _outageListModel;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,28 +74,28 @@
 
 - (void)tableViewDidLoadModel:(UITableView*)tableView
 {
-	NSMutableArray* items = [[NSMutableArray alloc] init];
-	NSArray* outages = _outageListModel.outages;
+  NSMutableArray* items = [[NSMutableArray alloc] init];
+  NSArray* outages = _outageListModel.outages;
 
-	for (id o in outages) {
-		OutageModel* outage = (OutageModel*)o;
-//		NSString* host = outage.host;
-		NSString* host = nil;
-		if (!host) {
-			host = outage.ipAddress;
-		}
+  for (id o in outages) {
+    OutageModel* outage = (OutageModel*)o;
+//    NSString* host = outage.host;
+    NSString* host = nil;
+    if (!host) {
+      host = outage.ipAddress;
+    }
     ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
     item.text = [host stringByAppendingFormat:@"/%@", outage.serviceName];
     item.caption = [outage.logMessage stringByRemovingHTMLTags];
     item.timestamp = outage.ifLostService;
     item.severity = outage.severity;
-		item.URL = [@"onms://nodes/" stringByAppendingString:outage.nodeId];
-		[items addObject:item];
-	}
-	
-	self.items = items;
-	
-	TT_RELEASE_SAFELY(items);
+    item.URL = [@"onms://nodes/get/" stringByAppendingString:outage.nodeId];
+    [items addObject:item];
+  }
+  
+  self.items = items;
+  
+  TT_RELEASE_SAFELY(items);
 }
 
 @end

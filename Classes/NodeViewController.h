@@ -35,7 +35,7 @@
 
 
 @interface NodeViewController : TTTableViewController {
-	NSString* _nodeId;
+  NSString* _nodeId;
 }
 
 @property (nonatomic, copy) NSString* nodeId;

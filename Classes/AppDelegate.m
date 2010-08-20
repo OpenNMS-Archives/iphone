@@ -40,6 +40,7 @@
 #import "AlarmViewController.h"
 #import "AboutViewController.h"
 #import "SettingsViewController.h"
+#import "IPAddressInputController.h"
 
 #import "ONMSDefaultStyleSheet.h"
 
@@ -58,33 +59,34 @@
   [TTStyleSheet setGlobalStyleSheet:styleSheet];
   [styleSheet release];
 
-	TTNavigator* navigator = [TTNavigator navigator];
-//	navigator.persistenceMode = TTNavigatorPersistenceModeAll;
+  TTNavigator* navigator = [TTNavigator navigator];
+//  navigator.persistenceMode = TTNavigatorPersistenceModeAll;
   navigator.persistenceMode = TTNavigatorPersistenceModeNone;
   navigator.supportsShakeToReload = YES;
 
-	TTURLMap* map = navigator.URLMap;
+  TTURLMap* map = navigator.URLMap;
 
-	[map from:@"*" toViewController:[TTWebController class]];
+  [map from:@"*" toViewController:[TTWebController class]];
 
-	[map from:@"onms://tabbar" toSharedViewController:[TabBarController class]];
-	[map from:@"onms://about" toSharedViewController:[AboutViewController class]];
-	[map from:@"onms://outages" toSharedViewController:[OutageListViewController class]];
-	[map from:@"onms://alarms" toSharedViewController:[AlarmListViewController class]];
-	[map from:@"onms://alarms/(initWithAlarmId:)" toSharedViewController:[AlarmViewController class]];
-  [map from:@"onms://nodes" toSharedViewController:[NodeSearchController class]];
-	[map from:@"onms://nodes/(initWithNodeId:)" toSharedViewController:[NodeViewController class]];
+  [map from:@"onms://tabbar" toSharedViewController:[TabBarController class]];
+  [map from:@"onms://about" toSharedViewController:[AboutViewController class]];
+  [map from:@"onms://outages/get" toSharedViewController:[OutageListViewController class]];
+  [map from:@"onms://alarms/get" toSharedViewController:[AlarmListViewController class]];
+  [map from:@"onms://alarms/get/(initWithAlarmId:)" toSharedViewController:[AlarmViewController class]];
+  [map from:@"onms://nodes/get" toSharedViewController:[NodeSearchController class]];
+  [map from:@"onms://nodes/get/(initWithNodeId:)" toSharedViewController:[NodeViewController class]];
+  [map from:@"onms://nodes/add" toModalViewController:[IPAddressInputController class]];
   [map from:@"onms://settings" toModalViewController:[SettingsViewController class]];
 
-	if (![navigator restoreViewControllers]) {
+  if (![navigator restoreViewControllers]) {
     [navigator beginDelay];
-		[navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://tabbar"]];
+    [navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://tabbar"]];
     NSString* user = [[NSUserDefaults standardUserDefaults] stringForKey:@"user_preference"];
     if (user == nil) {
       [navigator openURLAction:[TTURLAction actionWithURLPath:@"onms://settings"]];
     }
     [navigator endDelay];
-	}
+  }
 }
 
 

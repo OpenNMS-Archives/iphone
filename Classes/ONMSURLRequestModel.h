@@ -39,6 +39,6 @@
 
 }
 
-- (NSString*)getURL:(NSString*)path;
++ (NSString*)getURL:(NSString*)path;
 
 @end

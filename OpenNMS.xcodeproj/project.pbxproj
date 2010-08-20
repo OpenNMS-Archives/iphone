@@ -31,7 +31,6 @@
 		4439744C121D786D00CE638D /* NodeSearchDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4439744A121D786D00CE638D /* NodeSearchDataSource.m */; };
 		443974B8121D86D300CE638D /* NodeListDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 443974B7121D86D300CE638D /* NodeListDataSource.m */; };
 		443974BB121D87DB00CE638D /* NodeListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 443974BA121D87DB00CE638D /* NodeListModel.m */; };
-		4439762C121DB0B300CE638D /* MockDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4439762B121DB0B300CE638D /* MockDataSource.m */; };
 		44397742121DCD1F00CE638D /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 4439773B121DCD1F00CE638D /* Default-Landscape.png */; };
 		44397743121DCD1F00CE638D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4439773C121DCD1F00CE638D /* Default@2x.png */; };
 		44397744121DCD1F00CE638D /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 4439773D121DCD1F00CE638D /* Icon-72.png */; };
@@ -41,6 +40,7 @@
 		44397748121DCD1F00CE638D /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 44397741121DCD1F00CE638D /* iTunesArtwork */; };
 		44397798121DDA9700CE638D /* NodeXMLParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 44397797121DDA9700CE638D /* NodeXMLParserDelegate.m */; };
 		443977F6121DDF2600CE638D /* ONMSTableTextItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 443977F5121DDF2600CE638D /* ONMSTableTextItemCell.m */; };
+		44503702121DE87700EB9A1C /* IPAddressInputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44503701121DE87700EB9A1C /* IPAddressInputController.m */; };
 		4452000512084BCE00AEEFEC /* NodeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000212084BCE00AEEFEC /* NodeDataSource.m */; };
 		4452000612084BCE00AEEFEC /* NodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000412084BCE00AEEFEC /* NodeViewController.m */; };
 		4452000A12084CE500AEEFEC /* NodeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452000912084CE500AEEFEC /* NodeModel.m */; };
@@ -286,8 +286,6 @@
 		443974B7121D86D300CE638D /* NodeListDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeListDataSource.m; sourceTree = "<group>"; };
 		443974B9121D87DB00CE638D /* NodeListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeListModel.h; sourceTree = "<group>"; };
 		443974BA121D87DB00CE638D /* NodeListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeListModel.m; sourceTree = "<group>"; };
-		4439762A121DB0B300CE638D /* MockDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockDataSource.h; path = three20/samples/TTCatalog/Classes/MockDataSource.h; sourceTree = SOURCE_ROOT; };
-		4439762B121DB0B300CE638D /* MockDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockDataSource.m; path = three20/samples/TTCatalog/Classes/MockDataSource.m; sourceTree = SOURCE_ROOT; };
 		4439773B121DCD1F00CE638D /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Images/Default-Landscape.png"; sourceTree = "<group>"; };
 		4439773C121DCD1F00CE638D /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Images/Default@2x.png"; sourceTree = "<group>"; };
 		4439773D121DCD1F00CE638D /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Resources/Images/Icon-72.png"; sourceTree = "<group>"; };
@@ -299,6 +297,8 @@
 		44397797121DDA9700CE638D /* NodeXMLParserDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeXMLParserDelegate.m; sourceTree = "<group>"; };
 		443977F4121DDF2600CE638D /* ONMSTableTextItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSTableTextItemCell.h; sourceTree = "<group>"; };
 		443977F5121DDF2600CE638D /* ONMSTableTextItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONMSTableTextItemCell.m; sourceTree = "<group>"; };
+		44503700121DE87700EB9A1C /* IPAddressInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPAddressInputController.h; sourceTree = "<group>"; };
+		44503701121DE87700EB9A1C /* IPAddressInputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPAddressInputController.m; sourceTree = "<group>"; };
 		4452000112084BCE00AEEFEC /* NodeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeDataSource.h; sourceTree = "<group>"; };
 		4452000212084BCE00AEEFEC /* NodeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeDataSource.m; sourceTree = "<group>"; };
 		4452000312084BCE00AEEFEC /* NodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeViewController.h; sourceTree = "<group>"; };
@@ -564,8 +564,6 @@
 		4452000712084CBC00AEEFEC /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
-				4439762A121DB0B300CE638D /* MockDataSource.h */,
-				4439762B121DB0B300CE638D /* MockDataSource.m */,
 				44397427121D775200CE638D /* NodeSearchController.h */,
 				44397426121D775200CE638D /* NodeSearchController.m */,
 				4439744B121D786D00CE638D /* NodeSearchDataSource.h */,
@@ -628,6 +626,8 @@
 			children = (
 				4452017612086F1C00AEEFEC /* AboutViewController.h */,
 				4452017712086F1C00AEEFEC /* AboutViewController.m */,
+				44503700121DE87700EB9A1C /* IPAddressInputController.h */,
+				44503701121DE87700EB9A1C /* IPAddressInputController.m */,
 				4452016312086CBE00AEEFEC /* TabBarController.h */,
 				4452016412086CBE00AEEFEC /* TabBarController.m */,
 				445200BF120857B600AEEFEC /* RESTURLRequest.h */,
@@ -1008,9 +1008,9 @@
 				4439744C121D786D00CE638D /* NodeSearchDataSource.m in Sources */,
 				443974B8121D86D300CE638D /* NodeListDataSource.m in Sources */,
 				443974BB121D87DB00CE638D /* NodeListModel.m in Sources */,
-				4439762C121DB0B300CE638D /* MockDataSource.m in Sources */,
 				44397798121DDA9700CE638D /* NodeXMLParserDelegate.m in Sources */,
 				443977F6121DDF2600CE638D /* ONMSTableTextItemCell.m in Sources */,
+				44503702121DE87700EB9A1C /* IPAddressInputController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

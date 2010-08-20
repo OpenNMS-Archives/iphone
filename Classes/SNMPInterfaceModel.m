@@ -44,13 +44,13 @@
 
 +(NSArray*)interfacesFromXML:(NSData *)data
 {
-	TTXMLParser* parser = [[TTXMLParser alloc] initWithData:data];
-	parser.treatDuplicateKeysAsArrayItems = YES;
-	[parser parse];
+  TTXMLParser* parser = [[TTXMLParser alloc] initWithData:data];
+  parser.treatDuplicateKeysAsArrayItems = YES;
+  [parser parse];
 
-	NSMutableArray* interfaces = [[[NSMutableArray alloc] init] autorelease];
+  NSMutableArray* interfaces = [[[NSMutableArray alloc] init] autorelease];
 
-	NSArray* xmlInterfaces;
+  NSArray* xmlInterfaces;
   if ([parser.rootObject valueForKey:@"snmpInterface"]) {
     if ([[parser.rootObject valueForKey:@"snmpInterface"] isKindOfClass:[NSArray class]]) {
       xmlInterfaces = [parser.rootObject valueForKey:@"snmpInterface"];
@@ -70,9 +70,9 @@
     }
   }
   
-	TT_RELEASE_SAFELY(parser);
-	
-	return interfaces;
+  TT_RELEASE_SAFELY(parser);
+  
+  return interfaces;
 }
 
 - (NSString*)description

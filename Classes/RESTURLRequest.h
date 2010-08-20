@@ -35,7 +35,7 @@
 
 
 @interface RESTURLRequest : TTURLRequest {
-	NSString* _modelName;
+  NSString* _modelName;
 }
 
 @property (retain) NSString* modelName;

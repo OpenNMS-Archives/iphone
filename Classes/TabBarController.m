@@ -43,13 +43,13 @@
 
 - (void)viewDidLoad
 {
-	[self setTabURLs:[NSArray arrayWithObjects:
-                    @"onms://outages",
-                    @"onms://alarms",
-                    @"onms://nodes",
+  [self setTabURLs:[NSArray arrayWithObjects:
+                    @"onms://outages/get",
+                    @"onms://alarms/get",
+                    @"onms://nodes/get",
                     @"onms://about",
                     nil]
-	 ];
+   ];
 }
 
 @end

@@ -55,10 +55,10 @@
 
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
-	if (!self.isLoading) {
+  if (!self.isLoading) {
     if (_search && [_search length] > 0) {
       NSString* escaped = [_search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-      NSString* url = [self getURL:[NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@%%25&ipInterface.ipAddress=%@%%25&ipInterface.ipHostName=%@%%25", escaped, escaped, escaped]];
+      NSString* url = [ONMSURLRequestModel getURL:[NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@%%25&ipInterface.ipAddress=%@%%25&ipInterface.ipHostName=%@%%25", escaped, escaped, escaped]];
       TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
       request.cachePolicy = cachePolicy;
       
@@ -71,19 +71,18 @@
       [_nodes removeAllObjects];
       [self didFinishLoad];
     }
-	}
+  }
 }
 
 - (void)requestDidFinishLoad:(TTURLRequest*)request
 {
-	TTURLDataResponse* response = request.response;
+  TTURLDataResponse* response = request.response;
   
   NSXMLParser* parser = [[NSXMLParser alloc] initWithData:response.data];
   NodeXMLParserDelegate* npd = [[NodeXMLParserDelegate alloc] init];
   parser.delegate = npd;
   [parser parse];
 
-  TTDINFO(@"nodes = %@", npd.nodes);
   [_nodes removeAllObjects];
   for (id n in npd.nodes) {
     NodeModel* node = n;
@@ -93,7 +92,7 @@
   TT_RELEASE_SAFELY(npd);
   TT_RELEASE_SAFELY(parser);
 
-	[super requestDidFinishLoad:request];
+  [super requestDidFinishLoad:request];
 }
 
 @end

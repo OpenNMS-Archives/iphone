@@ -59,27 +59,28 @@
 
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
-	if (!self.isLoading && _alarmId != nil) {
-		NSString* url = [@"http://admin:admin@sin.local:8980/opennms/rest/alarms/" stringByAppendingString:_alarmId];
-		
-		RESTURLRequest* request = [RESTURLRequest requestWithURL:url delegate:self];
-//    request.cachePolicy = cachePolicy;
+  if (!self.isLoading && _alarmId != nil) {
+    NSString* url = [[ONMSURLRequestModel getURL:@"/alarms/"] stringByAppendingString:_alarmId];
+    
+    RESTURLRequest* request = [RESTURLRequest requestWithURL:url delegate:self];
+    request.cachePolicy = cachePolicy;
     request.cachePolicy = TTURLRequestCachePolicyNone;
-		id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
-		request.response = response;
-		TT_RELEASE_SAFELY(response);
-		
-		[request send];
-	}
+    id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
+    request.response = response;
+    TT_RELEASE_SAFELY(response);
+    
+    [request send];
+  }
 }
 
 - (void)requestDidFinishLoad:(TTURLRequest*)request
 {
-	TTURLDataResponse* response = request.response;
+  TTURLDataResponse* response = request.response;
   
-	NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
-	TT_RELEASE_SAFELY(string);
-  
+  NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
+  TTDINFO(@"text = %@", string);
+  TT_RELEASE_SAFELY(string);
+
   NSXMLParser* parser = [[NSXMLParser alloc] initWithData:response.data];
   AlarmXMLParserDelegate* apd = [[AlarmXMLParserDelegate alloc] init];
   parser.delegate = apd;
@@ -102,7 +103,7 @@
   TT_RELEASE_SAFELY(apd);
   TT_RELEASE_SAFELY(parser);
   
-	[super requestDidFinishLoad:request];
+  [super requestDidFinishLoad:request];
 }
 
 

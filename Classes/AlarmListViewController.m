@@ -38,11 +38,11 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		self.title = @"Alarms";
-		self.tabBarItem = [[[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"clock.png"] tag:0] autorelease];
-	}
-	return self;
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    self.title = @"Alarms";
+    self.tabBarItem = [[[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"clock.png"] tag:0] autorelease];
+  }
+  return self;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -76,9 +76,9 @@
 
 - (void)loadView
 {
-	self.tableViewStyle = UITableViewStylePlain;
-	self.variableHeightRows = YES;
-	[super loadView];
+  self.tableViewStyle = UITableViewStylePlain;
+  self.variableHeightRows = YES;
+  [super loadView];
 
   UIActivityIndicatorView* spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
   [spinner startAnimating];

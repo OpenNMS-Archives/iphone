@@ -33,10 +33,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AlarmViewController : TTTableViewController {
-	NSString* _alarmId;
+@interface AlarmViewController : TTTableViewController <TTURLRequestDelegate> {
+  NSString* _alarmId;
   UIBarButtonItem* _activityItem;
   UIBarButtonItem* _refreshButton;
+  BOOL _inProgress;
 }
 
 @property (nonatomic, copy) NSString* alarmId;

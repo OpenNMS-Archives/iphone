@@ -40,12 +40,12 @@
 
 - (id)initWithNodeId:(NSString*)nid
 {
-	if (self = [self init]) {
-		TTDINFO(@"initialized with node ID %@", nid);
-		self.nodeId = [nid retain];
-		self.title = [@"Node #" stringByAppendingString:nid];
-	}
-	return self;
+  if (self = [self init]) {
+    TTDINFO(@"initialized with node ID %@", nid);
+    self.nodeId = [nid retain];
+    self.title = [@"Node #" stringByAppendingString:nid];
+  }
+  return self;
 }
 
 - (void)dealloc
@@ -76,14 +76,14 @@
 
 - (void)loadView
 {
-	self.tableViewStyle = UITableViewStyleGrouped;
-	self.variableHeightRows = YES;
-	[super loadView];
+  self.tableViewStyle = UITableViewStyleGrouped;
+  self.variableHeightRows = YES;
+  [super loadView];
 }
 
 - (void)createModel
 {
-	self.dataSource = [[[NodeDataSource alloc] initWithNodeId:_nodeId] autorelease];
+  self.dataSource = [[[NodeDataSource alloc] initWithNodeId:_nodeId] autorelease];
 }
 
 @end

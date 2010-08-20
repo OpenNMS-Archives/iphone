@@ -45,20 +45,20 @@
 
 - (id)init
 {
-	if (self = [super init]) {
+  if (self = [super init]) {
     _nodeListModel = [[NodeListModel alloc] init];
-	}
-	return self;
+  }
+  return self;
 }
 
 - (void)dealloc
 {
-	[super dealloc];
+  [super dealloc];
 }
 
 - (id<TTModel>)model
 {
-	return _nodeListModel;
+  return _nodeListModel;
 }
 
 - (NSArray*)sectionIndexTitlesForTableView:(UITableView*)tableView
@@ -85,7 +85,6 @@
   NSArray* keys = [[_nodeListModel.nodes allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
   for (id name in keys) {
     NSString* key = [_nodeListModel.nodes valueForKey:name];
-    TTDINFO(@"%@ = %@", key, name);
     NSString* letter = [[NSString stringWithFormat:@"%c", [name characterAtIndex:0]] lowercaseString];
     NSMutableArray* section = [groups objectForKey:letter];
     if (!section) {
@@ -93,7 +92,7 @@
       [groups setObject:section forKey:letter];
     }
     
-    TTTableTextItem* item = [TTTableTextItem itemWithText:name URL:[@"onms://nodes/" stringByAppendingString:key]];
+    TTTableTextItem* item = [TTTableTextItem itemWithText:name URL:[@"onms://nodes/get/" stringByAppendingString:key]];
     [section addObject:item];
   }
 

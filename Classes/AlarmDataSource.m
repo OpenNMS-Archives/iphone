@@ -51,24 +51,24 @@
 
 - (id)initWithAlarmId:(NSString*)alarmId
 {
-	if (self = [super init]) {
-		_alarmModel = [[[AlarmModel alloc] initWithAlarmId:alarmId] retain];
-	}
-	return self;
+  if (self = [super init]) {
+    _alarmModel = [[[AlarmModel alloc] initWithAlarmId:alarmId] retain];
+  }
+  return self;
 }
 
 - (void)dealloc
 {
-	// Don't do this!  It's done for us.
-	// TT_RELEASE_SAFELY(_alarmModel);
+  // Don't do this!  It's done for us.
+  // TT_RELEASE_SAFELY(_alarmModel);
   TT_RELEASE_SAFELY(_ackDelegate);
   TT_RELEASE_SAFELY(_severity);
-	[super dealloc];
+  [super dealloc];
 }
 
 - (id<TTModel>)model
 {
-	return _alarmModel;
+  return _alarmModel;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,8 +83,8 @@
 
 - (void)tableViewDidLoadModel:(UITableView*)tableView
 {
-	NSMutableArray* items = [[NSMutableArray alloc] init];
-	NSMutableArray* sections = [[NSMutableArray alloc] init];
+  NSMutableArray* items = [[NSMutableArray alloc] init];
+  NSMutableArray* sections = [[NSMutableArray alloc] init];
 
   _severity = _alarmModel.severity;
 
@@ -137,10 +137,10 @@
   [items addObject:[NSArray arrayWithObject:button]];
   
   self.items = items;
-	self.sections = sections;
-	
-	TT_RELEASE_SAFELY(items);
-	TT_RELEASE_SAFELY(sections);
+  self.sections = sections;
+  
+  TT_RELEASE_SAFELY(items);
+  TT_RELEASE_SAFELY(sections);
 }
 
 @end

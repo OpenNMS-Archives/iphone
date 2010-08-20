@@ -44,22 +44,22 @@
 
 - (id)init
 {
-	if (self = [super init]) {
-		_alarmListModel = [[AlarmListModel alloc] init];
-	}
-	return self;
+  if (self = [super init]) {
+    _alarmListModel = [[AlarmListModel alloc] init];
+  }
+  return self;
 }
 
 - (void)dealloc
 {
-	// Don't do this!  It's done for us.
-	// TT_RELEASE_SAFELY(_alarmListModel);
-	[super dealloc];
+  // Don't do this!  It's done for us.
+  // TT_RELEASE_SAFELY(_alarmListModel);
+  [super dealloc];
 }
 
 - (id<TTModel>)model
 {
-	return _alarmListModel;
+  return _alarmListModel;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,27 +74,27 @@
 
 - (void)tableViewDidLoadModel:(UITableView*)tableView
 {
-	NSMutableArray* items = [[NSMutableArray alloc] init];
-	NSArray* alarms = _alarmListModel.alarms;
+  NSMutableArray* items = [[NSMutableArray alloc] init];
+  NSArray* alarms = _alarmListModel.alarms;
 
-	for (id o in alarms) {
-		AlarmModel* alarm = (AlarmModel*)o;
-		NSString* label = alarm.label;
-		if (!label) {
-			label = alarm.ipAddress;
-		}
-		ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
-		item.text = label;
-		item.caption = [alarm.logMessage stringByRemovingHTMLTags];
-		item.timestamp = alarm.firstEventTime;
+  for (id o in alarms) {
+    AlarmModel* alarm = (AlarmModel*)o;
+    NSString* label = alarm.label;
+    if (!label) {
+      label = alarm.ipAddress;
+    }
+    ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
+    item.text = label;
+    item.caption = [alarm.logMessage stringByRemovingHTMLTags];
+    item.timestamp = alarm.firstEventTime;
     item.severity = alarm.severity;
-		item.URL = [@"onms://alarms/" stringByAppendingString:alarm.alarmId];
-		[items addObject:item];
-	}
-	
-	self.items = items;
-	
-	TT_RELEASE_SAFELY(items);
+    item.URL = [@"onms://alarms/get/" stringByAppendingString:alarm.alarmId];
+    [items addObject:item];
+  }
+  
+  self.items = items;
+  
+  TT_RELEASE_SAFELY(items);
 }
 
 @end

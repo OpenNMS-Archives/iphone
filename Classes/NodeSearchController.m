@@ -33,7 +33,6 @@
 
 #import "NodeSearchController.h"
 #import "NodeSearchDataSource.h"
-#import "MockDataSource.h"
 
 #import "ONMSDefaultStyleSheet.h"
 
@@ -57,6 +56,14 @@
   return YES;
 }
 
+- (void)addNode
+{
+  TTNavigator* navigator = [TTNavigator navigator];
+  TTURLAction* action = [TTURLAction actionWithURLPath:@"onms://nodes/add"];
+  action.animated = YES;
+  [navigator openURLAction:action];
+}
+
 - (void)loadView
 {
   [super loadView];
@@ -65,11 +72,10 @@
   searchController.dataSource = [[[NodeSearchDataSource alloc] init] autorelease];
   self.searchViewController = searchController;
   self.tableView.tableHeaderView = _searchController.searchBar;
-  
+
   self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
   _searchController.searchBar.tintColor = TTSTYLEVAR(navigationBarTintColor);
-//  _searchController.searchResultsTableView.separatorColor = TTSTYLEVAR(searchTableSeparatorColor);
-//  self.tableView. = TTSTYLEVAR(searchTableSeparatorColor);
+  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNode)] autorelease] animated:YES];
 }
 
 - (void)createModel

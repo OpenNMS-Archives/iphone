@@ -37,7 +37,7 @@
 @class OutageModel;
 
 @interface OutageListDataSource : TTListDataSource {
-	OutageListModel* _outageListModel;
+  OutageListModel* _outageListModel;
 }
 
 @end

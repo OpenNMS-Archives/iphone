@@ -39,13 +39,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (RESTURLRequest*)request {
-	return [[[RESTURLRequest alloc] init] autorelease];
+  return [[[RESTURLRequest alloc] init] autorelease];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (RESTURLRequest*)requestWithURL:(NSString*)URL delegate:(id /*<TTURLRequestDelegate>*/)delegate {
-	return [[[RESTURLRequest alloc] initWithURL:URL delegate:delegate] autorelease];
+  return [[[RESTURLRequest alloc] initWithURL:URL delegate:delegate] autorelease];
 }
 
 @end

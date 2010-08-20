@@ -44,51 +44,51 @@
 
 - (void)dealloc
 {
-	TT_RELEASE_SAFELY(_outages);
-	[super dealloc];
+  TT_RELEASE_SAFELY(_outages);
+  [super dealloc];
 }
 
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
-	if (!self.isLoading) {
-		NSString* url = [self getURL:@"/outages?limit=50&orderBy=ifLostService&order=desc&ifRegainedService=null"];
+  if (!self.isLoading) {
+    NSString* url = [ONMSURLRequestModel getURL:@"/outages?limit=50&orderBy=ifLostService&order=desc&ifRegainedService=null"];
     
     TTDINFO(@"url = %@", url);
-		
-		TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
+    
+    TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
     request.cachePolicy = cachePolicy;
 
-		id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
-		request.response = response;
-		TT_RELEASE_SAFELY(response);
-		
-		[request send];
-	}
+    id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
+    request.response = response;
+    TT_RELEASE_SAFELY(response);
+    
+    [request send];
+  }
 }
 
 - (void)requestDidFinishLoad:(TTURLRequest*)request
 {
-	TTURLDataResponse* response = request.response;
-	
-	TT_RELEASE_SAFELY(_outages);
-	_outages = [[OutageListModel outagesFromXML:response.data withDuplicates:NO] retain];
+  TTURLDataResponse* response = request.response;
+  
+  TT_RELEASE_SAFELY(_outages);
+  _outages = [[OutageListModel outagesFromXML:response.data withDuplicates:NO] retain];
 
-	[super requestDidFinishLoad:request];
+  [super requestDidFinishLoad:request];
 }
 
 +(NSArray*)outagesFromXML:(NSData *)data withDuplicates:(BOOL)duplicates
 {
   NSMutableArray* nodeIds = [NSMutableArray array];
   
-	TTXMLParser* parser = [[TTXMLParser alloc] initWithData:data];
-	parser.treatDuplicateKeysAsArrayItems = YES;
-	[parser parse];
-	
-	NSDateFormatter* dateFormatter = [[ONMSDateFormatter alloc] init];
-	
-	NSMutableArray* outages = [[[NSMutableArray alloc] init] autorelease];
+  TTXMLParser* parser = [[TTXMLParser alloc] initWithData:data];
+  parser.treatDuplicateKeysAsArrayItems = YES;
+  [parser parse];
+  
+  NSDateFormatter* dateFormatter = [[ONMSDateFormatter alloc] init];
+  
+  NSMutableArray* outages = [[[NSMutableArray alloc] init] autorelease];
 
-	NSArray* xmlOutages;
+  NSArray* xmlOutages;
   if ([parser.rootObject valueForKey:@"outage"]) {
     if ([[parser.rootObject valueForKey:@"outage"] isKindOfClass:[NSArray class]]) {
       xmlOutages = [parser.rootObject valueForKey:@"outage"];
@@ -126,10 +126,10 @@
     }
   }
 
-	TT_RELEASE_SAFELY(dateFormatter);
-	TT_RELEASE_SAFELY(parser);
-	
-	return outages;
+  TT_RELEASE_SAFELY(dateFormatter);
+  TT_RELEASE_SAFELY(parser);
+  
+  return outages;
 }
 
 @end

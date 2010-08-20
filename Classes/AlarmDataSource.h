@@ -36,7 +36,7 @@
 @class AlarmModel;
 
 @interface AlarmDataSource : TTSectionedDataSource {
-	AlarmModel* _alarmModel;
+  AlarmModel* _alarmModel;
   NSString* _severity;
   id<NSObject> _ackDelegate;
 }

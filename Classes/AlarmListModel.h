@@ -36,7 +36,7 @@
 #import "ONMSURLRequestModel.h"
 
 @interface AlarmListModel : ONMSURLRequestModel {
-	NSMutableArray* _alarms;
+  NSMutableArray* _alarms;
 }
 
 @property (nonatomic, copy) NSArray* alarms;

@@ -55,23 +55,23 @@
 
 - (id)init
 {
-	if (self = [super init]) {
-		TTDINFO(@"init called");
-	}
-	return self;
+  if (self = [super init]) {
+    TTDINFO(@"init called");
+  }
+  return self;
 }
 
 +(NSArray*)eventsFromXML:(NSData *)data
 {
-	TTXMLParser* parser = [[TTXMLParser alloc] initWithData:data];
-	parser.treatDuplicateKeysAsArrayItems = YES;
-	[parser parse];
+  TTXMLParser* parser = [[TTXMLParser alloc] initWithData:data];
+  parser.treatDuplicateKeysAsArrayItems = YES;
+  [parser parse];
 
   NSDateFormatter* dateFormatter = [[ONMSDateFormatter alloc] init];
 
-	NSMutableArray* events = [[[NSMutableArray alloc] init] autorelease];
+  NSMutableArray* events = [[[NSMutableArray alloc] init] autorelease];
   
-	NSArray* xmlEvents;
+  NSArray* xmlEvents;
   if ([parser.rootObject valueForKey:@"event"]) {
     if ([[parser.rootObject valueForKey:@"event"] isKindOfClass:[NSArray class]]) {
       xmlEvents = [parser.rootObject valueForKey:@"event"];
@@ -92,9 +92,9 @@
   }
   
   TT_RELEASE_SAFELY(dateFormatter);
-	TT_RELEASE_SAFELY(parser);
-	
-	return events;
+  TT_RELEASE_SAFELY(parser);
+  
+  return events;
 }
 
 - (NSString*)description

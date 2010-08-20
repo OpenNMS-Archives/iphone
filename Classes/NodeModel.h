@@ -32,18 +32,18 @@
  *******************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "ONMSURLRequestModel.h"
 
-
-@interface NodeModel : TTURLRequestModel
+@interface NodeModel : ONMSURLRequestModel
 {
-	NSString* _nodeId;
-	NSString* _label;
-	NSArray* _outages;
+  NSString* _nodeId;
+  NSString* _label;
+  NSArray* _outages;
   NSArray* _ipInterfaces;
   NSArray* _snmpInterfaces;
   NSArray* _events;
 
-	int _inProgressCount;
+  int _inProgressCount;
 }
 
 @property (nonatomic, copy) NSString* nodeId;

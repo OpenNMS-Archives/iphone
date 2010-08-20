@@ -38,8 +38,8 @@
 
 - (id)init
 {
-	if (self = [super init]) {
-		_settingsModel = [[SettingsModel alloc] init];
+  if (self = [super init]) {
+    _settingsModel = [[SettingsModel alloc] init];
     
     _https = [[[UISwitch alloc] init] autorelease];
     
@@ -63,13 +63,13 @@
     _password.autocapitalizationType = UITextAutocapitalizationTypeNone;
     _password.keyboardType = UIKeyboardTypeAlphabet;
     _password.secureTextEntry = YES;
-	}
-	return self;
+  }
+  return self;
 }
 
 - (id<TTModel>)model
 {
-	return _settingsModel;
+  return _settingsModel;
 }
 
 - (void)saveChanges
@@ -85,7 +85,7 @@
 
 - (void)tableViewDidLoadModel:(UITableView*)tableView
 {
-	NSMutableArray* items = [[NSMutableArray alloc] init];
+  NSMutableArray* items = [[NSMutableArray alloc] init];
 
   _https.on = _settingsModel.https;
   [items addObject:[TTTableControlItem itemWithCaption:@"HTTPS?" control:_https]];
@@ -107,8 +107,8 @@
 
   self.sections = [NSArray arrayWithObject:@""];
   self.items = [NSArray arrayWithObject:items];
-	
-	TT_RELEASE_SAFELY(items);
+  
+  TT_RELEASE_SAFELY(items);
 }
 
 @end

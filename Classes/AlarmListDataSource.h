@@ -37,7 +37,7 @@
 @class AlarmModel;
 
 @interface AlarmListDataSource : TTListDataSource {
-	AlarmListModel* _alarmListModel;
+  AlarmListModel* _alarmListModel;
 }
 
 @end

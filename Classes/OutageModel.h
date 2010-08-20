@@ -35,17 +35,17 @@
 #import "Severity.h"
 
 @interface OutageModel : TTURLRequestModel {
-	NSString* _outageId;
-	NSString* _nodeId;
-	NSDate*   _ifLostService;
-	NSDate*   _ifRegainedService;
-	NSString* _ipAddress;
-	NSString* _host;
-	NSString* _serviceName;
-	NSString* _severity;
-	NSString* _logMessage;
-	NSString* _desc;
-	NSString* _uei;
+  NSString* _outageId;
+  NSString* _nodeId;
+  NSDate*   _ifLostService;
+  NSDate*   _ifRegainedService;
+  NSString* _ipAddress;
+  NSString* _host;
+  NSString* _serviceName;
+  NSString* _severity;
+  NSString* _logMessage;
+  NSString* _desc;
+  NSString* _uei;
 }
 
 @property (nonatomic, copy) NSString* outageId;

@@ -41,11 +41,11 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		self.title = @"Outages";
-		self.tabBarItem = [[[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"ekg.png"] tag:0] autorelease];
-	}
-	return self;
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    self.title = @"Outages";
+    self.tabBarItem = [[[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"ekg.png"] tag:0] autorelease];
+  }
+  return self;
 }
 
 - (void)dealloc
@@ -87,9 +87,9 @@
 
 - (void)loadView
 {
-	self.tableViewStyle = UITableViewStylePlain;
-	self.variableHeightRows = YES;
-	[super loadView];
+  self.tableViewStyle = UITableViewStylePlain;
+  self.variableHeightRows = YES;
+  [super loadView];
 
   UIActivityIndicatorView* spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
   [spinner startAnimating];

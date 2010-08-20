@@ -52,32 +52,32 @@
 
 - (id)initWithNodeId:(NSString*)nodeId
 {
-	if (self = [super init]) {
-		self.nodeId = nodeId;
-		_inProgressCount = 0;
-	}
-	return self;
+  if (self = [super init]) {
+    self.nodeId = nodeId;
+    _inProgressCount = 0;
+  }
+  return self;
 }
 
 - (void)dealloc
 {
-	TT_RELEASE_SAFELY(_events);
-	TT_RELEASE_SAFELY(_snmpInterfaces);
-	TT_RELEASE_SAFELY(_ipInterfaces);
-	TT_RELEASE_SAFELY(_outages);
-	TT_RELEASE_SAFELY(_nodeId);
-	TT_RELEASE_SAFELY(_label);
-	[super dealloc];
+  TT_RELEASE_SAFELY(_events);
+  TT_RELEASE_SAFELY(_snmpInterfaces);
+  TT_RELEASE_SAFELY(_ipInterfaces);
+  TT_RELEASE_SAFELY(_outages);
+  TT_RELEASE_SAFELY(_nodeId);
+  TT_RELEASE_SAFELY(_label);
+  [super dealloc];
 }
 
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
-	if (!self.isLoading && _nodeId != nil) {
+  if (!self.isLoading && _nodeId != nil) {
     TTDINFO(@"sending requests for node %@", _nodeId);
     _inProgressCount = 5;
 
     // Node
-    RESTURLRequest* request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingString:_nodeId] delegate:self];
+    RESTURLRequest* request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/nodes/"] stringByAppendingString:_nodeId] delegate:self];
     request.cachePolicy = cachePolicy;
     request.modelName = @"nodes";
 
@@ -88,7 +88,7 @@
     [request send];
 
     // Outages
-    request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/outages/forNode/" stringByAppendingFormat:@"%@?limit=%d&orderBy=ifLostService&order=desc", _nodeId, 50] delegate:self];
+    request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/outages/forNode/"] stringByAppendingFormat:@"%@?limit=%d&orderBy=ifLostService&order=desc", _nodeId, 50] delegate:self];
     request.cachePolicy = cachePolicy;
     request.modelName = @"outages";
 
@@ -99,7 +99,7 @@
     [request send];
 
     // IPInterface
-    request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingFormat:@"%@/ipinterfaces", _nodeId] delegate:self];
+    request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/nodes/"] stringByAppendingFormat:@"%@/ipinterfaces", _nodeId] delegate:self];
     request.cachePolicy = cachePolicy;
     request.modelName = @"ipinterfaces";
     
@@ -110,7 +110,7 @@
     [request send];
     
     // SNMPInterface
-    request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/nodes/" stringByAppendingFormat:@"%@/snmpinterfaces", _nodeId] delegate:self];
+    request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/nodes/"] stringByAppendingFormat:@"%@/snmpinterfaces", _nodeId] delegate:self];
     request.cachePolicy = cachePolicy;
     request.modelName = @"snmpinterfaces";
     
@@ -121,7 +121,7 @@
     [request send];
     
     // Events
-    request = [RESTURLRequest requestWithURL:[@"http://admin:admin@sin.local:8980/opennms/rest/events" stringByAppendingFormat:@"?limit=%d&node.id=%@", 10, _nodeId] delegate:self];
+    request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/events"] stringByAppendingFormat:@"?limit=%d&node.id=%@", 10, _nodeId] delegate:self];
     request.cachePolicy = cachePolicy;
     request.modelName = @"events";
     
@@ -133,11 +133,6 @@
   }
 }
 
-- (void)request:(TTURLRequest*)request didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge*)challenge
-{
-  [super request:request didReceiveAuthenticationChallenge:challenge];
-}
-
 - (void)request:(TTURLRequest*)request didFailLoadWithError:(NSError*)error
 {
   TTDWARNING(@"Failed request for model %@", ((RESTURLRequest*)request).modelName);
@@ -147,29 +142,29 @@
 
 - (void)requestDidFinishLoad:(TTURLRequest*)request
 {
-	TTURLDataResponse* response = request.response;
-	NSString* modelName = ((RESTURLRequest*)request).modelName;
+  TTURLDataResponse* response = request.response;
+  NSString* modelName = ((RESTURLRequest*)request).modelName;
 
-	_inProgressCount--;
+  _inProgressCount--;
 
-	TTDINFO(@"Got response for model %@", modelName);
+  TTDINFO(@"Got response for model %@", modelName);
 
-	NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
+  NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
 
-	if (TTIsStringWithAnyText(string)) {
-		TTXMLParser* parser = [[TTXMLParser alloc] initWithData:response.data];
-		parser.treatDuplicateKeysAsArrayItems = YES;
-		[parser parse];
+  if (TTIsStringWithAnyText(string)) {
+    TTXMLParser* parser = [[TTXMLParser alloc] initWithData:response.data];
+    parser.treatDuplicateKeysAsArrayItems = YES;
+    [parser parse];
 
-		if ([modelName isEqualToString:@"nodes"]) {
-			TT_RELEASE_SAFELY(_nodeId);
-			TT_RELEASE_SAFELY(_label);
+    if ([modelName isEqualToString:@"nodes"]) {
+      TT_RELEASE_SAFELY(_nodeId);
+      TT_RELEASE_SAFELY(_label);
 
-			_nodeId = [parser.rootObject valueForKey:@"id"];
-			_label  = [[parser.rootObject valueForKey:@"label"] copy];
-		} else if ([modelName isEqualToString:@"outages"]) {
-			TT_RELEASE_SAFELY(_outages);
-			_outages = [[OutageListModel outagesFromXML:response.data withDuplicates:YES] retain];
+      _nodeId = [parser.rootObject valueForKey:@"id"];
+      _label  = [[parser.rootObject valueForKey:@"label"] copy];
+    } else if ([modelName isEqualToString:@"outages"]) {
+      TT_RELEASE_SAFELY(_outages);
+      _outages = [[OutageListModel outagesFromXML:response.data withDuplicates:YES] retain];
     } else if ([modelName isEqualToString:@"ipinterfaces"]) {
       TT_RELEASE_SAFELY(_ipInterfaces);
       _ipInterfaces = [[IPInterfaceModel interfacesFromXML:response.data] retain];
@@ -179,17 +174,17 @@
     } else if ([modelName isEqualToString:@"events"]) {
       TT_RELEASE_SAFELY(_events);
       _events = [[EventModel eventsFromXML:response.data] retain];
-		} else {
-			TTDWARNING(@"unmatched model name: %@", modelName);
-		}
+    } else {
+      TTDWARNING(@"unmatched model name: %@", modelName);
+    }
 
-		TT_RELEASE_SAFELY(parser);
-	}
-	TT_RELEASE_SAFELY(string);
+    TT_RELEASE_SAFELY(parser);
+  }
+  TT_RELEASE_SAFELY(string);
 
-	if (_inProgressCount == 0) {
-		[super requestDidFinishLoad:request];
-	}
+  if (_inProgressCount == 0) {
+    [super requestDidFinishLoad:request];
+  }
 }
 
 - (NSString*)description

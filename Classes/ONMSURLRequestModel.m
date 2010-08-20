@@ -44,7 +44,7 @@
   return self;
 }
 
-- (NSString*)getURL:(NSString*)path
++ (NSString*)getURL:(NSString*)path
 {
   SettingsModel* settings = [[SettingsModel alloc] init];
   [settings load];

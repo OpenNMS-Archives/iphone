@@ -39,15 +39,15 @@
 
 -(id) init
 {
-	return [self initWithSeverity:nil];
+  return [self initWithSeverity:nil];
 }
 
 -(id) initWithSeverity:(NSString*)sev
 {
-	if (self = [super init]) {
-		_severity = [sev retain];
-	}
-	return self;
+  if (self = [super init]) {
+    _severity = [sev retain];
+  }
+  return self;
 }
 
 - (void)dealloc
@@ -147,7 +147,7 @@
 
 - (NSString*)description
 {
-	return [NSString stringWithFormat:@"Severity[%@]", _severity];
+  return [NSString stringWithFormat:@"Severity[%@]", _severity];
 }
 
 @end

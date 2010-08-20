@@ -77,7 +77,6 @@ didStartElement: (NSString*)elementName
       _currentNode = [[[NodeModel alloc] init] autorelease];
       _currentNode.nodeId = [attributeDict valueForKey:@"id"];
       _currentNode.label = [attributeDict valueForKey:@"label"];
-      TTDINFO(@"found a node: %@", _currentNode);
     }
   } else {
     _currentElement = elementName;
@@ -91,7 +90,6 @@ didStartElement: (NSString*)elementName
 {
   if ([elementName isEqualToString:@"node"]) {
     if (_currentNode) {
-      TTDINFO(@"current node = %@", _currentNode);
       [_nodes addObject:_currentNode];
       _currentNode = nil;
     }

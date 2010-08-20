@@ -35,7 +35,7 @@
 #import "ONMSURLRequestModel.h"
 
 @interface OutageListModel : ONMSURLRequestModel {
-	NSArray* _outages;
+  NSArray* _outages;
 }
 
 @property (nonatomic, copy) NSArray* outages;

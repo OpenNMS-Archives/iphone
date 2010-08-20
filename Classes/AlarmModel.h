@@ -33,18 +33,19 @@
 
 #import <Foundation/Foundation.h>
 #import "Severity.h"
+#import "ONMSURLRequestModel.h"
 
-@interface AlarmModel : TTURLRequestModel {
-	NSString* _alarmId;
+@interface AlarmModel : ONMSURLRequestModel {
+  NSString* _alarmId;
   NSString* _uei;
-	NSDate*   _firstEventTime;
+  NSDate*   _firstEventTime;
   NSDate*   _lastEventTime;
   NSString* _eventCount;
-	NSString* _ipAddress;
-	NSString* _host;
+  NSString* _ipAddress;
+  NSString* _host;
   NSString* _label;
-	NSString* _severity;
-	NSString* _logMessage;
+  NSString* _severity;
+  NSString* _logMessage;
   NSDate*   _ackTime;
   NSString* _ackUser;
 }

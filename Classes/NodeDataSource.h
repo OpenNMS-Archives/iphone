@@ -36,8 +36,8 @@
 @class NodeModel;
 
 @interface NodeDataSource : TTSectionedDataSource {
-	NodeModel* _nodeModel;
-	NSString* _label;
+  NodeModel* _nodeModel;
+  NSString* _label;
 }
 
 @property (nonatomic, copy) NSString* label;

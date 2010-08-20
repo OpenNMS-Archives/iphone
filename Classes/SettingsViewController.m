@@ -51,7 +51,7 @@
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	return YES;
+  return YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -68,7 +68,7 @@
 
 - (void)loadView
 {
-	self.tableViewStyle = UITableViewStyleGrouped;
+  self.tableViewStyle = UITableViewStyleGrouped;
   self.autoresizesForKeyboard = YES;
   self.variableHeightRows = NO;
   [super loadView];
