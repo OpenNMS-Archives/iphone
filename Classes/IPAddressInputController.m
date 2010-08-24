@@ -88,9 +88,16 @@
 	// Get the addresses for the given hostname.
 	CFHostRef hostRef = CFHostCreateWithName(kCFAllocatorDefault, (CFStringRef)hostname);
 	BOOL isSuccess = CFHostStartInfoResolution(hostRef, kCFHostAddresses, nil);
-	if (!isSuccess) return nil;
+	if (!isSuccess) {
+    CFRelease(hostRef);
+    return nil;
+  }
 	CFArrayRef addressesRef = CFHostGetAddressing(hostRef, nil);
-	if (addressesRef == nil) return nil;
+	if (addressesRef == nil) {
+    CFRelease(hostRef);
+    return nil;
+  }
+  CFRelease(hostRef);
   
 	// Convert these addresses into strings.
 	char ipAddress[INET6_ADDRSTRLEN];
@@ -103,7 +110,7 @@
 		if (ipAddress == nil) return nil;
 		[addresses addObject:[NSString stringWithCString:ipAddress encoding:NSASCIIStringEncoding]];
 	}
-  
+
 	return addresses;
 }
 
