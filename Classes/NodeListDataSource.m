@@ -63,7 +63,13 @@
 
 - (NSArray*)sectionIndexTitlesForTableView:(UITableView*)tableView
 {
-  return [TTTableViewDataSource lettersForSectionsWithSearch:YES summary:NO];
+  NSArray* keys = [[_nodeListModel.nodes allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+  
+  if (keys && [keys count] > 0) {
+    return [TTTableViewDataSource lettersForSectionsWithSearch:YES summary:NO];
+  } else {
+    return nil;
+  }
 }
 
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object
@@ -83,33 +89,36 @@
   NSMutableDictionary* groups = [NSMutableDictionary dictionary];
 
   NSArray* keys = [[_nodeListModel.nodes allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-  for (id name in keys) {
-    NSString* key = [_nodeListModel.nodes valueForKey:name];
-    NSString* letter = [[NSString stringWithFormat:@"%c", [name characterAtIndex:0]] lowercaseString];
-    NSMutableArray* section = [groups objectForKey:letter];
-    if (!section) {
-      section = [NSMutableArray array];
-      [groups setObject:section forKey:letter];
+  
+  if (keys && [keys count] > 0) {
+    for (id name in keys) {
+      NSString* key = [_nodeListModel.nodes valueForKey:name];
+      NSString* letter = [[NSString stringWithFormat:@"%c", [name characterAtIndex:0]] lowercaseString];
+      NSMutableArray* section = [groups objectForKey:letter];
+      if (!section) {
+        section = [NSMutableArray array];
+        [groups setObject:section forKey:letter];
+      }
+      
+      TTTableTextItem* item = [TTTableTextItem itemWithText:name URL:[@"onms://nodes/get/" stringByAppendingString:key]];
+      [section addObject:item];
     }
-    
-    TTTableTextItem* item = [TTTableTextItem itemWithText:name URL:[@"onms://nodes/get/" stringByAppendingString:key]];
-    [section addObject:item];
-  }
 
-  NSArray* letters = [groups.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-  for (NSString* letter in letters) {
-    NSArray* items = [groups objectForKey:letter];
-    [_sections addObject:letter];
-    [_items addObject:items];
+    NSArray* letters = [groups.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    for (NSString* letter in letters) {
+      NSArray* items = [groups objectForKey:letter];
+      [_sections addObject:letter];
+      [_items addObject:items];
+    }
+  } else {
+    [_sections addObject:@""];
+    TTTableTextItem* item = [TTTableTextItem itemWithText:@"No Matches."];
+    [_items addObject:[NSArray arrayWithObject:item]];
   }
 }
 
 - (NSString*)titleForLoading:(BOOL)reloading {
   return @"Searching...";
-}
-
-- (NSString*)titleForNoData {
-  return @"No nodes found.";
 }
 
 @end

@@ -123,12 +123,14 @@
     button.selector = @selector(acknowledge);
   }
   [items addObject:[NSArray arrayWithObject:button]];
-   
-  [sections addObject:@""];
-  button = [TTTableButton itemWithText:@"Escalate"];
-  button.delegate = _ackDelegate;
-  button.selector = @selector(escalate);
-  [items addObject:[NSArray arrayWithObject:button]];
+
+  if (![_alarmModel.severity isEqualToString:@"CRITICAL"]) {
+    [sections addObject:@""];
+    button = [TTTableButton itemWithText:@"Escalate"];
+    button.delegate = _ackDelegate;
+    button.selector = @selector(escalate);
+    [items addObject:[NSArray arrayWithObject:button]];
+  }
     
   [sections addObject:@""];
   button = [TTTableButton itemWithText:@"Clear"];

@@ -31,10 +31,16 @@
  *
  *******************************************************************************/
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "IPAddressInputModel.h"
 
-@interface IPAddressInputController : TTTableViewController {
-  BOOL _inProgress;
+@interface IPAddressInputDataSource : TTSectionedDataSource {
+  id<NSObject> _submitDelegate;
+  UITextField* _host;
 }
+
+@property (nonatomic, retain) id<NSObject> submitDelegate;
+
+- (NSString*)getHost;
 
 @end

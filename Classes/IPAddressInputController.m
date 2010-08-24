@@ -32,83 +32,145 @@
  *******************************************************************************/
 
 #import "IPAddressInputController.h"
+#import "IPAddressInputDataSource.h"
+#import "ONMSURLRequestModel.h"
+#import "RESTURLRequest.h"
+#import "SettingsModel.h"
+
+#import <CFNetwork/CFNetwork.h>
+#import <netinet/in.h>
+#import <netdb.h>
+#import <ifaddrs.h>
+#import <arpa/inet.h>
+#import <net/ethernet.h>
+#import <net/if_dl.h>
 
 @implementation IPAddressInputController
 
-- (id) init
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-  if (self = [super init]) {
-//    cellIdentifier = @"ipAddressInput";
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    _inProgress = NO;
+    self.title = @"Add Host";
+    self.autoresizesForKeyboard = YES;
+    self.variableHeightRows = NO;
+    self.tableViewStyle = UITableViewStyleGrouped;
   }
   return self;
+}
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+  return YES;
+}
+
+- (void)cancelClicked
+{
+  [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)loadView
 {
   [super loadView];
-  [_ipAddress becomeFirstResponder];
+  
+  self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
+  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelClicked)] autorelease] animated:YES];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch * touch = [touches anyObject];
-    if(touch.phase == UITouchPhaseBegan) {
-        [_ipAddress resignFirstResponder];
-    }
-}
-
-- (IBAction)addClicked
+- (void)createModel
 {
-  /*
-#if DEBUG
-    NSLog(@"%@: addClicked called, IP Address = %@", self, _ipAddress);
-#endif
-    NSString* formData = [NSString stringWithFormat:@"ipAddress=%@", _ipAddress.text];
-    NSData* postData = [formData dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString* postLength = [NSString stringWithFormat:@"%d", [postData length]];
-    NSMutableURLRequest* request = [[[NSMutableURLRequest alloc] init] autorelease];
-    NSURL* baseUrl = [NSURL URLWithString:[BaseUpdater getBaseUrl]];
-    [request setURL:[NSURL URLWithString:@"admin/addNewInterface" relativeToURL:baseUrl]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
-  [request setTimeoutInterval:5];
-    NSHTTPURLResponse* response = nil;
-    NSError* error = nil;
-    NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSString* stringResponseData = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-#if DEBUG
-    NSLog(@"%@: Sent request %@, received response %@, with error %@", self, request, response, error);
-    NSLog(@"%@: headers = %@", self, [response allHeaderFields]);
-    NSLog(@"%@: data = %@", self, stringResponseData);
-#endif
-    if (error) {
-        UIAlertView *a = [[UIAlertView alloc]
-                          initWithTitle: [error localizedDescription]
-                          message: [error localizedFailureReason]
-                          delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil];
-        [a show];
-        [a autorelease];
-    }
-    [stringResponseData release];
-   */
-  [self dismissModalViewControllerAnimated:YES];
+  IPAddressInputDataSource* ids = [[[IPAddressInputDataSource alloc] init] autorelease];
+  ids.submitDelegate = self;
+  self.dataSource = ids;
 }
 
-- (IBAction)cancelClicked
-{
-  [self dismissModalViewControllerAnimated:YES];
++ (NSArray *)addressesForHostname:(NSString *)hostname {
+	// Get the addresses for the given hostname.
+	CFHostRef hostRef = CFHostCreateWithName(kCFAllocatorDefault, (CFStringRef)hostname);
+	BOOL isSuccess = CFHostStartInfoResolution(hostRef, kCFHostAddresses, nil);
+	if (!isSuccess) return nil;
+	CFArrayRef addressesRef = CFHostGetAddressing(hostRef, nil);
+	if (addressesRef == nil) return nil;
+  
+	// Convert these addresses into strings.
+	char ipAddress[INET6_ADDRSTRLEN];
+	NSMutableArray *addresses = [NSMutableArray array];
+	CFIndex numAddresses = CFArrayGetCount(addressesRef);
+	for (CFIndex currentIndex = 0; currentIndex < numAddresses; currentIndex++) {
+		struct sockaddr *address = (struct sockaddr *)CFDataGetBytePtr(CFArrayGetValueAtIndex(addressesRef, currentIndex));
+		if (address == nil) return nil;
+		getnameinfo(address, address->sa_len, ipAddress, INET6_ADDRSTRLEN, nil, 0, NI_NUMERICHOST);
+		if (ipAddress == nil) return nil;
+		[addresses addObject:[NSString stringWithCString:ipAddress encoding:NSASCIIStringEncoding]];
+	}
+  
+	return addresses;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
++ (NSString *)addressForHostname:(NSString *)hostname {
+	NSArray *addresses = [IPAddressInputController addressesForHostname:hostname];
+	if ([addresses count] > 0)
+		return [addresses objectAtIndex:0];
+	else
+		return nil;
+}
+
+- (void)submitAddress
 {
-  if (textField == _ipAddress) {
-    [_ipAddress resignFirstResponder];
-    [self addClicked];
+  IPAddressInputDataSource* ds = self.dataSource;
+  NSString* host = [ds getHost];
+  NSScanner* scanner = [NSScanner scannerWithString:host];
+  scanner.caseSensitive = NO;
+  if ([scanner scanCharactersFromSet:[NSCharacterSet letterCharacterSet] intoString:NULL]) {
+    // it has characters, use NSHost to find the IP address
+    host = [IPAddressInputController addressForHostname:host];
   }
-  return YES;
+  NSString* url = [[ONMSURLRequestModel getURL:@"/../admin/addNewInterface"] stringByAppendingFormat:@"?ipAddress=%@", host];
+
+  RESTURLRequest* request = [RESTURLRequest requestWithURL:url delegate:self];
+  request.cachePolicy = TTURLRequestCachePolicyNone;
+  request.httpMethod = @"POST";
+//  request.httpBody = [@"" dataUsingEncoding:NSUTF8StringEncoding];
+  [request.parameters setValue:host forKey:@"ipAddress"];
+  request.contentType = @"application/x-www-form-urlencoded";
+  
+  id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
+  request.response = response;
+  TT_RELEASE_SAFELY(response);
+  
+  [request send];
+}
+
+- (void)request:(TTURLRequest*)request didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+  if (_inProgress) {
+    TTDINFO(@"got a 2nd auth challenge, password is wrong");
+    [[challenge sender] cancelAuthenticationChallenge:challenge];
+  } else {
+    _inProgress = YES;
+    SettingsModel* settings = [[SettingsModel alloc] init];
+    [settings load];
+    NSURLCredential *cred = [NSURLCredential credentialWithUser:settings.user
+                                                       password:settings.password persistence:NSURLCredentialPersistenceForSession];
+    [settings release];
+    [[challenge sender] useCredential:cred forAuthenticationChallenge:challenge];
+  }
+} 
+
+- (void)request:(TTURLRequest*)request didFailLoadWithError:(NSError*)error
+{
+  _inProgress = NO;
+  [self.navigationItem setRightBarButtonItem:nil animated:YES];
+  TTDWARNING(@"failed to add host %@: %@", request.urlPath, [error localizedDescription]);
+  UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:[@"An error occurred adding the host: " stringByAppendingString:[error localizedDescription]]
+                                                  delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+  [alert show];
+}
+
+- (void)requestDidFinishLoad:(TTURLRequest*)request
+{
+  _inProgress = NO;
+  [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

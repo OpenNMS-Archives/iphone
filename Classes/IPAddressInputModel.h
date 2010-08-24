@@ -31,10 +31,11 @@
  *
  *******************************************************************************/
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface IPAddressInputController : TTTableViewController {
-  BOOL _inProgress;
+
+@interface IPAddressInputModel : TTModel {
+
 }
 
 @end

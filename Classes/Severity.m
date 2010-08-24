@@ -60,26 +60,26 @@
 {
   if (_severity) {
     if ([_severity isEqual:@"INDETERMINATE"]) {
-      // #EBEBCD
-      return RGBCOLOR(235,235,205);
+      // #ebebc7
+      return RGBCOLOR(235,235,199);
     } else if ([_severity isEqual:@"CLEARED"]) {
-      // #EEEEEE
+      // #eeeeee
       return RGBCOLOR(238,238,238);
     } else if ([_severity isEqual:@"NORMAL"]) {
-      // #BFE19E
-      return RGBCOLOR(191,225,158);
+      // #b9e092
+      return RGBCOLOR(185,224,146);
     } else if ([_severity isEqual:@"WARNING"]) {
-      // #FFECA0
-      return RGBCOLOR(255,236,160);
+      // #ffe991
+      return RGBCOLOR(255,233,145);
     } else if ([_severity isEqual:@"MINOR"]) {
-      // #FFB57A
-      return RGBCOLOR(255,181,122);
+      // #ffb070
+      return RGBCOLOR(255,176,112);
     } else if ([_severity isEqual:@"MAJOR"]) {
-      // #FFAD98
-      return RGBCOLOR(255,173,152);
+      // #ffa38c
+      return RGBCOLOR(255,163,140);
     } else if ([_severity isEqual:@"CRITICAL"]) {
       // #FF6C6C
-      return RGBCOLOR(255,180,180);
+      return RGBCOLOR(255,97,97);
     }
   }
   // #FFFFFF

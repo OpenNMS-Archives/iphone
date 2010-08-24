@@ -72,15 +72,16 @@
   searchController.dataSource = [[[NodeSearchDataSource alloc] init] autorelease];
   self.searchViewController = searchController;
   self.tableView.tableHeaderView = _searchController.searchBar;
+  _searchController.searchBar.placeholder = @"Node Label or IP Begins with...";
 
   self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
   _searchController.searchBar.tintColor = TTSTYLEVAR(navigationBarTintColor);
-//  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNode)] autorelease] animated:YES];
+  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNode)] autorelease] animated:YES];
 }
 
 - (void)createModel
 {
-  self.dataSource = [TTSectionedDataSource dataSourceWithObjects:nil];
+  self.dataSource = [TTSectionedDataSource dataSourceWithItems:[NSArray arrayWithObject:[NSArray arrayWithObject:[TTTableTextItem itemWithText:@"No Matches."]]] sections:[NSArray arrayWithObject:@""]];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

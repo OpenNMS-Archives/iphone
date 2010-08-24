@@ -31,10 +31,9 @@
  *
  *******************************************************************************/
 
-#import <UIKit/UIKit.h>
+#import "IPAddressInputModel.h"
 
-@interface IPAddressInputController : TTTableViewController {
-  BOOL _inProgress;
-}
+
+@implementation IPAddressInputModel
 
 @end
