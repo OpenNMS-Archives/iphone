@@ -99,7 +99,7 @@
   
   [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Severity" caption:_alarmModel.severity]];
   [alarmItems addObject:[TTTableSubtextItem itemWithText:@"# Events" caption:_alarmModel.eventCount]];
-  [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Log Message" caption:_alarmModel.logMessage]];
+  [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Log Message" caption:[_alarmModel.logMessage stringByRemovingHTMLTags]]];
   [alarmItems addObject:[TTTableSubtextItem itemWithText:@"First Event" caption:[_alarmModel.firstEventTime description]]];
   if (![_alarmModel.lastEventTime isEqualToDate:_alarmModel.firstEventTime]) {
     [alarmItems addObject:[TTTableSubtextItem itemWithText:@"Last Event" caption:[_alarmModel.lastEventTime description]]];
