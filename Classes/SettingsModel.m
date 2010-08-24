@@ -111,27 +111,27 @@
     }
 
     NSString* key = [dict valueForKey:@"Key"];
-    id value = [[NSUserDefaults standardUserDefaults] valueForKey:key];
-    if (value == nil) {
+    id value = nil;
+    if (key) {
+      value = [[NSUserDefaults standardUserDefaults] valueForKey:key];
+    }
+   if (!value) {
       value = [dict valueForKey:@"DefaultValue"];
     }
 
-    [value retain];
     if ([key isEqualToString:@"https_preference"]) {
       _https = [value boolValue];
     } else if ([key isEqualToString:@"host_preference"]) {
-      _host = value;
+      _host = [value copy];
     } else if ([key isEqualToString:@"port_preference"]) {
-      _port = value;
+      _port = [value copy];
     } else if ([key isEqualToString:@"rest_preference"]) {
-      _path = value;
+      _path = [value copy];
     } else if ([key isEqualToString:@"user_preference"]) {
-      _user = value;
+      _user = [value copy];
     } else if ([key isEqualToString:@"password_preference"]) {
-      _password = value;
+      _password = [value copy];
     }
-    // Analyze says without this I have a retain of +1 in value, but if I do it, I get a crash in UITableViewCell dealloc
-//    [value release];
   }
 
   [plistData release];
