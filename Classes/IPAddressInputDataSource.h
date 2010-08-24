@@ -35,11 +35,8 @@
 #import "IPAddressInputModel.h"
 
 @interface IPAddressInputDataSource : TTSectionedDataSource {
-  id<NSObject> _submitDelegate;
   UITextField* _host;
 }
-
-@property (nonatomic, retain) id<NSObject> submitDelegate;
 
 - (NSString*)getHost;
 
