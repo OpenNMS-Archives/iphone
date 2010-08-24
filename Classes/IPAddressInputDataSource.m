@@ -36,8 +36,6 @@
 
 @implementation IPAddressInputDataSource
 
-@synthesize submitDelegate = _submitDelegate;
-
 - (id)init
 {
   if (self = [super init]) {
@@ -51,15 +49,18 @@
   return self;
 }
 
-- (void)dealloc
-{
-  TT_RELEASE_SAFELY(_submitDelegate);
-  [super dealloc];
-}
-
 - (id<TTModel>)model
 {
   return _model;
+}
+
+- (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object
+{
+  if ([object isKindOfClass:[TTTableViewItem class]]) {
+    return [TTTableViewCell class];
+  } else {
+    return [super tableView:tableView cellClassForObject:object];
+  }
 }
 
 - (void)tableViewDidLoadModel:(UITableView*)tableView
@@ -74,13 +75,6 @@
   [inputItems addObject:[TTTableControlItem itemWithCaption:@"Host:" control:_host]];
   
   [items addObject:inputItems];
-  
-  [sections addObject:@""];
-  TTTableButton* button = [[[TTTableButton alloc] init] autorelease];
-  button.delegate = _submitDelegate;
-  button.text = @"Add Host";
-  button.selector = @selector(submitAddress);
-  [items addObject:[NSArray arrayWithObject:button]];
   
   self.items = items;
   self.sections = sections;

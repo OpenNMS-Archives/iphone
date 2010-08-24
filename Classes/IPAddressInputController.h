@@ -37,4 +37,6 @@
   BOOL _inProgress;
 }
 
+- (void)submitAddress;
+
 @end

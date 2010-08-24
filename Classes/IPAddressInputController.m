@@ -74,14 +74,13 @@
   [super loadView];
   
   self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
-  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelClicked)] autorelease] animated:YES];
+  [self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelClicked)] autorelease] animated:YES];
+  [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithTitle:@"Add" style:UIBarButtonItemStyleBordered target:self action:@selector(submitAddress)] autorelease] animated:YES];
 }
 
 - (void)createModel
 {
-  IPAddressInputDataSource* ids = [[[IPAddressInputDataSource alloc] init] autorelease];
-  ids.submitDelegate = self;
-  self.dataSource = ids;
+  self.dataSource = [[[IPAddressInputDataSource alloc] init] autorelease];
 }
 
 + (NSArray *)addressesForHostname:(NSString *)hostname {
