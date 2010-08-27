@@ -99,7 +99,7 @@
     [request send];
 
     // IPInterface
-    request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/nodes/"] stringByAppendingFormat:@"%@/ipinterfaces", _nodeId] delegate:self];
+    request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/nodes/"] stringByAppendingFormat:@"%@/ipinterfaces?orderBy=ipHostName&orderBy=ipAddress", _nodeId] delegate:self];
     request.cachePolicy = cachePolicy;
     request.modelName = @"ipinterfaces";
     
@@ -110,7 +110,7 @@
     [request send];
     
     // SNMPInterface
-    request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/nodes/"] stringByAppendingFormat:@"%@/snmpinterfaces", _nodeId] delegate:self];
+    request = [RESTURLRequest requestWithURL:[[ONMSURLRequestModel getURL:@"/nodes/"] stringByAppendingFormat:@"%@/snmpinterfaces?orderBy=ifName&orderBy=ipAddress&orderBy=ifDesc", _nodeId] delegate:self];
     request.cachePolicy = cachePolicy;
     request.modelName = @"snmpinterfaces";
     

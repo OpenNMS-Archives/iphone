@@ -119,7 +119,11 @@
     for (id i in _nodeModel.ipInterfaces) {
       IPInterfaceModel* interface = (IPInterfaceModel*)i;
       TTTableSubtitleItem* item = [[[TTTableSubtitleItem alloc] init] autorelease];
-      item.text = interface.hostName;
+      if (interface.hostName) {
+        item.text = interface.hostName;
+      } else {
+        item.text = interface.ipAddress;
+      }
       item.subtitle = [NSString stringWithFormat:@"%@ (%@)", interface.ipAddress, [interface.managed isEqual:@"M"]? @"Managed" : @"Unmanaged"];
       [interfaceItems addObject:item];
     }
@@ -140,7 +144,11 @@
         text = interface.ifIndex;
       }
       item.text = text;
-      item.subtitle = [NSString stringWithFormat:@"%@ (%@)", interface.ipAddress, interface.ifSpeed];
+      if (!interface.ifSpeed || [interface.ifSpeed isEqualToString:@"(null)"]) {
+        item.subtitle = interface.ipAddress;
+      } else {
+        item.subtitle = [NSString stringWithFormat:@"%@ (%@)", interface.ipAddress, interface.ifSpeed];
+      }
       [interfaceItems addObject:item];
     }
     [items addObject:interfaceItems];
