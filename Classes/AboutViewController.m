@@ -95,9 +95,7 @@
                     @"\n"
                     @"Some icons copyright © Joseph Wain, from http://www.glyphish.com/.\n"
                     @"\n"
-                    @"Application framework by Three20, from http://three20.info/.\n"
-                    @"\n"
-                    @"Configuration panel code mySettings copyright © Kåre Morstøl, from http://bitbucket.org/karemorstol/mysettings/.",
+                    @"Application framework by Three20, from http://three20.info/.",
                     versionString, buildString];
   
   view.text = text;
