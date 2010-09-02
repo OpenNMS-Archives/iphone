@@ -60,8 +60,8 @@
   [styleSheet release];
 
   TTNavigator* navigator = [TTNavigator navigator];
-//  navigator.persistenceMode = TTNavigatorPersistenceModeAll;
-  navigator.persistenceMode = TTNavigatorPersistenceModeNone;
+  navigator.persistenceMode = TTNavigatorPersistenceModeAll;
+//  navigator.persistenceMode = TTNavigatorPersistenceModeNone;
   navigator.supportsShakeToReload = YES;
 
   TTURLMap* map = navigator.URLMap;
@@ -88,7 +88,6 @@
     [navigator endDelay];
   }
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)navigator:(TTNavigator*)navigator shouldOpenURL:(NSURL*)URL

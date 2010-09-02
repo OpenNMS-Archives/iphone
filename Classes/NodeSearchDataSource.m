@@ -31,6 +31,7 @@
  *
  *******************************************************************************/
 
+#import "NodeSearchController.h"
 #import "NodeSearchDataSource.h"
 #import "Three20Core/NSArrayAdditions.h"
 
@@ -44,6 +45,8 @@
 }
 
 - (void)search:(NSString*)text {
+  NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+  [defaults setObject:text forKey:kNodeSearchKey];
   [self.delegates perform:@selector(modelDidStartLoad:) withObject:self];
   [_nodeListModel search:text];
   [self.delegates perform:@selector(modelDidFinishLoad:) withObject:self];

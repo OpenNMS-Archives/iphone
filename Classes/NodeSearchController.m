@@ -77,6 +77,13 @@
   self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
   _searchController.searchBar.tintColor = TTSTYLEVAR(navigationBarTintColor);
   [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNode)] autorelease] animated:YES];
+
+  NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+  id obj = [defaults objectForKey:kNodeSearchKey];
+  if (obj) {
+    NSString* text = obj;
+    _searchController.searchBar.text = text;
+  }
 }
 
 - (void)createModel

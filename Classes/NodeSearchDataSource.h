@@ -39,4 +39,6 @@
 @interface NodeSearchDataSource : NodeListDataSource <TTURLRequestDelegate> {
 }
 
+static NSString* kNodeSearchKey = @"ONMSNodeSearch";
+
 @end
