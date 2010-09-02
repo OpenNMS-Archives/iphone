@@ -43,6 +43,7 @@
 {
   if (self = [super init]) {
     _nodes = [[NSMutableDictionary alloc] init];
+    _alwaysLoad = YES;
   }
   return self;
 }
@@ -55,7 +56,7 @@
 
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
-  if (!self.isLoading) {
+  if (_alwaysLoad || !self.isLoading) {
     if (_search && [_search length] > 0) {
       NSString* escaped = [_search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
       NSString* url = [ONMSURLRequestModel getURL:[NSString stringWithFormat:@"/nodes?comparator=ilike&match=any&label=%@%%25&ipInterface.ipAddress=%@%%25&ipInterface.ipHostName=%@%%25", escaped, escaped, escaped]];

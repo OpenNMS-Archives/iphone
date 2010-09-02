@@ -38,6 +38,7 @@
 {
   NSMutableDictionary* _nodes;
   NSString* _search;
+  BOOL _alwaysLoad;
 }
 
 @property (nonatomic, copy) NSDictionary* nodes;

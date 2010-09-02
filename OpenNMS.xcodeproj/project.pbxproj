@@ -406,7 +406,6 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				443974A0121D7EBB00CE638D /* Search */,
 				447EE4641208A82100F3E535 /* Miscellaneous */,
 				44289DC3121C3212006FC906 /* Settings */,
 				4485511D120A17FD000173CD /* Alarms */,
@@ -565,13 +564,6 @@
 				44289DC9121C32D6006FC906 /* SettingsModel.m */,
 			);
 			name = Settings;
-			sourceTree = "<group>";
-		};
-		443974A0121D7EBB00CE638D /* Search */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Search;
 			sourceTree = "<group>";
 		};
 		4452000712084CBC00AEEFEC /* Nodes */ = {
