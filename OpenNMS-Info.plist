@@ -30,13 +30,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>CFBundleSignature</key>
 	<string>ONMS</string>
 	<key>CFBundleURLTypes</key>
 	<array/>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>8</string>
 	<key>MinimumSystemVersion</key>
 	<string>3.0</string>
 	<key>UIInterfaceOrientation</key>
