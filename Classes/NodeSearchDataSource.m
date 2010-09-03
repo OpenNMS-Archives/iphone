@@ -35,6 +35,8 @@
 #import "NodeSearchDataSource.h"
 #import "Three20Core/NSArrayAdditions.h"
 
+#import "ONMSConstants.h"
+
 @implementation NodeSearchDataSource
 
 - (id)init

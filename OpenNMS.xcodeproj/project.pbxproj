@@ -282,6 +282,7 @@
 		442CA1EE12158B1800147B53 /* AlarmXMLParserDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmXMLParserDelegate.m; sourceTree = "<group>"; };
 		442CA24B1215920B00147B53 /* ONMSDateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSDateFormatter.h; sourceTree = "<group>"; };
 		442CA24C1215920B00147B53 /* ONMSDateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ONMSDateFormatter.m; sourceTree = "<group>"; };
+		442DC03012312C2A008A5484 /* ONMSConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONMSConstants.h; sourceTree = "<group>"; };
 		44397426121D775200CE638D /* NodeSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeSearchController.m; sourceTree = "<group>"; };
 		44397427121D775200CE638D /* NodeSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeSearchController.h; sourceTree = "<group>"; };
 		4439744A121D786D00CE638D /* NodeSearchDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeSearchDataSource.m; sourceTree = "<group>"; };
@@ -635,6 +636,7 @@
 		447EE4641208A82100F3E535 /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
+				442DC03012312C2A008A5484 /* ONMSConstants.h */,
 				4452017612086F1C00AEEFEC /* AboutViewController.h */,
 				4452017712086F1C00AEEFEC /* AboutViewController.m */,
 				4452016312086CBE00AEEFEC /* TabBarController.h */,
