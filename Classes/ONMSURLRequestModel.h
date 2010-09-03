@@ -36,9 +36,10 @@
 
 @interface ONMSURLRequestModel : TTURLRequestModel {
   BOOL _inProgress;
-
 }
 
 + (NSString*)getURL:(NSString*)path;
+- (NSString*)stringWithUTF8String:(NSString*)string;
+- (NSString*)stringWithUTF8Data:(NSData*)data;
 
 @end

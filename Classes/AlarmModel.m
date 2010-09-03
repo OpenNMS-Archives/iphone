@@ -77,11 +77,10 @@
 {
   TTURLDataResponse* response = request.response;
   
-  NSString* string = [[NSString alloc] initWithData:response.data encoding:NSUTF8StringEncoding];
-  TTDINFO(@"text = %@", string);
-  TT_RELEASE_SAFELY(string);
-
-  NSXMLParser* parser = [[NSXMLParser alloc] initWithData:response.data];
+  NSString* text = [self stringWithUTF8Data:response.data];
+  text = [self stringWithUTF8String:text];
+  NSData* data = [text dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+  NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
   AlarmXMLParserDelegate* apd = [[AlarmXMLParserDelegate alloc] init];
   parser.delegate = apd;
   [parser parse];

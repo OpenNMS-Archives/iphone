@@ -79,7 +79,10 @@
 {
   TTURLDataResponse* response = request.response;
   
-  NSXMLParser* parser = [[NSXMLParser alloc] initWithData:response.data];
+  NSString* text = [self stringWithUTF8Data:response.data];
+  text = [self stringWithUTF8String:text];
+  NSData* data = [text dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+  NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
   NodeXMLParserDelegate* npd = [[NodeXMLParserDelegate alloc] init];
   parser.delegate = npd;
   [parser parse];
