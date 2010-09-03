@@ -32,6 +32,7 @@
  *******************************************************************************/
 
 #import "SettingsModel.h"
+#import "ONMSConstants.h"
 
 @implementation SettingsModel
 
@@ -75,6 +76,7 @@
   [def setValue:_path forKey:@"rest_preference"];
   [def setValue:_user forKey:@"user_preference"];
   [def setValue:_password forKey:@"password_preference"];
+  [def setValue:@"" forKey:kNodeSearchKey];
   [self invalidate:YES];
 }
 

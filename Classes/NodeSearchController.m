@@ -36,6 +36,8 @@
 
 #import "ONMSDefaultStyleSheet.h"
 
+#import "ONMSConstants.h"
+
 @implementation NodeSearchController
 
 @synthesize delegate = _delegate;
@@ -77,7 +79,12 @@
   self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
   _searchController.searchBar.tintColor = TTSTYLEVAR(navigationBarTintColor);
   [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNode)] autorelease] animated:YES];
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+  [super viewWillAppear:animated];
+  
   NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
   id obj = [defaults objectForKey:kNodeSearchKey];
   if (obj) {
