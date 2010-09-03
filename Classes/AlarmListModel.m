@@ -40,6 +40,8 @@
 
 @implementation AlarmListModel
 
+static NSString* limit = @"100";
+
 @synthesize alarms = _alarms;
 
 - (void)dealloc
@@ -51,10 +53,11 @@
 - (void)load:(TTURLRequestCachePolicy)cachePolicy more:(BOOL)more
 {
   if (!self.isLoading) {
-    NSString* url = [ONMSURLRequestModel getURL:@"/alarms?limit=50&orderBy=lastEventTime&order=desc&alarmAckUser=null"];
-    
+    NSString* url = [ONMSURLRequestModel getURL:[@"/alarms?orderBy=lastEventTime&order=desc&alarmAckUser=null&limit=" stringByAppendingString:limit]];
+
     TTURLRequest* request = [TTURLRequest requestWithURL:url delegate:self];
     request.cachePolicy = cachePolicy;
+    request.cachePolicy = TTURLRequestCachePolicyNoCache;
 
     id<TTURLResponse> response = [[TTURLDataResponse alloc] init];
     request.response = response;
@@ -68,17 +71,19 @@
 {
   TTURLDataResponse* response = request.response;
 
-  TT_RELEASE_SAFELY(_alarms);
-
-  NSXMLParser* parser = [[NSXMLParser alloc] initWithData:response.data];
+  NSString* text = [self stringWithUTF8Data:response.data];
+  text = [self stringWithUTF8String:text];
+  NSData* data = [text dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+  NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
   AlarmXMLParserDelegate* apd = [[AlarmXMLParserDelegate alloc] init];
   parser.delegate = apd;
   [parser parse];
+  TT_RELEASE_SAFELY(_alarms);
   _alarms = [apd.alarms retain];
 
   TT_RELEASE_SAFELY(apd);
   TT_RELEASE_SAFELY(parser);
-  
+
   [super requestDidFinishLoad:request];
 }
 

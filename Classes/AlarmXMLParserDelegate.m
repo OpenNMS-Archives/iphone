@@ -167,7 +167,5 @@ didStartElement: (NSString*)elementName
 - (void)parser:(NSXMLParser *)parser foundProcessingInstructionWithTarget:(NSString *)target data:(NSString *)data {}
 - (void)parser:(NSXMLParser *)parser foundUnparsedEntityDeclarationWithName:(NSString *)name publicID:(NSString *)publicID systemID:(NSString *)systemID notationName:(NSString *)notationName {}
 - (NSData *)parser:(NSXMLParser *)parser resolveExternalEntityName:(NSString *)entityName systemID:(NSString *)systemID { return nil; }
-- (void)parserDidEndDocument:(NSXMLParser *)parser {}
-- (void)parserDidStartDocument:(NSXMLParser *)parser {}
 
 @end
