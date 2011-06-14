@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="external/JSON"/>
+	<classpathentry kind="src" output="test-classes" path="test"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/gwtmobile"/>
+	<classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/piriti-core-0.7.0b1.jar"/>
+	<classpathentry kind="lib" path="lib/totoe-0.2.4.jar"/>
+	<classpathentry kind="lib" path="external/gin/gin-1.5-post-gwt-2.2.jar"/>
+	<classpathentry kind="lib" path="external/guice/aopalliance.jar"/>
+	<classpathentry kind="lib" path="external/guice/guice-3.0.jar"/>
+	<classpathentry kind="lib" path="external/gin/javax.inject.jar"/>
+	<classpathentry kind="lib" path="external/gin/aopalliance.jar"/>
+	<classpathentry kind="lib" path="external/guice/guice-assistedinject-3.0.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

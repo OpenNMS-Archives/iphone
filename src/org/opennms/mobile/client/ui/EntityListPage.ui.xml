@@ -1,0 +1,10 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:m="urn:import:com.gwtmobile.ui.client.widgets">
+	<g:HTMLPanel>
+		<m:ScrollPanel ui:field="listContainer" styleName="EntityList">
+			<m:ListPanel ui:field="list" showArrow="true" selectable="false" />
+		</m:ScrollPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

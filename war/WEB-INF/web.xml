@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="opennms" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  
+  <filter>
+    <description>Allows "cross-site scripting" for the REST services.</description>
+    <filter-name>AccessControlAllowOrigin</filter-name>
+    <filter-class>org.opennms.mobile.server.AddAccessControlHeaderFilter</filter-class>
+    <init-param>
+      <description>This parameter specifies what origins to allow.</description>
+      <param-name>origin</param-name>
+      <param-value>*</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>AccessControlAllowOrigin</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>OpenNMS.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

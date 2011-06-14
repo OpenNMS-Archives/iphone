@@ -1,0 +1,6 @@
+OpenNMS/*.nocache.*
+OpenNMS/*.cache.*
+OpenNMS/*.rpc
+OpenNMS/gr
+OpenNMS/hosted.html
+org.opennms.mobile.OpenNMS.JUnit

@@ -1,0 +1,49 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:m="urn:import:com.gwtmobile.ui.client.widgets"
+	xmlns:o="urn:import:org.opennms.mobile.client.ui">
+	<ui:style>
+	</ui:style>
+	<g:HTMLPanel>
+		<m:HeaderPanel ui:field="header" caption="Foo" leftButton="Back" />
+		<o:OpenNMSTabPanel ui:field="tab">
+			<m:Tab>
+				<m:TabHeader>
+					<g:Label>Alarms</g:Label>
+				</m:TabHeader>
+				<m:TabContent>
+						<o:AlarmListPage styleName="Tab-Content" />
+				</m:TabContent>
+			</m:Tab>
+			<m:Tab>
+				<m:TabHeader>
+					<g:Label>Outages</g:Label>
+				</m:TabHeader>
+				<m:TabContent>
+						<o:OutageListPage styleName="Tab-Content" />
+				</m:TabContent>
+			</m:Tab>
+			<m:Tab>
+				<m:TabHeader>
+					<g:Label>Nodes</g:Label>
+				</m:TabHeader>
+				<m:TabContent>
+					<g:HTMLPanel styleName="Tab-Content">
+						<g:Label>Nodes Content</g:Label>
+					</g:HTMLPanel>
+				</m:TabContent>
+			</m:Tab>
+			<m:Tab>
+				<m:TabHeader>
+					<g:Label>About</g:Label>
+				</m:TabHeader>
+				<m:TabContent>
+					<g:HTMLPanel styleName="Tab-Content">
+						<g:Label>About Content</g:Label>
+					</g:HTMLPanel>
+				</m:TabContent>
+			</m:Tab>
+		</o:OpenNMSTabPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 
