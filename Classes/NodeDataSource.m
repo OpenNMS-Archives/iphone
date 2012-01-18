@@ -97,11 +97,10 @@
     NSMutableArray* outageItems = [NSMutableArray arrayWithCapacity:[_nodeModel.outages count]];
     for (id o in _nodeModel.outages) {
       OutageModel* outage = (OutageModel*)o;
-//    NSString* host = outage.host;
-      NSString* host = nil;
-      if (!host) {
-        host = outage.ipAddress;
-      }
+	  NSString* host = outage.ipAddress;
+	  if (host == nil) {
+		host = @"Unknown";
+	  }
       ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
       item.text = [host stringByAppendingFormat:@"/%@", outage.serviceName];
       item.caption = [outage.logMessage stringByRemovingHTMLTags];
