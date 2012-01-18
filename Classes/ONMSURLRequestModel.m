@@ -122,8 +122,14 @@
 {
   TTDINFO(@"request:%@ didFailLoadWithError:%@", request, [error localizedDescription]);
   _inProgress = NO;
-  UIAlertView* alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:[@"An error occurred making the request: " stringByAppendingString:[error localizedDescription]]
-                                                  delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+  UIAlertView* alert;
+  if ([error code] == -1012) {
+	alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Authentication Failed"
+													  delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+  } else {
+	alert = [[[UIAlertView alloc] initWithTitle:@"Error" message:[@"An error occurred making the request: " stringByAppendingString:[error localizedDescription]]
+													  delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+  }
   [alert show];
   [super request:request didFailLoadWithError:error];
 }
