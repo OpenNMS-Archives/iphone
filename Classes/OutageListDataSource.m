@@ -80,7 +80,7 @@
   for (id o in outages) {
     OutageModel* outage = (OutageModel*)o;
     NSString* host = outage.ipAddress;
-	if (host == nil) {
+	if (!host) {
 	  host = @"Unknown";
 	}
 

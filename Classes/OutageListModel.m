@@ -99,6 +99,7 @@
       OutageModel* outage = [[[OutageModel alloc] init] autorelease];
 
       outage.outageId = [o valueForKey:@"id"];
+      outage.ipAddress = [[o valueForKey:@"ipAddress"] valueForKey:@"___Entity_Value___"];
       outage.serviceName = [[[[o valueForKey:@"monitoredService"] valueForKey:@"serviceType"] valueForKey:@"name"] valueForKey:@"___Entity_Value___"];
       outage.ifLostService = [dateFormatter dateFromString:[[o valueForKey:@"ifLostService"] valueForKey:@"___Entity_Value___"]];
       NSString* ifRegainedService = [[o valueForKey:@"ifRegainedService"] valueForKey:@"___Entity_Value___"];
@@ -108,7 +109,6 @@
       
       NSDictionary* serviceLostEvent = [o valueForKey:@"serviceLostEvent"];
       outage.desc = [[serviceLostEvent valueForKey:@"description"] valueForKey:@"___Entity_Value___"];
-      outage.ipAddress = [[serviceLostEvent valueForKey:@"ipAddress"] valueForKey:@"___Entity_Value___"];
       outage.host = [[serviceLostEvent valueForKey:@"host"] valueForKey:@"___Entity_Value___"];
       outage.logMessage = [[serviceLostEvent valueForKey:@"logMessage"] valueForKey:@"___Entity_Value___"];
       outage.uei = [[serviceLostEvent valueForKey:@"uei"] valueForKey:@"___Entity_Value___"];

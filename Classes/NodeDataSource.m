@@ -98,7 +98,7 @@
     for (id o in _nodeModel.outages) {
       OutageModel* outage = (OutageModel*)o;
 	  NSString* host = outage.ipAddress;
-	  if (host == nil) {
+	  if (!host) {
 		host = @"Unknown";
 	  }
       ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
