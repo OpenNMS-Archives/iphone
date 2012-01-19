@@ -70,25 +70,45 @@
 
 - (void)showModel:(BOOL)show
 {
-  [self.navigationItem setRightBarButtonItem:nil animated:YES];
   [super showModel:show];
 
   AlarmDataSource* ads = self.dataSource;
   Severity* sev = [[Severity alloc] initWithSeverity:ads.severity];
   self.tableView.backgroundColor = [sev getDisplayColor];
+
+  UIImage* image = [sev getImage];
+  UIButton* button = (UIButton *) [[[UIImageView alloc] initWithImage:image] autorelease];
+  UIBarButtonItem *buttonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
+  [self.navigationItem setRightBarButtonItem:buttonItem animated:YES];
   [sev release];
 }
 
 - (void)showError:(BOOL)show
 {
-  [self.navigationItem setRightBarButtonItem:nil animated:YES];
+  AlarmDataSource* ads = self.dataSource;
+  Severity* sev = [[Severity alloc] initWithSeverity:ads.severity];
+
+  UIImage* image = [sev getImage];
+  UIButton* button = (UIButton *) [[[UIImageView alloc] initWithImage:image] autorelease];
+  UIBarButtonItem *buttonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
+  [self.navigationItem setRightBarButtonItem:buttonItem animated:YES];
+
   [super showError:show];
+  [sev release];
 }
 
 - (void)showEmpty:(BOOL)show
 {
-  [self.navigationItem setRightBarButtonItem:nil animated:YES];
+  AlarmDataSource* ads = self.dataSource;
+  Severity* sev = [[Severity alloc] initWithSeverity:ads.severity];
+
+  UIImage* image = [sev getImage];
+  UIButton* button = (UIButton *) [[[UIImageView alloc] initWithImage:image] autorelease];
+  UIBarButtonItem *buttonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
+  [self.navigationItem setRightBarButtonItem:buttonItem animated:YES];
+
   [super showEmpty:show];
+  [sev release];
 }
 
 
@@ -101,7 +121,7 @@
   UIActivityIndicatorView* spinner = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
   [spinner startAnimating];
   _activityItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
-  _refreshButton =  [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshAction)];
+  _refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshAction)];
 }
 
 - (void)createModel

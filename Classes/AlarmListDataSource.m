@@ -84,7 +84,7 @@
       label = alarm.ipAddress;
     }
     if (!label) {
-      label = alarm.uei;
+      label = [alarm.uei stringByReplacingOccurrencesOfString:@"uei.opennms.org/" withString:@""];
 	}
     ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
     item.text = label;

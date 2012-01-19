@@ -47,4 +47,6 @@
 
 - (NSString*)description;
 
+- (UIImage*)getImage;
+
 @end

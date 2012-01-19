@@ -150,4 +150,12 @@
   return [NSString stringWithFormat:@"Severity[%@]", _severity];
 }
 
+- (UIImage*)getImage
+{
+  NSString* imageName = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"severity-%@", [_severity lowercaseString]] ofType:@"png"];
+  TTDINFO(@"image name = %@", imageName);
+  // return nil;
+  return [[[[UIImage alloc] initWithContentsOfFile:imageName] autorelease] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
+}
+
 @end
