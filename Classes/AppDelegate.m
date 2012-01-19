@@ -53,6 +53,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
+  [TestFlight takeOff:@"15489123169f361894db6003651532d1_NTQ5NzMyMDEyLTAxLTE5IDEyOjE3OjUxLjk2ODYyNA"];
   _settingsActive = NO;
 
   ONMSDefaultStyleSheet* styleSheet = [[ONMSDefaultStyleSheet alloc] init];

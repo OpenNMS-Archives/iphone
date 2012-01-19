@@ -65,6 +65,7 @@
 		445202031208807F00AEEFEC /* o.png in Resources */ = {isa = PBXBuildFile; fileRef = 445201F41208807F00AEEFEC /* o.png */; };
 		445202041208807F00AEEFEC /* opennms-headingbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 445201F51208807F00AEEFEC /* opennms-headingbg.png */; };
 		445202051208807F00AEEFEC /* question-mark-helvetica.png in Resources */ = {isa = PBXBuildFile; fileRef = 445201F61208807F00AEEFEC /* question-mark-helvetica.png */; };
+		4452E75614C8868500BF4A25 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4452E75414C8868500BF4A25 /* libTestFlight.a */; };
 		4452FC911207476B00AEEFEC /* OutageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452FC901207476B00AEEFEC /* OutageListViewController.m */; };
 		4452FCEC120749BE00AEEFEC /* OutageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452FCEB120749BE00AEEFEC /* OutageModel.m */; };
 		4452FCF012074C5F00AEEFEC /* OutageListDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4452FCEF12074C5F00AEEFEC /* OutageListDataSource.m */; };
@@ -350,6 +351,8 @@
 		445201F41208807F00AEEFEC /* o.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = o.png; path = Resources/Images/o.png; sourceTree = "<group>"; };
 		445201F51208807F00AEEFEC /* opennms-headingbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "opennms-headingbg.png"; path = "Resources/Images/opennms-headingbg.png"; sourceTree = "<group>"; };
 		445201F61208807F00AEEFEC /* question-mark-helvetica.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "question-mark-helvetica.png"; path = "Resources/Images/question-mark-helvetica.png"; sourceTree = "<group>"; };
+		4452E75414C8868500BF4A25 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = TestFlight/libTestFlight.a; sourceTree = "<group>"; };
+		4452E75514C8868500BF4A25 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestFlight.h; path = TestFlight/TestFlight.h; sourceTree = "<group>"; };
 		4452FC8F1207476A00AEEFEC /* OutageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutageListViewController.h; sourceTree = "<group>"; };
 		4452FC901207476B00AEEFEC /* OutageListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutageListViewController.m; sourceTree = "<group>"; };
 		4452FCEA120749BE00AEEFEC /* OutageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutageModel.h; sourceTree = "<group>"; };
@@ -426,6 +429,7 @@
 				440DBDA2120C3A8C007CDF51 /* libThree20UICommon.a in Frameworks */,
 				440DBDA3120C3A8C007CDF51 /* libThree20UINavigator.a in Frameworks */,
 				444F94871220999600A4E5D2 /* CFNetwork.framework in Frameworks */,
+				4452E75614C8868500BF4A25 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,6 +464,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				4452E75214C8861D00BF4A25 /* TestFlight */,
 				4439773B121DCD1F00CE638D /* Default-Landscape.png */,
 				4439773C121DCD1F00CE638D /* Default@2x.png */,
 				4439773D121DCD1F00CE638D /* Icon-72.png */,
@@ -658,6 +663,15 @@
 				445201F61208807F00AEEFEC /* question-mark-helvetica.png */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		4452E75214C8861D00BF4A25 /* TestFlight */ = {
+			isa = PBXGroup;
+			children = (
+				4452E75414C8868500BF4A25 /* libTestFlight.a */,
+				4452E75514C8868500BF4A25 /* TestFlight.h */,
+			);
+			name = TestFlight;
 			sourceTree = "<group>";
 		};
 		4452FCE9120749A900AEEFEC /* Outages */ = {
@@ -1144,6 +1158,10 @@
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
 				HEADER_SEARCH_PATHS = ../three20/Build/Products/three20;
 				INFOPLIST_FILE = "OpenNMS-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlight\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -1165,6 +1183,10 @@
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
 				HEADER_SEARCH_PATHS = ../three20/Build/Products/three20;
 				INFOPLIST_FILE = "OpenNMS-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlight\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -1180,7 +1202,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: The OpenNMS Group, Inc.";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1193,9 +1217,11 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = OpenNMS;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A1885C88-F885-488E-971D-A42F5790AC9D";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = three20/Build/Products/three20;
 			};
@@ -1213,12 +1239,16 @@
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
 				HEADER_SEARCH_PATHS = ../three20/Build/Products/three20;
 				INFOPLIST_FILE = "OpenNMS-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlight\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
 				PRODUCT_NAME = OpenNMS;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A1885C88-F885-488E-971D-A42F5790AC9D";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1231,6 +1261,7 @@
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1247,6 +1278,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = three20/Build/Products/three20;
 			};
@@ -1263,6 +1295,10 @@
 				GCC_PREFIX_HEADER = OpenNMS_Prefix.pch;
 				HEADER_SEARCH_PATHS = ../three20/Build/Products/three20;
 				INFOPLIST_FILE = "OpenNMS-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TestFlight\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -1280,6 +1316,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1296,8 +1333,10 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = OpenNMS;
 				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = three20/Build/Products/three20;
 			};
@@ -1309,6 +1348,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1322,8 +1362,10 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = OpenNMS;
 				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = three20/Build/Products/three20;
 			};
