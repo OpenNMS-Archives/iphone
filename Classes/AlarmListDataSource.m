@@ -83,6 +83,9 @@
     if (!label) {
       label = alarm.ipAddress;
     }
+    if (!label) {
+      label = alarm.uei;
+	}
     ONMSSeverityItem* item = [[[ONMSSeverityItem alloc] init] autorelease];
     item.text = label;
     item.caption = [alarm.logMessage stringByRemovingHTMLTags];
