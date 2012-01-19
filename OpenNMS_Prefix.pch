@@ -10,7 +10,9 @@
 #endif
 
 #ifdef __OBJC__
+#ifdef DEBUG
   #import "TestFlight.h"
+#endif
   #import <Foundation/Foundation.h>
   #import <UIKit/UIKit.h>
   #import "Three20/Three20.h"

@@ -34,7 +34,7 @@
 	<key>CFBundleSignature</key>
 	<string>ONMS</string>
 	<key>CFBundleVersion</key>
-	<string>10</string>
+	<string>11</string>
 	<key>MinimumSystemVersion</key>
 	<string>3.0</string>
 	<key>UIInterfaceOrientation</key>

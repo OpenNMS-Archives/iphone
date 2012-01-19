@@ -86,7 +86,9 @@
   _settingsModel.user = _username.text;
   _settingsModel.password = _password.text;
   [_settingsModel save];
+#ifdef DEBUG
   [TestFlight passCheckpoint:@"SaveConfiguration"];
+#endif
 }
 
 - (void)tableViewDidLoadModel:(UITableView*)tableView
