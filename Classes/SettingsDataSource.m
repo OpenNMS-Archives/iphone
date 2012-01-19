@@ -75,9 +75,14 @@
 - (void)saveChanges
 {
   _settingsModel.https = _https.on;
-  _settingsModel.host = _host.text;
+  NSString* hostText = [[_host.text stringByReplacingOccurrencesOfString:@"https://" withString:@""] stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+  _settingsModel.host = hostText;
   _settingsModel.port = _port.text;
-  _settingsModel.path = _path.text;
+  NSString* pathText = _path.text;
+  if ([pathText hasSuffix:@"/"]) {
+    pathText = [pathText substringToIndex:[pathText length]-1];
+  }
+  _settingsModel.path = pathText;
   _settingsModel.user = _username.text;
   _settingsModel.password = _password.text;
   [_settingsModel save];
