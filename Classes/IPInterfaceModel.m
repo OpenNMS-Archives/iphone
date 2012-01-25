@@ -32,7 +32,7 @@
  *******************************************************************************/
 
 #import "IPInterfaceModel.h"
-#import "extThree20XML/extThree20XML.h"
+#import "TTXMLParser.h"
 
 @implementation IPInterfaceModel
 

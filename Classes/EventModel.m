@@ -32,7 +32,7 @@
  *******************************************************************************/
 
 #import "EventModel.h"
-#import "extThree20XML/extThree20XML.h"
+#import "TTXMLParser.h"
 #import "ONMSDateFormatter.h"
 
 @implementation EventModel

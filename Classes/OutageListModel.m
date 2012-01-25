@@ -34,7 +34,7 @@
 #import "OutageListModel.h"
 #import "OutageModel.h"
 #import "Severity.h"
-#import "extThree20XML/extThree20XML.h"
+#import "TTXMLParser.h"
 #import "ONMSDateFormatter.h"
 #import "SettingsModel.h"
 

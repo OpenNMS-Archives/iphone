@@ -34,7 +34,7 @@
 #import "AlarmListModel.h"
 #import "AlarmModel.h"
 #import "Severity.h"
-#import "extThree20XML/extThree20XML.h"
+#import "TTXMLParser.h"
 #import "AlarmXMLParserDelegate.h"
 #import "SettingsModel.h"
 

@@ -36,7 +36,7 @@
 #import "IPInterfaceModel.h"
 #import "SNMPInterfaceModel.h"
 #import "EventModel.h"
-#import "extThree20XML/extThree20XML.h"
+#import "TTXMLParser.h"
 #import "RESTURLRequest.h"
 
 @implementation NodeModel
