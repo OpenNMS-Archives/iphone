@@ -55,6 +55,12 @@
   [super dealloc];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[[self model] invalidate:NO];
+	[super viewWillAppear:animated];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
   return YES;

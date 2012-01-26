@@ -68,6 +68,12 @@
   return YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[[self model] invalidate:NO];
+	[super viewWillAppear:animated];
+}
+
 - (void)showModel:(BOOL)show
 {
   [super showModel:show];
