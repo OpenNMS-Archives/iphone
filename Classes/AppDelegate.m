@@ -69,7 +69,7 @@
 
   TTURLMap* map = navigator.URLMap;
 
-  [map from:@"*" toViewController:[TTWebController class]];
+//  [map from:@"*" toSharedViewController:[TabBarController class]];
 
   [map from:@"onms://tabbar" toSharedViewController:[TabBarController class]];
   [map from:@"onms://about" toSharedViewController:[AboutViewController class]];
